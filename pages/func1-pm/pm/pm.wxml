@@ -1,0 +1,84 @@
+<navbar
+  items="{{navItems}}"
+  model:current-index="{{currentTab}}"
+  active-class="{{currentTab == 0 ? 'receive-active' : 'send-active'}}"
+  bing:change="navbarTap"
+>
+  <view slot="after" class="navbar-after">
+    <text class="title">今日还剩{{pm_quota}}封私信</text>
+  </view>
+</navbar>
+
+<swiper style="height:calc(100vh - 12vw)" current="{{currentTab}}" bindchange="bindSwiperChange">
+  <swiper-item style="overflow:scroll">
+    <scroll-view
+      scroll-y="{{true}}" style="height:100%"
+      scroll-top="{{scroll_top}}"
+      enable-back-to-top="{{true}}"
+      refresher-enabled="{{true}}"
+      refresher-threshold="{{20}}"
+      refresher-default-style="{{scrollViewRefresherStyle}}"
+      refresher-triggered="{{triggered}}"
+      bindrefresherrefresh="onRefresh"
+      bindrefresherrestore="onRestore"
+    >
+    <view class="pm-outer">
+    <view wx:if="{{receiveList.length==0}}" class="no-content">这里空荡荡的</view>
+      <view wx:for="{{receiveList}}" wx:key="index">
+        <view class="date-title" wx:if="{{index === 0 || item.pm_date != receiveList[index - 1].pm_date}}">{{item.pm_date}}</view>
+        <singlePm class="single"
+          type = "receive"
+          pm_date = "{{item.pm_date}}"
+          sender_serial = "{{item.sender_serial}}"
+          sender_avatar = "{{item.sender_avatar}}"
+          receiver_serial = "{{item.receiver_serial}}"
+          pm_msg = "{{item.pm_msg}}"
+          pm_id = "{{item.pm_id}}"
+          pm_is_read = "{{item.pm_is_read}}"
+          post_id = "{{item.post_id}}"
+        >
+        </singlePm>
+      </view>
+    </view>
+  </scroll-view>
+  </swiper-item>
+
+  <swiper-item style="overflow:scroll">
+  <scroll-view
+    scroll-y="{{true}}" style="height:100%"
+    scroll-top="{{scroll_top}}"
+    enable-back-to-top="{{true}}"
+    refresher-enabled="{{true}}"
+    refresher-threshold="{{20}}"
+    refresher-default-style="{{scrollViewRefresherStyle}}"
+    refresher-triggered="{{triggered}}"
+    bindrefresherrefresh="onRefresh"
+    bindrefresherrestore="onRestore"
+  >
+    <view class="pm-outer">
+      <view wx:if="{{sendList.length==0}}" class="no-content">这里空荡荡的</view>
+      <view wx:for="{{sendList}}" wx:key="index">
+        <view class="date-title" wx:if="{{index === 0 || item.pm_date != sendList[index - 1].pm_date}}">{{item.pm_date}}</view>
+        <singlePm class="single"
+          type = "send"
+          pm_date = "{{item.pm_date}}"
+          sender_serial = "{{item.sender_serial}}"
+          sender_avatar = "{{item.sender_avatar}}"
+          receiver_serial = "{{item.receiver_serial}}"
+          pm_msg = "{{item.pm_msg}}"
+          pm_id = "{{item.pm_id}}"
+          pm_is_read = "{{item.pm_is_read}}"
+          post_id = "{{item.post_id}}"
+        >
+        </singlePm>
+      </view>
+    </view>
+  </scroll-view>
+  </swiper-item>
+</swiper>
+
+<view bindtap="toWritePm" class="write-button-outer">
+  <view class="write-button-inner">
+    <image class="write-button" src="/images/pm.svg"></image>    
+  </view>
+</view>

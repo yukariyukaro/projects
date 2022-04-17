@@ -1,0 +1,74 @@
+.card-comment-serial {
+  text-align:left;
+  padding:1vw 2vw 0vw 2vw;
+}
+.card-comment-content {
+  text-align:left;
+  padding: 0vw 2vw 2vw 2vw;
+  word-break: break-word;
+}
+.comment-floor {
+  font-weight: bold;
+}
+.comment-date {
+  color: var(--on-bg-2);
+}
+.avatar-outer {
+  width: 7vw;
+  height: 7vw;
+  float: right;
+  margin: -0.5vw 1vw;
+}
+.avatar {
+  width: 7vw;
+  height: 7vw
+}
+.alias {
+color: var(--on-secondary);
+font-weight: bold;
+float: right;
+display: inline;
+padding: 0.5vw 2vw;
+border-radius: 5px;
+background: var(--secondary-gradient);
+font-size: 4vw;
+}
+.alias-active {
+color: var(--on-secondary);
+font-weight: bold;
+float: right;
+display: inline;
+padding: 0.5vw 2vw;
+border-radius: 5px;
+background: var(--secondary-gradient);
+font-size: 4vw;
+opacity: 0.6;
+}
+.clear{ clear:both} 
+.card-outer{
+  position: relative;
+  margin: auto;
+  width: 90%;
+  height:auto;
+  border: 1px solid var(--primary);
+  padding: 0 2vw 2vw 2vw;
+  border-radius:14px;
+  box-shadow: var(--shadow-2);
+  background-color: var(--bg-2);
+}
+.line{
+  width: 95%;
+  margin: auto;
+  margin-top: 2vw;
+  margin-bottom: 2vw;
+  border-top: 1px var(--on-bg-2) solid;
+}
+.icon {
+  width: 4vw;
+  height: 4vw;
+  margin: 0.5vw;
+}
+.report {
+  position: absolute;
+  bottom: 2vw;
+}

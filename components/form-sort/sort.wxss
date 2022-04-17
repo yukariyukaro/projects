@@ -1,0 +1,9 @@
+.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: .5em;
+}
+.picker {
+  flex: 0 0 3.2em;
+  margin-right: .8em;
+}

@@ -1,0 +1,15 @@
+<view class="all-avatar-outer block shadow radius">
+  <view 
+  wx-if="{{avatarList.length>1}}" 
+  wx:for="{{avatarList}}" wx:key="id" 
+  class="{{chosenAvatar == item ? 'avatar-outer-active': 'avatar-outer'}}"
+  bindtap="chooseAvatar" data-item="{{item}}">
+    <image class="single-avatar" src="{{preURL+item+'.svg'}}"></image>
+  </view>
+</view>
+<view class="submit-outer">
+  <button class="submit primary" disabled="{{!chosenAvatar}}" bindtap="submitNewAvatar">
+    决定了!
+  </button>
+</view>
+

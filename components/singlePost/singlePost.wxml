@@ -1,0 +1,49 @@
+<!--components/singlePost/singlePost.wxml-->
+<view bindtap="postDetail" class="{{is_tapped? 'outer-active':'outer'}}">
+  <view wx:if="{{post_serial !== '999999' || pic === ''}}">
+    <view class="header">
+      <view class="header-title">
+        <text class="serial">#{{post_serial}}</text>
+        <view class="avatar-outer" wx-if="{{user_avatar != ''}}">
+          <image class="avatar" src="{{preURL+user_avatar+'.svg'}}"/>
+        </view>
+        <view class="{{union ? 'topic-union ' : 'topic'}}">
+          <view wx-if="{{topic_color}}" class="topic-tint" style="{{'background-color:' + topic_color}}" />
+          <text class="topic-school">{{topic_label}}</text>
+        </view>
+      </view>
+      <view class="follower-comment-outer">
+        <view class="follower-icon-outer">
+          <image wx:if="{{is_following}}" class="follower-icon" src="/images/star-active.svg"></image> 
+          <image wx:if="{{!is_following}}" class="follower-icon" src="/images/star-inactive.svg"></image> 
+        </view>
+        <view class="follower-num">{{follower_num}}</view>
+        <view class="comment-icon-outer">
+          <image class="comment-icon" src="/images/comment.svg"></image> 
+        </view>
+        <view class="comment-num">{{comment_num}}</view>
+      </view>
+    </view>
+    <view class='line'></view>
+    <view class="music-outer" wx:if="{{music_title != ''}}">
+      <view class="music-title">{{music_title}} - {{music_player}}</view>
+      <view class="music-icon-outer">
+        <image wx:if="{{music_source == 'NETEASE'}}" src="/images/netease.svg" class="music-icon"></image>
+        <image wx:if="{{music_source == 'BILIBILI'}}" src="/images/bilibili.svg" class="music-icon"></image>
+      </view>
+    </view>
+    <view class="content">
+      <view class="message-outer" style="width: {{pic === '' ? 100 : 82}}%">
+        <view class="message-txt">
+          <text>{{post_msg}}</text>
+          <text wx-if="{{post_is_complete=='false'}}"> ...</text>
+          <view wx-if="{{post_is_complete=='false'}}" class="loadmore"><text>查看完整树洞</text></view>
+        </view>
+      </view>
+      <view class="message-pic-outer" wx:if="{{pic !== ''}}">
+        <image class="message-pic" src="{{pic_loaded ? pic : '/images/image-placeholder.svg'}}" bindload="picOnLoad" lazy-load="{{true}}" mode="heightFix"
+        ></image>
+      </view>
+    </view>
+  </view>
+</view>

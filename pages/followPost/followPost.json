@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "singlePost": "/components/singlePost/singlePost",
+    "loadmore": "/components/loadmore/loadmore",
+    "navbar": "/components/navbar/navbar"
+  }
+}

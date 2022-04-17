@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "singleComment": "/components/singleComment/singleComment",
+    "netease": "/components/netease/netease",
+    "bilibili": "/components/bilibili/bilibili",
+    "prompt": "/components/prompt/prompt"
+  }
+}

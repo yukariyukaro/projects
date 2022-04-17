@@ -1,0 +1,69 @@
+<view wx:if="{{!is_error}}">
+<wxs src="../../utils/indexOf.wxs" module="tools" />
+<navbar items="{{navItems}}" start-index="-2" model:current-index="{{currentTab}}" bind:change="navbarTap" />
+
+<view class="write-button-outer" bind:tap="handleStarTap">
+  <view class="write-button-inner">
+  <image class="write-button" src="/images/send-post.svg"></image>    
+  </view>
+</view>
+
+<scroll-view
+  scroll-y="{{true}}" class="scroll-outer"
+  scroll-top="{{scroll_top}}"
+  enable-back-to-top="{{true}}"
+  refresher-enabled="{{true}}"
+  refresher-threshold="{{30}}"
+  refresher-default-style="{{scrollViewRefresherStyle}}"
+  refresher-triggered="{{refresh_triggered}}"
+  bindrefresherrefresh="onRefresh"
+  bindrefresherrestore="onRestore"
+  bindscrolltolower="onLoadMore"
+>
+  <view class="tool-bar" hidden="{{!main_data_received}}">
+    <navigator class="search-outer" url="/pages/search/search">
+      <image class="search-icon" src="/images/search.svg"></image>
+      <view>探寻树洞</view>
+    </navigator>
+    <view class="func-button-outer">
+      <text style="font-size: 30rpx;color: #888;" bindtap="onTapFunction">{{functionList.function_title}}</text>
+      <image class="func-button" src="{{functionList.function_image}}" bindtap="onTapFunction"></image>
+    </view>
+  </view>
+
+  <view class="post-content">
+    <pinned bannerList="{{bannerList}}" wx:if="{{currentTab == -2}}"/>
+    <singlePost wx:for="{{postList}}" wx:key="id"
+      post_serial="{{item.post_id}}" 
+      topic_label="{{item.post_topic}}" 
+      comment_num="{{item.comment_num}}" 
+      post_msg="{{item.post_msg}}" 
+      follower_num="{{item.follower_num}}" 
+      is_following="{{item.is_following}}"
+      post_is_complete="{{item.post_is_complete}}"
+      user_avatar="{{item.user_avatar}}"
+      pic="{{item.post_image}}"/>
+    <loadmore end="{{isLast}}" loading="{{is_loading_more}}" />
+  </view>
+
+
+</scroll-view>
+
+</view>
+
+<view wx:if="{{is_error}}">
+  <view style="font-size: 50rpx;font-weight: bold;text-align: center;margin-top: 100rpx;margin-bottom: 50rpx;">{{errorInfo.error_title}}</view>
+  <view style="font-size: 34rpx;margin-left: 30rpx;margin-right: 30rpx;">{{errorInfo.error_content}}</view>
+</view>
+
+
+<view class="ad1" wx:if="{{show_ad}}" bindtap="closeAD">
+        <view class="ad2">
+            <image mode="aspectFit" style="width:90%;height: 1000rpx;" catchtap="onTapAD" src='{{adInfo.ad_image}}'/>
+        </view>
+          <view class="back_w">
+           <cover-view class="back_image" catchtap="closeAD">
+             <cover-image  src="/images/cross-circle.svg"></cover-image>
+            </cover-view>
+          </view>
+</view>

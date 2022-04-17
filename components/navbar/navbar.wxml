@@ -1,0 +1,13 @@
+<view class="navbar shadow">
+  <slot name="before"/>
+  <view
+    wx:for="{{items}}" 
+    wx:for-item="name"
+    wx:key="unique"
+    data-index="{{index + startIndex}}"
+    class="item {{currentIndex==(index + startIndex) ? 'active-class active' : ''}}"
+    bindtap="navbarTap">
+      <text>{{prop ? name[prop] : name}}</text>
+  </view>
+  <slot name="after"/>
+</view>

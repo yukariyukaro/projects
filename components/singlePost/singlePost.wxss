@@ -1,0 +1,154 @@
+/* components/singlePost/singlePost.wxss */
+.header {
+  display: flex;
+  padding:2.5vw 5vw 0vw 5vw;
+  justify-content: space-between;
+}
+.header-title {
+  display: flex;
+  align-self: center;
+}
+.avatar-outer {
+  display: inline;
+  margin: 0 2vw;
+  margin-bottom: -0.3vw;
+}
+.avatar {
+  width: 6vw;
+  height: 6vw
+}
+.serial {
+  font-weight: bold;
+  align-self: center;
+}
+.topic {
+  color: var(--on-bg-2);
+  align-self: center;
+  padding: 0 2vw;
+  border-radius: 8px;
+  background: var(--bg-gray-1);
+  margin-left: 1vw;
+}
+.topic-union {
+  align-self: center;
+  position: relative;
+}
+.topic-tint {
+  content: "";
+  position: absolute;
+  bottom: 0.1em;
+  left: 0.2em;
+  right: 0.2em;
+  height: 0.4em;
+  opacity: 0.5;
+}
+.topic-school {
+  position: relative;
+}
+.outer{
+  margin:5vw;
+  width: 90%;
+  border-radius:10px;
+  font-size: 4vw;
+  background-color: var(--bg-2);
+  box-shadow: var(--shadow-1);
+}
+.outer:active {
+  opacity: 0.8;
+}
+.line{
+  width: 89%;
+  margin-top: 2.5vw;
+  margin-bottom:3vw;
+  margin-left: 5vw;
+  border-top: 1px var(--on-bg-2) solid;
+}
+.follower-comment-outer {
+  display: flex;
+}
+.comment-icon {
+  width: 4vw;
+  height: 4vw;
+}
+.comment-icon-outer {
+  margin: 0.7vw 2vw
+}
+.follower-icon {
+  width: 4vw;
+  height: 4vw;
+}
+.follower-icon-outer {
+  margin: 0.6vw 2vw
+}
+.loadmore {
+  font-size: 3vw;
+  color: var(--on-bg-2);
+  height: 3vw
+}
+.loadmore text {
+  float: right
+}
+.content {
+  text-align:left;
+  padding: 0.5vw 5vw 3.5vw 5vw;
+  white-space: pre-wrap;
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+}
+.message-outer {
+  /* width: 82%; */
+  display: flex;
+}
+.message-txt {
+  word-break: break-word;
+  width: 100%;
+}
+.message-pic-outer {
+  width: 15vw;
+  height: 15vw;
+  position: relative;
+  align-self: center;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.message-pic {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+.music-outer {
+  font-size: 3.5vw;
+  display: flex;
+  background: var(--bg-gray-1);
+  width: 90%;
+  margin: auto;
+  margin-bottom: 2vw;
+  padding: 2% 2.5%;
+  box-sizing: border-box;  
+  border-radius: 5px;
+  color: var(--on-bg-2);
+  position: relative;
+}
+.music-title {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;  
+  text-overflow: ellipsis;
+}
+.music-icon-outer {
+  text-align: right;
+  height: 4vw;
+  width: 10%;
+  align-self: center;
+}
+.music-icon {
+  height: 4vw;
+  width: 4vw;
+}

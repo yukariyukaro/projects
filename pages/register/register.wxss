@@ -1,0 +1,102 @@
+.page{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-size: 100% 100%;
+  background-repeat:repeat-x;
+  height: 100%;
+  width:100%;
+  overflow:hidden;
+}
+.logo-outer {
+  width: 100%;
+  text-align: center;
+}
+.logo {
+  text-align: center;
+  margin-top: 6vw;
+  width: 25vw;
+  height: 25vw;
+}
+
+.description{
+  margin-top: 5vw;
+  text-align:center;
+  font-family: Helvetica;
+  color: var(--on-bg-1);
+  font-size: 5vw;
+  padding-bottom: 4vw;
+  font-weight: bold;
+}
+.inputbar-auth-group {
+  display: flex;
+  width: 70vw;
+  margin: 3vw 15vw;
+
+}
+.inputbar{
+  background-color: var(--bg-gray-1);
+  width:70vw;
+  margin:3vw 15vw 0 15vw;
+  height:13vw;
+  box-sizing:border-box;
+  display: flex
+}
+.inputbar-auth{
+  background-color: var(--bg-gray-1);
+  margin-right: 5vw;
+  height:13vw;
+  box-sizing:border-box;
+}
+.inputbar-input{
+  width:100%;
+  height:100%;
+  padding-left:5vw;
+  line-height:13vw;
+  font-size:4vw;
+  background-color:transparent
+}
+.inputbtn-getauth{
+  cursor:pointer;
+  padding: 0;
+  text-align:center;
+  line-height:13vw;
+  font-size:3.5vw;
+  font-weight:900;
+  background-color: var(--secondary);
+  color: var(--on-secondary)
+}
+
+.inputbtn-submit{
+  width:70vw !important;
+  margin:3vw 15vw;
+  padding: 0;
+  height:13vw;
+  box-sizing:border-box;
+  text-align:center;
+  line-height:13vw;
+  font-size:4vw;
+  font-weight:900;
+}
+.contact {
+  position: fixed;
+  bottom: 2vw;
+  text-align: center;
+  left: 15vw;
+  width: 70vw;
+  color: var(--on-bg-2);
+  font-size: 3vw
+}
+.mon-picker {
+  align-self: center;
+  width: 100%;
+}
+.radius {
+  border-radius:3vw;
+}
+.other-school-button {
+  background-color: var(--bg-gray-1);
+  color: var(--on-bg-gray-2);
+  border-radius: 3px;
+  padding: 3px;
+}

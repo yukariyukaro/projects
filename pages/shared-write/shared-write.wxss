@@ -1,0 +1,112 @@
+.outer {
+  width: 100%;
+  height: 100%;
+  padding-top: 6vw;
+  padding-bottom: 7vw;
+  font-size: 4vw
+}
+/* 写作块 */
+.textarea-outer{
+  text-align:left;
+  padding: 3vw 5vw 3vw 5vw;
+  height:400rpx
+}
+textarea {
+  width: 100%;
+  height:400rpx;
+  background-color: var(--bg-2);
+}
+.remnant {
+  float:right; 
+  color: var(--on-bg-2);
+  margin-top:1vw;
+}
+/* 多媒体块 */
+.media-outer {
+  text-align:left;
+  padding: 2vw 5vw 2vw 5vw;
+  height: auto;
+}
+.media-single-line {
+  display: flex;
+  justify-content: space-between
+}
+.media-desc {
+  font-size: 3vw;
+  color: var(--on-bg-2);
+  margin-top: -2.5vw
+}
+.media-icon-outer {
+  align-self: center;
+  width: 8vw;
+  height: 8vw;
+  display: flex;
+  border-radius: 4vw;
+}
+.media-icon-outer:active {
+  opacity: 0.7;
+}
+.media-icon {
+  width: 7vw;
+  height: 7vw;
+  margin: auto
+}
+.close-icon-outer {
+  align-self: center;
+  width: 8vw;
+  height: 8vw;
+  display: flex;
+  border-radius: 4vw;
+}
+.close-icon {
+  width: 7vw;
+  height: 7vw;
+  margin: auto
+}
+/* pic块 */
+.pic-outer {
+  text-align:left;
+  padding: 2vw 5vw 2vw 5vw;
+  height: auto;
+}
+/* switch块 */
+.switch-group-outer {
+  text-align:left;
+  /* padding: 2vw 2vw 2vw 5vw; */
+  padding: 2vw 2vw 0vw 5vw;
+  height: 20vw;
+}
+.switch-question-label {
+  margin-top: 1vw;
+}
+.switch-group-public {
+  display: flex
+}
+.switch-group-anonymous {
+  display: flex;
+  margin-top: 1vw
+}
+.switch {
+  flex: 1;
+  text-align: right;
+  margin-top: -0.5vw
+}
+switch {
+  transform:scale(0.6) !important;
+}
+/* 发布按钮 */
+button {
+  font-size: 5vw !important;
+  font-weight: bold;
+  width: 90vw !important;
+}
+/* 通用 */
+.block {
+  width: 90%;
+  margin: auto;
+  margin-bottom: 5vw;
+  background-color: var(--bg-2);
+}
+.radius{
+  border-radius:10px;
+}

@@ -1,0 +1,7 @@
+<view class="outer">
+<view class="title"><text>HKU专属\n友情测试</text></view>
+<view class="continue-outer">
+  <button class="long-button" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录并开始出题</button>
+</view>
+<view class="rule"><text>HKU友情测试规则 \n 点击"去出新题目"即可开始定制HKU友情测试题 \n 每位HKU噗噗用户最多出两套题 \n 题目提交后将无法删除或编辑 \n 含有敏感字符的题目选项将被过滤, 可能导致永久封号</text></view>
+</view>

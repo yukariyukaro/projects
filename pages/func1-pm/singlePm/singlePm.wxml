@@ -1,0 +1,18 @@
+<view bindtap="toDetail" class="outer">
+  <view class="upper-bar">
+    <view class="serial-box-outer"> 
+    <view class="serial-box">
+      <block wx:if="{{type == 'receive'}}">
+        <text user-select='true'>{{sender_serial}}</text>
+      </block>
+      <block wx:elif="{{type == 'send'}}">
+        <text user-select='true'>{{receiver_serial}}</text>
+      </block>
+    </view>
+    </view>
+    <view style="display: flex">
+      <view class="{{pm_is_read == '0' ? 'unread' : 'read'}}"></view>
+    </view>
+  </view>
+  <view class="msg">{{pm_msg}}</view>
+</view>

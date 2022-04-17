@@ -1,0 +1,45 @@
+<view class="page">
+  <view class="logo-outer"> 
+  <image class="logo" src="/images/pootal-logo.svg"></image>
+    <!-- <image class="logo" src="/images/logo-white.png"></image>
+    <image class="logo-star" id="star" src="/images/logo-white-star.png"></image> -->
+  </view>
+
+  <view class="description">HKU 噗噗</view>
+
+    <view class="inputbar radius">
+      <input type="text" class="inputbar-input" placeholder="UID名" maxlength="20" bindinput="uidInput"></input>
+    </view>
+    <view class="inputbar radius">
+      <picker
+        class="mon-picker"
+        options="{{suffixes}}"
+        index="{{suffix_idx}}"
+        bind:change="handleSuffixChange"
+      />
+    </view>
+    <view class="inputbar-auth-group">
+      <view class="inputbar-auth radius">
+        <input type="text" class="inputbar-input" placeholder="验证码" bindinput="vcodeInput"></input>       
+      </view>
+      <button class="inputbtn-getauth radius" bindtap="sendVcode" disabled="{{isSending||authSent}}">发送验证码</button>
+    </view>
+
+    <view class="inputbar-auth-group">
+      <checkbox-group bindchange="agreeChange">
+        <checkbox color="{{secondaryColor}}" value="true" style="margin-right: 3vw"/>
+      </checkbox-group>
+      <text style="align-self: center;">我同意</text><navigator style="align-self: center;" url="/pages/disclaimer/disclaimer">【用户条款及声明】</navigator>
+    </view>
+
+    <button class="inputbtn-submit secondary radius" bindtap="register" disabled="{{isPosting}}">提交注册</button>
+ 
+  <view class="contact">
+    <text>*请提供UID账号以验证HKU学生或职员身份，更多详情请查看</text>
+    <navigator url="/pages/disclaimer/disclaimer">【用户条款及声明】</navigator><text>\n 联系我们 hkupootal@gmail.com</text>
+    <view style="display: flex; justify-content: space-between; font-weight: bold">
+      <view class="other-school-button"><navigator target="miniProgram" open-type="navigate" app-id="wx489029782cc3f033" path="" extra-data="" version="release">HKUST学生入口</navigator></view>
+      <view class="other-school-button"><navigator target="miniProgram" open-type="navigate" app-id="wxad4d60c06d39de3c" path="" extra-data="" version="release">CUHK学生入口</navigator></view>
+    </view>
+  </view>
+</view>

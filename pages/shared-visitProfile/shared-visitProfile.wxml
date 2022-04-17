@@ -1,0 +1,67 @@
+<wxs src="../../utils/indexOf.wxs" module="tools" />
+<view class="id-card">
+  <view class="id-card-inner">
+  <view class="avatar-outer" wx-if="{{user_avatar != ''}}">
+    <image class="avatar" src="{{preURL+user_avatar+'.svg'}}"/>
+  </view>
+  <view class="id-text-outer">
+    <view class="serial-outer">
+      <view>ID</view>
+      <view class="serial-box-outer" wx:if="{{union_serial != '匿名'}}"> 
+        <view class="serial-box">
+          <text user-select="true">{{union_serial_display}}@{{school_label}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="nickname-outer">
+      <view>昵称</view>
+      <view class="nickname">
+        <text class="nickname-editable">{{nickname}}</text>
+      </view>
+    </view>
+    <view class="pm-entry-outer">
+      <view bindtap="sendPm">给TA发私信</view>
+      <view  class="pm-icon-outer" bindtap="sendPm">
+        <image class="pm-icon" src="/images/pm.svg"></image>
+      </view>
+    </view>
+  </view>
+  </view>
+</view>
+<view class="title-card shadow" wx:if="{{union_serial != '匿名'}}">
+  <text class="title">TA的公开树洞</text>
+</view>
+<scroll-view
+  wx:if="{{union_serial != '匿名'}}"
+  scroll-y="{{true}}" class="scroll-outer"
+  scroll-top="{{scroll_top}}"
+  enable-back-to-top="{{true}}"
+  refresher-enabled="{{true}}"
+  refresher-threshold="{{30}}"
+  refresher-default-style="black"
+  refresher-background="white"
+  refresher-triggered="{{refresh_triggered}}"
+  bindrefresherrefresh="onRefresh"
+  bindrefresherrestore="onRestore"
+  bindscrolltolower="onLoadMore"
+> 
+  <view class="post-content" wx:if="{{past_data_received}}">
+    <singlePost  wx:for="{{past_posts}}" wx:key="id"
+      post_serial="{{item.post_serial}}" 
+      topic_label="{{item.topic_label}}" 
+      comment_num="{{item.comment_num}}" 
+      post_is_complete="{{item.post_is_complete}}"
+      post_msg="{{item.post_msg}}" 
+      follower_num="{{item.follower_num}}"
+      is_following="{{tools.indexOf(past_following_posts,item.post_serial)}}"
+      music_player="{{item.music_player}}"
+      music_title="{{item.music_title}}"
+      pic="{{item.pic}}"
+      user_avatar="{{user_avatar}}"
+      union
+    />
+    <loadmore empty="{{past_posts.length==0}}" end="{{past_no_more_post}}" loading="{{is_loading_more}}">
+      这里空荡荡的
+    </loadmore>
+  </view>
+</scroll-view>

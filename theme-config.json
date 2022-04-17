@@ -1,0 +1,24 @@
+{
+  "defaults": {
+    "light": {
+      "backgroundTextStyle": "light",
+      "navigationBarTextStyle": "white",
+      "scrollViewRefresherStyle": "black"
+    },
+    "dark": {
+      "backgroundTextStyle": "dark",
+      "navigationBarTextStyle": "black",
+      "scrollViewRefresherStyle": "white"
+    }
+  },
+  "keyMap": {
+    "primary": "primary",
+    "secondary": "secondary",
+    "backgroundColor": "bg-1",
+    "navigationBarBackgroundColor": "primary",
+    "tabBarBackgroundColor": "bg-3",
+    "tabBarSelectedColor": "primary",
+    "onBg1": "on-bg-1",
+    "onBg2": "on-bg-2"
+  }
+}

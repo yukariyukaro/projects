@@ -1,0 +1,81 @@
+.music-outer {
+  background: var(--bg-gray-1);
+  width: 100%;
+  display: flex;
+  margin: auto;
+  padding: 2vw;
+  box-sizing: border-box;  
+  border-radius: 5px;
+  margin-top: 2vw;
+  margin-bottom: 2vw;
+  color: var(--on-bg-1);
+  position: relative;
+  font-size: 3.5vw;
+  overflow: hidden;
+}
+.cover-outer {
+  width: 20vw;
+  height: 15vw;
+  position: relative;
+}
+.cover {
+  width: 20vw;
+  height: 15vw;
+  border-radius: 5px;
+  object-fit: cover;
+}
+.title-outer {
+  width: 70%;
+  height: 10vw;
+  margin:auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  
+}
+.title {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;  
+  text-overflow: ellipsis;
+}
+.player {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.netease-icon-outer {
+  position: absolute;
+  top: 2vw;
+  right: 2vw;
+}
+.netease-icon {
+  width: 4vw;
+  height: 4vw;
+}
+.record-logo {
+  position: absolute;
+  font-size: 3vw;
+  color: rgb(218,178,115);
+  font-style: italic;
+  bottom: -1vw;
+  right: 2vw;
+}
+.music-play-outer {
+  align-self: center;
+  width: 20vw;
+  height: 15vw;
+  display: flex;
+  position: absolute;
+  left: 3vw;
+  z-index: 10;
+  opacity: 0.8;
+}
+.music-play-outer:active {
+  opacity: 0.6;
+}
+.music-play-icon {
+  width: 10vw;
+  height: 15vw;
+  margin: auto;
+} 

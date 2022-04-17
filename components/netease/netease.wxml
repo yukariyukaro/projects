@@ -1,0 +1,16 @@
+<view class="music-outer">
+  <view class="cover-outer">
+    <image class="cover" src="{{music_cover}}"/>
+  </view>
+  <view class="music-play-outer" bindtap="playMusic">
+    <image class="music-play-icon" src="/images/play.svg"></image>
+  </view>
+  <view class="netease-icon-outer">
+    <image src="/images/netease.svg" class="netease-icon"></image>
+  </view>
+  <view class="record-logo">Voyager record 旅行者金唱片</view>
+  <view class="title-outer">
+    <view class="title">{{music_title}}</view>
+    <view class="player">{{music_player}} - {{music_epname}}</view>
+  </view>
+</view>

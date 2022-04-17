@@ -1,0 +1,72 @@
+.pm-outer {
+  width: 100%;
+  height: 100%;
+  flex-flow: row wrap;
+  padding-bottom: 8vw;
+}
+.write-button-outer {
+  position: fixed;
+  bottom: 15vw;
+  right: 2vw;
+  z-index: 100;
+  height: 20vw;
+  width: 20vw;
+  border-radius: 10vw;
+  background: var(--bg-3);
+  box-shadow: var(--shadow-2);
+  opacity: 0.9
+}
+.write-button-inner {
+  box-shadow: var(--shadow-inset-2);
+  height: 100%;
+  width: 100%;
+  border-radius: 10vw;
+  position: absolute;  
+}
+.write-button {
+  width: 13vw;
+  height: 13vw;
+  margin: 3.5vw;
+}
+.title {
+  line-height: 12vw;
+  font-size: 4vw;
+  color: var(--on-bg-2);
+}
+.scroll-outer {
+  height: calc(100vh - 12vw);
+  padding-top: 15vw;  
+}
+.no-content {
+  font-size: 4vw;
+  color: var(--on-bg-2);
+  margin-top: 30vw;
+  text-align:center;
+  width: 100%;
+}
+.receive-active {
+  font-weight: bold;
+}
+.send-active {
+  font-weight: bold;
+}
+.send-active::after{
+  background: var(--primary) !important;
+}
+.navbar-after {
+  flex: 0 0 60%;
+  display: flex;
+  justify-content: space-between;
+}
+.help {
+  width: 20%;
+  line-height:12vw;
+  text-align:center;
+}
+.date-title {
+  font-size: 4.5vw;
+  font-weight: bold;
+  margin-left: 2.5vw;
+  margin-top: 2vw;
+  color: var(--on-bg-2)
+}

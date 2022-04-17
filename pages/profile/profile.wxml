@@ -1,0 +1,94 @@
+<view>
+<prompt id="nicknamePrompt" 
+  title='请输入昵称:' 
+  bind:getInput="nicknameGetInput" 
+  bind:modalCancel="nicknameCancel"
+  bind:modalConfirm="nicknameConfirm"
+  type="input"
+  input_height="6"
+  max_length="10">
+</prompt>
+<prompt id="serialPrompt" 
+  title='请输入新ID:' 
+  desc='ID至少3位 仅支持数字和小写字母'
+  bind:getInput="serialGetInput" 
+  bind:modalCancel="serialCancel"
+  bind:modalConfirm="serialConfirm"
+  type="input"
+  input_height="6"
+  max_length="10">
+</prompt>
+<view class="id-card">
+  <view class="id-card-inner">
+    <navigator url="/pages/avatarPicker/avatarPicker">
+      <view class="avatar-outer" wx-if="{{userInfo.user_avatar}}">
+        <image class="avatar" src="{{preURL+userInfo.user_avatar+'.svg'}}"/>
+      </view>
+    </navigator>
+    <view class="id-text-outer">
+      <view class="serial-outer">
+        <view class="serial-title">Pootal ID</view>
+        <text bindtap="showSerialPrompt" class="op">修改</text>
+        <view class="serial-box-outer"> 
+          <view class="serial-box">
+            <text user-select="true">{{userInfo.user_serial}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="nickname-outer">
+        <view class="nickname-title">昵称</view>
+        <text wx:if="{{userInfo.user_nickname==='未设置'}}" bindtap="showNicknamePrompt" class="op">创建</text>
+        <text wx:else bindtap="showNicknamePrompt" class="op">修改</text>
+        <view class="nickname">
+          <text class="nickname-editable">{{userInfo.user_nickname}}</text>
+        </view>
+      </view>
+      <view class="nickname-desc">*昵称和Pootal ID可以随时修改</view>
+    </view>
+  </view>
+</view>
+
+<view class="entry-block">
+  <view class="func-icon-outer {{index==chosen_func ? 'func-icon-active' : ''}}" wx:for="{{func_list}}" data-index="{{index}}" wx:key="index" bindtap="funcTap">
+    <image class="func-icon" src="{{item.icon}}"/>
+    <view class="func-icon-label">{{item.label}}</view>
+  </view>
+</view>
+
+<view class="title-outer" style="margin-top:40rpx">
+  <view class="notice-title">通知中心</view>
+  <view class="switch">
+        <text style="font-size: 30rpx;color: #888;">消息推送</text>
+        <switch color="#D85050" checked="{{userInfo.subscribe_accept}}" bindchange="acceptSubscribe"/>  
+  </view>
+</view>
+<scroll-view
+  scroll-y="{{true}}" class="scroll-outer"
+  scroll-top="{{scroll_top}}"
+  enable-back-to-top="{{true}}"
+  refresher-enabled="{{true}}"
+  refresher-threshold="{{30}}"
+  refresher-default-style="{{scrollViewRefresherStyle}}"
+  refresher-triggered="{{refresh_triggered}}"
+  bindrefresherrefresh="onRefresh"
+  bindrefresherrestore="onRestore"
+  bindscrolltolower="onLoadMore"
+>
+<view   style="padding-top:10rpx; padding-bottom: 60rpx;">
+  <view wx:for="{{noticeList}}" wx:key="index" class="single-notice-outer" wx:if="{{noticeList.length > 0}}" data-url="{{item.notice_url}}" bindtap="nav2Notice">
+    <view url="/pages/func1-pm/pm/pm" class="single-notice" wx:if="{{item.notice_is_read == '0'}}">
+      <view class="single-notice-bar bar-pm"></view>
+      <view class="single-notice-msg">{{item.notice_msg}}</view>
+    </view>
+    <view class="single-notice has_read" wx:else>
+      <view class="single-notice-bar bar-post"></view>
+      <view class="single-notice-msg">{{item.notice_msg}}</view>
+    </view>
+
+  </view>
+  <loadmore end="{{isLast}}" loading="{{is_loading_more}}" wx:if="{{noticeList.length != 0}}"/>
+  <view wx:if="{{noticeList.length == 0}}" class="no-content">暂时没有新通知</view>
+</view>
+</scroll-view>
+
+</view>

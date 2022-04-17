@@ -1,0 +1,24 @@
+<view class="modal-wrapper" hidden="{{hidden}}">
+  <view class="modal-container">
+    <view class="modal-title">{{title}}</view>
+    <view class="modal-body">
+      <slot></slot>
+    </view>
+      <view class="modal-button-group">
+        <button
+          class="modal-button ~gray"
+          bindtap="_cancel"
+          wx:if="{{cancelText}}"
+        >
+          {{cancelText}}
+        </button>
+        <button
+          class="modal-button ~secondary"
+          bindtap="_confirm"
+          wx:if="{{confirmText}}"
+        >
+          {{confirmText}}
+        </button>
+      </view>
+  </view>
+</view>

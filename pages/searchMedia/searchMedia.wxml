@@ -1,0 +1,30 @@
+<view class="outer">
+  <view class="search-outer">
+    <view class="search-input-outer">
+      <view class="search-prefix">
+        <image src="/images/netease.svg" class="prefix-media-icon" wx:if="{{source === 'NETEASE'}}"></image>
+        <image src="/images/bilibili.svg" class="prefix-media-icon" wx:if="{{source === 'BILIBILI'}}"></image>
+      </view>
+      <input wx:if="{{source === 'NETEASE'}}" class="search-input" maxlength="200" auto-focus
+        placeholder="将网易云歌曲链接复制粘贴到此处" bindinput="bindSearchInput" bindconfirm="searchNetease" value="{{inputTxt}}" />
+      <input wx:if="{{source === 'BILIBILI'}}" class="search-input" maxlength="200" auto-focus placeholder="将bv号复制粘贴到此处"
+        bindinput="bindSearchInput" bindconfirm="searchBilibili" value="{{inputTxt}}" />
+    </view>
+    <view class="search-icon-outer" wx:if="{{source === 'NETEASE'}}" bindtap="searchNetease">
+      <image class="search-icon" src="/images/search.svg"></image>
+    </view>
+    <view class="search-icon-outer" wx:if="{{source === 'BILIBILI'}}" bindtap="searchBilibili">
+      <image class="search-icon" src="/images/search.svg"></image>
+    </view>
+  </view>
+  <view class="result-outer" wx:if="{{result != undefined}}">
+    <view class="result" catch:tap="confirmResult">
+      <netease wx:if="{{source === 'NETEASE'}}" music_cover="{{result.cover}}" music_player="{{result.player}}"
+        music_title="{{result.title}}" music_epname="{{result.epname}}" music_source="{{result.musicSource}}"
+        music_id="{{result.musicId}}" />
+      <bilibili wx:if="{{source === 'BILIBILI'}}" music_cover="{{result.cover}}" music_player="{{result.player}}"
+        music_title="{{result.title}}" music_epname="{{result.epname}}" music_source="{{result.musicSource}}"
+        music_id="{{result.musicId}}" />
+    </view>
+  </view>
+</view>

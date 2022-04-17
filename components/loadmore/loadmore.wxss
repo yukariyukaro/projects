@@ -1,0 +1,32 @@
+.no-content, .loadmore {
+  font-size: 4vw;
+  color: var(--on-bg-2);
+  text-align:center;
+}
+.no-content {
+  margin-top: 30vw;
+}
+.loadmore {
+  height: 5%;
+  margin-top: 2vw;
+}
+.running {
+  width: 20px;
+  height: 20px;
+  vertical-align: text-top;
+  animation: 1s step-start infinite running-shiba;
+}
+@keyframes running-shiba {
+  0%, 100% {
+    transform: translate(1px, 0.5px) rotate(5deg);
+  }
+  25% {
+    transform: translate(-0.5px, 0px) rotate(20deg);
+  }
+  50% {
+    transform: translate(-3px, 1.5px) rotate(-15deg);
+  }
+  75% {
+    transform: translate(0.5px, 1px) rotate(-7deg);
+  }
+}

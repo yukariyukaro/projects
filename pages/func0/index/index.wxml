@@ -1,0 +1,17 @@
+<view class="outer">
+<navigator class="long-button" url="/pages/func0/setEntrance/setEntrance" wx:if="{{sheets.length<2}}">
+  <button class="long-button">
+    <text style="line-height: 10vw">去出新题目</text>
+  </button>
+</navigator>
+<view style="font-size:4vw;margin-left:5vw;margin-top:5vw;font-weight: bold;">· 我的测试(上限两套):</view>
+<view bindtap="ownSheetDetail" data-id="{{item.sheet_id}}" wx:for="{{sheets}}" wx:key="index" class="sheet-outer shadow">
+  <text class="sheet-score-num">📃 {{index+1}}. 已经有{{item.score_num}}人做了</text>
+  <text class="sheet-detail">点击查看详情</text>
+</view>
+<view style="font-size:4vw;margin-left:5vw;font-weight: bold;">· 我做过的测试:</view>
+<view bindtap="otherSheetDetail" data-id="{{item.sheet_id}}" data-itsc="{{item.user_itsc}}" wx:for="{{done_sheets}}" wx:key="index" class="sheet-outer shadow">
+  <text class="sheet-score-num">✏ {{index+1}}. {{item.wc_nickname}}的测试</text>
+  <text class="sheet-detail">点击查看详情</text>
+</view>
+</view>

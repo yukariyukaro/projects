@@ -1,0 +1,89 @@
+page {
+  --primary: #D85050;
+  --primary-gradient: linear-gradient(to bottom right, #c53d3d, #e96b6b);
+  --secondary: #ffd700;
+  --secondary-gradient: linear-gradient(to bottom right, #e9c602, #ffe760);
+  --gray-gradient: linear-gradient(to bottom right, #b4b4b4, #d6d6d6);
+  --primary-shadow: 0 0 18px -4px rgba(216, 80, 80, 0.8);
+  --secondary-shadow: 0 0 18px -4px rgba(233, 198, 2, 0.8);
+  --gray-shadow: 0 0 18px -4px rgba(128, 128, 128, 0.8);
+  --bg-1: #fff;
+  --bg-2: #fff;
+  --bg-3: #fff;
+  --bg-gray-1: #ddd;
+  --bg-gray-2: #c2c2c2;
+  --on-primary: #fff;
+  --on-secondary: #000;
+  --on-bg-1: #000;
+  --on-bg-2: #808080;
+  --on-bg-3: #606060;
+  --on-bg-gray-1: #000;
+  --on-bg-gray-2: #000;
+  --shadow-1: 0 0 18px 4px rgba(0, 0, 0, 0.1);
+  --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.1);
+  --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15);
+}
+@media (prefers-color-scheme: dark) {
+  page {
+    --primary: #864442;
+    --secondary: #f3ec68;
+    --primary-gradient: linear-gradient(to bottom right, #b44d56, #cc7980);
+    --secondary-gradient: linear-gradient(to bottom right, #EDDE3F, #f6f194);
+    --gray-gradient: linear-gradient(to bottom right, #424242, #646464);
+    --primary-shadow: 0 0 18px -8px rgba(133, 68, 66, 0.8);
+    --secondary-shadow: 0 0 18px -8px rgba(233, 198, 2, 0.8);
+    --gray-shadow: 0 0 18px -8px rgba(128, 128, 128, 0.8);
+    --bg-1: #000000;
+    --bg-2: #1c1c1c;
+    --bg-3: #212121;
+    --bg-gray-1: #2e2e2e;
+    --bg-gray-2: #4f4f4f;
+    --on-primary: #000;
+    --on-secondary: #000;
+    --on-bg-1: rgba(255, 255, 255, 0.8);
+    --on-bg-2: rgba(175, 175, 175, 0.8);
+    --on-bg-3: rgb(158, 158, 158, 0.8);
+    --on-bg-gray-1: #000;
+    --on-bg-gray-2: rgb(200, 200, 200, 0.8);
+    --shadow-1: 0 0 18px 4px rgba(0, 0, 0, 0.1), 0 0 8px 4px rgba(0, 0, 0, 0.1);
+    --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.2), 0 0 4px 2px rgba(0, 0, 0, 0.3);
+    --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15);
+  }
+}
+page {
+  --shadow-inset-1: 0 -1px 3px 0 rgba(0,0,0,0.3) inset;
+  --shadow-inset-2: 0 -2px 5px 0 rgba(0,0,0,0.3) inset;
+}
+
+page {
+  background-color: var(--bg-1);
+  color: var(--on-bg-1);
+}
+
+.shadow {
+  box-shadow: var(--shadow-1);
+}
+
+button {
+  border-radius: 10px !important;
+}
+button:not([disabled]).secondary {
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+  box-shadow: var(--secondary-shadow);
+}
+button:not([disabled]).gray {
+  background-color: var(--bg-gray-2);
+  color: var(--on-bg-gray-1);
+  box-shadow: var(--gray-shadow);
+}
+button:not([disabled]).primary {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  box-shadow: var(--primary-shadow);
+}
+@media (prefers-color-scheme: dark) {
+  .wx-switch-input::before {
+    background-color: var(--bg-2) !important;
+  }
+}

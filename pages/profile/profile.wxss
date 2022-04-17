@@ -1,0 +1,203 @@
+page {
+  overflow: hidden;
+}
+.id-card {
+  width: 90%;
+  height: 26vw;
+  border-radius: 10px; 
+  box-shadow: var(--shadow-1);
+  position: relative;
+  left: 5%;
+  top: 5vw;
+  font-size: 4vw;
+  background-color: var(--bg-2);
+}
+.id-card-inner {
+  box-shadow: var(--shadow-inset-1);
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  position: absolute;  
+}
+.id-text-outer {
+  margin-left: 25vw
+}
+.serial-outer {
+  display: flex;
+  margin-top: 3vw;
+  width: 60vw
+}
+.serial-box-outer {
+  flex: 1;
+  text-align: right
+}
+.serial-box {
+  color: var(--on-secondary);
+  font-weight: bold;
+  display: inline;
+  padding: 0vw 2vw;
+  border-radius: 5px;
+  background: var(--secondary-gradient);
+}
+.avatar-outer {
+  float: left;
+  margin: 3.5vw 0 0vw 5vw;
+  border: 2px solid var(--bg-gray-1);
+  border-radius: 10px;
+  padding: 0.5vw;
+  width: 15vw;
+  height: 15vw;
+  text-align: center;  
+}
+.avatar {
+  width: 12vw;
+  height: 12vw;
+  margin-top:1vw;
+}
+.nickname-outer {
+  display: flex;
+  width: 60vw;
+  margin-top: 1vw
+}
+.nickname {
+  color: var(--on-bg-2);
+  flex: 1;
+  text-align: right
+}
+.nickname-desc {
+  font-size: 3vw;
+  width: 60vw;
+  color: var(--on-bg-2)
+}
+.op {
+  color: var(--primary);
+  font-size:3.5vw;
+  margin-left: 0.25em;
+}
+/* 功能块 */
+.entry-block {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 80vw;
+  text-align: center;
+  margin: auto;
+  margin-top: 10vw;
+  padding: 0 5vw;
+  border-radius: 10px;  
+}
+.func-icon-outer {
+  float: left;
+  margin: 1vw 2vw 0vw 2vw;
+  width: 17vw;
+  height: 17vw;
+  text-align: center;
+}
+.func-icon-active {
+  transform:rotate(20deg);
+}
+.func-icon {
+  width: 8vw;
+  height: 8vw;
+  margin-top:1vw;
+}
+.func-icon-label {
+  font-size: 3vw;
+  color: var(--on-bg-2);
+}
+
+.block {
+  width: 90%;
+  margin: auto;
+  margin-bottom: 5vw;
+  background-color: var(--bg-2);
+}
+.radius{
+  border-radius:10px;
+}
+.switch-group-outer {
+  text-align:left;
+  padding: 2vw 2vw 2vw 2vw;
+}
+.switch-group-public {
+  display: flex
+}
+.switch-question-label {
+  margin-top: 1vw;
+}
+.switch {
+  flex: 1;
+  text-align: right;
+  margin-top: -0.5vw
+}
+switch {
+  transform:scale(0.6) !important;
+}
+.title-outer {
+  margin: 0 5vw;
+  display: flex;
+  height: 6vw;
+  justify-content: space-between;
+}
+.notice-title {
+  font-size: 4.5vw;
+  font-weight: bold;
+  line-height: 6vw
+}
+.delete-all {
+  font-size: 4vw;
+  color: var(--on-bg-2);
+  font-weight: bold;
+}
+.single-notice-outer {
+  width: 85%;
+  border-radius: 6px;
+  box-shadow: var(--shadow-3);
+  margin: auto;
+  margin-top: 3vw;
+  margin-bottom: 3vw; 
+  font-size: 4vw;
+  background-color: var(--bg-2);
+}
+.single-notice {
+  padding: 2vw 3vw;
+  border-radius: 6px;
+}
+.has_read {
+  opacity: 0.3;
+  width: 90%;
+}
+.single-notice-bar {
+  width: 13vw;
+  height: 1.5vw;
+  margin-left: 2vw;
+  margin-bottom: 1vw;
+}
+.bar-pm {
+  background: linear-gradient(to bottom right, yellow, gold);
+}
+.bar-post {
+  background: linear-gradient(to bottom right, blue, purple);
+}
+.bar-comment {
+  background: linear-gradient(to bottom right, rgb(255, 94, 169), rgb(248, 3, 97));
+}
+.no-content {
+  font-size: 4vw;
+  color: var(--on-bg-2);
+  padding-top: 30vw;
+  text-align:center;
+}
+.scroll-outer {
+  height:calc(100vh - 60vw);
+}
+.delete-icon-outer {
+  width: 10%; 
+  align-self: center; 
+  text-align: center
+}
+.icon {
+  width: 4vw;
+  height: 4vw;
+  margin: 0.5vw;
+}

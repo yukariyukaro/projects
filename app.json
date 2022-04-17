@@ -1,0 +1,75 @@
+{
+  "cloud": true,
+  "themeLocation": "theme.json",
+  "pages": [
+    "pages/home/home",
+    "pages/profile/profile",
+    "pages/func0/setEntrance/setEntrance",
+    "pages/more/more",
+    "pages/write/write",
+    "pages/register/register",
+    "pages/detail/detail",
+    "components/singleComment/singleComment",
+    "pages/writeComment/writeComment",
+    "pages/visitProfile/visitProfile",
+    "pages/avatarPicker/avatarPicker",
+    "pages/func0/setProblem/setProblem",
+    "pages/func0/problemDetail/problemDetail",
+    "pages/func0/shareQR/shareQR",
+    "pages/disclaimer/disclaimer",
+    "pages/search/search",
+    "pages/func1-pm/writePm/writePm",
+    "pages/transition/transition",
+    "pages/searchMedia/searchMedia",
+    "pages/pastPost/pastPost",
+    "pages/followPost/followPost",
+    "pages/func1-pm/pm/pm",
+    "pages/func1-pm/pmDetail/pmDetail",
+    "pages/shared-home/shared-home",
+    "pages/shared-detail/shared-detail",
+    "pages/shared-write/shared-write",
+    "pages/shared-writeComment/shared-writeComment",
+    "pages/survey/survey",
+    "pages/webview/webview"
+  ],
+  "requiredBackgroundModes": [
+    "audio",
+    "location"
+  ],
+  "darkmode": true,
+  "window": {
+    "navigationBarTitleText": "HKU噗噗",
+    "navigationBarBackgroundColor": "@navigationBarBackgroundColor",
+    "navigationBarTextStyle": "@navigationBarTextStyle",
+    "backgroundColor": "@backgroundColor",
+    "backgroundTextStyle": "@backgroundTextStyle"
+  },
+  "tabBar": {
+    "color": "#8a8a8a",
+    "selectedColor": "@tabBarSelectedColor",
+    "backgroundColor": "@tabBarBackgroundColor",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "images/home-inactive.png",
+        "selectedIconPath": "images/home-active.png",
+        "text": "树洞"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "iconPath": "images/profile-inactive.png",
+        "selectedIconPath": "images/profile-active.png",
+        "text": "我的"
+      },
+      {
+        "pagePath": "pages/more/more",
+        "iconPath": "images/more-inactive.png",
+        "selectedIconPath": "images/more-active.png",
+        "text": "更多"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

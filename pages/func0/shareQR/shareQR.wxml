@@ -1,0 +1,7 @@
+<view class="outer">
+<canvas canvas-id="myCanvas" style="{{canvasStyle}}"></canvas>
+<view style="height:100vw">
+  <image src='{{tempSavedImageURL}}' mode='aspectFit' style='height:100%;width:100%' show-menu-by-longpress="{{true}}"></image>
+  <view style="font-size:5vw;font-weight:bold;text-align:center">请长按图片保存至相册后分享到朋友圈</view>
+</view> 
+</view>

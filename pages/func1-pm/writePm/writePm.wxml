@@ -1,0 +1,71 @@
+<view class="outer">
+<view class="block shadow radius">
+  <view class="textarea-outer" bindtap="focus">
+    <textarea class="content" value="{{pm_msg}}" maxlength="750" placeholder="我想对你说..." show-confirm-bar="{{false}}" bindinput="bindContentInput" focus="{{focus}}"></textarea>
+  </view>
+  <view class="remnant">还可以写{{remnantLen}}字</view>
+</view>
+
+<view class="block shadow radius">
+  <view class="setting-group-outer">
+    <text class="switch-question-label">私信投递方式<text style="color:red"> *</text> </text>
+    <view class="to-type-outer">
+      <view class="{{to_type == 'user'?'to-type-box-active':'to-type-box-inactive'}}" data-idx="user" bindtap="toTypeTap">
+        <view>用户编号</view>
+      </view>
+      <view class="{{to_type == 'post'?'to-type-box-active':'to-type-box-inactive'}}" data-idx="post" bindtap="toTypeTap">
+        <view>树洞编号</view>
+      </view>
+    </view>
+    <view hidden="{{to_type != 'user'}}">
+      <view class="serial-input-outer">
+        <view style="align-self:center"><text>用户编号<text style="color:red"> *</text> </text></view>
+        <view class="serial-input">
+          <input class="input" maxlength="10" value="{{user_serial}}" placeholder="ID" bindinput="bindUserSerialInput"/>
+        </view>
+      </view>
+    </view>
+    <view class="serial-input-outer" hidden="{{to_type != 'post'}}">
+      <view style="align-self:center"><text>树洞编号<text style="color:red"> *</text> </text></view>
+      <view style="display: flex">
+        <view class="serial-hashtag">#</view>
+        <view class="serial-input">
+          <input class="input" maxlength="6" value="{{post_id}}" placeholder="六位树洞编号" bindinput="bindPostSerialInput" type="number"/>
+        </view>
+      </view>
+    </view>
+    <view class="serial-input-outer" hidden="{{to_type != 'post'}}">
+      <view style="align-self:center"><text>楼层</text></view>
+      <view style="display: flex">
+        <view class="floor-prefix">LG</view>
+        <view class="serial-input">
+          <input class="input" maxlength="3" value="{{comment_order}}" placeholder="楼层" bindinput="bindCommentOrderInput" type="number"/>
+      </view>
+      </view>
+    </view>
+    <view class="switch-question-desc" hidden="{{to_type != 'post'}}">
+      <text hidden="{{}}">若寄送给树洞拥有者请不要填写楼层 \n</text>
+      <text>若寄送给G层 楼层为LG0</text>
+    </view>
+  </view>
+</view>
+
+<view class="block shadow radius">
+<view class="setting-group-outer">
+    <view class="switch-group-anonymous">
+      <text class="switch-question-label">是否显示Pootal ID<text style="color:red"> *</text> </text>
+      <view class="switch" >
+        <switch color="{{primaryColor}}" checked="{{pm_with_serial}}" bindchange="switchSerialChange"/> 
+      </view>
+    </view>
+    <view class="switch-question-desc">
+      <text wx:if="{{pm_with_serial}}">将显示自己的头像和Pootal ID</text>
+      <text wx:if="{{!pm_with_serial}}">隐去自己的头像和ID,<text style="color: var(--primary)"> 但对方无法给你回信</text></text>
+    </view>
+</view>
+</view>
+
+<button class="secondary" bindtap="submitNewPm" disabled="{{isSending}}">寄送</button>
+
+</view>
+

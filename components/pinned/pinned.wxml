@@ -1,0 +1,17 @@
+<view class="pinned" wx:if="{{bannerList[0]}}">
+  <view class="pinned-background" style="background-image: url(https://avtar-space-1301435395.cos.ap-shanghai.myqcloud.com/stardust_pics/hku_pics/egg.png)" />
+  <swiper
+    circular="{{bannerList.length > 1}}"
+    autoplay="{{bannerList.length > 1}}"
+    class="swiper"
+    interval="3000"
+  >
+    <swiper-item wx:for="{{bannerList}}">
+      <view class="outer" style="background-image: url({{item.banner_image}});" bind:tap="postDetail" data-index="{{index}}">
+        <view class="pinned-content">
+          <text>{{item.banner_title}}</text>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+</view>

@@ -1,0 +1,25 @@
+<modal
+  id="prompt-modal"
+  title="{{title}}"
+  confirmText="提交"
+>
+  <view style="margin-bottom: 2vw"><text>{{desc}}</text></view>
+  <textarea
+    class="prompt-input"
+    bindinput="_textareaInput"
+    auto-height="{{true}}"
+    maxlength="{{max_length}}"
+    style="width: 100%"
+    focus="{{focus}}"
+    wx-if="{{type=='textarea'}}"
+  />
+  <input
+    class="prompt-input"
+    bindinput="_inputInput"
+    style="height:6vw"
+    maxlength="{{max_length}}"
+    focus="{{focus}}"
+    wx-if="{{type=='input'}}"
+  />
+  <view class="remnant">{{max_length-current_length}}/{{max_length}}</view>
+</modal>

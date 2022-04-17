@@ -1,0 +1,29 @@
+<view>
+  <view class="card-outer">
+      <view class="card-comment-serial">
+          <text class="comment-floor" wx:if="{{comment_order=='0'}}">G层 · </text>
+          <text class="comment-floor" wx:if="{{comment_order!='0'}}">LG{{comment_order}} · </text>
+          <text class="comment-date">{{comment_date}}</text>
+          <view style="float:right" wx:if="{{is_author}}" bindtap="deleteComment">
+            <image class="icon" src="/images/trash-delete.svg"></image>
+          </view>
+          <view style="float:right; display: flex" wx:else>
+            <image  bindtap="goToComment" class="icon" src="/images/reply.svg"></image>
+          </view>
+      </view>
+      <view class="line"></view>
+      <view class="card-comment-content"><text user-select='true'>{{comment_msg}}</text></view>
+    
+      <image  bindtap="reportComment" class="icon report" src="/images/report.svg"></image>
+
+      <view class="alias" bindtap="visitUser">
+        <text>{{comment_alias}}</text>
+      </view>
+
+      <view class="avatar-outer" wx:if="{{user_avatar != ''}}" bindtap="visitUser">
+        <image class="avatar" src="{{preURL+user_avatar+'.svg'}}"/>
+      </view>  
+      <view class="clear"></view>
+  </view>
+  <view style="height: 4vw"></view>
+</view>

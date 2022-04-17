@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "stardust-miniprogram",
+  "version": "1.0.0",
+  "description": "Stardust Miniprogram",
+  "dependencies": {
+    "async-mutex": "^0.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "postcss": "^8.2.6",
+    "postcss-export-custom-variables": "^1.0.0",
+    "postcss-export-vars": "^0.2.0",
+    "postcss-loader": "^5.0.0",
+    "prettier": "2.0.5"
+  },
+  "scripts": {
+    "lint": "eslint \"./**/*.js\"",
+    "format": "eslint \"./**/*.js\" --fix",
+    "postcss": "node ./postcss.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bruceshark/stardust-miniprogram.git"
+  },
+  "author": "startdust",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Bruceshark/stardust-miniprogram/issues"
+  },
+  "homepage": "https://github.com/Bruceshark/stardust-miniprogram#readme"
+}
