@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "singlePost": "/components/singlePost/singlePost",
-    "pinned": "/components/pinned/pinned",
-    "navbar": "/components/navbar/navbar",
-    "loadmore": "/components/loadmore/loadmore"
-  }
-}
