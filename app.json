@@ -4,7 +4,6 @@
   "pages": [
     "pages/home/home",
     "pages/profile/profile",
-    "pages/func0/setEntrance/setEntrance",
     "pages/more/more",
     "pages/write/write",
     "pages/register/register",
@@ -13,24 +12,19 @@
     "pages/writeComment/writeComment",
     "pages/visitProfile/visitProfile",
     "pages/avatarPicker/avatarPicker",
-    "pages/func0/setProblem/setProblem",
-    "pages/func0/problemDetail/problemDetail",
-    "pages/func0/shareQR/shareQR",
     "pages/disclaimer/disclaimer",
     "pages/search/search",
     "pages/func1-pm/writePm/writePm",
-    "pages/transition/transition",
-    "pages/searchMedia/searchMedia",
     "pages/pastPost/pastPost",
     "pages/followPost/followPost",
     "pages/func1-pm/pm/pm",
     "pages/func1-pm/pmDetail/pmDetail",
-    "pages/shared-home/shared-home",
-    "pages/shared-detail/shared-detail",
-    "pages/shared-write/shared-write",
-    "pages/shared-writeComment/shared-writeComment",
-    "pages/survey/survey",
-    "pages/webview/webview"
+    "pages/webview/webview",
+    "pages/pmdetail/pmdetail",
+    "pages/pmlist/pmlist",
+    "pages/notice/notice",
+    "pages/auth/auth",
+    "pages/org/org"
   ],
   "requiredBackgroundModes": [
     "audio",
@@ -57,16 +51,16 @@
         "text": "树洞"
       },
       {
-        "pagePath": "pages/profile/profile",
+        "pagePath": "pages/pmlist/pmlist",
         "iconPath": "images/profile-inactive.png",
         "selectedIconPath": "images/profile-active.png",
-        "text": "我的"
+        "text": "消息"
       },
       {
-        "pagePath": "pages/more/more",
+        "pagePath": "pages/profile/profile",
         "iconPath": "images/more-inactive.png",
         "selectedIconPath": "images/more-active.png",
-        "text": "更多"
+        "text": "我的"
       }
     ]
   },

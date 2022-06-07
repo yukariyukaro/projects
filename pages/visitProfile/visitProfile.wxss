@@ -110,6 +110,6 @@ page {
   width: 100%;
 }
 .scroll-outer {
-  height:calc(100vh - 48vw);
+  height:calc(100vh - 37vw);
   padding-top: 10vw
 }

@@ -2,7 +2,8 @@
   "usingComponents": {
     "singlePost": "/components/singlePost/singlePost",
     "pinned": "/components/pinned/pinned",
-    "navbar": "/components/navbar/navbar",
+    "navbarnew": "/components/navbarnew/navbarnew",
     "loadmore": "/components/loadmore/loadmore"
-  }
+  },
+  "disableScroll":true
 }

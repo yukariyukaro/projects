@@ -58,23 +58,114 @@
         <!-- 图片 -->
         <view wx:if="{{postDetail.post_image != ''}}" style="margin-top: 5vw;text-align:center">
           <image
-            style="width:100%;border-radius: 10px" mode="widthFix"
+            style="width:100%;border-radius: 20rpx" mode="widthFix"
             src="{{postDetail.post_image}}"
             bindtap="previewPic"
           ></image>
         </view>
+        <!-- Bilibili -->
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'bilibili'}}" bindtap="onTapBilibili">
+          <image
+            class="function_bilibili_image" mode="aspectFill" src="{{postDetail.post_media.bilibili_image}}"
+          ></image>
+          <view class="function_bilibili_right">
+            <view class="function_text_container">
+              <view class="function_text_title">{{postDetail.post_media.bilibili_title}}</view>
+              <view class="function_text_detail">{{postDetail.post_media.bilibili_author}}</view>
+            </view>
+            <image class="function_bilibili_icon" src="/images/bilibili.svg"></image>
+          </view>
+        </view>
+        <!-- 文章 -->
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'article'}}" bindtap="onTapArticle">
+          <image
+            class="function_bilibili_image" mode="aspectFill" src="{{postDetail.post_media.article_image}}"
+          ></image>
+          <view class="function_bilibili_right">
+            <view class="function_text_container">
+              <view class="function_text_title">{{postDetail.post_media.article_title}}</view>
+              <view class="function_text_detail">{{postDetail.post_media.article_author}}</view>
+            </view>
+          </view>
+        </view>
+        <!-- 网易云 -->
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'netease'}}" bindtap="onTapNetease">
+          <image
+            class="function_netease_image" mode="aspectFill" src="{{postDetail.post_media.netease_image}}"
+          ></image>
+          <view class="function_netease_right">
+            <view class="function_text_container">
+              <view class="function_text_title">{{postDetail.post_media.netease_title}}</view>
+              <view class="function_text_detail">{{postDetail.post_media.netease_artist}} - {{postDetail.post_media.netease_epname}}</view>
+            </view>
+            <image class="function_netease_icon" src="/images/netease.svg"></image>
+          </view>
+        </view>
+        <!-- 投票 -->
+        <view class="function_container" style="padding-bottom: 20rpx;  flex-direction: column;" wx:if="{{postDetail.post_media.media_type == 'vote'}}">
+          <view class="function_vote_title">{{postDetail.post_media.vote_title}}</view>
+          <view class="function_vote_subtitle" wx:if="{{postDetail.post_media.user_voted_option_title}}">你已选择：{{postDetail.post_media.user_voted_option_title}}</view>
+          <view class="function_vote_subtitle" wx:else>你尚未投票{{postDetail.post_media.user_voted_option_title}}</view>
+          <view class="function_vote_option_list" wx:for="{{postDetail.post_media.optionList}}" bindtap="vote" data-optionid="{{item.option_id}}">
+            <view class="function_vote_option_lower">
+              <view class="{{item.is_voted ? 'function_vote_option_lower_text_left_voted' :'function_vote_option_lower_text_left'}}">{{item.option_title}}</view>
+              <view class="{{item.is_voted ? 'function_vote_option_lower_text_right_voted' :'function_vote_option_lower_text_right'}}">{{item.option_num}}</view>
+            </view>
+            <view class="{{item.is_voted ? 'function_vote_option_upper_voted' :'function_vote_option_upper'}}" style="width:{{item.option_percentage}};">
+              <view class="function_vote_option_upper_inner">
+                <view class="function_vote_option_upper_text_left">{{item.option_title}}</view>
+                <view class="function_vote_option_upper_text_right">{{item.option_num}}</view>
+              </view>
+            </view>
+          </view>
+
+        </view>
+        <!-- 引用树洞 -->
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'quote'}}" bindtap="onTapQuote">
+          <image
+            class="function_netease_image" mode="aspectFill" src="/images/pootal-logo.svg"
+          ></image>
+          <view class="function_netease_right">
+            <view class="function_text_container">
+              <view class="function_text_title">{{postDetail.post_media.quote_title}}</view>
+              <view class="function_text_detail_quote">{{postDetail.post_media.quote_content}}</view>
+            </view>
+          </view>
+        </view>
+        <!-- 小程序 -->
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'miniapp'}}" bindtap="onTapMiniapp">
+          <image
+            class="function_netease_image" mode="aspectFill" src="{{postDetail.post_media.miniapp_image}}"
+          ></image>
+          <view class="function_netease_right">
+            <view class="function_text_container">
+              <view class="function_text_title">{{postDetail.post_media.miniapp_msg}}</view>
+              <view class="function_text_detail_quote">{{postDetail.post_media.miniapp_name}}</view>
+            </view>
+          </view>
+        </view>
       </view>
       <!-- 日期 -->
       <view class="post-datetime">
-        <text>发表于{{postDetail.post_date}}</text>
+        <view wx:if="{{postDetail.post_school_label == 'CUHK' || postDetail.post_school_label == 'UST'}}">来自UNI</view>
+        <view wx:if="{{postDetail.post_school_label == 'HKU'}}">已同步至UNI</view>
+        <view>发表于{{postDetail.post_date}}</view>
       </view>
       <!-- 署名 -->
-      <view class="alias" bindtap="visitUser">
+      <view class="alias{{postDetail.is_org?'-org':''}}" bindtap="visitUser">
         <text>{{postDetail.post_alias}}</text>
       </view>
       <view class="avatar-outer" bindtap="visitUser">
         <image class="avatar" src="{{preURL+postDetail.user_avatar+'.svg'}}"/>
       </view>
+
+      <view class="org-box" wx:if="{{postDetail.is_org}}" bindtap="visitUser">
+      <view class="org-box-cor"></view>
+      <view class="org-box-text">
+        <view class="org-box-inner">{{postDetail.post_alias}}已开通社团主页</view>
+        </view>
+      </view>
+
     </view>
 
     <!-- 展示评论 -->
@@ -114,16 +205,18 @@
           bind:deleteComment="deleteComment"
           bind:replyComment="replyComment"
           bind:reportComment="reportComment"
-          post_serial="{{post_serial}}"
+          post_id="{{postDetail.post_id}}"
           comment_id="{{item.comment_id}}"
           comment_order="{{item.comment_order}}"
           comment_msg="{{item.comment_msg}}"
           comment_date="{{item.comment_date}}"
           is_author="{{item.is_author}}"
           is_anonymous="{{item.is_anonymous}}"
+          is_org="{{item.is_org}}"
           comment_alias="{{item.comment_alias}}"
           user_avatar="{{item.user_avatar}}"
           user_serial="{{item.user_serial}}"
+          comment_school_label="{{item.comment_school_label}}"
           post_is_author="{{postDetail.is_author}}"
           />
       </view>
@@ -132,7 +225,7 @@
 </scroll-view>
 
 <!-- 追加补充信息 -->
-<view bindtap="goToComment">
+<view bindtap="goToComment" style="padding-bottom: env(safe-area-inset-bottom);">
   <view class="comment-content-outer">
     <view>{{comment_placeholder}}</view>
     <image class="icon-send" src="/images/thought.svg"></image>

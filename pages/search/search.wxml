@@ -1,14 +1,46 @@
 <view class="outer">
   <view class="search-outer">
     <view class="search-input-outer">
-      <view class="search-hashtag">#</view>
-      <input class="search-input" maxlength="6" auto-focus placeholder="探寻树洞" bindinput="bindSearchInput" type="number"/>
+      <view class="small-icon-outer" bindtap="search">
+        <image class="small-icon" src="/images/search.svg" style="margin-left: 20rpx;"></image>
+      </view>
+      <input class="search-input" maxlength="20" auto-focus placeholder="搜索树洞" bindinput="onInputKeyWord" value="{{key_word}}" confirm-type="done"/>
+      <view class="small-icon-outer" bindtap="clearInput" style="margin-right: 20rpx;">
+        <image class="small-icon" style="width: 3.5vw" src="/images/delete.svg"></image>
+      </view>
     </view>
-    <view class="search-icon-outer" bindtap="search">
-      <image class="search-icon" src="/images/search.svg"></image>
-    </view>
+    
   </view>
-  <view class="help">
-    <text>🔍探寻须知: \n 1. 目前只支持通过树洞编号来探寻对应树洞 \n 2. 删除、隐私状态的树洞不会被探寻到</text>
+  <view style="margin:20rpx;margin-left: 60rpx;">
+    <view style="font-size: 28rpx;color: gray;">共搜索到{{hit_count}}条结果</view>
   </view>
+  
+
+<scroll-view
+  scroll-y="{{true}}" class="scroll-outer"
+  scroll-top="{{scroll_top}}"
+  enable-back-to-top="{{true}}"
+  bindrefresherrestore="onRestore"
+  bindscrolltolower="onLoadMore"
+  bindscroll="bindScroll"
+>
+
+  <view class="post-content">
+    <singlePost wx:for="{{postList}}" wx:key="id"
+      post_id="{{item.post_id}}" 
+      topic_label="{{item.post_topic}}" 
+      comment_num="{{item.comment_num}}" 
+      post_msg="{{item.post_msg}}" 
+      follower_num="{{item.follower_num}}" 
+      is_following="{{item.is_following}}"
+      post_is_complete="{{item.post_is_complete}}"
+      user_avatar="{{item.user_avatar}}"
+      pic="{{item.post_image}}"
+      post_media="{{item.post_media}}"/>
+    <loadmore end="{{isLast}}" loading="{{is_loading_more}}" />
+  </view>
+
+
+</scroll-view>
+
 </view>

@@ -1,0 +1,84 @@
+<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll">
+
+  <view style="position:relative;">
+
+    <image class="background-image" mode="aspectFill" src="{{orgInfo.org_bg_image}}">
+    </image>
+
+    <view style="position: absolute;z-index: 99;">
+      <view class="top-view">
+        <!-- 头像名称 -->
+        <view class="user-info">
+          <view class="user-name limit-text-widht">{{orgInfo.org_name}}</view>
+          <view class="head-view">
+            <image class="avatar-image" mode="aspectFill" src="{{orgInfo.org_avatar}}"></image>
+          </view>
+        </view>
+        <!-- 简介 -->
+        <view class="introduce-view">
+          <text class="introduce-text">{{orgInfo.org_intro}}</text>
+        </view>
+        <!-- 轮播图 -->
+        <swiper circular="{{orgInfo.org_banner.length > 1}}" autoplay="{{orgInfo.org_banner.length > 1}}" class="swiper" interval="3000" wx:if="{{orgInfo.org_banner[0]}}">
+          <swiper-item wx:for="{{orgInfo.org_banner}}">
+            <view class="banner-outer" style="background-image: url({{item.banner_image}});" bindtap="onTapBanner" data-banneritem="{{orgInfo.org_banner[index]}}">
+              <view class="pinned-content" wx:if="{{item.banner_title}}">
+                <text>{{item.banner_title}}</text>
+              </view>
+            </view>
+          </swiper-item>
+        </swiper>
+        <view
+        class="model-container"
+        wx:if="{{orgInfo.org_model_main.function_title}}"
+        bindtap="handleFunctionPre"
+        data-functionlist="{{orgInfo.org_model_main}}"
+        style="margin-top: {{!orgInfo.org_banner[0]?'20rpx':'0'}};"
+        >
+          <view class="model-inner-container">
+            <view class="model-text">{{orgInfo.org_model_main.function_title}}</view>
+            <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+          </view>
+        </view>
+        <view style="display: flex;flex-direction: row;margin-top: {{orgInfo.org_model_main.function_title?'20rpx':'0'}};" wx:if="{{orgInfo.org_model_half[0]}}">
+          <view class="model-container-half-left" wx:if="{{orgInfo.org_model_half[0]}}" bindtap="handleFunctionPre" data-functionlist="{{orgInfo.org_model_half[0]}}">
+            <view class="model-inner-container">
+              <view class="model-text">{{orgInfo.org_model_half[0].function_title}}</view>
+              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+            </view>
+          </view>
+          <view class="model-container-half-right" wx:if="{{orgInfo.org_model_half[1]}}"
+          bindtap="handleFunctionPre" data-functionlist="{{orgInfo.org_model_half[1]}}">
+            <view class="model-inner-container">
+              <view class="model-text">{{orgInfo.org_model_half[1].function_title}}</view>
+              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+            </view>
+          </view>
+        </view>
+        <view style="display: flex;flex-direction: row;margin-top: 20rpx;" wx:if="{{orgInfo.org_model_half[2]}}">
+          <view class="model-container-half-left" wx:if="{{orgInfo.org_model_half[2]}}"
+          bindtap="handleFunctionPre" data-functionlist="{{orgInfo.org_model_half[2]}}">
+            <view class="model-inner-container">
+              <view class="model-text">{{orgInfo.org_model_half[2].function_title}}</view>
+              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+            </view>
+          </view>
+          <view class="model-container-half-right" wx:if="{{orgInfo.org_model_half[3]}}"
+          bindtap="handleFunctionPre" data-functionlist="{{orgInfo.org_model_half[3]}}">
+            <view class="model-inner-container">
+              <view class="model-text">{{orgInfo.org_model_half[3].function_title}}</view>
+              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <singlePostNew wx:for="{{postList}}" wx:key="post_id" post_id="{{item.post_id}}" topic_label="{{item.post_topic}}" comment_num="{{item.comment_num}}" post_msg="{{item.post_msg}}" follower_num="{{item.follower_num}}" is_following="{{item.is_following}}" post_is_complete="{{item.post_is_complete}}" user_avatar="{{item.user_avatar}}" pic="{{item.post_image}}" post_media="{{item.post_media}}" post_is_folded="{{item.post_is_folded}}"/>
+      <loadmore end="{{isLast}}" loading="{{is_loading_more}}" />
+    </view>
+    
+  </view>
+
+
+
+</scroll-view>

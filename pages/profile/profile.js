@@ -14,7 +14,7 @@ Page({
         address: '/pages/followPost/followPost',
       },
       {
-        label: '私信',
+        label: '旧版私信',
         icon: '/images/pm.svg',
         address: '/pages/func1-pm/pm/pm',
       }
@@ -28,12 +28,6 @@ Page({
     new_nickname: '',
     new_user_serial: '',
     userInfo:{},
-    noticeList:[],
-    page:0,
-    isLast:false,
-    is_loading_more:false,
-    refresh_triggered: false,
-    crollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
   },
 
   // 选择进入功能
@@ -98,7 +92,7 @@ Page({
       });
       var that = this
       wx.request({
-        url: 'https://pupu.boatonland.com/v1/user/changeNickname.php', 
+        url: 'https://api.pupu.hkupootal.com/v3/user/nickname/update.php', 
         method: 'POST',
         data: {
           token:wx.getStorageSync('token'),
@@ -147,7 +141,7 @@ Page({
       });
       var that = this
       wx.request({
-        url: 'https://pupu.boatonland.com/v1/user/changePootalID.php', 
+        url: 'https://api.pupu.hkupootal.com/v3/user/pootalid/update.php', 
         method: 'POST',
         data: {
           token:wx.getStorageSync('token'),
@@ -190,7 +184,7 @@ Page({
   getUserInfo: function () {
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/user/getInfo.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/user/profile/my.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
@@ -215,65 +209,68 @@ Page({
     })
 
   },
-  // 下拉刷新
-  onRefresh() {
-    this.setData({
-      page:0,
-      refresh_triggered: true,
-    });
-    wx.showLoading({
-      title: '加载中',
-    })
-    this.getNotice()
-  },
-  onLoadMore: function () {
-    this.setData({
-      is_loading_more: true,
-      page:this.data.page + 1
-    });
-    this.getNotice()
-  },
-
-  acceptSubscribe: function (e) {
-    var that = this
-    if(e.detail.value){
-      wx.showModal({
-        title:"开启推送",
-        content:"请在新界面勾选「总是保持以上选择，不再询问」并选择「允许」",
-        showCancel:false,
-        success(res){
-          if(res.confirm){
-            app.subscribe(true).then(function(bool){
-              console.log(bool)
-              if(bool){
-                that.accept(true)
-              }else{
-                that.data.userInfo.subscribe_accept = false
-                that.setData({
-                  userInfo:that.data.userInfo
-                })
-              }
-            }
-            )
-          }
-        }
+  updateTabbar:function(){
+    var notice_count = wx.getStorageSync('allNoticeCount')
+    if(notice_count > 0){
+      wx.setTabBarBadge({
+        index: 1,
+        text: String(notice_count),
       })
     }else{
-      that.accept(false)
+      wx.removeTabBarBadge({
+        index: 1,
+      })
     }
-
   },
-  accept: function (e) {
-    var that = this
+
+  // 控制选项卡折叠/展开
+  changeExpand: function (e) {
+    const index = e.currentTarget.dataset.index;
+    const current = this.data.expandIndex;
+    if (index === current) {
+      this.setData({ expandIndex: -1 });
+    } else {
+      this.setData({ expandIndex: index });
+    }
+  },
+  // 动画
+  handleLogoTap: function () {
+    this.animate(
+      '.avatar-ripple',
+      [
+        { opacity: 0.8, scale: [1, 1] },
+        { opacity: 0, scale: [1.5, 1.5] },
+      ],
+      1500,
+      () => {
+        this.clearAnimation('.avatar-ripple');
+      }
+    );
+  },
+  // 退出登录
+  logout: function () {
+    var that = this;
+    app.showModal({
+      title: '提示',
+      content: '登出后将解绑微信号和UID,下次登陆将重新绑定。确定登出吗?',
+      success(res) {
+        if (res.confirm) {
+          that.implementLogout();
+        }
+      },
+    });
+  },
+  // 执行登出
+  implementLogout: function () {
     wx.showLoading({
-      title: '加载中',
-    })
+      title: '清除数据中',
+    });
+    // record记录开始
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/notice/accept.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/user/logout/wechat.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
-        subscribe_accept:e
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -281,20 +278,17 @@ Page({
       success (res) {
         wx.hideLoading()
         if(res.data.code == 200){
-          that.data.userInfo.subscribe_accept = true
-          that.setData({
-            userInfo:that.data.userInfo
-          })
-          wx.showToast({title: '开启推送成功', icon: "none", duration: 1000})
-        }else if(res.data.code == 201){
-          that.data.userInfo.subscribe_accept = false
-          that.setData({
-            userInfo:that.data.userInfo
-          })
-          wx.showToast({title: '关闭推送成功', icon: "none", duration: 1000})
+          wx.removeStorageSync('token')
+          app.clearDB()
+          wx.closeSocket()
+          wx.setStorageSync('allNoticeCount', 0)
+          wx.setStorageSync('systemNoticeCount', 0)
+            wx.reLaunch({
+              url: '/pages/register/register',
+            })
         }else if(res.data.code == 800 ||res.data.code == 900){
           app.launch().then(res=>{
-            that.accept(e)
+            that.implementLogout()
           })
         }else{
           wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
@@ -302,65 +296,13 @@ Page({
       }
     })
 
-  },
-  getNotice: function () {
-    var that = this
-    wx.request({
-      url: 'https://pupu.boatonland.com/v1/notice/get.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        page:that.data.page,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          if(that.data.page == '0'){
-            that.setData({
-              noticeList:res.data.noticeList,
-              isLast:res.data.isLast,
-              refresh_triggered: false,
-              is_loading_more: false,
-            })
-            wx.stopPullDownRefresh()
-          }else{
-            that.setData({
-              noticeList:that.data.noticeList.concat(res.data.noticeList),
-              isLast:res.data.isLast,
-              refresh_triggered: false,
-              is_loading_more: false,
-            })
-          }
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getPost()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
-      }
-    })
-
-  },
-  nav2Notice:function(e){
-    app.subscribe(false)
-    wx.navigateTo({
-      url: e.currentTarget.dataset.url
-    })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.setNavigationBarTitle({
-      title: '漫游日志',
-    });
     this.getUserInfo()
-    this.getNotice()
   },
 
   /**
@@ -374,7 +316,10 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {},
+  onShow: function () {
+    app.globalData.tabbarJS = this
+    app.updateTabbar()
+  },
 
   /**
    * 生命周期函数--监听页面隐藏

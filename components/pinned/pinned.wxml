@@ -8,7 +8,7 @@
   >
     <swiper-item wx:for="{{bannerList}}">
       <view class="outer" style="background-image: url({{item.banner_image}});" bind:tap="postDetail" data-index="{{index}}">
-        <view class="pinned-content">
+        <view class="pinned-content" wx:if="{{item.banner_title}}">
           <text>{{item.banner_title}}</text>
         </view>
       </view>

@@ -9,7 +9,7 @@ Page({
 
     isSending: false,
     comment_remnant: 500,
-    comment_placeholder: '想对这个树洞的拥有者说什么？',
+    comment_placeholder: '想对洞主说些什么？',
     triggered: false,
 
     // 举报
@@ -19,7 +19,7 @@ Page({
     reportIndex: '',
     reportUserMsg: '',
 
-    post_serial:'',
+    post_id:'',
     postDetail:{},
     commentList:[],
     comment_reverse: false,
@@ -29,12 +29,23 @@ Page({
     this.setData({
       triggered: true,
     });
+    wx.showLoading({
+      title: '加载中',
+    })
     this.getPostDetail()
   },
   visitUser: function () {
-    if (this.data.postDetail.is_anonymous){
+    if(this.data.postDetail.post_school_label == "CUHK" || this.data.postDetail.post_school_label == "UST"){
+      wx.showToast({title: '暂不支持UNI用户',icon: 'none',duration: 1000,});
+      return;
+    }
+    if(this.data.postDetail.is_org){
       wx.navigateTo({
-        url: "/pages/visitProfile/visitProfile?is_anonymous=true&user_serial=NA&post_id=" + this.data.postDetail.post_id
+        url: "/pages/org/org?user_serial=" + this.data.postDetail.user_serial
+      })
+    }else if (this.data.postDetail.is_anonymous){
+      wx.navigateTo({
+        url: "/pages/visitProfile/visitProfile?is_anonymous=true&user_serial=NA&post_id=" + this.data.postDetail.post_id + "&comment_order=-1"
       })
     }else{
       wx.navigateTo({
@@ -60,7 +71,7 @@ Page({
     this.reportPrompt.show();
     this.setData({
       reportMsg: this.data.postDetail.post_msg,
-      reportId: this.data.post_serial,
+      reportId: this.data.postDetail.post_id,
       reportType: 'post',
     });
   },
@@ -92,14 +103,14 @@ Page({
       title: '加载中',
     });
     if(that.data.reportType == 'post'){
-      var report_msg = "举报了#" + that.data.post_serial + "「" + that.data.postDetail.post_msg + "」，理由为「"+ that.data.reportUserMsg +"」"
+      var report_msg = "举报了#" + that.data.postDetail.post_id + "「" + that.data.postDetail.post_msg + "」，理由为「"+ that.data.reportUserMsg +"」"
     }
     if(that.data.reportType == 'comment'){
-      var report_msg = "举报了#" + that.data.post_serial + "的评论LG"+ that.data.reportIndex +"「" + that.data.reportMsg + "」，理由为「"+ that.data.reportUserMsg +"」"
+      var report_msg = "举报了#" + that.data.postDetail.post_id + "的评论LG"+ that.data.reportIndex +"「" + that.data.reportMsg + "」，理由为「"+ that.data.reportUserMsg +"」"
     }
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/post/report.php', 
+      url: 'https://api.pupu.hkupootal.com/v2/post/report.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
@@ -127,11 +138,11 @@ Page({
     var that = this;
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/post/detail.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/post/single/get.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
-        post_id:that.data.post_serial,
+        post_id:that.data.post_id,
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -145,6 +156,12 @@ Page({
               data_received:true,
               triggered: false,
             })
+            if(res.data.postDetail.is_author){
+              that.setData({
+                comment_placeholder:"想在自己的树洞下补充些什么？"
+              })
+            }
+            
         }else if(res.data.code == 401){
           wx.navigateBack({
             delta: 1,
@@ -239,11 +256,11 @@ Page({
     });
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/post/follow.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/post/single/follow.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
-        post_id:that.data.post_serial,
+        post_id:that.data.postDetail.post_id,
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -281,11 +298,11 @@ Page({
     });
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/post/setPrivate.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/post/single/private.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
-        post_id:that.data.post_serial,
+        post_id:that.data.postDetail.post_id,
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -315,11 +332,11 @@ Page({
     });
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/post/setPublic.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/post/single/public.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
-        post_id:that.data.post_serial,
+        post_id:that.data.postDetail.post_id,
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -349,11 +366,11 @@ Page({
     });
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/post/delete.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/post/single/delete.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
-        post_id:that.data.post_serial,
+        post_id:that.data.postDetail.post_id,
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -381,7 +398,7 @@ Page({
       title: '加载中',
     });
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/comment/delete.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/comment/delete.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
@@ -407,7 +424,38 @@ Page({
       }
     })
   },
-
+  vote: function (e) {
+    var that = this;
+    wx.showLoading({
+      title: '加载中',
+    });
+    var that = this
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/vote/post.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+        option_id:e.currentTarget.dataset.optionid,
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        wx.hideLoading()
+        if(res.data.code == 200){
+          that.getPostDetail()
+        }else if(res.data.code == 201){
+          that.getPostDetail()
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.vote(e)
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
+    })
+  },
 
   
   // 预览大图片
@@ -419,7 +467,7 @@ Page({
   // 跳转
   goToComment: function () {
     wx.navigateTo({
-      url: '/pages/writeComment/writeComment?post_id=' + this.data.post_serial +'&is_author=' + this.data.postDetail.is_author,
+      url: '/pages/writeComment/writeComment?post_id=' + this.data.postDetail.post_id +'&is_author=' + this.data.postDetail.is_author,
     });
   },
   // 评论倒序
@@ -430,6 +478,52 @@ Page({
       comment_reverse: !this.data.comment_reverse,
     });
   },
+  onTapBilibili:function(){
+    wx.navigateToMiniProgram({
+      appId: 'wx7564fd5313d24844',
+      path:"pages/video/video?bvid=" + this.data.postDetail.post_media.bilibili_bv
+    })
+  },
+  onTapNetease:function(){
+    wx.showLoading({
+      title: '获取中',
+    });
+    const backgroundAudioManager = wx.getBackgroundAudioManager();
+    backgroundAudioManager.title = this.data.postDetail.post_media.netease_title;
+    backgroundAudioManager.epname = this.data.postDetail.post_media.netease_epname;
+    backgroundAudioManager.singer = this.data.postDetail.post_media.netease_aritst;
+    backgroundAudioManager.coverImgUrl = this.data.postDetail.post_media.netease_image;
+    // 设置了 src 之后会自动播放
+    backgroundAudioManager.src =
+      'http://music.163.com/song/media/outer/url?id=' + this.data.postDetail.post_media.netease_id;
+    backgroundAudioManager.onPlay(() => {
+      wx.hideLoading();
+    });
+    backgroundAudioManager.onError(() => {
+      wx.hideLoading();
+      wx.showToast({title: '版权受限',icon: 'none',duration: 1000,});
+    })
+  },
+  onTapQuote:function(){
+    if(this.data.postDetail.post_media.post_id == ''){
+      wx.showToast({title: '该内容不存在或已被删除',icon: 'none',duration: 1000})
+      return
+    }
+    wx.navigateTo({
+      url: '/pages/detail/detail?post_id=' + this.data.postDetail.post_media.post_id,
+    })
+  },
+  onTapArticle:function(){
+    wx.navigateTo({
+      url: '/pages/webview/webview?url=' + this.data.postDetail.post_media.article_link,
+    })
+  },
+  onTapMiniapp:function(){
+    wx.navigateToMiniProgram({
+      appId: this.data.postDetail.post_media.miniapp_appid,
+      path: this.data.postDetail.post_media.miniapp_path,
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -437,9 +531,19 @@ Page({
     wx.setNavigationBarTitle({
       title: '树洞详情',
     });
-    this.setData({
-      post_serial: options.post_serial
-    });
+    wx.showLoading({
+      title: '加载中',
+    })
+    if(options.post_serial){
+      this.setData({
+        post_id: options.post_serial
+      })
+    }else{
+      this.setData({
+        post_id: options.post_id
+      });
+    }
+    
   },
 
   /**
@@ -485,7 +589,7 @@ Page({
       msg = msg.slice(0, 20) + '...';
     }
     return {
-      path: `/pages/home/home?jump_page=detail&post_serial=${this.data.post_serial}`,
+      path: `/pages/home/home?jump_page=detail&post_serial=${this.data.postDetail.post_id}`,
       title: 'HKU树洞用户: ' + msg,
     };
   },

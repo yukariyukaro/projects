@@ -7,12 +7,23 @@ Page({
     post_msg: '',
     post_public: true,
     post_with_serial: false,
+    post_is_uni: false,
     topicList: [],
     topicIndex: -1,
     isSending: false,
     focus: false,
     post_image: '',
     primaryColor: app.globalData.theme.primary,
+    post_with_media:false,
+    post_media_received:false,
+    post_media:[],
+    mediaList:["网易云","Bilibili","投票","引用"],
+    mediaIndex:-1,
+    bilibili_bv:'',
+    netease_link:'',
+    vote_content:'',
+    vote_is_multi:false,
+    isGettingMedia:false,
   },
   // 让输入框聚焦
   focus: function () {
@@ -35,6 +46,12 @@ Page({
   switchSerialChange: function (e) {
     this.setData({ post_with_serial: e.detail.value });
   },
+  switchUNIChange: function (e) {
+    this.setData({ post_is_uni: e.detail.value });
+  },
+  switchMultiChange: function (e) {
+    this.setData({ vote_is_multi: e.detail.value });
+  },
   // 选择主题
   bindTopic: function (e) {
     this.setData({
@@ -51,6 +68,36 @@ Page({
     this.setData({
       isSending:true
     })
+    if(that.data.mediaIndex == 3){
+      if (that.data.quote_post_id.match(/^\s*$/)) {
+        wx.showToast({ title: '树洞编号不得为空', icon: 'none', duration: 1000,});
+        this.setData({ isSending: false });
+        return
+      }
+      if(that.data.quote_comment_order == ''){
+        var post_media = {
+          media_type:'quote',
+          post_id:that.data.quote_post_id,
+          comment_order:null,
+        }
+      }else{
+        var post_media = {
+          media_type:'quote',
+          post_id:that.data.quote_post_id,
+          comment_order:that.data.quote_comment_order,
+        }
+      }
+      that.setData({
+        post_media: post_media,
+        post_media_received:true
+      });
+    }
+    if(that.data.post_media.media_type == 'miniapp'){
+      that.setData({
+        post_with_media:true,
+        post_media_received:true
+      })
+    }
     if (post_msg.match(/^\s*$/)) {
       wx.showToast({ title: '内容不得为空', icon: 'error', duration: 1000,});
       this.setData({ isSending: false });
@@ -64,8 +111,14 @@ Page({
       const post_topic = this.data.topicList[topicIndex];
       const post_public = this.data.post_public ? 1 : 2;
       const post_with_serial = this.data.post_with_serial;
+
+      if(that.data.post_with_media && that.data.post_media_received){
+        var post_media = JSON.stringify(that.data.post_media)
+      }else{
+        var post_media = ''
+      }
       wx.request({
-        url: 'https://pupu.boatonland.com/v1/post/post.php', 
+        url: 'https://api.pupu.hkupootal.com/v3/post/single/post.php', 
         method: 'POST',
         data: {
           token:wx.getStorageSync('token'),
@@ -74,6 +127,9 @@ Page({
           post_with_alias:post_with_serial,
           post_public:post_public,
           post_image:that.data.post_image,
+          post_media:post_media,
+          post_is_uni:that.data.post_is_uni,
+          vote_is_multi:that.data.vote_is_multi
         },
         header: {
           'content-type': 'application/x-www-form-urlencoded'
@@ -107,9 +163,6 @@ Page({
       })
     }
   },
-  
-
-
   uploadImage:function(){
     var that =this
     var Bucket = 'boatonland-1307992092';
@@ -153,11 +206,10 @@ Page({
             wx.showLoading({title: '上传中',})
             console.log(res)
             var filePath = res.tempFiles[0].path;
-            var filename = filePath.substr(filePath.lastIndexOf('/') + 1);
             cos.postObject({
                 Bucket: Bucket,
                 Region: Region,
-                Key: filename,
+                Key: that.randomString(),
                 FilePath: filePath,
                 onProgress: function (info) {
                     console.log(info)
@@ -217,6 +269,258 @@ Page({
       urls: [this.data.post_image],
     });
   },
+  withMedia: function () {
+    this.setData({
+      post_with_media: true,
+    });
+  },
+  bindMediaInput:function(e){
+    if(this.data.mediaIndex == 0){
+      this.setData({
+        netease_link:e.detail.value
+      })
+    }else if(this.data.mediaIndex == 1){
+      this.setData({
+        bilibili_bv:e.detail.value
+      })
+    }else if(this.data.mediaIndex == 2){
+      this.setData({
+        vote_content:e.detail.value
+      })
+    }
+  },
+  bindQuotePostIdInput:function(e){
+    this.setData({
+      quote_post_id:e.detail.value
+    })
+  },
+  bindQuoteCommentOrderInput:function(e){
+    this.setData({
+      quote_comment_order:e.detail.value
+    })
+  },
+  bindSelectMedia: function (e) {
+    this.setData({
+      mediaIndex: e.detail.value,
+      post_media:[],
+      netease_id:'',
+      bilibili_bv:'',
+      quote_post_id:'',
+      quote_comment_order:'',
+      post_media_received:false,
+      vote_is_multi:false
+    })
+  },
+  removeMedia:function(){
+    this.setData({
+      mediaIndex: -1,
+      post_media:[],
+      netease_id:'',
+      bilibili_bv:'',
+      post_with_media:false,
+      post_media_received:false,
+      vote_is_multi:false,
+      quote_post_id:'',
+      quote_comment_order:''
+    })
+  },
+  getMedia:function(){
+    if(this.data.mediaIndex == 0){
+      this.getNeteaseDetail()
+    }else if(this.data.mediaIndex == 1){
+      this.getBilibiliDetail()
+    }
+  },
+  getNeteaseDetail:function(){
+    var that = this
+    wx.showLoading({
+      title: '获取中',
+    })
+    that.setData({
+      isGettingMedia:true
+    })
+    wx.cloud.init();
+    wx.cloud.callFunction({
+      name: 'searchMusic',
+      data: {
+        body: {
+          inputTxt: that.data.netease_link,
+        },
+      },
+      success: (res) => {
+        wx.hideLoading()
+        that.setData({
+          isGettingMedia:false
+        })
+        const result = res.result;
+        console.log(result);
+        if (result.error != 'false') {
+          wx.showToast({ title: '获取失败', icon: 'none', duration: 1000,})
+        } else {
+          var post_media = {
+            media_type:'netease',
+            netease_id:result.data.musicId,
+            netease_title:result.data.title,
+            netease_artist:result.data.player,
+            netease_image:result.data.cover,
+            netease_epname:result.data.epname
+          }
+          that.setData({
+            post_media: post_media,
+            post_media_received:true
+          });
+        }
+      },
+      fail: (err) => {
+        wx.hideLoading()
+        that.setData({
+          isGettingMedia:false
+        })
+        wx.showToast({ title: '获取失败', icon: 'none', duration: 1000,})
+      },
+    });
+  },
+  getBilibiliDetail:function(){
+    var that = this
+    wx.showLoading({
+      title: '获取中',
+    })
+    that.setData({
+      isGettingMedia:true
+    })
+    wx.cloud.init();
+    wx.cloud.callFunction({
+      name: 'searchBilibili',
+      data: {
+        body: {
+          inputTxt: that.data.bilibili_bv,
+        },
+      },
+      success: (res) => {
+        wx.hideLoading()
+        that.setData({
+          isGettingMedia:false
+        })
+        const result = res.result;
+        console.log(result);
+        if (result.error != 'false') {
+          wx.showToast({ title: '获取失败', icon: 'none', duration: 1000,})
+        } else {
+          var post_media = {
+            media_type:'bilibili',
+            bilibili_bv:result.data.epname,
+            bilibili_title:result.data.title,
+            bilibili_image:result.data.cover,
+            bilibili_author:result.data.player
+          }
+          that.setData({
+            post_media: post_media,
+            post_media_received:true
+          });
+        }
+      },
+      fail: (err) => {
+        wx.hideLoading()
+        that.setData({
+          isGettingMedia:false
+        })
+        wx.showToast({ title: '获取失败', icon: 'none', duration: 1000,})
+      },
+    });
+  },
+  setVote:function(){
+    var that = this
+    if (that.data.vote_content.match(/^\s*$/)) {
+      wx.showToast({ title: '内容不得为空', icon: 'error', duration: 1000,});
+      return
+    }
+    if(that.data.post_media.media_type == 'vote'){
+      var newOptionList = [{
+        option_title:that.data.vote_content
+      }]
+      var post_media = {
+        media_type:'vote',
+        vote_title:that.data.post_media.vote_title,
+        optionList:that.data.post_media.optionList.concat(newOptionList)
+      }
+      that.setData({
+        post_media: post_media,
+        post_media_received:true,
+        vote_content:''
+      })
+    }else{
+      var post_media = {
+        media_type:'vote',
+        vote_title:that.data.vote_content,
+        optionList:[]
+      }
+      that.setData({
+        post_media: post_media,
+        post_media_received:true,
+        vote_content:''
+      })
+    }
+  },
+  removeOption:function(e){
+    var that = this
+    wx.showModal({
+      title:"提示",
+      content:"确定移除选项？",
+      success(res){
+        if(res.confirm){
+          console.log(e.currentTarget.dataset.index)
+          var newOptionList = that.data.post_media.optionList
+          newOptionList.splice(e.currentTarget.dataset.index,1)
+          var post_media = {
+            media_type:'vote',
+            vote_title:that.data.post_media.vote_title,
+            optionList:newOptionList
+          }
+          console.log(post_media)
+          that.setData({
+            post_media: post_media,
+            post_media_received:true,
+            vote_content:''
+          })
+        }
+      }
+    })
+  },
+  getPostTopic: function () {
+    var that = this
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/info/posttopic.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        if(res.data.code == 200){
+          that.setData({
+            topicList:res.data.topicList
+          })
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.getPostTopic()
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
+    })
+
+  },
+  randomString(e) {
+    e = e || 32;
+    var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
+      a = t.length,
+      n = "";
+    for (var i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+    return n;
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -225,12 +529,14 @@ Page({
     wx.setNavigationBarTitle({
       title: '发布树洞',
     });
-    const eventChannel = this.getOpenerEventChannel();
-    eventChannel.on('acceptTopics', function (topicList) {
+    that.getPostTopic()
+    if(options.post_media){
+      var post_media = decodeURIComponent(options.post_media)
+      post_media = JSON.parse(post_media)
       that.setData({
-        topicList:topicList
-      });
-    });
+        post_media:post_media,
+      })
+    }
   },
 
   /**

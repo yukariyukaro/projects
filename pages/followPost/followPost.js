@@ -18,6 +18,7 @@ Page({
   onRefresh() {
     this.setData({
       page:0,
+      is_loading_more:true
     });
     wx.showLoading({
       title: '加载中',
@@ -26,6 +27,8 @@ Page({
   },
   // 上拉加载更多
   onLoadMore: function () {
+    if(this.data.is_loading_more){return}
+    if(this.data.isLast){return}
     this.setData({
       is_loading_more: true,
       page:this.data.page + 1
@@ -36,7 +39,7 @@ Page({
   getPostByFollow: function () {
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/post/getByFollow.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/post/list/follow.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
@@ -77,18 +80,13 @@ Page({
     })
 
   },
-  // navbarTap: function () {
-  //   if (this.data.currentTab == 0 && this.data.follow_posts.length === 0) {
-  //     this.fetchUserFollowPosts(true);
-  //   }
-  //   if (this.data.currentTab == 1 && this.data.uni_follow_posts.length === 0) {
-  //     this.fetchUserUniFollowPosts(true);
-  //   }
-  //   // 滚动条回到顶部
-  //   this.setData({
-  //     scroll_top: 0
-  //   });
-  // },
+  bindScroll:function(e){
+    // console.log(e.detail.scrollHeight - e.detail.scrollTop)
+    if(this.data.is_loading_more){return}
+    if(e.detail.scrollHeight - e.detail.scrollTop < 2500){
+      this.onLoadMore()
+    }
+  },
   /**
    * 生命周期函数--监听页面加载
    */

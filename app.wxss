@@ -12,6 +12,9 @@ page {
   --bg-3: #fff;
   --bg-gray-1: #ddd;
   --bg-gray-2: #c2c2c2;
+  --bg-gray-3: #eeeeee;
+  --bg-gray-4: #F8F8F8;
+  --bg--gray-5: #ffffff;
   --on-primary: #fff;
   --on-secondary: #000;
   --on-bg-1: #000;
@@ -22,6 +25,15 @@ page {
   --shadow-1: 0 0 18px 4px rgba(0, 0, 0, 0.1);
   --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.1);
   --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15);
+  --text: #333333;
+  --divider: #eeeeee;
+  --pmtext: #252628;
+  --pmsubtext: #b7b5c2;
+  --inputouter: #F2F2F2;
+  --inputinner: #FFFFFF;
+  --model-bg-gray: #f8f8f8;
+  --alias-org-bg: linear-gradient(to bottom right, #55A5FF, #A7F7FF);
+  --alias-org-text: #000000;
 }
 @media (prefers-color-scheme: dark) {
   page {
@@ -38,6 +50,9 @@ page {
     --bg-3: #212121;
     --bg-gray-1: #2e2e2e;
     --bg-gray-2: #4f4f4f;
+    --bg-gray-3: #2e2e2e;
+    --bg-gray-4: #000000;
+    --bg--gray-5: #4f4f4f;
     --on-primary: #000;
     --on-secondary: #000;
     --on-bg-1: rgba(255, 255, 255, 0.8);
@@ -48,6 +63,15 @@ page {
     --shadow-1: 0 0 18px 4px rgba(0, 0, 0, 0.1), 0 0 8px 4px rgba(0, 0, 0, 0.1);
     --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.2), 0 0 4px 2px rgba(0, 0, 0, 0.3);
     --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15);
+    --text: #dddddd;
+    --divider: #222222;
+    --pmtext: #4f4f4f
+    --pmsubtext: #b7b5c2;
+    --inputouter: #323232;
+    --inputinner: #666666;
+    --model-bg-gray: #282828;
+    --alias-org: linear-gradient(to bottom right, #55A5FF, #ffffff);
+    --alias-org-text: #000000;
   }
 }
 page {

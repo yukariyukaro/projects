@@ -8,11 +8,13 @@ Component({
     comment_date: String,
     is_author: Boolean,
     is_anonymous: Boolean,
+    is_org: Boolean,
     post_is_author: Boolean,
     comment_alias: String,
     user_avatar: String,
-    post_serial: String,
+    post_id: String,
     user_serial: String,
+    comment_school_label: String
   },
 
   data: {
@@ -24,13 +26,21 @@ Component({
    */
   methods: {
     visitUser: function () {
+      if(this.properties.is_org){
+        wx.navigateTo({
+          url: "/pages/org/org?user_serial=" + this.properties.user_serial
+        })
+      }else if(this.properties.comment_school_label == "CUHK" || this.properties.comment_school_label == "UST"){
+        wx.showToast({title: '暂不支持UNI用户',icon: 'none',duration: 1000,});
+        return;
+      }
       if (this.properties.is_anonymous){
         wx.navigateTo({
-          url: "/pages/visitProfile/visitProfile?is_anonymous=true&user_serial=NA&post_id=" + this.properties.post_serial + "&comment_order=" + this.properties.comment_order
+          url: "/pages/visitProfile/visitProfile?is_anonymous=true&user_serial=NA&post_id=" + this.properties.post_id + "&comment_order=" + this.properties.comment_order
         })
       }else{
         wx.navigateTo({
-          url: "/pages/visitProfile/visitProfile?&user_serial=" + this.properties.user_serial + "&post_id=" + this.properties.post_serial + "&comment_order=" + this.properties.comment_order
+          url: "/pages/visitProfile/visitProfile?&user_serial=" + this.properties.user_serial + "&post_id=" + this.properties.post_id + "&comment_order=" + this.properties.comment_order
         })
       }
     },
@@ -57,7 +67,7 @@ Component({
     },
     goToComment: function () {
       wx.navigateTo({
-        url: '/pages/writeComment/writeComment?post_id=' + this.data.post_serial +'&is_author=' + this.data.post_is_author + '&comment_id=' + this.data.comment_id + '&comment_order=' + this.data.comment_order,
+        url: '/pages/writeComment/writeComment?post_id=' + this.data.post_id +'&is_author=' + this.data.post_is_author + '&comment_id=' + this.data.comment_id + '&comment_order=' + this.data.comment_order,
       });
     }
   },

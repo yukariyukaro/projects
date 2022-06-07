@@ -1,6 +1,4 @@
-page {
-  overflow: hidden;
-}
+@import "/pages/more/more.wxss";
 .id-card {
   width: 90%;
   height: 26vw;
@@ -189,7 +187,7 @@ switch {
   text-align:center;
 }
 .scroll-outer {
-  height:calc(100vh - 60vw);
+  height:calc(100vh - 125rpx);
 }
 .delete-icon-outer {
   width: 10%; 

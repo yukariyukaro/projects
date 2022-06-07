@@ -7,12 +7,13 @@ Page({
     comment_msg: '',
     comment_with_serial: false,
     is_author: '',
-    placeholder: '想对树洞的拥有者说些什么?',
+    placeholder: '想对洞主说些什么?',
     focus: true,
     post_id: '',
     comment_id:'',
     is_author: false,
     primaryColor: app.globalData.theme.primary,
+    isSending:false
   },
   // 让输入框聚焦
   focus: function () {
@@ -39,8 +40,11 @@ Page({
     wx.showLoading({
       title: '提交中',
     })
+    that.setData({
+      isSending:true
+    })
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/comment/post.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/comment/post.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
@@ -54,6 +58,9 @@ Page({
       },
       success (res) {
         wx.hideLoading()
+        that.setData({
+          isSending:false
+        })
         if(res.data.code == 200){
             wx.navigateBack({
               delta: 1,
@@ -100,12 +107,12 @@ Page({
       if(options.comment_order == 0){
         that.setData({
           comment_id:options.comment_id,
-          comment_msg:"Re G层: "
+          placeholder:"Re G: "
         })
       }else{
         that.setData({
           comment_id:options.comment_id,
-          comment_msg:"Re LG" + options.comment_order + ": "
+          placeholder:"Re LG" + options.comment_order + ": "
         })
       }
     }

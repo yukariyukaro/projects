@@ -33,6 +33,16 @@ border-radius: 5px;
 background: var(--secondary-gradient);
 font-size: 4vw;
 }
+.alias-org {
+  color: var(--alias-org-text);
+  font-weight: bold;
+  float: right;
+  display: inline;
+  padding: 0.5vw 2vw;
+  border-radius: 5px;
+  background: var(--alias-org-bg);
+  font-size: 4vw;
+  }
 .alias-active {
 color: var(--on-secondary);
 font-weight: bold;

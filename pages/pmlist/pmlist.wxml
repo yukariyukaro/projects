@@ -1,0 +1,41 @@
+    <view class="dialog-list">
+
+      <view bindtap="nav2Notice">
+        <view class="dialog-item" hoverClass="hover">
+          <view class="item-head">
+            <image class="icon" mode="aspectFill"
+              src="https://i.boatonland.com/notification.png"></image>
+          </view>
+          <view class="item-body">
+            <view class="info">
+              <view class="name" style="margin-top: 50rpx;">通知</view>
+            </view>
+            <view class="content">
+              <view class="red-dot" style="margin-bottom: 50rpx;" wx:if="{{systemNoticeCount > 0}}">{{systemNoticeCount}}</view>
+            </view>
+          </view>
+        </view>
+        <view class="divider"></view>
+      </view>
+
+      <view bindtap="nav2PmDetail" data-chatid="{{item.chat_id}}" wx:for="{{chatList}}" wx:key="index">
+        <view class="dialog-item" hoverClass="hover">
+          <view class="item-head">
+            <image class="icon" mode="aspectFill"
+              src="{{preURL + item.chat_avatar}}.svg"></image>
+          </view>
+          <view class="item-body">
+            <view class="info">
+              <view class="name"> {{item.chat_alias}}</view>
+              <view class="time">{{item.chat_update_date}}</view>
+            </view>
+            <view class="content">
+              <text class="desc">{{item.chat_latest_msg}}</text>
+              <view class="red-dot" wx:if="{{item.chat_unread_count > 0}}">{{item.chat_unread_count}}</view>
+            </view>
+          </view>
+        </view>
+        <view class="divider"></view>
+      </view>
+      
+    </view>

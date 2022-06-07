@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "netease": "/components/netease/netease",
-    "bilibili": "/components/bilibili/bilibili"
-  }
-}

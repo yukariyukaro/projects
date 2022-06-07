@@ -1,0 +1,15 @@
+<view class="avatar-outer" style="margin-top: {{from_miniapp ? 100 : 200}}rpx;">
+  <view class="avatar-image-wrapper">
+    <view class="avatar-ripple"/>
+    <image class="avatar" src="/images/pootal-logo.svg"/>
+  </view>
+</view>
+<view class="description">HKU噗噗 · 授权登录</view>
+<view class="divider"></view>
+
+<view style="margin: 0rpx 80rpx 120rpx 80rpx;" wx:if="{{dev_name}}">
+  <view ><text style="padding-right: 30rpx;">{{dev_name}}</text>申请使用</view>
+  <view style="font-weight: bold;font-size: 50rpx;margin-top:10rpx;">你的教育邮箱地址</view>
+  <button class="mainButton-r1" bindtap="confirm">同意</button>
+  <button class="mainButton-r2" bindtap="reject">拒绝</button>
+</view>

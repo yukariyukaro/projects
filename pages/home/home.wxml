@@ -1,12 +1,13 @@
 <view wx:if="{{!is_error}}">
 <wxs src="../../utils/indexOf.wxs" module="tools" />
-<navbar items="{{navItems}}" start-index="-2" model:current-index="{{currentTab}}" bind:change="navbarTap" />
+<navbarnew items="{{navItems}}" start-index="-4" model:current-index="{{currentTab}}" bind:change="navbarTap" />
 
 <view class="write-button-outer" bind:tap="handleStarTap">
   <view class="write-button-inner">
   <image class="write-button" src="/images/send-post.svg"></image>    
   </view>
 </view>
+
 
 <scroll-view
   scroll-y="{{true}}" class="scroll-outer"
@@ -19,22 +20,14 @@
   bindrefresherrefresh="onRefresh"
   bindrefresherrestore="onRestore"
   bindscrolltolower="onLoadMore"
+  bindscroll="bindScroll"
 >
-  <view class="tool-bar" hidden="{{!main_data_received}}">
-    <navigator class="search-outer" url="/pages/search/search">
-      <image class="search-icon" src="/images/search.svg"></image>
-      <view>探寻树洞</view>
-    </navigator>
-    <view class="func-button-outer">
-      <text style="font-size: 30rpx;color: #888;" bindtap="onTapFunction">{{functionList.function_title}}</text>
-      <image class="func-button" src="{{functionList.function_image}}" bindtap="onTapFunction"></image>
-    </view>
-  </view>
 
-  <view class="post-content">
-    <pinned bannerList="{{bannerList}}" wx:if="{{currentTab == -2}}"/>
-    <singlePost wx:for="{{postList}}" wx:key="id"
-      post_serial="{{item.post_id}}" 
+
+  <view class="post-content" style="margin-top:5vw">
+    <pinned bannerList="{{bannerList}}"/>
+    <singlePost wx:for="{{postList}}" wx:key="post_id"
+      post_id="{{item.post_id}}" 
       topic_label="{{item.post_topic}}" 
       comment_num="{{item.comment_num}}" 
       post_msg="{{item.post_msg}}" 
@@ -42,7 +35,9 @@
       is_following="{{item.is_following}}"
       post_is_complete="{{item.post_is_complete}}"
       user_avatar="{{item.user_avatar}}"
-      pic="{{item.post_image}}"/>
+      pic="{{item.post_image}}"
+      post_media="{{item.post_media}}"
+      post_is_folded="{{item.post_is_folded}}"/>
     <loadmore end="{{isLast}}" loading="{{is_loading_more}}" />
   </view>
 

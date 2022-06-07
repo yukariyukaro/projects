@@ -1,0 +1,59 @@
+<scroll-view
+  style="height:calc(100vh - 250rpx);margin-bottom: 250rpx;"
+  scroll-y="{{true}}"
+  scroll-top="{{scroll_top}}"
+  scroll-into-view="{{toView}}"
+>
+  <view class="content-container">
+    <view class="item-container" wx:for="{{pmList}}" wx:key="index" id='pm-{{index}}'>
+      <text class="item-top" wx:if="{{index==0||pmList[index].pm_timestamp-pmList[index-1].pm_timestamp>60*5}}">{{item.pm_date}}</text>
+      <view class="item" style="flex-direction: {{item.pm_is_from_me?'row-reverse':'row'}}">
+        <image bindtap="onMemberClick" class="item-left" data-id="{{message.user.id}}" mode="aspectFill"
+          src="{{preURL + item.pm_avatar}}.svg"></image>
+        <view class="item-right {{item.pm_is_from_me?'item-right-me':''}}">
+          <view class="item-right-text-container {{item.pm_is_from_me?'item-right-text-container-me':''}}">
+            <image 
+            wx:if="{{item.pm_media.type == 'image'}}"
+            src="{{item.pm_media.image_link}}"
+            mode="heightFix"
+            style="height: 300rpx;border-radius: 10rpx;max-width: 400rpx;"
+            bindtap="previewImage"
+            data-image="{{item.pm_media.image_link}}"
+            ></image>
+            <text class="item-right-text {{item.pm_is_from_me?'item-right-text-me':''}}"
+              selectable="true" wx:else bindlongpress="longpress" data-pmid="{{item.pm_id}}" data-pmmsg="{{item.pm_msg}}">{{item.pm_msg}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+  <view catchtouchmove="stopTouch" class="jz-chat-edit-view-container bottom-extra">
+    <input
+      bindinput="bindInput"
+      class="jz-chat-edit-view-input"
+      cursorSpacing="126rpx" 
+      focus="{{inputFocus}}"
+      bindfocus="onInputFocus"
+      maxlength="400"
+      confirm-type="send"
+      bindconfirm="sendMessage"
+      value="{{pm_msg}}"></input>
+    <view class="jz-chat-edit-view-bottom">
+      <view class="jz-chat-edit-view-bottom-left">
+        <image bindtap="onEmojiClick" class="jz-chat-edit-view-emoji {{emojiShow?'jz-chat-edit-view-emoji-show':''}}"
+          src="/images/icon_emoji.png"></image>
+        <image bindtap="sendImage" class="jz-chat-edit-view-emoji"
+          src="/images/icon_image.png"></image>
+      </view>
+      <text bindtap="sendMessage" class="jz-chat-edit-view-confirm">发送</text>
+    </view>
+    <scroll-view class="jz-chat-emoji-scroll" hidden="{{!emojiShow}}" scrollY="true"
+      style="height: {{keyboardHeight}}rpx;">
+      <view class="jz-chat-emoji-content">
+        <text bindtap="onEmojiText" class="jz-chat-emoji-text" data-index="{{index}}" wx:for="{{emojiChars}}"
+          wx:key="index">{{item}}</text>
+      </view>
+    </scroll-view>
+  </view>

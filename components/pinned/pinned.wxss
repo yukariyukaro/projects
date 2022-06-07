@@ -69,8 +69,9 @@
 }
 
 .pinned-content {
-  padding: 10px;
+  padding: 10rpx 30rpx 10rpx 20rpx;
   box-sizing: border-box;
+  background-color: rgba(69, 69, 69, 0.4);
   color: #fff;
   font-size: 3.5vw;
   font-weight: bold;

@@ -4,5 +4,5 @@
   padding-bottom:10vw;
 }
 .scroll-outer {
-  height:calc(100vh - 12vw);
+  height:calc(100vh);
 }

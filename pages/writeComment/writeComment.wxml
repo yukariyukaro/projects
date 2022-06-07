@@ -22,7 +22,7 @@
 </view>
 
 <view class="btns">
-  <button class="save secondary" bindtap="submitComment">提交</button>
+  <button class="save secondary" bindtap="submitComment" disabled="{{isSending}}">提交</button>
   <button class="cancel gray" bindtap="cancel">返回</button>
 </view>
 

@@ -91,7 +91,7 @@ Page({
     }
     console.log(data)
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/pm/post.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/pm/post.php', 
       method: 'POST',
       data: data,
       header: {

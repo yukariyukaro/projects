@@ -5,13 +5,13 @@
       <image class="avatar" src="/images/pootal-logo.svg" bind:tap="handleLogoTap"/>
     </view>
     <view class="version">
-      <text>2.0.0</text>
+      <text>2.3.1</text>
     </view>
   </view>
   <view class="avatar-outer">
     <image class="media-qr" show-menu-by-longpress="{{true}}" src="/images/media-qr.jpg"></image>
     <view class="version">
-      <text>公众号:HKUPootal \n 关注发现更多</text>
+      <text>公众号:HKUPootal \n 长按识别，发现更多</text>
     </view>
   </view>
 </view>
@@ -50,9 +50,6 @@ Icon made by Wissawa Khamsriwath from www.flaticon.com \n</text>
   </view>
   <view class="single-info-content" hidden="{{expandIndex != 2}}">
   <text>HKUPootal，香港大学最"不"靠谱的社交平台。
-
-    特别感谢的同学：
-    B21 Arno
 
     技术支持：
     Stardust@HKUST
@@ -94,7 +91,7 @@ Icon made by Wissawa Khamsriwath from www.flaticon.com \n</text>
   </view>
 </view>
 <button class="long-button gray" bindtap="logout">
-  <text>注销并退出登录</text>
+  <text>退出登录</text>
 </button>
 <modal
   id="disclaimer-modal"

@@ -25,7 +25,6 @@ textarea {
 .switch-group {
   text-align:left;
   padding: 3vw 2vw 4vw 5vw;
-  height: 10vw;
 }
 .switch-group-anonymous {
   display: flex;

@@ -3,5 +3,6 @@
     "singlePost": "/components/singlePost/singlePost",
     "prompt": "/components/prompt/prompt",
     "loadmore": "/components/loadmore/loadmore"
-  }
+  },
+  "navigationBarTitleText": "我的"
 }

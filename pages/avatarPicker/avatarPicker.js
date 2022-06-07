@@ -8,7 +8,7 @@ Page({
   getAvatarList: function () {
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/user/getAvatarList.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/user/avatar/get.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
@@ -47,7 +47,7 @@ Page({
       title: '提交中',
     });
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/user/changeAvatar.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/user/avatar/update.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),

@@ -40,7 +40,7 @@ Page({
   getPm:function(){
     var that = this
       wx.request({
-        url: 'https://pupu.boatonland.com/v1/pm/get.php', 
+        url: 'https://api.pupu.hkupootal.com/v3/pm/get.php', 
         method: 'POST',
         data: {
           token:wx.getStorageSync('token'),

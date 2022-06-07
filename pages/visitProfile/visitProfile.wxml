@@ -26,11 +26,7 @@
   </view>
   </view>
 </view>
-<view class="title-card shadow" wx:if="{{!is_anonymous}}">
-  <text wx:for="{{tabs}}" wx:key="unique" data-index="{{index}}"
-    class="title {{currentTab==index ? 'title-active' : ''}}" bindtap="navbarTap" 
-  >{{item}}</text>
-</view>
+
 <scroll-view
   wx:if="{{!is_anonymous}}"
   scroll-y="{{true}}" class="scroll-outer"
@@ -43,10 +39,11 @@
   bindrefresherrefresh="onRefresh"
   bindrefresherrestore="onRestore"
   bindscrolltolower="onLoadMore"
+  bindscroll="bindScroll"
 > 
   <view class="post-content">
     <singlePost wx:for="{{postList}}" wx:key="id"
-      post_serial="{{item.post_id}}" 
+      post_id="{{item.post_id}}" 
       topic_label="{{item.post_topic}}" 
       comment_num="{{item.comment_num}}" 
       post_msg="{{item.post_msg}}" 
@@ -54,28 +51,9 @@
       is_following="{{item.is_following}}"
       post_is_complete="{{item.post_is_complete}}"
       user_avatar="{{item.user_avatar}}"
-      pic="{{item.post_image}}"/>
+      pic="{{item.post_image}}"
+      post_media="{{item.post_media}}"/>
     <loadmore empty="{{postList.length==0}}" end="{{isLast}}" loading="{{is_loading_more}}">
-      这里空荡荡的
-    </loadmore>
-  </view>
-  <view class="post-content" wx:if="{{uni_past_data_received}}" hidden="{{currentTab !==1 && tabs.length > 1}}">
-    <singlePost  wx:for="{{uni_past_posts}}" wx:key="id"
-      post_serial="{{item.post_serial}}" 
-      topic_label="{{item.topic_label}}" 
-      comment_num="{{item.comment_num}}" 
-      post_is_complete="{{item.post_is_complete}}"
-      post_msg="{{item.post_msg}}" 
-      follower_num="{{item.follower_num}}"
-      is_following="{{tools.indexOf(uni_past_following_posts,item.post_serial)}}"
-      music_player="{{item.music_player}}"
-      music_title="{{item.music_title}}"
-      music_source="{{item.music_source}}"
-      pic="{{item.pic}}"
-      user_avatar="{{user_avatar}}"
-      union
-    />
-    <loadmore empty="{{uni_past_posts.length==0}}" end="{{uni_past_no_more_post}}" loading="{{is_loading_more}}">
       这里空荡荡的
     </loadmore>
   </view>

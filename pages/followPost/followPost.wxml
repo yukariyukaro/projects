@@ -1,4 +1,3 @@
-<navbar items="{{navItems}}" start-index="0" model:current-index="{{currentTab}}" bind:change="navbarTap" />
 <scroll-view
   scroll-y="{{true}}" class="scroll-outer"
   scroll-top="{{scroll_top}}"
@@ -10,10 +9,11 @@
   bindrefresherrefresh="onRefresh"
   bindrefresherrestore="onRestore"
   bindscrolltolower="onLoadMore"
+  bindscroll="bindScroll"
 >
 <view class="post-content">
   <singlePost wx:for="{{postList}}" wx:key="id"
-      post_serial="{{item.post_id}}" 
+      post_id="{{item.post_id}}" 
       topic_label="{{item.post_topic}}" 
       comment_num="{{item.comment_num}}" 
       post_msg="{{item.post_msg}}" 
@@ -21,7 +21,8 @@
       is_following="{{item.is_following}}"
       post_is_complete="{{item.post_is_complete}}"
       user_avatar="{{item.user_avatar}}"
-      pic="{{item.post_image}}"/>
+      pic="{{item.post_image}}"
+      post_media="{{item.post_media}}"/>
   <loadmore empty="{{postList.length==0}}" end="{{isLast}}" loading="{{is_loading_more}}">
     <text>这里空荡荡的~\n*点击树洞详情页的右上角\n可以开始围观感兴趣的树洞</text>
   </loadmore>

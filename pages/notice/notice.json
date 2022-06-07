@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "loadmore": "/components/loadmore/loadmore"
+  },
+  "navigationBarTitleText": "通知中心",
+  "disableScroll": true
+}

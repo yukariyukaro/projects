@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "mini-compress": "/components/mini-compress/mini-compress",
-    "netease": "/components/netease/netease",
-    "bilibili": "/components/bilibili/bilibili"
-  }
-}

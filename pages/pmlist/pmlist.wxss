@@ -1,0 +1,214 @@
+
+.menu-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 50rpx;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  position: fixed;
+  z-index: 100;
+  box-shadow: 0px 2rpx 24rpx 0px rgba(149, 149, 149, 0.2);
+}
+
+.menu-item {
+  position: relative;
+  width: 88rpx;
+  height: 146rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.menu-icon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 15rpx;
+  background: #D8D8D8;
+}
+
+.menu-title {
+  line-height: 40rpx;
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 16rpx;
+}
+
+.menu-num {
+  position: absolute;
+  right: -10rpx;
+  top: -20rpx;
+}
+
+/* pages/shop/shop.wxss */
+
+/* 消息头部 */
+
+.msg-head {
+  background-color: #f4f3f7;
+  padding-bottom: 20rpx;
+}
+
+.msg-item {
+  height: 140rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0;
+  background: #fff;
+  border: none;
+  padding: 0 32rpx;
+}
+
+.msg-item .icon,.dialog-item .icon {
+  display: block;
+  width: 90rpx;
+  height: 90rpx;
+  margin-right: 30rpx;
+}
+
+.msg-item .txt {
+  flex: 1;
+  text-align: left;
+  font-size: 30rpx;
+  margin-right: 30rpx;
+}
+
+.msg-item .red-dot,.dialog-item .red-dot {
+  display: block;
+  height: 32rpx;
+  line-height: 32rpx;
+  background-color: #F75e58;
+  border-radius: 16rpx;
+  font-size: 20rpx;
+  color: #fff;
+  padding: 0 12rpx;
+}
+
+.msg-item .red-dot {
+  margin-right: 20rpx;
+}
+
+
+.dialog-list {
+padding-bottom:120rpx;
+}
+
+.dialog-item {
+  display: flex;
+  align-items: center;
+  height: 140rpx;
+  padding: 0 32rpx;
+  border: none;
+  background: none;
+}
+
+.dialog-item .item-head {
+  position: relative;
+  width: 90rpx;
+  height: 90rpx;
+}
+
+.dialog-item .item-head .red-dot {
+  position: absolute;
+  right: -4rpx;
+  top: -4rpx;
+  width: 16rpx;
+  height: 16rpx;
+}
+
+.dialog-item .item-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-left: 30rpx;
+  text-align: left;
+}
+
+.dialog-item .item-body .info {
+  height: 50rpx;
+  line-height: 50rpx;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.dialog-item .item-body .name {
+  font-size: 30rpx;
+  color: var(--pmtext);
+  width:300rpx;
+  overflow: hidden;
+  white-space: nowrap; 
+  text-overflow:ellipsis;
+}
+
+.dialog-item .item-body .official-icon {
+  width: 54rpx;
+  height: 28rpx;
+  margin-left: 10rpx;
+}
+
+.dialog-item .item-body .time {
+  flex: 1;
+  color: var(--pmsubtext);
+  font-size: 22rpx;
+  text-align: right;
+}
+
+.dialog-item .item-body .content {
+  height: 44rpx;
+  line-height: 44rpx;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0;
+}
+
+.dialog-item .item-body .desc {
+  flex: 1;
+  height: 100%;
+  font-size: 24rpx;
+  color: #8d919b;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}/* pages/message/message.wxss */
+
+.home-tabs{
+position: relative;
+}
+
+.redtag{
+position: absolute;
+background: #F75e58;
+width:20rpx!important;
+height: 20rpx;
+right: 0;
+top:20rpx;
+border-radius: 50%;
+}
+
+.home-tab {
+
+padding-top: 0rpx;
+}
+
+.home-tabone {
+padding-top: 100rpx;
+}
+
+.divider{
+  height: 1px;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+  background-color: var(--divider);
+}

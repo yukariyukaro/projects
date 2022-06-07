@@ -5,6 +5,8 @@ Page({
    */
   data: {
     user_itsc:'',
+    user_portal_password:'',
+    mode:'portal',
     authSent: false,
     agree: false,
     suffixes: ['@hku.hk', '@connect.hku.hk'],
@@ -13,7 +15,8 @@ Page({
     vcode_vcode:'',
     vcode_key:'',
     isSending:false,
-    isPosting:false
+    isPosting:false,
+    from_miniapp:false
   },
   sendVcode:function(){
     var that = this
@@ -40,7 +43,7 @@ Page({
       isSending:true
     })
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/user/sendVcode.php', 
+      url: 'https://api.pupu.hkupootal.com/v2/user/sendVcode.php', 
       method: 'POST',
       data: {
         user_itsc:that.data.user_itsc,
@@ -65,12 +68,21 @@ Page({
               content:'验证码已发送,请留意垃圾邮件箱!',
             });
         }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+          wx.showModal({title: '提示',content:res.data.msg,showCancel: false,})
         }
       }
     })
   },
   register:function(){
+    var mode = this.data.mode
+    if(mode == 'portal'){
+      this.registerByPortal()
+    }
+    if(mode == 'email'){
+      this.registerByEmail()
+    }
+  },
+  registerByEmail:function(){
     var that = this
     if (!that.data.authSent) {
       app.showModal({
@@ -114,7 +126,7 @@ Page({
       success (res) {
         if(res.code){
           wx.request({
-            url: 'https://pupu.boatonland.com/v1/user/register.php', 
+            url: 'https://api.pupu.hkupootal.com/v2/user/register.php', 
             method: 'POST',
             data: {
               user_itsc:that.data.user_itsc,
@@ -137,7 +149,77 @@ Page({
                     url: '/pages/home/home',
                   })
               }else{
-                wx.showToast({title: res2.data.msg, icon: "error", duration: 1000})
+                wx.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
+              }
+            }
+          })
+        }else{
+          wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
+        }
+      }
+  })
+    
+  },
+  registerByPortal:function(){
+    var that = this
+    if (that.data.user_itsc.match(/^\s*$/)) {
+      app.showModal({
+        title: '警告',
+        showCancel: false,
+        content: 'UID不能为空',
+      });
+      return;
+    }
+    if (that.data.user_portal_password.match(/^\s*$/)) {
+      app.showModal({
+        title: '警告',
+        showCancel: false,
+        content: 'PIN不能为空',
+      });
+      return;
+    }
+    if (!that.data.agree) {
+      app.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '请先同意「用户条款及声明」',
+      });
+      return;
+    }
+    wx.showLoading({
+      title: '提交中',
+    })
+    that.setData({
+      isPosting:true
+    })
+    wx.login({
+      success (res) {
+        if(res.code){
+          wx.request({
+            url: 'https://api.pupu.hkupootal.com/v2/user/registerByPortal.php', 
+            method: 'POST',
+            data: {
+              user_itsc:that.data.user_itsc,
+              user_portal_password:that.data.user_portal_password,
+              code:res.code
+            },
+            header: {
+              'content-type': 'application/x-www-form-urlencoded'
+            },
+            success (res2) {
+              wx.hideLoading()
+              that.setData({
+                isPosting:false
+              })
+              if(res2.data.code == 200){
+                  wx.setStorageSync('token', res2.data.token)
+                  wx.reLaunch({
+                    url: '/pages/home/home',
+                  })
+                  wx.closeSocket()
+                  app.launchWebSoccket()
+              }else{
+                wx.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
               }
             }
           })
@@ -167,12 +249,27 @@ Page({
       vcode_vcode:e.detail.value
     })
   },
+  passwordInput:function(e){
+    this.setData({
+      user_portal_password:e.detail.value
+    })
+  },
+  changeMode:function(e){
+    this.setData({
+      mode:e.currentTarget.dataset.mode
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
     wx.hideHomeButton();
-    wx.setNavigationBarTitle({ title: '验证UID' });
+    wx.setNavigationBarTitle({ title: '验证UID' })
+    if(app.globalData.from_miniapp){
+      this.setData({
+        from_miniapp:true
+      })
+    }
   },
 
   /**

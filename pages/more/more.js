@@ -50,7 +50,7 @@ Page({
     });
     // record记录开始
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/user/logout.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/user/logout/wechat.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
@@ -62,6 +62,9 @@ Page({
         wx.hideLoading()
         if(res.data.code == 200){
           wx.removeStorageSync('token')
+          wx.removeStorageSync('localDB')
+          wx.setStorageSync('allNoticeCount', 0)
+          wx.setStorageSync('systemNoticeCount', 0)
             wx.reLaunch({
               url: '/pages/register/register',
             })
@@ -76,6 +79,7 @@ Page({
     })
 
   },
+
   /**
    * 生命周期函数--监听页面加载
    */

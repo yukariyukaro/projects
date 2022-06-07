@@ -4,6 +4,8 @@ const mutex = new Mutex();
 const AV = require('./libs/av-core-min.js');
 const adapters = require('./libs/leancloud-adapters-weapp.js');
 const themes = require('./theme');
+const localDB = require('utils/database.js')
+const _ = localDB.command
 
 AV.setAdapters(adapters);
 AV.init({
@@ -14,12 +16,22 @@ AV.init({
 });
 App({
   onLaunch(){
+    var that = this
     this.launch()
     this.watchCaptureScreen()
+    if(!wx.getStorageSync('allNoticeCount')){
+      wx.setStorageSync('allNoticeCount', 0)
+    }
+    if(!wx.getStorageSync('systemNoticeCount')){
+      wx.setStorageSync('systemNoticeCount', 0)
+    }
+  },
+  onShow:function(){
+    this.launchWebSoccket()
   },
   onHide: function () {
-    // 切后台的时候去掉跳转标记，从他处（分享链接）进入的时候能重新触发跳转
-    this.globalData.redirectToRegister = false;
+    this.globalData.redirectToRegister = false
+    wx.closeSocket()
   },
   onThemeChange: function ({ theme }) {
     this.globalData.theme = themes[theme];
@@ -40,6 +52,14 @@ App({
     redirectToRegister: false,
     theme: themes[wx.getSystemInfoSync().theme],
     colorScheme: wx.getSystemInfoSync().theme,
+    indexJS:'',
+    wsConnect:false,
+    chat_id:'',
+    db_version:'4',
+    gettingChatList:[],
+    tabbarJS:'',
+    auth_key:'',
+    from_miniapp:'',
   },
 
   subscribe:function(mode){
@@ -141,8 +161,6 @@ App({
 
     })
   },
-  
-
   // 记录截屏开始
   watchCaptureScreen:function(){
     wx.onUserCaptureScreen(function (res) {
@@ -157,7 +175,7 @@ App({
       }
       urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length-1)
       wx.request({
-        url: 'https://pupu.boatonland.com/v1/user/captureScreen.php', 
+        url: 'https://api.pupu.hkupootal.com/v3/user/record/capturescreen.php', 
         method: 'POST',
         data: {
           token:wx.getStorageSync('token'),
@@ -184,12 +202,13 @@ App({
   },
 
   launch:function(){
+    var that = this
     console.log('执行launch')
     return new Promise(function (resolve, reject) {
       var token = wx.getStorageSync('token')
       if(token){
         wx.request({
-          url: 'https://pupu.boatonland.com/v1/user/check.php',
+          url: 'https://api.pupu.hkupootal.com/v3/user/check/wechat.php',
           method:'POST',
           data: {
             token: token
@@ -203,7 +222,7 @@ App({
                 success (res) {
                   if(res.code){
                     wx.request({
-                      url: 'https://pupu.boatonland.com/v1/user/login.php',
+                      url: 'https://api.pupu.hkupootal.com/v2/user/login.php',
                       method:'POST',
                       data: {
                         code: res.code
@@ -216,14 +235,23 @@ App({
                           wx.setStorageSync('token', res2.data.token)
                           resolve()
                         }else if(res2.data.code == 401){
-                          wx.reLaunch({
-                            url: '/pages/register/register',
-                            success(){
-                              wx.showToast({title: '请先注册', icon: "none", duration: 1000})
-                            }
-                          })
+                          var pages = getCurrentPages()
+                          var currentPage = pages[pages.length-1]
+                          var url = currentPage.route
+                          if(url!="pages/register/register"){
+                            wx.reLaunch({
+                              url: '/pages/register/register',
+                              success(){
+                                wx.showToast({title: '请先注册', icon: "none", duration: 1000})
+                              }
+                            })
+                          }
                         }else if(res2.data.code == 800){
                           wx.removeStorageSync('token')
+                          that.clearDB()
+                          wx.closeSocket()
+                          wx.setStorageSync('allNoticeCount', 0)
+                          wx.setStorageSync('systemNoticeCount', 0)
                           wx.showModal({
                             title:"提示",
                             content:res2.data.msg,
@@ -242,6 +270,10 @@ App({
             })
             }else if(res6.data.code == 800){
               wx.removeStorageSync('token')
+              that.clearDB()
+              wx.closeSocket()
+              wx.setStorageSync('allNoticeCount', 0)
+              wx.setStorageSync('systemNoticeCount', 0)
               wx.showModal({
                 title:"提示",
                 content:res6.data.msg,
@@ -256,7 +288,7 @@ App({
           success (res) {
             if(res.code){
               wx.request({
-                url: 'https://pupu.boatonland.com/v1/user/login.php',
+                url: 'https://api.pupu.hkupootal.com/v2/user/login.php',
                 method:'POST',
                 data: {
                   code: res.code
@@ -269,14 +301,23 @@ App({
                     wx.setStorageSync('token', res2.data.token)
                     resolve()
                   }else if(res2.data.code == 401){
-                    wx.reLaunch({
-                      url: '/pages/register/register',
-                      success(){
-                        wx.showToast({title: '请先注册', icon: "none", duration: 1000})
-                      }
-                    })
+                    var pages = getCurrentPages()
+                    var currentPage = pages[pages.length-1]
+                    var url = currentPage.route
+                    if(url!="pages/register/register"){
+                      wx.reLaunch({
+                        url: '/pages/register/register',
+                        success(){
+                          wx.showToast({title: '请先注册', icon: "none", duration: 1000})
+                        }
+                      })
+                    }
                   }else if(res2.data.code == 800){
                     wx.removeStorageSync('token')
+                    that.clearDB()
+                    wx.closeSocket()
+                    wx.setStorageSync('allNoticeCount', 0)
+                    wx.setStorageSync('systemNoticeCount', 0)
                     wx.showModal({
                       title:"提示",
                       content:res2.data.msg,
@@ -297,4 +338,300 @@ App({
       
     })
   },
+
+  //新消息推送
+  initDatabase:function(){
+    console.log('初始化数据库')
+    var that = this
+    if(wx.getStorageSync('db_version') != this.globalData.db_version){
+      that.clearDB()
+      console.log("更新版本，清空数据库")
+      wx.setStorageSync('db_version', this.globalData.db_version)
+    }
+    localDB.init()
+    var chat = localDB.collection('chat')
+    if(!chat){
+      console.log("不存在chat")
+      chat = localDB.createCollection('chat') 
+    }
+    var pm = localDB.collection('pm')
+    if(!pm){
+      console.log("不存在pm")
+      pm = localDB.createCollection('pm') 
+    }
+    pm.where({
+      _timeout: _.lt(Date.now())
+    }).remove()
+    chat.where({
+      _timeout: _.lt(Date.now())
+    }).remove() 
+    that.clearStorage(chat,pm,1)
+    return{chat,pm}
+  },
+  clearStorage:function(chat,pm,i){
+    var that = this
+    console.log("开始清理存储")
+    console.log("尝试清理"+i+"天")
+    if(that.getBytesLength(JSON.stringify(wx.getStorageSync('localDB'))) > 900000){
+      console.log("容量要超了，提前清除")
+      pm.where({
+        _timeout: _.lt(Date.now() + i * 24 * 3600000)
+      }).remove()
+      chat.where({
+        _timeout: _.lt(Date.now() + i * 24 * 3600000)
+      }).remove() 
+      setTimeout(() => {
+        that.clearStorage(chat,pm,i+1)
+      }, 100);
+    }else{
+      console.log("不需要清理")
+    }
+  },
+  getHistoryMessage:function(){
+    var that = this
+    return new Promise(function (resolve, reject) {
+      var db = that.initDatabase()
+      var pm = db.pm
+      var latset_pm_id_list = pm.orderBy('pm_id', 'desc').limit(1).get()
+      console.log(latset_pm_id_list)
+      if(!latset_pm_id_list[0]){
+        var latset_pm_id = 0
+      }else{
+        var latset_pm_id = latset_pm_id_list[0].pm_id
+      }
+      console.log("latset_pm_id为"+latset_pm_id)
+      wx.request({
+        url: 'https://api.pupu.hkupootal.com/v3/pmnew/message/get.php', 
+        method: 'POST',
+        data: {
+          token:wx.getStorageSync('token'),
+          pm_id:latset_pm_id
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        success (res) {
+          console.log(res)
+          if(res.data.code == 200){
+            var pmList = res.data.pmList
+            console.log(pmList)
+            pmList.forEach(item => {
+              that.addMessageToDb(item)
+            })
+            resolve()
+          }else if(res.data.code == 800 ||res.data.code == 900){
+            that.launch().then(res=>{
+              that.getHistoryMessage()
+            })
+          }else{
+            wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+          }
+        }
+      })
+    })
+  },
+  addMessageToDb:function(item){
+    console.log(item)
+    var that = this
+    var db = that.initDatabase()
+    var chat = db.chat
+    var pm = db.pm
+    var pm_list = pm.where({
+      pm_id: item.pm_id
+    }).limit(1).get()
+    if(pm_list[0]){
+      return
+    }
+    item._timeout = Date.now() + 30 * 24 * 3600000
+    pm.add(item)
+    var chat_list = chat.where({
+      chat_id: item.chat_id
+    }).limit(1).get()
+    console.log(chat_list)
+    if(!chat_list[0]){
+      that.addChatToDb(item)
+    }else{
+      var newChatDetail = chat_list[0]
+      newChatDetail.chat_latest_msg = item.pm_msg
+      newChatDetail.chat_update_date = item.pm_date
+      newChatDetail.chat_latest_pm_id = item.pm_id
+      if(!item.pm_is_from_me && that.globalData.chat_id!=item.chat_id){
+        newChatDetail.chat_unread_count += 1
+        wx.setStorageSync('allNoticeCount', wx.getStorageSync('allNoticeCount')+1)
+        that.updateTabbar()
+      }
+      chat.where({
+        chat_id: item.chat_id
+      }).update(newChatDetail)
+      that.updateData()
+    }
+  },
+  addChatToDb:function(item){
+    var that = this
+    if(that.globalData.gettingChatList.includes(item.chat_id)){
+      console.log("已经在获取"+item.chat_id)
+      return
+    }
+    that.globalData.gettingChatList.push(item.chat_id)
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/pmnew/chat/get.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+        chat_id:item.chat_id
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        if(res.data.code == 200){
+          var chatDetail = res.data.chatDetail
+          chatDetail.chat_latest_msg = item.pm_msg
+          chatDetail.chat_update_date = item.pm_date
+          chatDetail.chat_latest_pm_id = item.pm_id
+          if(item.pm_is_from_me){
+            chatDetail.chat_unread_count = 0
+          }else{
+            chatDetail.chat_unread_count = 1
+            wx.setStorageSync('allNoticeCount', wx.getStorageSync('allNoticeCount')+1)
+            that.updateTabbar()
+          }
+          var db = that.initDatabase()
+          var chat = db.chat
+          var chat_list = chat.where({
+            chat_id: item.chat_id
+          }).limit(1).get()
+          console.log(chat_list)
+          if(!chat_list[0]){
+            chatDetail._timeout = Date.now() + 30 * 24 * 3600000
+            chat.add(chatDetail)
+            that.updateData()
+          }
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.addChatToDb(item)
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
+    })
+  },
+  updateData:function(){
+    var that = this
+    console.log("调用")
+    if(that.globalData.indexJS != ''){
+      that.globalData.indexJS.setPageData()
+      console.log("调用成功")
+    }else{
+      console.log("调用失败")
+    }
+  },
+  webSocketConnect:function(){
+    var that = this
+    wx.connectSocket({
+      url: 'wss://ws.pupu.hkupootal.com:3330',
+    })
+
+    wx.onSocketOpen(function() {
+      console.log('WebSocket已连接')
+      that.globalData.wsConnect = true
+      var message = {
+        type:'bind',
+        token:wx.getStorageSync('token')
+      }
+      wx.sendSocketMessage({
+        data:JSON.stringify(message)
+      })
+    })
+    
+    wx.onSocketMessage(function(res) {
+      that.messageHandler(res.data)
+    })
+
+    wx.onSocketClose(function() {
+      that.globalData.wsConnect = false
+      console.log('WebSocket 已关闭！')
+    })
+  },
+  messageHandler:function(data){
+    var that = this
+    console.log(data)
+    data = JSON.parse(data)
+    switch(data.type){
+      case "bind":
+        if(data.bind_result){
+          console.log("uid绑定成功")
+        }else{
+          console.log("uid绑定失败")
+          wx.closeSocket()
+          setTimeout(() => {
+            console.log("重新连接")
+            that.webSocketConnect()
+          }, 5000)
+        }
+        break
+      case "message":
+        var content = JSON.parse(data.content)
+        that.addMessageToDb(content)
+        wx.vibrateShort({type: 'medium',})
+        break
+      case "notice":
+        wx.setStorageSync('allNoticeCount', wx.getStorageSync('allNoticeCount')+1)
+        wx.setStorageSync('systemNoticeCount', wx.getStorageSync('systemNoticeCount')+1)
+        that.updateTabbar()
+        wx.vibrateShort({type: 'medium',})
+        break
+    }
+  },
+  launchWebSoccket:function(){
+    var that = this
+    if(!that.globalData.wsConnect){
+      console.log("先获取历史消息")
+      that.getHistoryMessage().then(res=>{
+        console.log("然后链接")
+        that.webSocketConnect()
+      })
+    }else{
+      var message = {
+        type : 'ping',
+      }
+      wx.sendSocketMessage({
+        data:JSON.stringify(message)
+      })
+    }
+    setTimeout(() => {
+      console.log("每10秒检测一次")
+      that.launchWebSoccket()
+    }, 10000); 
+  },
+  updateTabbar:function(){
+    var tabbarJS = this.globalData.tabbarJS
+    if(tabbarJS != '')[
+      tabbarJS.updateTabbar()
+    ]
+  },
+  getBytesLength:function(string) {   
+    var totalLength = 0 
+    var charCode = 0
+      for (var i = 0; i < string.length; i++) {  
+        charCode = string.charCodeAt(i)
+        if (charCode < 0x007f)  {     
+            totalLength++
+        } else if ((0x0080 <= charCode) && (charCode <= 0x07ff))  {     
+            totalLength += 2  
+        } else if ((0x0800 <= charCode) && (charCode <= 0xffff))  {     
+          totalLength += 3 
+        } else{  
+            totalLength += 4
+        }          
+    }  
+    return totalLength
+  },
+  clearDB:function(){
+    var that = this
+    var db = that.initDatabase()
+    db.chat.remove()
+    db.pm.remove()
+  }
 });

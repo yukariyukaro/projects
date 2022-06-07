@@ -31,7 +31,7 @@ Page({
       return
     }
     wx.navigateTo({
-      url: "/pages/detail/detail?post_serial=" + this.data.post_id
+      url: "/pages/detail/detail?post_id=" + this.data.post_id
     });
   },
   /**

@@ -22,6 +22,7 @@ Page({
   onRefresh() {
     this.setData({
       page:0,
+      is_loading_more:true
     });
     wx.showLoading({
       title: '加载中',
@@ -30,6 +31,8 @@ Page({
   },
   // 上拉加载更多
   onLoadMore: function () {
+    if(this.data.is_loading_more){return}
+    if(this.data.isLast){return}
     this.setData({
       is_loading_more: true,
       page:this.data.page + 1
@@ -40,7 +43,7 @@ Page({
   getUserInfo: function () {
     var that = this
     wx.request({
-      url: 'https://pupu.boatonland.com/v1/user/getUserInfo.php', 
+      url: 'https://api.pupu.hkupootal.com/v3/user/profile/visit.php', 
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
@@ -69,7 +72,7 @@ Page({
   getPostByUser:function(){
       var that = this
       wx.request({
-        url: 'https://pupu.boatonland.com/v1/post/getByUser.php', 
+        url: 'https://api.pupu.hkupootal.com/v3/post/list/user.php', 
         method: 'POST',
         data: {
           token:wx.getStorageSync('token'),
@@ -109,15 +112,90 @@ Page({
       })
   
   },
+  // nav2Pm:function(){
+  //   if(!this.data.is_anonymous){
+  //     wx.navigateTo({
+  //       url: '/pages/func1-pm/writePm/writePm?user_serial=' + this.data.user_serial,
+  //     })
+  //   }else{
+  //     wx.navigateTo({
+  //       url: '/pages/func1-pm/writePm/writePm?to_type=post&post_id=' + this.data.post_id + '&comment_order=' + this.data.comment_order,
+  //     })
+  //   }
+  // },
   nav2Pm:function(){
-    if(!this.data.is_anonymous){
-      wx.navigateTo({
-        url: '/pages/func1-pm/writePm/writePm?user_serial=' + this.data.user_serial,
-      })
-    }else{
-      wx.navigateTo({
-        url: '/pages/func1-pm/writePm/writePm?to_type=post&post_id=' + this.data.post_id + '&comment_order=' + this.data.comment_order,
-      })
+    var that = this
+    wx.showActionSheet({
+      itemList: ['实名私信','匿名私信'],
+      success (res) {
+        wx.showLoading({
+          title: '加载中',
+        })
+        if(res.tapIndex == 0){
+          if(!that.data.is_anonymous){
+            var data = {
+              token:wx.getStorageSync('token'),
+              sender_is_real_name:"true",
+              to_type:"user",
+              receiver_serial:that.data.user_serial,
+            }
+          }else{
+            var data = {
+              token:wx.getStorageSync('token'),
+              sender_is_real_name:"true",
+              to_type:"post",
+              post_id:that.data.post_id,
+              comment_order:that.data.comment_order,
+            }
+          }
+        }else if(res.tapIndex == 1){
+          if(!that.data.is_anonymous){
+            var data = {
+              token:wx.getStorageSync('token'),
+              sender_is_real_name:"false",
+              to_type:"user",
+              receiver_serial:that.data.user_serial,
+            }
+          }else{
+            var data = {
+              token:wx.getStorageSync('token'),
+              sender_is_real_name:"false",
+              to_type:"post",
+              post_id:that.data.post_id,
+              comment_order:that.data.comment_order,
+            }
+          }
+        }
+        wx.request({
+          url: 'https://api.pupu.hkupootal.com/v3/pmnew/chat/create.php', 
+          method: 'POST',
+          data: data,
+          header: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          success (res) {
+            wx.hideLoading()
+            if(res.data.code == 200){
+              wx.navigateTo({
+                url: '/pages/pmdetail/pmdetail?chat_id='+ res.data.chat_id,
+              })
+            }else if(res.data.code == 800 ||res.data.code == 900){
+              app.launch().then(res=>{
+                that.nav2Pm()
+              })
+            }else{
+              wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+            }
+          }
+        })
+      }
+    })
+  },
+  bindScroll:function(e){
+    // console.log(e.detail.scrollHeight - e.detail.scrollTop)
+    if(this.data.is_loading_more){return}
+    if(e.detail.scrollHeight - e.detail.scrollTop < 2500){
+      this.onLoadMore()
     }
   },
 
