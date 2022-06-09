@@ -9,8 +9,8 @@
   margin-bottom: 22vw
 }
 .single-avatar {
-  width: 15vw;
-  height: 15vw;
+  width: 50rpx;
+  height: 50rpx;
 }
 .avatar-outer {
   text-align: center;

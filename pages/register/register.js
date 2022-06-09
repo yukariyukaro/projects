@@ -62,13 +62,13 @@ Page({
               authSent:true,
               vcode_key:res.data.vcode_key,
             })
-            wx.showModal({
+            app.showModal({
               title: '验证码已发送',
               showCancel: false,
               content:'验证码已发送,请留意垃圾邮件箱!',
             });
         }else{
-          wx.showModal({title: '提示',content:res.data.msg,showCancel: false,})
+          app.showModal({title: '提示',content:res.data.msg,showCancel: false,})
         }
       }
     })
@@ -149,7 +149,7 @@ Page({
                     url: '/pages/home/home',
                   })
               }else{
-                wx.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
+                app.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
               }
             }
           })
@@ -219,7 +219,7 @@ Page({
                   wx.closeSocket()
                   app.launchWebSoccket()
               }else{
-                wx.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
+                app.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
               }
             }
           })

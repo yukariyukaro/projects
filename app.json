@@ -24,7 +24,12 @@
     "pages/pmlist/pmlist",
     "pages/notice/notice",
     "pages/auth/auth",
-    "pages/org/org"
+    "pages/org/org",
+    "pages/mine/mine",
+    "pages/about/about",
+    "pages/setting/setting",
+    "pages/newdetail/detail",
+    "pages/userdata/userdata"
   ],
   "requiredBackgroundModes": [
     "audio",
@@ -57,7 +62,7 @@
         "text": "消息"
       },
       {
-        "pagePath": "pages/profile/profile",
+        "pagePath": "pages/mine/mine",
         "iconPath": "images/more-inactive.png",
         "selectedIconPath": "images/more-active.png",
         "text": "我的"

@@ -26,7 +26,8 @@ page {
   --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.1);
   --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15);
   --text: #333333;
-  --divider: #eeeeee;
+  /* --divider: #eeeeee; */
+  --divider:#e8e8e8;
   --pmtext: #252628;
   --pmsubtext: #b7b5c2;
   --inputouter: #F2F2F2;
@@ -64,7 +65,7 @@ page {
     --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.2), 0 0 4px 2px rgba(0, 0, 0, 0.3);
     --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15);
     --text: #dddddd;
-    --divider: #222222;
+    --divider: #282828;
     --pmtext: #4f4f4f
     --pmsubtext: #b7b5c2;
     --inputouter: #323232;

@@ -160,7 +160,7 @@ Component({
     showTipAbtRatio() {
       const { zd, _maxh2w } = this.data;
       const content = zd.TXT_maxh2w + _maxh2w;
-      wx.showModal({
+      app.showModal({
         title: zd.TXT_tip,
         content,
         confirmText: zd.TXT_gotit,

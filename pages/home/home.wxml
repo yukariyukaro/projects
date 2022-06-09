@@ -26,7 +26,7 @@
 
   <view class="post-content" style="margin-top:5vw">
     <pinned bannerList="{{bannerList}}"/>
-    <singlePost wx:for="{{postList}}" wx:key="post_id"
+    <singlePostNew wx:for="{{postList}}" wx:key="post_id"
       post_id="{{item.post_id}}" 
       topic_label="{{item.post_topic}}" 
       comment_num="{{item.comment_num}}" 

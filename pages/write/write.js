@@ -463,7 +463,7 @@ Page({
   },
   removeOption:function(e){
     var that = this
-    wx.showModal({
+    app.showModal({
       title:"提示",
       content:"确定移除选项？",
       success(res){

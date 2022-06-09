@@ -189,7 +189,7 @@ Page({
             if(res.tapIndex == 0){
               that.setPrivate()
             }else if(res.tapIndex == 1){
-              wx.showModal({
+              app.showModal({
                 title:"确认删除？",
                 content:"删除后将无法恢复",
                 success(res){
@@ -208,7 +208,7 @@ Page({
             if(res.tapIndex == 0){
               that.setPublic()
             }else if(res.tapIndex == 1){
-              wx.showModal({
+              app.showModal({
                 title:"确认删除？",
                 content:"删除后将无法恢复",
                 success(res){
@@ -588,6 +588,7 @@ Page({
     if (msg.length > 20) {
       msg = msg.slice(0, 20) + '...';
     }
+    console.log(msg)
     return {
       path: `/pages/home/home?jump_page=detail&post_serial=${this.data.postDetail.post_id}`,
       title: 'HKU树洞用户: ' + msg,

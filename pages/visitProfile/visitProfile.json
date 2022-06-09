@@ -1,6 +1,8 @@
 {
   "usingComponents": {
-    "singlePost": "/components/singlePost/singlePost",
+    "singlePostNew": "/components/singlePostNew/singlePostNew",
     "loadmore": "/components/loadmore/loadmore"
-  }
+  },
+  "navigationBarTitleText": "用户信息",
+  "disableScroll":true
 }

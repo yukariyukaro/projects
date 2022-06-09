@@ -1,0 +1,55 @@
+<view class="own-header">
+  <view class="header-top">
+    <view class="own-header-img-div">
+      <image mode="aspectFill" class="own-header-img" src="{{preURL + user_avatar}}.svg" wx:if="{{user_avatar}}"></image>
+    </view>
+    <view class="header-middle">
+      <view class="own-header-r-t text-overflow">{{user_serial}}</view>
+    </view>
+  </view>
+</view>
+
+<scroll-view style="height: calc(100vh - 240rpx);" scroll-y="true">
+  <view class="menu">
+    <view class="u-flex-item">
+      <view class="u-row-left">
+        <view style="display: flex;flex-direction: column;">
+          <view class="name">编辑Pootal ID</view>
+          <view class="note">只能含有数字和小写字母</view>
+        </view>
+      </view>
+      <view class="u-row-right">
+        <input class="serial-input" value="{{user_serial}}" bindinput="bindSerialInput" placeholder="请输入新的Pootal ID"></input>
+      </view>
+    </view>
+  </view>
+
+  <view class="menu">
+    <view class="u-flex-item">
+      <view class="u-row-left">
+        <view style="display: flex;flex-direction: column;">
+          <view class="name">头像兑换码</view>
+          <view class="note">输入兑换码已解锁未拥有的头像</view>
+        </view>
+      </view>
+      <view class="u-row-right">
+        <input class="serial-input" value="{{avatar_sdk_content}}" bindinput="bindSdkInput" placeholder="请输入兑换码"></input>
+      </view>
+    </view>
+  </view>
+
+  <button class="mainButton-r" wx:if="{{avatar_sdk_content}}" bindtap="useSdk">兑换</button>
+
+  <view class="outer" wx:for="{{avatarCollection}}">
+    <view style="padding:30rpx">
+      <view>{{item.avatar_collection_name}}<text wx:if="{{!item.avater_collection_is_owned}}">（未拥有）</text></view>
+      <view style="display: flex;justify-content: center;flex-direction: row;flex-wrap: wrap;margin-top: 20rpx;">
+        <view wx:for="{{item.avatarList}}" wx:for-item="item2" class="{{user_avatar == item2.avatar_name ? 'avatar-outer-active': 'avatar-outer'}}" bindtap="chooseAvatar" data-avatarname="{{item2.avatar_name}}">
+          <image class="single-avatar" src="{{preURL+item2.avatar_name+'.svg'}}"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <button class="mainButton-r" bindtap="update">保存</button>
+</scroll-view>

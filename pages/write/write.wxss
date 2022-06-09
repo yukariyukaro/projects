@@ -146,6 +146,7 @@ button {
 }
 .radius{
   border-radius:10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
 }
 
 .save {
@@ -162,8 +163,8 @@ button {
 .function_container{
   margin-top: 5vw;
   text-align:center;
-  background-color:var(--bg-gray-3);
-  border-radius: 20rpx;
+  background-color:var(--model-bg-gray);
+  border-radius: 10px;
   display: flex;
   width: 600rpx;
   overflow-wrap: break-word;

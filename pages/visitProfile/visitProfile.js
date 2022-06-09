@@ -204,9 +204,6 @@ Page({
    */
   onLoad: function (options) {
     var that = this;
-    wx.setNavigationBarTitle({
-      title: '访问日志',
-    });
     if(options.is_anonymous){
       var userInfo = {
         user_serial:"匿名",

@@ -1,8 +1,5 @@
 <view wx:if="{{empty}}" class="no-content"><slot/></view>
 <view wx:else class="loadmore">
-  <text wx:if="{{end}}">-就咁多-</text>
-  <view wx:elif="{{loading}}">
-    <image class="running" src="/images/shiba.png" />
-    加载中...
-  </view>
+  <text wx:if="{{end}}">——就咁多——</text>
+  <text wx:elif="{{loading}}">加载中...</text>
 </view>

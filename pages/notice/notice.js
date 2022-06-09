@@ -45,7 +45,7 @@ Page({
   acceptSubscribe: function (e) {
     var that = this
     if(e.detail.value){
-      wx.showModal({
+      app.showModal({
         title:"开启推送",
         content:"请在新界面勾选「总是保持以上选择，不再询问」并选择「允许」",
         showCancel:false,
@@ -198,7 +198,7 @@ Page({
   },
   clearNotice: function () {
     var that = this
-    wx.showModal({
+    app.showModal({
       title:"提示",
       content:"确认清空未读通知？",
       showCancel:true,
@@ -257,6 +257,13 @@ Page({
       page:this.data.page + 1
     });
     this.getNotice()
+  },
+  bindScroll:function(e){
+    // console.log(e.detail.scrollHeight - e.detail.scrollTop)
+    if(this.data.is_loading_more){return}
+    if(e.detail.scrollHeight - e.detail.scrollTop < 2500){
+      this.onLoadMore()
+    }
   },
   /**
    * 生命周期函数--监听页面加载

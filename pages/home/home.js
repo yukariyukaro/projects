@@ -78,9 +78,14 @@ Page({
       success (res) {
         wx.hideLoading()
         if(res.data.code == 200){
+          if(wx.getStorageSync('banUniPost')){
+            var postList = res.data.postList.filter(function (item) {
+              return item.post_topic != "UST" && item.post_topic != "CUHK"
+            });
+          }
           if(that.data.page == '0'){
             that.setData({
-              postList:res.data.postList,
+              postList:postList,
               isLast:res.data.isLast,
               main_data_received:true,
               refresh_triggered: false,
@@ -89,7 +94,7 @@ Page({
             wx.stopPullDownRefresh()
           }else{
             that.setData({
-              postList:that.data.postList.concat(res.data.postList),
+              postList:that.data.postList.concat(postList),
               isLast:res.data.isLast,
               main_data_received:true,
               refresh_triggered: false,

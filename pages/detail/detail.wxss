@@ -1,21 +1,18 @@
-.header-outer {
-  height: 11vw;
-  background: var(--bg-3);
-  font-size: 4vw;
-  width:95%;
-  left:2.5%;
-  top: 2vw;
-  position: fixed;
-  z-index:10;
-  border-radius: 15px;
+.header-outer{
   display: flex;
-
+  position: fixed;
+  margin:20rpx 30rpx 40rpx 30rpx;
+  width:690rpx;
+  border-radius:10rpx;
+  font-size: 30rpx;
+  background-color: var(--bg-2);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
 }
 .header {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 0 7vw;
+  padding: 5rpx 40rpx;
 }
 .header-title {
   display: flex;
@@ -54,12 +51,15 @@
   z-index: -1
 }
 .topic {
-  color: var(--on-bg-2);
-  display: inline;
-  padding: 0.5vw 2vw;
-  border-radius: 8px;
-  background: var(--bg-gray-1);
-  margin-left: 1vw;
+  color: #8C8C8C;
+  align-self: center;
+  padding: 5rpx 15rpx;
+  border-radius: 10rpx;
+  background: var(--divider);
+  margin-left: 20rpx;
+}
+.topic-school {
+  font-size: 30rpx;
 }
 .icon-more {
   width:7vw; 
@@ -168,15 +168,15 @@
 }
 /* 新评论区 */
 .comment-content-outer{
-  background: var(--bg-3);
-  color: var(--on-bg-2);
+  background: var(--bg-2);
+  color: #8C8C8C;
   font-size: 4vw;
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom) + 20rpx);
   left: 5vw;
   right: 5vw;
   height: 10vw;
-  box-shadow: var(--shadow-3);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
   border-radius: 20px;
   display: flex;
   justify-content: center;
@@ -198,8 +198,8 @@
 .function_container{
   margin-top: 5vw;
   text-align:center;
-  background-color:var(--bg-gray-3);
-  border-radius: 20rpx;
+  background-color:var(--model-bg-gray);
+  border-radius: 10px;
   display: flex;
   width: 600rpx;
 }

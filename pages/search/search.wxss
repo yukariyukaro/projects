@@ -1,8 +1,8 @@
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   page {
     background-color: #f9f9f9;
   }
-}
+} */
 .outer {
   width: 100vw
 }
@@ -17,7 +17,7 @@
   width: 60vw;
   border-radius: 5vw;
   background-color: var(--bg-2);
-  box-shadow: var(--shadow-3);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
   flex: 1;
   align-self: center;
   display: flex;
@@ -34,17 +34,17 @@
   font-weight: bold;
   align-self: center;
   margin-left: 3vw;
-  color: var(--secondary)
+  color: #8C8C8C;
 }
 .small-icon-outer {
   align-self: center;
-  width: 10vw;
-  height: 10vw;
+  width: 60rpx;
+  height: 60rpx;
   display: flex;
 }
 .small-icon {
-  width: 5vw;
-  height: 5vw;
+  width: 30rpx;
+  height: 30rpx;
   margin: auto
 }
 .search-option-row {

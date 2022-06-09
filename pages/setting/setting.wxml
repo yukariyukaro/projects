@@ -1,0 +1,51 @@
+<view class="menu">
+  <view class="u-flex-item">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">通知推送</view>
+        <view class="note">开启后可以在微信接收到通知推送</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <switch color="#D85050" checked="{{subscribe_accept}}" bindchange="acceptSubscribe" />
+    </view>
+  </view>
+  <view class="u-flex-item" bindtap="clearUnread">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">清空未读消息</view>
+        <view class="note">清空所有的小红点</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <view class="u-light-color"></view>
+      <view class="arror-right"></view>
+    </view>
+  </view>
+  <view class="u-flex-item" bindtap="regetMessage">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">重新获取消息</view>
+        <view class="note">清空所有历史消息，然后重新获取最近300条消息</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <view class="u-light-color"></view>
+      <view class="arror-right"></view>
+    </view>
+  </view>
+</view>
+
+<view class="menu">
+  <view class="u-flex-item">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">在「全部」中屏蔽来自UNI的树洞</view>
+        <view class="note">屏蔽后，来自UNI的树洞将只会在「UNI」中展示</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <switch color="#D85050" checked="{{banUniPost}}" bindchange="setBanUniPost" />
+    </view>
+  </view>
+</view>

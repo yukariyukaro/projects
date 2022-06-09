@@ -1,7 +1,8 @@
 /* components/singlePost/singlePost.wxss */
 .header {
   display: flex;
-  padding:2.5vw 5vw 0vw 5vw;
+  /* padding:2.5vw 5vw 0vw 5vw; */
+  padding: 20rpx 40rpx 0 40rpx;
   justify-content: space-between;
 }
 .header-title {
@@ -10,40 +11,27 @@
 }
 .avatar-outer {
   display: inline;
-  margin: 0 2vw;
-  margin-bottom: -0.3vw;
+  margin: 5rpx 20rpx 0 20rpx;
 }
 .avatar {
-  width: 6vw;
-  height: 6vw
+  width: 45rpx;
+  height: 45rpx;
 }
 .serial {
   font-weight: bold;
+  font-size: 32rpx;
   align-self: center;
 }
 .topic {
-  color: var(--on-bg-2);
+  color: #8C8C8C;
   align-self: center;
-  padding: 0 2vw;
-  border-radius: 8px;
-  background: var(--bg-gray-1);
+  padding: 5rpx 15rpx;
+  border-radius: 10rpx;
+  background: var(--divider);
   margin-left: 1vw;
 }
-.topic-union {
-  align-self: center;
-  position: relative;
-}
-.topic-tint {
-  content: "";
-  position: absolute;
-  bottom: 0.1em;
-  left: 0.2em;
-  right: 0.2em;
-  height: 0.4em;
-  opacity: 0.5;
-}
 .topic-school {
-  position: relative;
+  font-size: 30rpx;
 }
 .outer{
   margin:40rpx 30rpx 40rpx 30rpx;
@@ -54,43 +42,37 @@
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
 }
 .outer:active {
-  opacity: 0.8;
+  opacity: 0.7;
 }
-.line{
-  width: 89%;
-  margin-top: 2.5vw;
-  margin-bottom:3vw;
-  margin-left: 5vw;
-  border-top: 1px var(--on-bg-2) solid;
+.divider{
+  height: 1px;
+  margin: 15rpx 20rpx 20rpx 20rpx;
+  background-color: var(--divider);
 }
 .follower-comment-outer {
   display: flex;
 }
-.comment-icon {
-  width: 4vw;
-  height: 4vw;
-}
-.comment-icon-outer {
-  margin: 0.7vw 2vw
-}
 .follower-icon {
-  width: 4vw;
-  height: 4vw;
+  width: 30rpx;
+  height: 30rpx;
+  margin-top: 15rpx;
 }
-.follower-icon-outer {
-  margin: 0.6vw 2vw
+.follower-num{
+  color: #8C8C8C;
+  font-weight: bold;
+  font-size: 30rpx;
+  align-self: center;
 }
 .loadmore {
-  font-size: 3vw;
-  color: var(--on-bg-2);
-  height: 3vw
+  font-size: 22rpx;
+  color: #8C8C8C;
 }
 .loadmore text {
   float: right
 }
 .content {
   text-align:left;
-  padding: 0.5vw 5vw 3.5vw 5vw;
+  padding: 10rpx 40rpx 30rpx 40rpx;
   white-space: pre-wrap;
   display: flex;
   width: 90%;
@@ -109,7 +91,7 @@
   height: 15vw;
   position: relative;
   align-self: center;
-  border-radius: 5px;
+  border-radius: 10rpx;
   overflow: hidden;
 }
 .message-pic {
@@ -121,19 +103,19 @@
   margin: auto;
   width: 100%;
   height: 100%;
-  border-radius: 5px;
+  border-radius: 10rpx;
 }
 .music-outer {
-  font-size: 3.5vw;
+  font-size: 28rpx;
   display: flex;
-  background: var(--bg-gray-1);
+  background: var(--divider);
   width: 90%;
   margin: auto;
-  margin-bottom: 2vw;
-  padding: 2% 2.5%;
+  margin-bottom: 15rpx;
+  padding: 15rpx 20rpx;
   box-sizing: border-box;  
-  border-radius: 5px;
-  color: var(--on-bg-2);
+  border-radius: 10rpx;
+  color: #8C8C8C;
   position: relative;
 }
 .music-title {
@@ -142,7 +124,7 @@
   white-space: nowrap;  
   text-overflow: ellipsis;
   font-weight: bold;
-  padding-left: 10rpx;
+  font-size: 28rpx;
 }
 .music-icon-outer-netease {
   text-align: right;

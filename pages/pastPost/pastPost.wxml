@@ -12,7 +12,7 @@
   bindscroll="bindScroll"
 >
 <view class="post-content">
-  <singlePost wx:for="{{postList}}" wx:key="id"
+  <singlePostNew wx:for="{{postList}}" wx:key="id"
       post_id="{{item.post_id}}" 
       topic_label="{{item.post_topic}}" 
       comment_num="{{item.comment_num}}" 

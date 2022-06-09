@@ -53,7 +53,7 @@ Component({
     },
     deleteComment: function () {
       var that = this
-      wx.showModal({
+      app.showModal({
         title:"确认删除？",
         content:"删除后将无法恢复",
         success(res){

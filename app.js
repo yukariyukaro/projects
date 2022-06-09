@@ -25,6 +25,9 @@ App({
     if(!wx.getStorageSync('systemNoticeCount')){
       wx.setStorageSync('systemNoticeCount', 0)
     }
+    if(!wx.getStorageSync('banUniPost')){
+      wx.setStorageSync('banUniPost', false)
+    }
   },
   onShow:function(){
     this.launchWebSoccket()
@@ -72,7 +75,7 @@ App({
         if(!res.subscriptionsSetting.mainSwitch){
           console.log('main button已经关闭')
           if(mode){
-            wx.showModal({
+            app.showModal({
               title:'未开启订阅消息权限',
               content:'你未开启订阅消息权限，可能无法接收通知，请到设置页面开启。',
               success(res2){
@@ -122,7 +125,7 @@ App({
             }else if(Math.round(valid_count%4) != 0){
               console.log('some reject')
               if(mode){
-                wx.showModal({
+                app.showModal({
                   title:'未开启订阅消息权限',
                   content:'你未开启订阅消息权限，可能无法接收通知，请到设置页面开启。',
                   success(res2){
@@ -252,7 +255,7 @@ App({
                           wx.closeSocket()
                           wx.setStorageSync('allNoticeCount', 0)
                           wx.setStorageSync('systemNoticeCount', 0)
-                          wx.showModal({
+                          app.showModal({
                             title:"提示",
                             content:res2.data.msg,
                             showCancel:false
@@ -274,7 +277,7 @@ App({
               wx.closeSocket()
               wx.setStorageSync('allNoticeCount', 0)
               wx.setStorageSync('systemNoticeCount', 0)
-              wx.showModal({
+              app.showModal({
                 title:"提示",
                 content:res6.data.msg,
                 showCancel:false
@@ -318,7 +321,7 @@ App({
                     wx.closeSocket()
                     wx.setStorageSync('allNoticeCount', 0)
                     wx.setStorageSync('systemNoticeCount', 0)
-                    wx.showModal({
+                    app.showModal({
                       title:"提示",
                       content:res2.data.msg,
                       showCancel:false
@@ -343,11 +346,11 @@ App({
   initDatabase:function(){
     console.log('初始化数据库')
     var that = this
-    if(wx.getStorageSync('db_version') != this.globalData.db_version){
-      that.clearDB()
-      console.log("更新版本，清空数据库")
-      wx.setStorageSync('db_version', this.globalData.db_version)
-    }
+    // if(wx.getStorageSync('db_version') != this.globalData.db_version){
+    //   that.clearDB()
+    //   console.log("更新版本，清空数据库")
+    //   wx.setStorageSync('db_version', this.globalData.db_version)
+    // }
     localDB.init()
     var chat = localDB.collection('chat')
     if(!chat){
@@ -419,12 +422,6 @@ App({
               that.addMessageToDb(item)
             })
             resolve()
-          }else if(res.data.code == 800 ||res.data.code == 900){
-            that.launch().then(res=>{
-              that.getHistoryMessage()
-            })
-          }else{
-            wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
           }
         }
       })
@@ -507,12 +504,6 @@ App({
             chat.add(chatDetail)
             that.updateData()
           }
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.addChatToDb(item)
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
         }
       }
     })

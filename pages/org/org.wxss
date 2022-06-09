@@ -121,6 +121,10 @@
   border-radius: 10rpx;
 }
 
+.model-container:active {
+  opacity: 0.7;
+}
+
 .model-container-half-left{
   height:100rpx;
   width: 295rpx;
@@ -129,11 +133,19 @@
   border-radius: 10rpx;
 }
 
+.model-container-half-left:active {
+  opacity: 0.7;
+}
+
 .model-container-half-right{
   height:100rpx;
   width: 295rpx;
   background-color: var(--model-bg-gray);
   border-radius: 10rpx;
+}
+
+.model-container-half-right:active {
+  opacity: 0.7;
 }
 
 .model-inner-container{
