@@ -66,6 +66,7 @@ App({
   },
 
   subscribe:function(mode){
+    var that = this
     return new Promise(function (resolve, reject) {
       var tmplIds = ['rzlxxKpaBxAreM0aOGEG72pmWkhKL288hE10mfdseJo','gdUXklCC0B5W4vSFuEYp1CZ-ny6YoXFt35zrjRBtycY','V-WN788I-oJTlyLrVfSz4PA9O2n4L7WdgHaX0onp-hU']
     wx.getSetting({
@@ -75,7 +76,7 @@ App({
         if(!res.subscriptionsSetting.mainSwitch){
           console.log('main button已经关闭')
           if(mode){
-            app.showModal({
+            that.showModal({
               title:'未开启订阅消息权限',
               content:'你未开启订阅消息权限，可能无法接收通知，请到设置页面开启。',
               success(res2){
@@ -125,7 +126,7 @@ App({
             }else if(Math.round(valid_count%4) != 0){
               console.log('some reject')
               if(mode){
-                app.showModal({
+                that.showModal({
                   title:'未开启订阅消息权限',
                   content:'你未开启订阅消息权限，可能无法接收通知，请到设置页面开启。',
                   success(res2){
@@ -255,7 +256,7 @@ App({
                           wx.closeSocket()
                           wx.setStorageSync('allNoticeCount', 0)
                           wx.setStorageSync('systemNoticeCount', 0)
-                          app.showModal({
+                          that.showModal({
                             title:"提示",
                             content:res2.data.msg,
                             showCancel:false
@@ -277,7 +278,7 @@ App({
               wx.closeSocket()
               wx.setStorageSync('allNoticeCount', 0)
               wx.setStorageSync('systemNoticeCount', 0)
-              app.showModal({
+              that.showModal({
                 title:"提示",
                 content:res6.data.msg,
                 showCancel:false
@@ -321,7 +322,7 @@ App({
                     wx.closeSocket()
                     wx.setStorageSync('allNoticeCount', 0)
                     wx.setStorageSync('systemNoticeCount', 0)
-                    app.showModal({
+                    that.showModal({
                       title:"提示",
                       content:res2.data.msg,
                       showCancel:false

@@ -82,6 +82,8 @@ Page({
             var postList = res.data.postList.filter(function (item) {
               return item.post_topic != "UST" && item.post_topic != "CUHK"
             });
+          }else{
+            var postList = res.data.postList
           }
           if(that.data.page == '0'){
             that.setData({

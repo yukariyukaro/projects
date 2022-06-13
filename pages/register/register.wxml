@@ -46,7 +46,7 @@
     <button class="inputbtn-submit secondary radius" bindtap="register" disabled="{{isPosting}}">登录</button>
  
   <view class="contact">
-    <view wx:if="{{mode=='portal'}}" bindtap="changeMode" data-mode="email">使用邮箱验证码登录</view>
+    <!-- <view wx:if="{{mode=='portal'}}" bindtap="changeMode" data-mode="email">使用邮箱验证码登录</view> -->
     <view wx:if="{{mode=='email'}}" bindtap="changeMode" data-mode="portal">使用Portal账号登录</view>
     <view>联系我们：hkupootal@gmail.com</view>
     <view style="display: flex; justify-content: space-between; font-weight: bold;margin-top: 20rpx;">
