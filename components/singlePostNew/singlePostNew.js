@@ -42,7 +42,9 @@ Component({
     },
     postDetail: util.throttle(function () {
       app.subscribe(false)
-      if(this.properties.post_media.media_type == 'article' && !this.properties.post_media.open_comment){
+      if(this.properties.post_media.media_type == 'article' && this.properties.post_media.inner_path){
+        wx.navigateTo({url: this.properties.post_media.inner_path,})
+      }else if(this.properties.post_media.media_type == 'article' && !this.properties.post_media.open_comment){
         wx.navigateTo({url: '/pages/webview/webview?url=' + this.properties.post_media.article_link,})
       }else{
         wx.navigateTo({url: '/pages/detail/detail?post_id=' + this.properties.post_id,})
