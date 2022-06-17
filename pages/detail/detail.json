@@ -3,5 +3,6 @@
     "singleComment": "/components/singleComment/singleComment",
     "prompt": "/components/prompt/prompt"
   },
-  "disableScroll":true
+  "disableScroll":true,
+  "navigationBarTitleText": "树洞详情"
 }

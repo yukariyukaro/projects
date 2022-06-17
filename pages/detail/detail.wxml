@@ -18,18 +18,22 @@
     <view class="header-control">
       <!-- 围观/公开状态 -->
       <view class="header-status">
-        <view class="status-active" wx:if="{{!postDetail.is_author && postDetail.is_following}}" bindtap="follow">
+        <view wx:if="{{!postDetail.is_author && postDetail.is_following}}" bindtap="follow">
           正在围观
         </view>
-        <view class="status-inactive" wx:if="{{!postDetail.is_author && !postDetail.is_following}}" bindtap="follow">
+        <view class="status-active" wx:if="{{!postDetail.is_author && postDetail.is_following}}" bindtap="follow"></view>
+        <view wx:if="{{!postDetail.is_author && !postDetail.is_following}}" bindtap="follow">
           尚未围观
         </view>  
-        <view class="status-active" wx:if="{{postDetail.is_author && postDetail.post_public == '1'}}" bindtap="setPrivate">
+        <view class="status-inactive" wx:if="{{!postDetail.is_author && !postDetail.is_following}}" bindtap="follow" style="{{tintStyle?tintStyle:''}}"></view>
+        <view wx:if="{{postDetail.is_author && postDetail.post_public == '1'}}" bindtap="setPrivate">
           公开状态
-        </view>    
-        <view class="status-inactive" wx:if="{{postDetail.is_author && postDetail.post_public == '2'}}" bindtap="setPublic">
+        </view>
+        <view class="status-active" wx:if="{{postDetail.is_author && postDetail.post_public == '1'}}" bindtap="setPrivate"></view>
+        <view wx:if="{{postDetail.is_author && postDetail.post_public == '2'}}" bindtap="setPublic">
           私密状态
         </view> 
+        <view class="status-inactive" wx:if="{{postDetail.is_author && postDetail.post_public == '2'}}" bindtap="setPublic" style="{{tintStyle?tintStyle:''}}"></view>
       </view>
       <!-- 更多操作 -->
       <view class="icon-more-outer" bindtap="showMainMenu">
@@ -192,6 +196,10 @@
             <image wx:if="{{comment_reverse}}" class="icon" style="transform: rotate(180deg)" src="/images/sort.svg"></image>
           </view>
         </view>
+      </view>
+      <!-- 广告 -->
+      <view>
+        <image wx:if="{{adInfo.ad_image}}" src="{{adInfo.ad_image}}" style="margin:auto;width:640rpx;height:213rpx;padding: 0 15rpx 15rpx 15rpx;" bindtap="onTapAd"></image>
       </view>
       <!-- 显示所有评论 -->
       <view>

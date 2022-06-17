@@ -28,7 +28,6 @@
     "pages/mine/mine",
     "pages/about/about",
     "pages/setting/setting",
-    "pages/newdetail/detail",
     "pages/userdata/userdata"
   ],
   "requiredBackgroundModes": [

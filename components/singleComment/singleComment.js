@@ -19,6 +19,25 @@ Component({
 
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
+    borderStyle:""
+  },
+  
+  lifetimes: {
+    attached: function() {
+      var app = getApp()
+      var systemInfo = wx.getSystemInfoSync()
+      if(app.globalData.themeInfo.primaryColorLight){
+        if(systemInfo.theme == 'dark'){
+          this.setData({
+            borderStyle: "border: 1px solid " + app.globalData.themeInfo.primaryColorDark + ";"
+          })
+        }else{
+          this.setData({
+            borderStyle: "border: 1px solid " + app.globalData.themeInfo.primaryColorLight + ";"
+          })
+        }
+      }
+    },
   },
 
   /**

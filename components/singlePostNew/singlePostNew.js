@@ -44,6 +44,8 @@ Component({
       app.subscribe(false)
       if(this.properties.post_media.media_type == 'article' && this.properties.post_media.inner_path){
         wx.navigateTo({url: this.properties.post_media.inner_path,})
+      }else if(this.properties.post_media.media_type == 'article' && this.properties.post_media.miniapp_appid){
+        wx.navigateToMiniProgram({appId: this.properties.post_media.miniapp_appid,path: this.properties.post_media.miniapp_path,})
       }else if(this.properties.post_media.media_type == 'article' && !this.properties.post_media.open_comment){
         wx.navigateTo({url: '/pages/webview/webview?url=' + this.properties.post_media.article_link,})
       }else{

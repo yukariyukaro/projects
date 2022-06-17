@@ -138,6 +138,7 @@ Page({
       success(res){
         if(res.confirm){
           app.clearDB()
+          app.globalData.gettingChatList = []
           wx.showToast({title: '后台获取中', icon: "none", duration: 1000})
           setTimeout(() => {
             app.getHistoryMessage()

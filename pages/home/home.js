@@ -17,7 +17,8 @@ Page({
     functionList:{},
     is_loading_more:false,
     refresh_triggered: false,
-    main_data_received:false
+    main_data_received:false,
+    postButtonIcon:"/images/send-post.svg"
   },
   // 下拉刷新
   onRefresh: function () {
@@ -476,6 +477,11 @@ Page({
   onShow: function () {    
     app.globalData.tabbarJS = this
     app.updateTabbar()
+    // if(app.globalData.themeInfo.postButtonIcon){
+    //   this.setData({
+    //     postButtonIcon:app.globalData.themeInfo.postButtonIcon
+    //   })
+    // }
   },
 
   /**

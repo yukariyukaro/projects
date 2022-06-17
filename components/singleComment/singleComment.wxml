@@ -1,5 +1,5 @@
 <view>
-  <view class="card-outer">
+  <view class="card-outer" style="{{borderStyle ? borderStyle : ''}}">
       <view class="card-comment-serial">
           <text class="comment-floor" wx:if="{{comment_order=='0'}}">G · </text>
           <text class="comment-floor" wx:if="{{comment_order!='0'}}">LG{{comment_order}} · </text>

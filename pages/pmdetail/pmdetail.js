@@ -17,7 +17,8 @@ Page({
     pmList:[],
     toView:'',
     keyboardPosition:0,
-    inputFocus:false
+    inputFocus:false,
+    chatStyle:""
   },
 
   bindInput: function (e) {
@@ -236,6 +237,18 @@ Page({
     app.globalData.indexJS = this
     app.globalData.chat_id = this.data.chat_id
     this.setPageData()
+    var systemInfo = wx.getSystemInfoSync()
+    if (app.globalData.themeInfo.primaryColorLight) {
+      if (systemInfo.theme == 'dark') {
+        this.setData({
+          chatStyle: "background:" + app.globalData.themeInfo.primaryColorDark + ";"
+        })
+      } else {
+        this.setData({
+          chatStyle: "background:" + app.globalData.themeInfo.primaryColorLight + ";"
+        })
+      }
+    }
   },
 
   /**

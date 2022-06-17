@@ -19,6 +19,7 @@ App({
     var that = this
     this.launch()
     this.watchCaptureScreen()
+    this.getTheme()
     if(!wx.getStorageSync('allNoticeCount')){
       wx.setStorageSync('allNoticeCount', 0)
     }
@@ -39,6 +40,7 @@ App({
   onThemeChange: function ({ theme }) {
     this.globalData.theme = themes[theme];
     this.globalData.colorScheme = theme;
+    this.updateTheme()
   },
   
 
@@ -63,6 +65,7 @@ App({
     tabbarJS:'',
     auth_key:'',
     from_miniapp:'',
+    themeInfo:'',
   },
 
   subscribe:function(mode){
@@ -72,16 +75,16 @@ App({
     wx.getSetting({
       withSubscriptions: true,
       success(res){
-        console.log(res.subscriptionsSetting)
+        // console.log(res.subscriptionsSetting)
         if(!res.subscriptionsSetting.mainSwitch){
-          console.log('main button已经关闭')
+          // console.log('main button已经关闭')
           if(mode){
             that.showModal({
               title:'未开启订阅消息权限',
               content:'你未开启订阅消息权限，可能无法接收通知，请到设置页面开启。',
               success(res2){
                 if(res2.confirm){
-                  console.log('跳转设置成功')
+                  // console.log('跳转设置成功')
                   wx.openSetting({
                     withSubscriptions: true,
                   })
@@ -90,48 +93,48 @@ App({
             })
             resolve(false)
           }else{
-            console.log('非必要，取消弹窗请求')
+            // console.log('非必要，取消弹窗请求')
           }
         }else{
           new Promise(function (resolve, reject) {
             var valid_count = 0
             for(let i=0;i<tmplIds.length;i++){
-              console.log(i)
+              // console.log(i)
               var subid = tmplIds[i]
               if(res.subscriptionsSetting[subid] == 'accept'){
-                console.log(tmplIds[i],'接受')
+                // console.log(tmplIds[i],'接受')
                 var valid_count = valid_count + 4
               }else if(res.subscriptionsSetting[subid] == 'reject'){
-                console.log(tmplIds[i],'拒绝')
+                // console.log(tmplIds[i],'拒绝')
                 var valid_count = valid_count + 1
               }else{
-                console.log(tmplIds[i],'未知')
+                // console.log(tmplIds[i],'未知')
               }
               if(i == tmplIds.length - 1){
-                console.log('结果',valid_count)
+                // console.log('结果',valid_count)
                 resolve(valid_count)
               }
             }
           }).then(function(valid_count){
             if(valid_count == 12){
-              console.log('all accept')
+              // console.log('all accept')
               wx.requestSubscribeMessage({
                 tmplIds: tmplIds,
                 complete(res2){
-                  console.log(res2)
-                  console.log('静默请求成功')
+                  // console.log(res2)
+                  // console.log('静默请求成功')
                   resolve(true)
                 }
               })
             }else if(Math.round(valid_count%4) != 0){
-              console.log('some reject')
+              // console.log('some reject')
               if(mode){
                 that.showModal({
                   title:'未开启订阅消息权限',
                   content:'你未开启订阅消息权限，可能无法接收通知，请到设置页面开启。',
                   success(res2){
                     if(res2.confirm){
-                      console.log('跳转设置成功')
+                      // console.log('跳转设置成功')
                       wx.openSetting({
                         withSubscriptions: true,
                       })
@@ -140,22 +143,22 @@ App({
                 })
                 resolve(false)
               }else{
-                console.log('非必要，取消弹窗请求')
+                // console.log('非必要，取消弹窗请求')
               }
 
             }else{
-              console.log('have undifined')
+              // console.log('have undifined')
               if(mode){
                 wx.requestSubscribeMessage({
                   tmplIds: tmplIds,
                   complete(res2){
-                    console.log(res2)
-                    console.log('弹窗请求成功')
+                    // console.log(res2)
+                    // console.log('弹窗请求成功')
                     resolve(true)
                   }
                 })
               }else{
-                console.log('非必要，取消弹窗请求')
+                // console.log('非必要，取消弹窗请求')
               }
             }
           })
@@ -207,7 +210,6 @@ App({
 
   launch:function(){
     var that = this
-    console.log('执行launch')
     return new Promise(function (resolve, reject) {
       var token = wx.getStorageSync('token')
       if(token){
@@ -226,10 +228,11 @@ App({
                 success (res) {
                   if(res.code){
                     wx.request({
-                      url: 'https://api.pupu.hkupootal.com/v2/user/login.php',
+                      url: 'https://api.pupu.hkupootal.com/v3/user/login/wechat.php',
                       method:'POST',
                       data: {
-                        code: res.code
+                        code: res.code,
+                        system_info:JSON.stringify(wx.getSystemInfoSync())
                       },
                       header: {
                         'content-type': 'application/x-www-form-urlencoded'
@@ -292,10 +295,11 @@ App({
           success (res) {
             if(res.code){
               wx.request({
-                url: 'https://api.pupu.hkupootal.com/v2/user/login.php',
+                url: 'https://api.pupu.hkupootal.com/v3/user/login/wechat.php',
                 method:'POST',
                 data: {
-                  code: res.code
+                  code: res.code,
+                  system_info:JSON.stringify(wx.getSystemInfoSync())
                 },
                 header: {
                   'content-type': 'application/x-www-form-urlencoded'
@@ -339,13 +343,12 @@ App({
           }
       })
       }
-      
     })
   },
 
   //新消息推送
   initDatabase:function(){
-    console.log('初始化数据库')
+    // console.log('初始化数据库')
     var that = this
     // if(wx.getStorageSync('db_version') != this.globalData.db_version){
     //   that.clearDB()
@@ -355,12 +358,12 @@ App({
     localDB.init()
     var chat = localDB.collection('chat')
     if(!chat){
-      console.log("不存在chat")
+      // console.log("不存在chat")
       chat = localDB.createCollection('chat') 
     }
     var pm = localDB.collection('pm')
     if(!pm){
-      console.log("不存在pm")
+      // console.log("不存在pm")
       pm = localDB.createCollection('pm') 
     }
     pm.where({
@@ -374,10 +377,10 @@ App({
   },
   clearStorage:function(chat,pm,i){
     var that = this
-    console.log("开始清理存储")
-    console.log("尝试清理"+i+"天")
+    // console.log("开始清理存储")
+    // console.log("尝试清理"+i+"天")
     if(that.getBytesLength(JSON.stringify(wx.getStorageSync('localDB'))) > 900000){
-      console.log("容量要超了，提前清除")
+      // console.log("容量要超了，提前清除")
       pm.where({
         _timeout: _.lt(Date.now() + i * 24 * 3600000)
       }).remove()
@@ -388,7 +391,7 @@ App({
         that.clearStorage(chat,pm,i+1)
       }, 100);
     }else{
-      console.log("不需要清理")
+      // console.log("不需要清理")
     }
   },
   getHistoryMessage:function(){
@@ -397,13 +400,13 @@ App({
       var db = that.initDatabase()
       var pm = db.pm
       var latset_pm_id_list = pm.orderBy('pm_id', 'desc').limit(1).get()
-      console.log(latset_pm_id_list)
+      // console.log(latset_pm_id_list)
       if(!latset_pm_id_list[0]){
         var latset_pm_id = 0
       }else{
         var latset_pm_id = latset_pm_id_list[0].pm_id
       }
-      console.log("latset_pm_id为"+latset_pm_id)
+      // console.log("latset_pm_id为"+latset_pm_id)
       wx.request({
         url: 'https://api.pupu.hkupootal.com/v3/pmnew/message/get.php', 
         method: 'POST',
@@ -415,10 +418,10 @@ App({
           'content-type': 'application/x-www-form-urlencoded'
         },
         success (res) {
-          console.log(res)
+          // console.log(res)
           if(res.data.code == 200){
             var pmList = res.data.pmList
-            console.log(pmList)
+            // console.log(pmList)
             pmList.forEach(item => {
               that.addMessageToDb(item)
             })
@@ -429,7 +432,7 @@ App({
     })
   },
   addMessageToDb:function(item){
-    console.log(item)
+    // console.log(item)
     var that = this
     var db = that.initDatabase()
     var chat = db.chat
@@ -445,7 +448,7 @@ App({
     var chat_list = chat.where({
       chat_id: item.chat_id
     }).limit(1).get()
-    console.log(chat_list)
+    // console.log(chat_list)
     if(!chat_list[0]){
       that.addChatToDb(item)
     }else{
@@ -467,7 +470,7 @@ App({
   addChatToDb:function(item){
     var that = this
     if(that.globalData.gettingChatList.includes(item.chat_id)){
-      console.log("已经在获取"+item.chat_id)
+      // console.log("已经在获取"+item.chat_id)
       return
     }
     that.globalData.gettingChatList.push(item.chat_id)
@@ -499,24 +502,25 @@ App({
           var chat_list = chat.where({
             chat_id: item.chat_id
           }).limit(1).get()
-          console.log(chat_list)
+          // console.log(chat_list)
           if(!chat_list[0]){
             chatDetail._timeout = Date.now() + 30 * 24 * 3600000
             chat.add(chatDetail)
             that.updateData()
           }
+          that.globalData.gettingChatList.delete(item.chat_id)
         }
       }
     })
   },
   updateData:function(){
     var that = this
-    console.log("调用")
+    // console.log("调用")
     if(that.globalData.indexJS != ''){
       that.globalData.indexJS.setPageData()
-      console.log("调用成功")
+      // console.log("调用成功")
     }else{
-      console.log("调用失败")
+      // console.log("调用失败")
     }
   },
   webSocketConnect:function(){
@@ -526,7 +530,7 @@ App({
     })
 
     wx.onSocketOpen(function() {
-      console.log('WebSocket已连接')
+      // console.log('WebSocket已连接')
       that.globalData.wsConnect = true
       var message = {
         type:'bind',
@@ -543,22 +547,22 @@ App({
 
     wx.onSocketClose(function() {
       that.globalData.wsConnect = false
-      console.log('WebSocket 已关闭！')
+      // console.log('WebSocket 已关闭！')
     })
   },
   messageHandler:function(data){
     var that = this
-    console.log(data)
+    // console.log(data)
     data = JSON.parse(data)
     switch(data.type){
       case "bind":
         if(data.bind_result){
-          console.log("uid绑定成功")
+          // console.log("uid绑定成功")
         }else{
-          console.log("uid绑定失败")
+          // console.log("uid绑定失败")
           wx.closeSocket()
           setTimeout(() => {
-            console.log("重新连接")
+            // console.log("重新连接")
             that.webSocketConnect()
           }, 5000)
         }
@@ -579,9 +583,9 @@ App({
   launchWebSoccket:function(){
     var that = this
     if(!that.globalData.wsConnect){
-      console.log("先获取历史消息")
+      // console.log("先获取历史消息")
       that.getHistoryMessage().then(res=>{
-        console.log("然后链接")
+        // console.log("然后链接")
         that.webSocketConnect()
       })
     }else{
@@ -593,7 +597,7 @@ App({
       })
     }
     setTimeout(() => {
-      console.log("每10秒检测一次")
+      // console.log("每10秒检测一次")
       that.launchWebSoccket()
     }, 10000); 
   },
@@ -625,5 +629,119 @@ App({
     var db = that.initDatabase()
     db.chat.remove()
     db.pm.remove()
-  }
+  },
+
+
+  getTheme:function(){
+    var that = this
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/info/theme.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        if(res.data.code == 200){
+          that.globalData.themeInfo = []
+          that.updateTheme(true)
+        }else if(res.data.code == 201){
+          that.globalData.themeInfo = res.data.themeInfo
+          that.updateTheme(true)
+        }
+      }
+    })
+  },
+  updateTheme:function(withAnimation){
+    var that = this
+    var systemInfo = wx.getSystemInfoSync()
+    if(that.globalData.themeInfo.navigationBarColorLight){
+      if(systemInfo.theme == 'dark'){
+        if(withAnimation){
+          wx.setNavigationBarColor({
+            frontColor: that.globalData.themeInfo.navigationBarFontColorDark,
+            backgroundColor: that.globalData.themeInfo.navigationBarColorDark,
+            animation: {
+              duration: 1000,
+              timingFunc: 'easeInOut'
+            }
+          })
+        }else{
+          wx.setNavigationBarColor({
+            frontColor: that.globalData.themeInfo.navigationBarFontColorDark,
+            backgroundColor: that.globalData.themeInfo.navigationBarColorDark
+          })
+        }
+      }else{
+        if(withAnimation){
+          wx.setNavigationBarColor({
+            frontColor: that.globalData.themeInfo.navigationBarFontColorLight,
+            backgroundColor: that.globalData.themeInfo.navigationBarColorLight,
+            animation: {
+              duration: 1000,
+              timingFunc: 'easeInOut'
+            }
+          })
+        }else{
+          wx.setNavigationBarColor({
+            frontColor: that.globalData.themeInfo.navigationBarFontColorLight,
+            backgroundColor: that.globalData.themeInfo.navigationBarColorLight
+          })
+        }
+      }
+    }
+    var pages = getCurrentPages()
+    var currentPage = pages[pages.length-1]
+    var url = currentPage.route
+    if(url == "pages/home/home" || url == "pages/pmlist/pmlist" || url == "pages/mine/mine"){
+      if(that.globalData.themeInfo.tabbarFontSelectedColorLight){
+        if(systemInfo.theme == 'dark'){
+          wx.setTabBarStyle({
+            color: that.globalData.themeInfo.tabbarFontColorDark,
+            selectedColor: that.globalData.themeInfo.tabbarFontSelectedColorDark
+          })
+        }else{
+          wx.setTabBarStyle({
+            color: that.globalData.themeInfo.tabbarFontColorLight,
+            selectedColor: that.globalData.themeInfo.tabbarFontSelectedColorLight
+          })
+        }
+      }
+      if(that.globalData.themeInfo.tabbarItem){
+        that.globalData.themeInfo.tabbarItem.forEach(item => {
+          wx.setTabBarItem({
+            index: item.index,
+            text: item.text,
+            iconPath: item.iconPath,
+            selectedIconPath: item.selectedIconPath
+          })
+        })
+      }
+    }
+  },
+  
 });
+
+const page = Page
+Page = function (pageData) {
+  _handleInstanceMethod(pageData, 'onShow', function(e) {
+    var app = getApp()
+    app.updateTheme(false)
+  })
+  page(pageData)
+}
+const _handleInstanceMethod = function(instanceData, name, callback) {
+  if (instanceData[name]) {
+    const e = instanceData[name]
+    instanceData[name] = function(arg) {
+      callback.call(this, arg)
+      e.call(this, arg)
+    }
+  } else {
+    instanceData[name] = function(arg) {
+      callback.call(this, arg)
+    }
+  }
+}

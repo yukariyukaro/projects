@@ -21,7 +21,7 @@
             data-image="{{item.pm_media.image_link}}"
             ></image>
             <text class="item-right-text {{item.pm_is_from_me?'item-right-text-me':''}}"
-              selectable="true" wx:else bindlongpress="longpress" data-pmid="{{item.pm_id}}" data-pmmsg="{{item.pm_msg}}">{{item.pm_msg}}</text>
+              selectable="true" wx:else bindlongpress="longpress" data-pmid="{{item.pm_id}}" data-pmmsg="{{item.pm_msg}}" style="{{item.pm_is_from_me?chatStyle:''}}">{{item.pm_msg}}</text>
           </view>
         </view>
       </view>
@@ -47,7 +47,7 @@
         <image bindtap="sendImage" class="jz-chat-edit-view-emoji"
           src="/images/icon_image.png"></image>
       </view>
-      <text bindtap="sendMessage" class="jz-chat-edit-view-confirm">发送</text>
+      <text bindtap="sendMessage" class="jz-chat-edit-view-confirm" style="{{chatStyle?chatStyle:''}}">发送</text>
     </view>
     <scroll-view class="jz-chat-emoji-scroll" hidden="{{!emojiShow}}" scrollY="true"
       style="height: {{keyboardHeight}}rpx;">

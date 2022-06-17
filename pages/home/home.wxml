@@ -4,7 +4,7 @@
 
 <view class="write-button-outer" bind:tap="handleStarTap">
   <view class="write-button-inner">
-  <image class="write-button" src="/images/send-post.svg"></image>    
+  <image class="write-button" src="{{postButtonIcon}}"></image>    
   </view>
 </view>
 

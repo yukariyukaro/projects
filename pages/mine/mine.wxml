@@ -1,6 +1,6 @@
 <view style="padding-top: calc({{navBarHeight}}px + 0rpx)">
     <view class="user-background" style="transform: scale({{userBackgroundScale}});">
-        <image class="user-background-image" mode="aspectFill" src="/images/cover.png"
+        <image class="user-background-image" mode="aspectFill" src="{{mineBackgroundImage}}"
             style="height: 496rpx"></image>
         <view class="user-background-gradient"></view>
     </view>

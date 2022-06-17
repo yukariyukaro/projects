@@ -8,7 +8,8 @@ Page({
     preURL: "https://i.boatonland.com/avatar/",
     navBarHeight:0,
     userBackgroundScale:1,
-    userInfo:[]
+    userInfo:[],
+    mineBackgroundImage:"/images/cover.png"
   },
   
   getUserInfo: function () {
@@ -98,6 +99,7 @@ Page({
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),
+        system_info:JSON.stringify(wx.getSystemInfoSync())
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -173,6 +175,11 @@ Page({
    */
   onShow: function () {
     this.getUserInfo()
+    if(app.globalData.themeInfo.mineBackgroundImage){
+      this.setData({
+        mineBackgroundImage:app.globalData.themeInfo.mineBackgroundImage
+      })
+    }
   },
 
   /**
