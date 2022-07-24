@@ -3,11 +3,11 @@
     <view class="u-row-left">
       <view style="display: flex;flex-direction: column;">
         <view class="name">通知推送</view>
-        <view class="note">开启后可以在微信接收到通知推送</view>
+        <view class="note">开启后可以在「HKU ONE」公众号接收到通知推送</view>
       </view>
     </view>
     <view class="u-row-right">
-      <switch color="#D85050" checked="{{subscribe_accept}}" bindchange="acceptSubscribe" />
+      <switch color="#D85050" checked="{{subscribe_accept}}" bindchange="acceptSubscribeNew" />
     </view>
   </view>
   <view class="u-flex-item" bindtap="clearUnread">

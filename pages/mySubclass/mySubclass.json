@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "one": "/components/one/one"
+  },
+  "navigationBarTitleText": "我的选课",
+  "disableScroll":true
+}

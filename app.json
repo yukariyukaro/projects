@@ -28,7 +28,10 @@
     "pages/mine/mine",
     "pages/about/about",
     "pages/setting/setting",
-    "pages/userdata/userdata"
+    "pages/userdata/userdata",
+    "pages/one/one",
+    "pages/mySubclass/mySubclass",
+    "pages/followService/followService"
   ],
   "requiredBackgroundModes": [
     "audio",
@@ -53,6 +56,12 @@
         "iconPath": "images/home-inactive.png",
         "selectedIconPath": "images/home-active.png",
         "text": "树洞"
+      },
+      {
+        "pagePath": "pages/one/one",
+        "iconPath": "images/one-inactive.png",
+        "selectedIconPath": "images/one-active.png",
+        "text": "ONE"
       },
       {
         "pagePath": "pages/pmlist/pmlist",

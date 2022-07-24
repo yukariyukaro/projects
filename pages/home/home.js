@@ -4,7 +4,8 @@ Page({
     scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     scroll_top: 0,
     currentTab: -1,
-    navItems: ['🔎','👀','🔥','全部'],
+    startIndex: -3,
+    navItems: ['👀','🔥','全部'],
     postList:[],
     page:0,
     isLast:false,
@@ -18,7 +19,9 @@ Page({
     is_loading_more:false,
     refresh_triggered: false,
     main_data_received:false,
-    postButtonIcon:"/images/send-post.svg"
+    postButtonIcon:"/images/send-post.svg",
+    swiper_current:2,
+    nav_to_view:0
   },
   // 下拉刷新
   onRefresh: function () {
@@ -43,15 +46,22 @@ Page({
   },
   // 切换导航栏选项卡
   // 全部posts会在页面初始化时就加载并储存，但是主题posts需要每次点击时重新请求
-  navbarTap: function () {
+  navbarTapPre: function (e) {
+    this.navbarTap(e.currentTarget.dataset.index)
+    this.setData({
+      swiper_current:e.currentTarget.dataset.index - this.data.startIndex
+    })
+  },
+  navbarTap: function (index) {
     wx.showLoading({
       title: '加载中',
     })
     this.setData({
       is_loading_more:true,
-      postList:'',
+      postList:[],
       page:0,
-      scroll_top:0
+      scroll_top:0,
+      currentTab:index
     })
     this.getAll()
   },
@@ -412,12 +422,12 @@ Page({
     var notice_count = wx.getStorageSync('allNoticeCount')
     if(notice_count > 0){
       wx.setTabBarBadge({
-        index: 1,
+        index: 2,
         text: String(notice_count),
       })
     }else{
       wx.removeTabBarBadge({
-        index: 1,
+        index: 2,
       })
     }
   },
@@ -430,6 +440,13 @@ Page({
                if(pair[0] == variable){return pair[1];}
        }
        return(false);
+  },
+  swiperChange:function(e){
+    if(e.detail.source != 'touch'){return}
+    this.navbarTap(e.detail.current + this.data.startIndex)
+    this.setData({
+      nav_to_view:e.detail.current + this.data.startIndex - 2
+    })
   },
 
   /**

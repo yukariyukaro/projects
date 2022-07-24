@@ -36,6 +36,34 @@ Page({
     })
 
   },
+  checkMethod: function () {
+    var that = this
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/notice/checkmethod.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        wx.hideLoading()
+        if(res.data.code == 200){
+            that.setData({
+              subscribe_accept:res.data.subscribe_accept
+            })
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.checkMethod()
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
+    })
+
+  },
   acceptSubscribe: function (e) {
     var that = this
     if(e.detail.value){
@@ -63,6 +91,50 @@ Page({
     }else{
       that.accept(false)
     }
+
+  },
+  acceptSubscribeNew: function (e) {
+    var that = this
+    var that = this
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/notice/acceptnew.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+        subscribe_accept:e.detail.value
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        wx.hideLoading()
+        if(res.data.code == 200){
+          that.setData({
+            subscribe_accept:true
+          })
+          wx.showToast({title: '开启推送成功', icon: "none", duration: 1000})
+        }else if(res.data.code == 201){
+          that.setData({
+            subscribe_accept:false
+          })
+          wx.showToast({title: '关闭推送成功', icon: "none", duration: 1000})
+        }else if(res.data.code == 401){
+          that.setData({
+            subscribe_accept:false
+          })
+          wx.showToast({title: '没有关注HKU ONE', icon: "none", duration: 1000})
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.acceptSubscribeNew(e)
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
+    })
 
   },
   accept: function (e) {
@@ -155,7 +227,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getUserInfo()
+    this.checkMethod()
     this.setData({
       banUniPost:wx.getStorageSync('banUniPost')
     })

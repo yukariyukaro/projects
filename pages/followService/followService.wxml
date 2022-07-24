@@ -1,0 +1,3 @@
+<image src="https://i.boatonland.com/NtRPeYe44SHs6CKkrRJY7jzCN5BTXTbw" mode="widthFix" style="width: 100%;"></image>
+<image src="https://i.boatonland.com/yAfRjfaMCtMck6ZEhFY7EYMRy6WMbjm4" mode="widthFix" style="width: 450rpx;position: absolute;z-index: 99;top: 570rpx;left: 150rpx;" show-menu-by-longpress="true"></image>
+<image src="https://i.boatonland.com/834mpbBkK4zPEPDC85DKnjEEm7ehw2Gm" mode="widthFix" style="width: 400rpx;position: absolute;z-index: 99;top: 1170rpx;left: 175rpx;" bindtap="nav2Home"></image>

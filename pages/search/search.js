@@ -10,7 +10,8 @@ Page({
     key_word:'',
     is_loading_more:false,
     hit_count:'0',
-    scroll_top:0
+    scroll_top:0,
+    new_search:true
   },
 
   onInputKeyWord:function(e){
@@ -40,11 +41,23 @@ Page({
     });
     this.getPostBySearch();
   },
+  newSearch: function (e) {
+    this.setData({ new_search: e.detail.value });
+    this.getPostBySearch()
+    wx.openUrl({
+      url:'https://baidu.com'
+    })
+  },
 
   getPostBySearch: function () {
     var that = this
+    if(that.data.new_search){
+      var url = 'https://api.pupu.hkupootal.com/v3/one/search.php'
+    }else{
+      var url ='https://api.pupu.hkupootal.com/v3/post/list/search.php'
+    }
     wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/list/search.php', 
+      url: url,
       method: 'POST',
       data: {
         token:wx.getStorageSync('token'),

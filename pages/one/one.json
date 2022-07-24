@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "one": "/components/one/one",
+    "loadmore": "/components/loadmore/loadmore"
+  },
+  "navigationBarTextStyle": "black",
+  "navigationStyle": "custom",
+  "disableScroll":true
+}

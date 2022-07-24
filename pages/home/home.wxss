@@ -62,6 +62,7 @@
   z-index: 10;
   position: relative;
 }
+
 .scroll-outer {
   height:calc(100vh - 12vw);
 }
@@ -89,4 +90,29 @@
 .back_image {
   width: 60rpx;
   height: 60rpx;
+}
+
+.navbar {
+  background-color: var(--bg-3);
+  height: 12vw;
+  font-size: 4vw;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.navbar .item {
+  text-align: center;
+  line-height: 12vw;
+  position: relative;
+  width: 100rpx;
+  display: inline-block;
+}
+.navbar .item.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 35%;
+  right: 35%;
+  height: 1vw;
+  background: var(--secondary);
 }

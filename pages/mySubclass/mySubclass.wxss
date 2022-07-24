@@ -1,0 +1,36 @@
+.scroll-outer {
+  height:100vh;
+  width: 100%;
+  padding-bottom: 300rpx;
+}
+.item-content{
+  height: 100%;
+  width: 100%;
+}
+
+.term-title{
+  font-size: 50rpx;
+  font-weight: bold;
+  margin: 40rpx 0 0 20rpx;
+}
+
+.mainButton-r{
+  background-color: var(--primary);
+  color: #FFFFFF;
+  margin-top:40rpx;
+  margin-bottom: 60rpx;
+  font-size: 34rpx;
+  border-radius: 20rpx;
+  height: 90rpx;
+}
+
+.class-card{
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  position: absolute;
+  border-radius: 10rpx;
+  overflow: hidden;
+  color: var(--on-primary);
+  opacity: 0.9;
+}

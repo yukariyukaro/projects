@@ -1,0 +1,218 @@
+<view bindtap="nav2Post" class="post-outer" wx:if="{{type == 'post'}}">
+  <view class="post-header" style="{{data.post_is_folded?'padding-bottom: 20rpx;':''}}">
+    <view class="post-header-title">
+      <text class="post-serial">#{{data.post_id}}</text>
+      <view class="post-avatar-outer" wx-if="{{data.user_avatar != ''}}">
+        <image class="post-avatar" src="{{preURL+data.user_avatar+'.svg'}}" />
+      </view>
+      <view class="post-topic">
+        <text class="post-topic-text">{{data.post_topic}}</text>
+      </view>
+    </view>
+    <view class="post-follower-comment-outer">
+      <view style="padding-right:15rpx;">
+        <image wx:if="{{data.is_following}}" class="post-follower-icon" src="/images/sf-star-fill.svg"></image>
+        <image wx:if="{{!data.is_following}}" class="post-follower-icon" src="/images/sf-star.svg"></image>
+      </view>
+      <view class="post-follower-num" style="padding-right: 25rpx;">{{data.follower_num}}</view>
+      <view style="padding-right: 15rpx;">
+        <image class="post-follower-icon" src="/images/sf-comment.svg"></image>
+      </view>
+      <view class="post-follower-num">{{data.comment_num}}</view>
+    </view>
+  </view>
+  <block wx:if="{{!data.post_is_folded}}">
+    <view class="post-divider"></view>
+    <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'netease'}}">
+      <view class="post-function-title">{{data.post_media.netease_title}} - {{data.post_media.netease_artist}}</view>
+      <view class="post-function-icon-outer-netease">
+        <image src="/images/netease.svg" class="post-icon-netease"></image>
+      </view>
+    </view>
+    <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'bilibili'}}">
+      <view class="post-function-title">{{data.post_media.bilibili_title}}</view>
+      <view class="post-function-icon-outer-bilibili">
+        <image src="/images/bilibili.svg" class="post-icon-bilibili"></image>
+      </view>
+    </view>
+    <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'vote'}}">
+      <view class="post-function-title">{{data.post_media.vote_title}}</view>
+      <view class="post-function-icon-outer-vote">
+        <image src="/images/vote.svg" class="post-icon-vote"></image>
+      </view>
+    </view>
+    <view class="post-function-outer" wx:if="{{data.data.post_media.media_type == 'quote'}}">
+      <view class="post-function-title">{{post_media.quote_title}}</view>
+      <view class="post-function-icon-outer-vote">
+        <image src="/images/profile-active.png" class="post-icon-quote"></image>
+      </view>
+    </view>
+    <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'miniapp'}}">
+      <view class="post-function-title">{{data.post_media.miniapp_name}}</view>
+      <view class="post-function-icon-outer-vote">
+        <image src="/images/miniapp.svg" class="post-icon-netease"></image>
+      </view>
+    </view>
+    <view class="post-content">
+      <view class="post-content-outer" style="width: {{data.post_image == '' ? '100%' : '82%'}}">
+        <view class="post-content-text">
+          <text>{{data.post_msg}}</text>
+          <text wx:if="{{!data.post_is_complete}}">...</text>
+          <view wx:if="{{!data.post_is_complete}}" class="post-loadmore"><text>查看完整树洞</text></view>
+        </view>
+      </view>
+      <view class="post-image-outer" wx:if="{{data.post_image != ''}}">
+        <image class="post-image" src="{{data.post_image_is_loaded ? data.post_image : '/images/image-placeholder.svg'}}" bindload="postImageOnLoad" lazy-load="true" mode="widthFix"></image>
+      </view>
+    </view>
+  </block>
+</view>
+
+<view bindtap="nav2Article" class="post-outer" wx:if="{{type == 'article'}}">
+  <image src="{{data.post_media.article_image}}" style="width: 100%;height:294rpx;overflow: hidden;border-radius: 10rpx 10rpx 0 0;" mode="aspectFill"></image>
+  <view style="font-size: 32rpx;font-weight: normal;margin:10rpx 30rpx 0 30rpx;padding-bottom: 20rpx;">
+    <view class="post-header-title">
+      <image class="post-avatar" src="{{preURL+data.user_avatar+'.svg'}}" catchtap="nav2OrgFromArticle" />
+      <text class="article-author" catchtap="nav2OrgFromArticle">{{data.post_media.article_author}}</text>
+    </view>
+    <view style="margin-top: 10rpx;">{{data.post_media.article_title}}</view>
+  </view>
+</view>
+
+<view class="org-outer" wx:if="{{type == 'org'}}">
+  <!-- 头像名称 -->
+  <view class="org-user-info">
+    <view class="org-user-name">{{data.org_name}}</view>
+    <view class="org-head-view">
+      <image class="org-avatar-image" mode="aspectFill" src="{{data.org_avatar}}"></image>
+    </view>
+  </view>
+  <!-- 简介 -->
+  <view class="org-introduce-view">
+    <text class="org-introduce-text">{{data.org_intro}}</text>
+  </view>
+  <!-- 轮播图 -->
+  <swiper circular="{{data.org_banner.length > 1}}" autoplay="{{data.org_banner.length > 1}}" class="org-swiper" interval="3000" wx:if="{{data.org_banner[0]}}">
+    <swiper-item wx:for="{{data.org_banner}}">
+      <view class="org-banner-outer" style="background-image: url({{item.banner_image}});" bindtap="orgOnTapBanner" data-banneritem="{{data.org_banner[index]}}">
+        <view class="org-pinned-content" wx:if="{{item.banner_title}}">
+          <text>{{item.banner_title}}</text>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+  <view class="org-model-container" wx:if="{{data.org_model_main.function_title}}" bindtap="handleFunctionPre" data-functionitem="{{data.org_model_main}}" style="margin-top: {{!data.org_banner[0]?'20rpx':'0'}};">
+    <view class="org-model-inner-container">
+      <view class="org-model-text">{{data.org_model_main.function_title}}</view>
+      <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
+    </view>
+  </view>
+  <view style="display: flex;flex-direction: row;margin-top: {{data.org_model_main.function_title?'20rpx':'0'}};" wx:if="{{data.org_model_half[0]}}">
+    <view class="org-model-container-half-left" wx:if="{{data.org_model_half[0]}}" bindtap="handleFunctionPre" data-functionitem="{{data.org_model_half[0]}}">
+      <view class="org-model-inner-container">
+        <view class="org-model-text">{{data.org_model_half[0].function_title}}</view>
+        <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
+      </view>
+    </view>
+    <view class="org-model-container-half-right" wx:if="{{data.org_model_half[1]}}" bindtap="handleFunctionPre" data-functionitem="{{data.org_model_half[1]}}">
+      <view class="org-model-inner-container">
+        <view class="org-model-text">{{data.org_model_half[1].function_title}}</view>
+        <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
+      </view>
+    </view>
+  </view>
+  <view style="display: flex;flex-direction: row;margin-top: 20rpx;" wx:if="{{data.org_model_half[2]}}">
+    <view class="org-model-container-half-left" wx:if="{{data.org_model_half[2]}}" bindtap="handleFunctionPre" data-functionitem="{{data.org_model_half[2]}}">
+      <view class="org-model-inner-container">
+        <view class="org-model-text">{{data.org_model_half[2].function_title}}</view>
+        <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
+      </view>
+    </view>
+    <view class="org-model-container-half-right" wx:if="{{data.org_model_half[3]}}" bindtap="handleFunctionPre" data-functionitem="{{data.org_model_half[3]}}">
+      <view class="org-model-inner-container">
+        <view class="org-model-text">{{data.org_model_half[3].function_title}}</view>
+        <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
+      </view>
+    </view>
+  </view>
+  <view class="org-bottom-container">
+    <view style="font-size: 30rpx;color: #8C8C8C;" bindtap="nav2OrgFromOrg">进入社团主页</view>
+    <image style="width: 40rpx;height: 40rpx;" src="/images/arrow-all.svg"></image>
+  </view>
+</view>
+
+<view class="common-outer" wx:if="{{type == 'link'}}">
+  <view style="display: flex;flex-direction: row;">
+    <image class="link-image" src="{{data.link_image}}" mode="aspectFill" wx:if="{{data.link_image}}"></image>
+    <view style="{{data.link_image ? 'margin-left: 30rpx;position: relative;width: 450rpx;' : 'position: relative;width: 630rpx;'}}">
+      <view class="link-text-container">
+        <view class="link-title" bindtap="handleFunctionPre" data-functionitem="{{data}}">{{data.link_title}}</view>
+        <view class="link-info">{{data.link_info}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="link-sub-title" style="{{index == 0 ? 'margin-top: 30rpx;' : 'margin-top: 10rpx;'}}" wx:for="{{data.sub_link_list}}" bindtap="handleFunctionPre" data-functionitem="{{item}}">{{item.link_title}}</view>
+</view>
+
+<view class="common-outer" wx:if="{{type == 'course'}}">
+  <view class="course-code">{{data.course_code}}</view>
+  <view class="course-title">{{data.course_title}}</view>
+  <view class="course-dept">{{data.course_dept}}</view>
+  <view style="display: flex;flex-direction: row;margin-top: 20rpx;">
+    <view class="course-model-container-half-left">
+      <view class="org-model-inner-container" bindtap="copyUrl" data-urllink="https://richku.com/courses?code={{data.course_code}}" data-urltitle="RIC课程评价{{data.course_code}}">
+        <view class="org-model-text">RIC课程评价</view>
+        <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
+      </view>
+    </view>
+    <view class="course-model-container-half-right">
+      <view class="org-model-inner-container" bindtap="courseJoinGroup">
+        <view class="org-model-text">加课程群</view>
+        <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
+      </view>
+    </view>
+  </view>
+  <view wx:for="{{data.course_subclass_list}}" wx:for-item="subclass" wx:for-index="subclass_index" wx:if="{{subclass_index == 0 || data.course_show_all}}" style="position: relative;">
+    <image src="/images/sf-{{subclass.is_added?'minus':'add'}}.svg" style="width: 40rpx;height: 40rpx;position: absolute;right: 20rpx;top: 30rpx;opacity: 0.5;" bindtap="courseAddSubclass" data-subclassid="{{subclass.subclass_id}}" data-index="{{subclass_index}}"></image>
+    <view class="course-divider"></view>
+    <view class="course-subclass-section-added" wx:if="{{subclass.is_added}}">{{subclass.subclass_section}}</view>
+    <view class="course-subclass-section" wx:else>{{subclass.subclass_section}}</view>
+    <block wx:for="{{subclass.subclass_time}}" wx:for-item="time">
+      <view class="course-subclass-time">{{time.date}}: {{time.start_time}} - {{time.end_time}} - {{time.venue}}</view>
+    </block>
+    <view class="course-subclass-instructor">
+      <text wx:for="{{subclass.subclass_instructor}}" wx:for-item="instructor" wx:for-index="instructor_index">{{instructor_index + 1 == subclass.subclass_instructor.length ? instructor : instructor + '; '}}</text>
+    </view>
+    <view class="course-subclass-output-button" wx:if="{{subclass.is_added}}" bindtap="courseNav2My">查看已选课程/导出日历></view>
+  </view>
+  <block wx:if="{{!data.course_show_all && data.course_subclass_list.length > 1}}">
+  <view class="course-divider"></view>
+  <view class="common-show-all-container">
+    <view class="common-show-all-text" bindtap="courseShowAll">展开</view>
+  </view>
+  </block>
+</view>
+
+<view class="common-outer" wx:if="{{type == 'button'}}">
+  <view class="button-title" wx:if="{{data.button_title}}">{{data.button_title}}</view>
+  <view class="button-container" wx:for="{{data.button_list}}" style="margin-top:{{index == 0 ? '0' : '20rpx'}}" wx:if="{{index < 3 || data.button_show_all}}">
+    <view class="button-inner-container">
+      <view class="button-text">{{item.button_text}}</view>
+    </view>
+  </view>
+  <view class="common-show-all-container" style="margin-top: 30rpx;" wx:if="{{!data.button_show_all && data.button_list.length > 3}}">
+    <view class="common-show-all-text" bindtap="buttonShowAll">展开</view>
+  </view>
+</view>
+
+<view class="common-outer" wx:if="{{type == 'text'}}">
+  <view class="text-title" style="{{data.function_type ? 'text-decoration: underline;' : ''}}" bindtap="handleFunctionPre" data-functionitem="{{data}}">{{data.text_title}}</view>
+  <image class="text-image" src="{{data.text_image}}" mode="aspectFill" wx:if="{{data.text_image}}"></image>
+  <text class="text-content">{{data.text_content}}</text>
+  <block wx:if="{{!data.text_is_completed}}">
+  <view class="text-divider"></view>
+  <view class="common-show-all-container" style="margin-top: 30rpx;">
+    <view class="common-show-all-text" bindtap="textShowAll">展开</view>
+  </view>
+  </block>
+</view>

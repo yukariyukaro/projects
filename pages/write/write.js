@@ -529,6 +529,9 @@ Page({
     wx.setNavigationBarTitle({
       title: '发布树洞',
     });
+    wx.enableAlertBeforeUnload({
+      message: '返回后草稿内容将不会被保存，确认返回？',
+    })
     that.getPostTopic()
     if(options.post_media){
       var post_media = decodeURIComponent(options.post_media)

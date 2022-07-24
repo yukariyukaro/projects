@@ -24,7 +24,7 @@ Component({
       const currentIndex = e.currentTarget.dataset.index;
       if(currentIndex == '-4'){
         wx.navigateTo({
-          url: '/pages/search/search',
+          url: '/pages/one/one',
         })
       }else{
         this.setData({ currentIndex });

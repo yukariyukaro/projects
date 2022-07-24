@@ -48,6 +48,16 @@
                     <view class="arror-right"></view>
                 </view>
             </view>
+            <view class="u-flex-item" data-url="/pages/mySubclass/mySubclass" bindtap="nav2Url">
+                <view class="u-row-left">
+                    <image src="/images/ui-course.svg"></image>
+                    <view class="name">我的选课</view>
+                </view>
+                <view class="u-row-right">
+                    <view class="u-light-color"></view>
+                    <view class="arror-right"></view>
+                </view>
+            </view>
         </view>
         <view class="menu">
             <view class="u-flex-item" data-url="/pages/userdata/userdata" bindtap="nav2Url">

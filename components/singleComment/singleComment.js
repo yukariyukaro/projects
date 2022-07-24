@@ -85,8 +85,9 @@ Component({
       
     },
     goToComment: function () {
-      wx.navigateTo({
-        url: '/pages/writeComment/writeComment?post_id=' + this.data.post_id +'&is_author=' + this.data.post_is_author + '&comment_id=' + this.data.comment_id + '&comment_order=' + this.data.comment_order,
+      this.triggerEvent('replyComment', {
+        comment_id: this.data.comment_id,
+        comment_order: this.data.comment_order,
       });
     }
   },

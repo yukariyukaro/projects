@@ -5,12 +5,6 @@ Page({
     scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     data_received: false,
     preURL: 'https://i.boatonland.com/avatar/',
-    tintStyle:"",
-
-    isSending: false,
-    comment_remnant: 500,
-    comment_placeholder: '想对洞主说些什么？',
-    triggered: false,
 
     // 举报
     reportType: '', // 'comment' or 'post'
@@ -18,13 +12,23 @@ Page({
     reportId: '',
     reportIndex: '',
     reportUserMsg: '',
+    comment_placeholder: '想对洞主说些什么？',
 
     post_id: '',
     postDetail: {},
     commentList: [],
     comment_reverse: false,
 
-    adInfo:[]
+    adInfo:[],
+    show_comment_box:false,
+    comment_box_animation:'',
+    comment_id:'',
+    comment_msg: '',
+    comment_with_serial: false,
+    is_author: false,
+    comment_box_placeholder: '想对洞主说些什么?',
+    comment_is_sending:false,
+    focus:false
   },
   // 下拉刷新
   onRefresh() {
@@ -60,17 +64,27 @@ Page({
     }
   },
   replyComment: function (e) {
-    const {
-      post_serial
-    } = this.data;
-    const comment_index = e.detail;
-    const comment_floor = comment_index == '0' ? 'G层' : `LG${comment_index}`;
-    const re_comment = `Re ${comment_floor}: `;
-    app.globalData.tem_comment = re_comment;
-    app.globalData.tem_comment_with_serial = true;
-    app.globalData.tem_comment_post = post_serial;
-    // 跳转到撰写页面
-    this.goToComment();
+    if(e.detail.comment_order == 0){
+      var comment_box_placeholder = "Re G:"
+    }else{
+      var comment_box_placeholder = "Re LG" + e.detail.comment_order + ":"
+    }
+    if(this.data.postDetail.is_author){
+      this.setData({
+        comment_msg:'',
+        comment_box_placeholder:comment_box_placeholder,
+        comment_id:e.detail.comment_id,
+        comment_with_serial:true
+      })
+    }else{
+      this.setData({
+        comment_msg:'',
+        comment_box_placeholder:comment_box_placeholder,
+        comment_id:e.detail.comment_id,
+        comment_with_serial:false
+      })
+    }
+    this.showCommentBox()
   },
 
   reportPost: function () {
@@ -558,17 +572,31 @@ Page({
   },
 
 
-  // 预览大图片
   previewPic: function () {
     wx.previewImage({
       urls: [this.data.postDetail.post_image],
     });
   },
-  // 跳转
   goToComment: function () {
-    wx.navigateTo({
-      url: '/pages/writeComment/writeComment?post_id=' + this.data.postDetail.post_id + '&is_author=' + this.data.postDetail.is_author,
-    });
+    // wx.navigateTo({
+    //   url: '/pages/writeComment/writeComment?post_id=' + this.data.postDetail.post_id + '&is_author=' + this.data.postDetail.is_author,
+    // });
+    if(this.data.postDetail.is_author){
+      this.setData({
+        comment_msg:'',
+        comment_box_placeholder:'想在自己的树洞下补充些什么？',
+        comment_id:'',
+        comment_with_serial:true
+      })
+    }else{
+      this.setData({
+        comment_msg:'',
+        comment_box_placeholder:'想对洞主说些什么',
+        comment_id:'',
+        comment_with_serial:false
+      })
+    }
+    this.showCommentBox()
   },
   // 评论倒序
   reverseComments: function () {
@@ -659,6 +687,104 @@ Page({
         break;
     }
   },
+  showCommentBox:function(e){
+    var that = this;
+    var animation  = wx.createAnimation({
+        duration:500,
+        timingFunction:'ease-out'
+      })
+    that.animation = animation
+    animation.translateY(400).step()
+    that.setData({
+      comment_box_animation: animation.export(),
+      show_comment_box:true,
+      focus:true
+    })
+    setTimeout(function(){
+      animation.translateY(0).step()
+      that.setData({
+        comment_box_animation: animation.export(),
+      })
+    },50)
+  },
+  hideCommentBox:function(e){
+    var that = this;
+    var animation  = wx.createAnimation({
+        duration:500,
+        timingFunction:'ease-out'
+      })
+    that.animation = animation
+    animation.translateY(400).step()
+    that.setData({
+      comment_box_animation: animation.export(),
+    })
+    setTimeout(function(){
+      animation.translateY(0).step()
+      that.setData({
+        comment_box_animation: animation.export(),
+        show_comment_box:false,
+        focus:false,
+        comment_msg:'',
+        comment_box_placeholder:'想对洞主说些什么',
+        comment_id:'',
+        comment_with_serial:false
+      })
+    },50)
+  },
+  bindCommentMsgInput: function (e) {
+    this.setData({
+      comment_msg: e.detail.value,
+    });
+  },
+  // 选择是否带编号
+  switchSerialChange: function (e) {
+    this.setData({ comment_with_serial: e.detail.value });
+  },
+  submitComment: function () {
+    var that = this
+    if(that.data.comment_is_sending){
+      return
+    }
+    wx.showLoading({
+      title: '发送中',
+    })
+    that.setData({
+      comment_is_sending:true
+    })
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/comment/post.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+        post_id:that.data.postDetail.post_id,
+        comment_id:that.data.comment_id,
+        comment_msg:that.data.comment_msg,
+        comment_with_serial:that.data.comment_with_serial,
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        wx.hideLoading()
+        that.setData({
+          comment_is_sending:false
+        })
+        if(res.data.code == 200){
+          wx.showToast({title: "发布成功", icon: "none", duration: 1000})
+          that.hideCommentBox()
+          that.getPostDetail()
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.submitComment()
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
+    })
+
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */

@@ -469,3 +469,42 @@
   top: 50%;
   transform: translate(0, -50%);
 }
+.send-button{
+  width: 112rpx;
+  height: 60rpx;
+  font-size: 28rpx;
+  color: #FFFFFF;
+  border-radius: 30rpx;
+  line-height: 60rpx;
+  background: var(--primary);
+  text-align: center;
+}
+
+.textarea-outer{
+  text-align:left;
+  min-height: 120rpx;
+  width: 100%;
+  margin-top: 20rpx;
+}
+
+.textarea-content{
+  font-size: 32rpx;
+  max-height:400rpx !important;
+  width: 100%;
+}
+
+.textarea-switch {
+  transform:scale(0.6) !important;
+}
+
+.reply-outer{
+  margin:40rpx 30rpx 0rpx 30rpx;
+  padding: 30rpx;
+  width: 630rpx;
+  border-radius:10rpx;
+  font-size: 30rpx;
+  background-color: var(--bg-2);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 20rpx);
+}

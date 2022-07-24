@@ -64,12 +64,12 @@ Page({
     var notice_count = wx.getStorageSync('allNoticeCount')
     if(notice_count > 0){
       wx.setTabBarBadge({
-        index: 1,
+        index: 2,
         text: String(notice_count),
       })
     }else{
       wx.removeTabBarBadge({
-        index: 1,
+        index: 2,
       })
     }
   },
