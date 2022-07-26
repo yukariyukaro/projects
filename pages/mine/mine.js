@@ -152,6 +152,24 @@ Page({
       });
     }
   },
+  updateTabbar:function(){
+    var notice_count = wx.getStorageSync('allNoticeCount')
+    if(notice_count > 0){
+      wx.setTabBarBadge({
+        index: 2,
+        text: String(notice_count),
+      })
+    }else{
+      wx.removeTabBarBadge({
+        index: 2,
+      })
+    }
+    if(wx.getStorageSync('showOneRedDot')){
+      wx.showTabBarRedDot({
+        index:1
+      })
+    }
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -174,6 +192,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    app.globalData.tabbarJS = this
     this.getUserInfo()
     if(app.globalData.themeInfo.mineBackgroundImage){
       this.setData({
@@ -186,14 +205,14 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    app.globalData.indexJS = ''
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    app.globalData.indexJS = ''
   },
 
   /**

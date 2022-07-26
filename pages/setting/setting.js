@@ -6,7 +6,8 @@ Page({
    */
   data: {
     subscribe_accept:false,
-    banUniPost:false
+    banUniPost:false,
+    allowHomeSwipe:false
   },
   getUserInfo: function () {
     var that = this
@@ -222,6 +223,9 @@ Page({
   setBanUniPost:function(e){
     wx.setStorageSync('banUniPost', e.detail.value)
   },
+  setAllowHomeSwipe:function(e){
+    wx.setStorageSync('allowHomeSwipe', e.detail.value)
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -229,7 +233,8 @@ Page({
   onLoad: function (options) {
     this.checkMethod()
     this.setData({
-      banUniPost:wx.getStorageSync('banUniPost')
+      banUniPost:wx.getStorageSync('banUniPost'),
+      allowHomeSwipe:wx.getStorageSync('allowHomeSwipe')
     })
   },
 

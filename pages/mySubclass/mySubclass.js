@@ -11,7 +11,9 @@ Page({
     term_index:0,
     weekday_list:['MON','TUE','WED','THU','FRI'],
     timepoint_list:['8:30','10:30','12:30','14:30','16:30','18:30','20:30'],
-    color_list:['229453','ffd111','ed5126','1a94bc','813c85','f1939c','1772b4','12a182','d6a01d','de7622']
+    color_list:['229453','ffd111','ed5126','1a94bc','813c85','f1939c','1772b4','12a182','d6a01d','de7622'],
+    now_weekday:0,
+    now_hour_position:0
   },
 
   getSubclass: function () {
@@ -34,7 +36,6 @@ Page({
               var end_time_hour = Date.parse("1970/01/01 " + timeslot.end_time) / 3600000 + 8
               timeslot.position_top = (start_time_hour - 8.5) * 80
               timeslot.position_height = (end_time_hour - start_time_hour) * 80
-              timeslot.color_index = timeslot.course_id % 30
             })
           })
           that.setData({
@@ -152,6 +153,15 @@ Page({
    */
   onLoad(options) {
     this.getSubclass()
+    this.setData({
+      now_weekday: new Date().getDay()
+    })
+    var now_hour = (Date.parse(new Date())%86400000/3600000 + 8)%24
+    if(now_hour>8.5 && now_hour<22.5){
+      this.setData({
+        now_hour_position: (now_hour - 8.5) * 80
+      })
+    }
   },
 
   /**

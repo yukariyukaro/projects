@@ -393,6 +393,19 @@ Page({
       focus: false
     })
   },
+  updateTabbar:function(){
+    var notice_count = wx.getStorageSync('allNoticeCount')
+    if(notice_count > 0){
+      wx.setTabBarBadge({
+        index: 2,
+        text: String(notice_count),
+      })
+    }else{
+      wx.removeTabBarBadge({
+        index: 2,
+      })
+    }
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -416,6 +429,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    app.globalData.tabbarJS = this
     this.getPlaceholder()
     this.check()
     this.setData({
@@ -425,13 +439,20 @@ Page({
       color: '#8a8a8a',
       selectedColor: '#1f86fc'
     })
-
+    wx.hideTabBarRedDot({
+      index: 1,
+    })
+    wx.setStorageSync('showOneRedDot', false)
+    if(this.data.key_word == ''){
+      this.getOneList()
+    }
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
+    app.globalData.indexJS = ''
     wx.setTabBarStyle({
       color: '#8a8a8a',
       selectedColor: '#D85050'
@@ -442,7 +463,11 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    app.globalData.indexJS = ''
+    wx.setTabBarStyle({
+      color: '#8a8a8a',
+      selectedColor: '#D85050'
+    })
   },
 
   /**

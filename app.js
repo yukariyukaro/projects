@@ -29,9 +29,19 @@ App({
     if(!wx.getStorageSync('banUniPost')){
       wx.setStorageSync('banUniPost', false)
     }
+    if(!wx.getStorageSync('allowHomeSwipe')){
+      wx.setStorageSync('allowHomeSwipe', false)
+    }
+    if(!wx.getStorageSync('oneLatestId')){
+      wx.setStorageSync('oneLatestId', 0)
+    }
+    if(!wx.getStorageSync('showOneRedDot')){
+      wx.setStorageSync('showOneRedDot', false)
+    }
   },
   onShow:function(){
     this.launchWebSoccket()
+    this.getOneLatest()
   },
   onHide: function () {
     this.globalData.redirectToRegister = false
@@ -344,6 +354,37 @@ App({
       })
       }
     })
+  },
+
+  getOneLatest: function () {
+    var that = this
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/one/getlatest.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token')
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        wx.hideLoading()
+        if(res.data.code == 200){
+          if(res.data.one_latest_id > wx.getStorageSync('oneLatestId')){
+            wx.setStorageSync('oneLatestId', res.data.one_latest_id)
+            wx.setStorageSync('showOneRedDot', true)
+            that.updateTabbar()
+          }
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          that.launch().then(res=>{
+            that.getOneLatest()
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
+    })
+
   },
 
   //新消息推送

@@ -149,7 +149,7 @@ Page({
             if(post_public == 2){
               wx.showToast({ title: '#'+res.data.post_id+'私有树洞诞生了⭐', icon: 'none', duration: 1000,});
               setTimeout(() =>
-                wx.reLaunch({url: '/pages/profile/profile',}),
+                wx.reLaunch({url: '/pages/mine/mine',}),
               1000);
             }
           }else if(res.data.code == 800 ||res.data.code == 900){

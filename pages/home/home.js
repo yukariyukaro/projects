@@ -21,7 +21,8 @@ Page({
     main_data_received:false,
     postButtonIcon:"/images/send-post.svg",
     swiper_current:2,
-    nav_to_view:0
+    nav_to_view:0,
+    allowHomeSwipe:false
   },
   // 下拉刷新
   onRefresh: function () {
@@ -430,6 +431,11 @@ Page({
         index: 2,
       })
     }
+    if(wx.getStorageSync('showOneRedDot')){
+      wx.showTabBarRedDot({
+        index:1
+      })
+    }
   },
 
   getQueryVariable:function(qrlink,variable) {
@@ -494,6 +500,9 @@ Page({
   onShow: function () {    
     app.globalData.tabbarJS = this
     app.updateTabbar()
+    this.setData({
+      allowHomeSwipe:wx.getStorageSync('allowHomeSwipe')
+    })
     // if(app.globalData.themeInfo.postButtonIcon){
     //   this.setData({
     //     postButtonIcon:app.globalData.themeInfo.postButtonIcon
@@ -504,12 +513,16 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {},
+  onHide: function () {
+    app.globalData.indexJS = ''
+  },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {},
+  onUnload: function () {
+    app.globalData.indexJS = ''
+  },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作

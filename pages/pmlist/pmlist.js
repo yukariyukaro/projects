@@ -72,6 +72,11 @@ Page({
         index: 2,
       })
     }
+    if(wx.getStorageSync('showOneRedDot')){
+      wx.showTabBarRedDot({
+        index:1
+      })
+    }
   },
 
   /**

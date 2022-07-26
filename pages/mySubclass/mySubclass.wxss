@@ -32,5 +32,32 @@
   border-radius: 10rpx;
   overflow: hidden;
   color: var(--on-primary);
-  opacity: 0.9;
+}
+
+.weekday-text{
+  width: 18%;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.weekday-text-now{
+  width: 18%;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.timeline-divider{
+  height: 1px;
+  width: 1000%;
+  background-color: var(--divider);
+}
+
+.timeline-divider-now{
+  height: 1px;
+  width: 1000%;
+  position: absolute;
+  background-color: var(--primary);
 }

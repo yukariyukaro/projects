@@ -23,7 +23,7 @@
         </view>
       </view>
     </view>
-    <view style="width:100%;height:{{one_list[0].type == 'org' ? '65rpx' : '0'}}"></view>
+    <view style="width:100%;height:{{one_list[0].type == 'org' ? '55rpx' : '0'}}"></view>
     <view class="item-content">
       <one wx:for="{{one_list}}" type="{{item.type}}" data="{{item.data}}" />
       <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />

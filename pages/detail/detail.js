@@ -249,67 +249,139 @@ Page({
     var that = this
     if (that.data.postDetail.is_author) {
       if (that.data.postDetail.post_public == '1') {
-        wx.showActionSheet({
-          itemList: ['设为私密', '删除'],
-          success(res) {
-            if (res.tapIndex == 0) {
-              that.setPrivate()
-            } else if (res.tapIndex == 1) {
-              app.showModal({
-                title: "确认删除？",
-                content: "删除后将无法恢复",
-                success(res) {
-                  if (res.confirm) {
-                    that.delete()
+        if(that.data.postDetail.post_uni_id){
+          wx.showActionSheet({
+            alertText: 'UNI ID: U' + that.data.postDetail.post_uni_id,
+            itemList: ['设为私密', '删除'],
+            success(res) {
+              if (res.tapIndex == 0) {
+                that.setPrivate()
+              } else if (res.tapIndex == 1) {
+                app.showModal({
+                  title: "确认删除？",
+                  content: "删除后将无法恢复",
+                  success(res) {
+                    if (res.confirm) {
+                      that.delete()
+                    }
                   }
-                }
-              })
+                })
+              }
             }
-          }
-        })
+          })
+        }else{
+          wx.showActionSheet({
+            itemList: ['设为私密', '删除'],
+            success(res) {
+              if (res.tapIndex == 0) {
+                that.setPrivate()
+              } else if (res.tapIndex == 1) {
+                app.showModal({
+                  title: "确认删除？",
+                  content: "删除后将无法恢复",
+                  success(res) {
+                    if (res.confirm) {
+                      that.delete()
+                    }
+                  }
+                })
+              }
+            }
+          })
+        }     
       } else if (that.data.postDetail.post_public == '2') {
-        wx.showActionSheet({
-          itemList: ['设为公开', '删除'],
-          success(res) {
-            if (res.tapIndex == 0) {
-              that.setPublic()
-            } else if (res.tapIndex == 1) {
-              app.showModal({
-                title: "确认删除？",
-                content: "删除后将无法恢复",
-                success(res) {
-                  if (res.confirm) {
-                    that.delete()
+        if(that.data.postDetail.post_uni_id){
+          wx.showActionSheet({
+            alertText: 'UNI ID: U' + that.data.postDetail.post_uni_id,
+            itemList: ['设为公开', '删除'],
+            success(res) {
+              if (res.tapIndex == 0) {
+                that.setPublic()
+              } else if (res.tapIndex == 1) {
+                app.showModal({
+                  title: "确认删除？",
+                  content: "删除后将无法恢复",
+                  success(res) {
+                    if (res.confirm) {
+                      that.delete()
+                    }
                   }
-                }
-              })
+                })
+              }
             }
-          }
-        })
+          })
+        }else{
+          wx.showActionSheet({
+            itemList: ['设为公开', '删除'],
+            success(res) {
+              if (res.tapIndex == 0) {
+                that.setPublic()
+              } else if (res.tapIndex == 1) {
+                app.showModal({
+                  title: "确认删除？",
+                  content: "删除后将无法恢复",
+                  success(res) {
+                    if (res.confirm) {
+                      that.delete()
+                    }
+                  }
+                })
+              }
+            }
+          })
+        }
       }
     } else {
       if (that.data.postDetail.is_following) {
-        wx.showActionSheet({
-          itemList: ['取消围观', '举报'],
-          success(res) {
-            if (res.tapIndex == 0) {
-              that.follow()
-            } else if (res.tapIndex == 1) {
-              that.reportPost()
+        if(that.data.postDetail.post_uni_id){
+          wx.showActionSheet({
+            alertText: 'UNI ID: U' + that.data.postDetail.post_uni_id,
+            itemList: ['取消围观', '举报'],
+            success(res) {
+              if (res.tapIndex == 0) {
+                that.follow()
+              } else if (res.tapIndex == 1) {
+                that.reportPost()
+              }
             }
-          }
-        })
+          })
+        }else{
+          wx.showActionSheet({
+            itemList: ['取消围观', '举报'],
+            success(res) {
+              if (res.tapIndex == 0) {
+                that.follow()
+              } else if (res.tapIndex == 1) {
+                that.reportPost()
+              }
+            }
+          })
+        }    
       } else {
-        wx.showActionSheet({
-          itemList: ['围观', '举报'],
-          success(res) {
-            if (res.tapIndex == 0) {
-              that.follow()
-            } else if (res.tapIndex == 1) {
-              that.reportPost()
+        if(that.data.postDetail.post_uni_id){
+          wx.showActionSheet({
+            alertText: 'UNI ID: U' + that.data.postDetail.post_uni_id,
+            itemList: ['围观', '举报'],
+            success(res) {
+              if (res.tapIndex == 0) {
+                that.follow()
+              } else if (res.tapIndex == 1) {
+                that.reportPost()
+              }
             }
-          }
-        })
+          })
+        }else{
+          wx.showActionSheet({
+            itemList: ['围观', '举报'],
+            success(res) {
+              if (res.tapIndex == 0) {
+                that.follow()
+              } else if (res.tapIndex == 1) {
+                that.reportPost()
+              }
+            }
+          })
+        }
       }
 
     }
