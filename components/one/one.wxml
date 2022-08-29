@@ -173,7 +173,7 @@
     </view>
   </view>
   <view wx:for="{{data.course_subclass_list}}" wx:for-item="subclass" wx:for-index="subclass_index" wx:if="{{subclass_index == 0 || data.course_show_all}}" style="position: relative;">
-    <image src="/images/sf-{{subclass.is_added?'minus':'add'}}.svg" style="width: 40rpx;height: 40rpx;position: absolute;right: 20rpx;top: 30rpx;opacity: 0.5;" bindtap="courseAddSubclass" data-subclassid="{{subclass.subclass_id}}" data-index="{{subclass_index}}"></image>
+    <image src="/images/sf-{{subclass.is_added?'minus':'add'}}.svg" style="width: 40rpx;height: 40rpx;position: absolute;right: 20rpx;top: 30rpx;" bindtap="courseAddSubclass" data-subclassid="{{subclass.subclass_id}}" data-index="{{subclass_index}}"></image>
     <view class="course-divider"></view>
     <view class="course-subclass-section-added" wx:if="{{subclass.is_added}}">{{subclass.subclass_section}}</view>
     <view class="course-subclass-section" wx:else>{{subclass.subclass_section}}</view>
@@ -186,10 +186,10 @@
     <view class="course-subclass-output-button" wx:if="{{subclass.is_added}}" bindtap="courseNav2My">查看已选课程/导出日历></view>
   </view>
   <block wx:if="{{!data.course_show_all && data.course_subclass_list.length > 1}}">
-  <view class="course-divider"></view>
-  <view class="common-show-all-container">
-    <view class="common-show-all-text" bindtap="courseShowAll">展开</view>
-  </view>
+    <view class="course-divider"></view>
+    <view class="common-show-all-container">
+      <view class="common-show-all-text" bindtap="courseShowAll">展开</view>
+    </view>
   </block>
 </view>
 
@@ -210,9 +210,26 @@
   <image class="text-image" src="{{data.text_image}}" mode="aspectFill" wx:if="{{data.text_image}}"></image>
   <text class="text-content">{{data.text_content}}</text>
   <block wx:if="{{!data.text_is_completed}}">
-  <view class="text-divider"></view>
-  <view class="common-show-all-container" style="margin-top: 30rpx;">
-    <view class="common-show-all-text" bindtap="textShowAll">展开</view>
-  </view>
+    <view class="text-divider"></view>
+    <view class="common-show-all-container" style="margin-top: 30rpx;">
+      <view class="common-show-all-text" bindtap="textShowAll">展开</view>
+    </view>
   </block>
+</view>
+
+<view class="calendar-now-outer" wx:if="{{type == 'calendar_now'}}" bindtap="nav2MySubclass">
+  <view class="calendar-now-container">
+    <view class="calendar-now-inner-left">
+      <view class="calendar-now-inner-left-inner">
+        <view class="calendar-now-ca">{{data.ca_now}}</view>
+        <view class="calendar-now-date">{{data.date_now}}</view>
+      </view>
+    </view>
+    <view class="calendar-now-inner-right">
+      <view class="calendar-now-card" wx:for="{{data.calendar_now_list}}" style="{{index == data.calendar_now_list.length - 1 ? '' : 'margin-bottom:20rpx'}}">
+        <view class="calendar-now-title">{{item.calendar_title}}</view>
+        <view class="calendar-now-content">{{item.calendar_start_time}} - {{item.calendar_end_time}} - {{item.calendar_location}}</view>
+      </view>
+    </view>
+  </view>
 </view>

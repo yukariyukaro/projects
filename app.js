@@ -565,6 +565,7 @@ App({
     }
   },
   webSocketConnect:function(){
+    // console.log('开始链接')
     var that = this
     wx.connectSocket({
       url: 'wss://ws.pupu.hkupootal.com:3330',
@@ -589,6 +590,12 @@ App({
     wx.onSocketClose(function() {
       that.globalData.wsConnect = false
       // console.log('WebSocket 已关闭！')
+    })
+
+    wx.onSocketError(function(res) {
+      that.globalData.wsConnect = false
+      console.log('出现问题')
+      console.log(res)
     })
   },
   messageHandler:function(data){
@@ -624,9 +631,9 @@ App({
   launchWebSoccket:function(){
     var that = this
     if(!that.globalData.wsConnect){
-      // console.log("先获取历史消息")
+      console.log("先获取历史消息")
       that.getHistoryMessage().then(res=>{
-        // console.log("然后链接")
+        console.log("然后链接")
         that.webSocketConnect()
       })
     }else{
@@ -638,7 +645,7 @@ App({
       })
     }
     setTimeout(() => {
-      // console.log("每10秒检测一次")
+      console.log("每10秒检测一次")
       that.launchWebSoccket()
     }, 10000); 
   },

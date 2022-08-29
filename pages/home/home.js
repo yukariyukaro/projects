@@ -454,6 +454,32 @@ Page({
       nav_to_view:e.detail.current + this.data.startIndex - 2
     })
   },
+  getCalendarNow:function(){
+    var that = this
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/calendar/getnow.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        if(res.data.code == 200){
+          that.setData({
+            calendar_now_data:res.data.calendar_now_data
+          })
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.getCalendarNow()
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
+    })
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -500,6 +526,7 @@ Page({
   onShow: function () {    
     app.globalData.tabbarJS = this
     app.updateTabbar()
+    this.getCalendarNow()
     this.setData({
       allowHomeSwipe:wx.getStorageSync('allowHomeSwipe')
     })

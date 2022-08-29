@@ -14,7 +14,10 @@ Component({
     user_avatar: String,
     post_id: String,
     user_serial: String,
-    comment_school_label: String
+    comment_school_label: String,
+    post_is_author: Boolean,
+    comment_father_msg: String,
+    comment_image: String
   },
 
   data: {

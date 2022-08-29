@@ -23,7 +23,7 @@
   align-self: center;
 }
 .topic {
-  color: #8C8C8C;
+  color: #8c8c8c;
   align-self: center;
   padding: 5rpx 15rpx;
   border-radius: 10rpx;

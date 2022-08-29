@@ -1,5 +1,5 @@
 var app = getApp();
-var util = require('../../utils/util.js');
+var COS = require('../../utils/cos-wx-sdk-v5.js')
 Page({
   data: {
     scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
@@ -24,6 +24,7 @@ Page({
     comment_box_animation:'',
     comment_id:'',
     comment_msg: '',
+    comment_image:'',
     comment_with_serial: false,
     is_author: false,
     comment_box_placeholder: '想对洞主说些什么?',
@@ -759,51 +760,76 @@ Page({
         break;
     }
   },
-  showCommentBox:function(e){
+  showCommentBox:function(){
     var that = this;
     var animation  = wx.createAnimation({
         duration:500,
         timingFunction:'ease-out'
       })
+    var overlay_animation  = wx.createAnimation({
+        duration:500,
+        timingFunction:'ease-out'
+      })
     that.animation = animation
+    that.overlay_animation = overlay_animation
     animation.translateY(400).step()
     that.setData({
       comment_box_animation: animation.export(),
+      overlay_animation: overlay_animation.export(),
       show_comment_box:true,
-      focus:true
     })
     setTimeout(function(){
       animation.translateY(0).step()
+      overlay_animation.opacity(1).step()
       that.setData({
         comment_box_animation: animation.export(),
+        overlay_animation: overlay_animation.export(),
       })
-    },50)
+    },1)
+    setTimeout(function(){
+      that.setData({
+        focus:true
+      })
+    },800)
   },
-  hideCommentBox:function(e){
+  hideCommentBox:function(){
     var that = this;
     var animation  = wx.createAnimation({
         duration:500,
-        timingFunction:'ease-out'
+        timingFunction:'ease-in'
+      })
+    var overlay_animation  = wx.createAnimation({
+        duration:500,
+        timingFunction:'ease-in'
       })
     that.animation = animation
+    that.overlay_animation = overlay_animation
     animation.translateY(400).step()
+    overlay_animation.opacity(0).step()
     that.setData({
       comment_box_animation: animation.export(),
+      overlay_animation: overlay_animation.export(),
     })
     setTimeout(function(){
       animation.translateY(0).step()
       that.setData({
-        comment_box_animation: animation.export(),
         show_comment_box:false,
         focus:false,
         comment_msg:'',
+        comment_image:'',
         comment_box_placeholder:'想对洞主说些什么',
         comment_id:'',
         comment_with_serial:false
       })
-    },50)
+    },500)
   },
   bindCommentMsgInput: function (e) {
+    var regex = /\/\/HKUPootal:picture/
+    console.log(regex.test(e.detail.value))
+    if(regex.test(e.detail.value)){
+      this.uploadImage()
+      e.detail.value = e.detail.value.replace(regex, '')
+    }
     this.setData({
       comment_msg: e.detail.value,
     });
@@ -831,6 +857,7 @@ Page({
         post_id:that.data.postDetail.post_id,
         comment_id:that.data.comment_id,
         comment_msg:that.data.comment_msg,
+        comment_image:that.data.comment_image,
         comment_with_serial:that.data.comment_with_serial,
       },
       header: {
@@ -855,6 +882,123 @@ Page({
       }
     })
 
+  },
+  uploadImage:function(){
+    var that =this
+    var Bucket = 'boatonland-1307992092';
+    var Region = 'ap-beijing';
+    var cos = new COS({
+      ForcePathStyle: true, // 如果使用了很多存储桶，可以通过打开后缀式，减少配置白名单域名数量，请求时会用地域域名
+      getAuthorization: function (options, callback) {
+          // 异步获取临时密钥
+          wx.request({
+              url: 'https://image.boatonland.com/index.php',
+              data: {
+                  bucket: options.Bucket,
+                  region: options.Region,
+              },
+              dataType: 'json',
+              success: function (result) {
+                  var data = result.data;
+                  var credentials = data && data.credentials;
+                  if (!data || !credentials) return console.error('credentials invalid');
+                  callback({
+                      TmpSecretId: credentials.tmpSecretId,
+                      TmpSecretKey: credentials.tmpSecretKey,
+                      XCosSecurityToken: credentials.sessionToken,
+                      // 建议返回服务器时间作为签名的开始时间，避免用户浏览器本地时间偏差过大导致签名错误
+                      StartTime: data.startTime, // 时间戳，单位秒，如：1580000000
+                      ExpiredTime: data.expiredTime, // 时间戳，单位秒，如：1580000900
+                  });
+              }
+          });
+      }
+    });
+    // 接下来可以通过 cos 实例调用 COS 请求。
+    // TODO
+
+    // 选择文件
+    wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认用原图
+        sourceType: ['album','camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success: function (res) {
+            wx.showLoading({title: '上传中',})
+            console.log(res)
+            var filePath = res.tempFiles[0].path;
+            cos.postObject({
+                Bucket: Bucket,
+                Region: Region,
+                Key: that.randomString() + that.getExt(filePath),
+                FilePath: filePath,
+                onProgress: function (info) {
+                    console.log(info)
+                    console.log(JSON.stringify(info));
+                }
+            }, function (err, data) {
+                console.log(err || data);
+                if(data.Location){
+                  var location = 'https://i.boatonland.com/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
+                  wx.showLoading({
+                    title: '安全检测中',
+                  })
+                  setTimeout(function () {
+                    wx.hideLoading()
+                    wx.showToast({title: '上传成功' ,icon:'success',})
+                    that.setData({
+                      comment_image: location,
+                    })
+                   }, 1000) 
+                }else{
+                  wx.hideLoading()
+                  wx.showToast({title: '上传失败' ,icon:'error',})
+                }
+            });
+        }
+    });
+
+  },
+  randomString:function(e) {
+    e = e || 32;
+    var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
+      a = t.length,
+      n = "";
+    for (var i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+    return n;
+  },
+  getExt:function(filename){
+    var idx = filename.lastIndexOf('.');
+    return (idx < 1) ? "" : "." + filename.substr(idx + 1);
+  },
+  picTap: function () {
+    var that = this;
+    wx.showActionSheet({
+      itemList: ['删除', '查看'],
+      success(res) {
+        const index = res.tapIndex;
+        switch (index) {
+          case 0:
+            that.deletePic();
+            break;
+          case 1:
+            that.previewPic();
+            break;
+        }
+      },
+      fail(res) {
+        console.log(res.errMsg);
+      },
+    });
+  },
+  deletePic: function () {
+    this.setData({
+      comment_image: '',
+    });
+  },
+  previewPic: function () {
+    wx.previewImage({
+      urls: [this.data.comment_image],
+    });
   },
 
   /**

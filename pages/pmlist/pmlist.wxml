@@ -35,7 +35,7 @@
             </view>
           </view>
         </view>
-        <view class="divider"></view>
+        <view class="divider" wx:if="{{index + 1 !=chatList.length}}"></view>
       </view>
       
     </view>

@@ -1,5 +1,4 @@
 var app = getApp();
-const AV = require('../../libs/av-core-min.js');
 var COS = require('../../utils/cos-wx-sdk-v5.js')
 Page({
   data: {
@@ -209,7 +208,7 @@ Page({
             cos.postObject({
                 Bucket: Bucket,
                 Region: Region,
-                Key: that.randomString(),
+                Key: that.randomString() + that.getExt(filePath),
                 FilePath: filePath,
                 onProgress: function (info) {
                     console.log(info)
@@ -238,7 +237,10 @@ Page({
     });
 
   },
-  // 点击图片后，可以删除/查看
+  getExt:function(filename){
+    var idx = filename.lastIndexOf('.');
+    return (idx < 1) ? "" : "." + filename.substr(idx + 1);
+  },
   picTap: function () {
     var that = this;
     wx.showActionSheet({

@@ -31,7 +31,10 @@
     "pages/userdata/userdata",
     "pages/one/one",
     "pages/mySubclass/mySubclass",
-    "pages/followService/followService"
+    "pages/followService/followService",
+    "pages/pay/pay",
+    "pages/upload/upload",
+    "pages/addCalendar/addCalendar"
   ],
   "requiredBackgroundModes": [
     "audio",

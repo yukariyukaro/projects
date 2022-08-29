@@ -35,6 +35,7 @@ page {
   --model-bg-gray: #f8f8f8;
   --alias-org-bg: linear-gradient(to bottom right, #55A5FF, #A7F7FF);
   --alias-org-text: #000000;
+  --hku-one-primary: #1F86FC;
 }
 @media (prefers-color-scheme: dark) {
   page {
@@ -73,6 +74,7 @@ page {
     --model-bg-gray: #282828;
     --alias-org: linear-gradient(to bottom right, #55A5FF, #ffffff);
     --alias-org-text: #000000;
+    --hku-one-primary: #55A5FF;
   }
 }
 page {

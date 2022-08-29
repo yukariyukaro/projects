@@ -1,0 +1,127 @@
+<view class="menu" wx:if="{{!is_edit}}">
+  <view class="u-flex-item" bindtap="selectCalendarType">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">日程类型</view>
+        <view class="note">请选择日程的类型</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <view class="serial-input" wx:if="{{calendar_type}}">{{calendar_type_show}}</view>
+      <view class="arror-right" wx:else></view>
+    </view>
+  </view>
+</view>
+
+<view class="menu" wx:if="{{calendar_type && calendar_type!='course'}}">
+  <picker value="{{course_list_index}}" range="{{course_list}}" range-key="course_code" bindchange="bindCourseChange" wx:if="{{calendar_type == 'tutorial' && !is_edit}}">
+    <view class="u-flex-item">
+      <view class="u-row-left">
+        <view style="display: flex;flex-direction: column;">
+          <view class="name">课程</view>
+          <view class="note">Tutorial对应的课程</view>
+        </view>
+      </view>
+      <view class="u-row-right">
+        <view class="serial-input">{{course_code}}</view>
+        <view class="arror-right" wx:if="{{!course_code}}"></view>
+      </view>
+    </view>
+  </picker>
+  <view class="u-flex-item" wx:if="{{calendar_type == 'diy_ca' || calendar_type == 'diy_date'}}">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">日程标题</view>
+        <view class="note">简要概括日程内容</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <input class="serial-input" value="{{calendar_title}}" bindinput="bindCalendarTitleInput" placeholder="日程标题"></input>
+    </view>
+  </view>
+  <view class="u-flex-item">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">日程地点</view>
+        <view class="note">日程所在的地点</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <input class="serial-input" value="{{calendar_location}}" bindinput="bindCalendarLocationInput" placeholder="日程地点"></input>
+    </view>
+  </view>
+</view>
+
+<view class="menu" wx:if="{{calendar_type}}">
+  <picker mode="date" value="{{calendar_ca}}" bindchange="bindCalendarCaChange" wx:if="{{calendar_type == 'diy_ca'}}">
+    <view class="u-flex-item">
+      <view class="u-row-left">
+        <view style="display: flex;flex-direction: column;">
+          <view class="name">日期</view>
+          <view class="note">日程的日期</view>
+        </view>
+      </view>
+      <view class="u-row-right">
+        <view class="serial-input">{{calendar_ca}}</view>
+        <view class="arror-right" wx:if="{{!calendar_ca}}"></view>
+      </view>
+    </view>
+  </picker>
+  <picker value="{{date_list_index}}" range="{{date_list}}" bindchange="bindCalendarDateChange" wx:elif="{{calendar_type != 'course'}}">
+    <view class="u-flex-item">
+      <view class="u-row-left">
+        <view style="display: flex;flex-direction: column;">
+          <view class="name">星期</view>
+          <view class="note">每星期重复的日期</view>
+        </view>
+      </view>
+      <view class="u-row-right">
+        <view class="serial-input">{{calendar_date}}</view>
+        <view class="arror-right" wx:if="{{!calendar_date}}"></view>
+      </view>
+    </view>
+  </picker>
+  <picker mode="time" value="{{calendar_start_time}}" bindchange="bindCalendarStartTimeChange" wx:if="{{calendar_type != 'course'}}">
+    <view class="u-flex-item">
+      <view class="u-row-left">
+        <view style="display: flex;flex-direction: column;">
+          <view class="name">开始时间</view>
+          <view class="note">日程开始的时间</view>
+        </view>
+      </view>
+      <view class="u-row-right">
+        <view class="serial-input">{{calendar_start_time}}</view>
+        <view class="arror-right" wx:if="{{!calendar_start_time}}"></view>
+      </view>
+    </view>
+  </picker>
+  <picker mode="time" value="{{calendar_end_time}}" bindchange="bindCalendarEndTimeChange" wx:if="{{calendar_type != 'course'}}">
+    <view class="u-flex-item">
+      <view class="u-row-left">
+        <view style="display: flex;flex-direction: column;">
+          <view class="name">结束时间</view>
+          <view class="note">日程结束的时间</view>
+        </view>
+      </view>
+      <view class="u-row-right">
+        <view class="serial-input">{{calendar_end_time}}</view>
+        <view class="arror-right" wx:if="{{!calendar_end_time}}"></view>
+      </view>
+    </view>
+  </picker>
+  <view class="u-flex-item">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">提前提醒时间</view>
+        <view class="note">提前多少分钟提醒日程</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <input class="serial-input" value="{{calendar_notice_pre_time}}" type="number" bindinput="bindCalendarNoticePreTimeInput" placeholder="提前提醒时间（分钟）"></input>
+    </view>
+  </view>
+</view>
+
+<button class="mainButton-r" bindtap="update" disabled="{{!can_post}}" wx:if="{{is_edit}}">更新</button>
+
+<button class="mainButton-r" bindtap="create" disabled="{{!can_post}}" wx:else>创建</button>

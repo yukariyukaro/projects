@@ -94,10 +94,6 @@
 }
 
 
-.dialog-list {
-padding-bottom:120rpx;
-}
-
 .dialog-item {
   display: flex;
   align-items: center;

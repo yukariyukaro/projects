@@ -1,39 +1,81 @@
-<scroll-view scroll-y="true" class="scroll-outer" enable-back-to-top="true" bindrefresherrefresh="getSubclass" refresher-enabled="true" refresher-threshold="30" refresher-triggered="{{refresh_triggered}}" scroll-into-view="{{to_view}}">
+<scroll-view scroll-y="true" class="scroll-outer" enable-back-to-top="true" bindrefresherrefresh="onRefresh" refresher-enabled="true" refresher-threshold="30" refresher-triggered="{{refresh_triggered}}" scroll-into-view="{{to_view}}">
   <view>
-    <view class="term-title" bindtap="changeTerm">{{term_list[term_index].subclass_term}} ></view>
+    <view class="term-title" bindtap="changeTerm">{{term_list[term_index].term}} ></view>
     <view style="width:710rpx;margin-left: 20rpx;margin-right: 20rpx;">
       <view style="display: flex;flex-direction: row;width: 100%;margin-top: 40rpx;">
         <view style="width: 10%;">
         </view>
-        <view class="{{index+1==now_weekday?'weekday-text-now':'weekday-text'}}" wx:for="{{weekday_list}}" wx:for-item="weekday">
+        <view class="{{(index+1)%7==now_weekday?'weekday-text-now':'weekday-text'}}" wx:for="{{weekday_list}}" wx:for-item="weekday">
           {{weekday}}
         </view>
       </view>
       <view style="display: flex;flex-direction: row;width: 100%;">
-        <view style="width: 10%;height: 1120rpx;display: flex;flex-direction: column;position: relative;">
-          <view style="height: 160rpx;text-align: center;" wx:for="{{timepoint_list}}" wx:for-item="timepoint">
+        <view style="width: 10%;display: flex;flex-direction: column;position: relative;">
+          <view style="height: {{timepoint == '0:00' ? '40rpx' : '160rpx'}};text-align: center;" wx:for="{{timepoint_list}}" wx:for-item="timepoint">
             <view class="timeline-divider"></view>
             <view style="font-size: 28rpx;">{{timepoint}}</view>
           </view>
           <view class="timeline-divider"></view>
           <view class="timeline-divider-now" style="top:{{now_hour_position}}rpx" wx:if="{{now_hour_position!=0}}"></view>
         </view>
-        <view style="width: 18%;height: 1120rpx;position: relative;" wx:for="{{weekday_list}}" wx:for-item="weekday">
-          <view class="class-card" style="height:{{timeslot.position_height}}rpx;top:{{timeslot.position_top}}rpx;background-color:#{{color_list[timeslot.course_index]}};" wx:for="{{term_list[term_index].timeslot_list}}" wx:for-item="timeslot" wx:if="{{timeslot.date == weekday}}" bindtap="scrollToCourse" data-courseid="{{timeslot.course_id}}">
+        <view style="width: 18%;position: relative;" wx:for="{{weekday_list}}" wx:for-item="weekday">
+          <view class="class-card" style="height:{{calendar.position_height}}rpx;top:{{calendar.position_top}}rpx;background-color:#{{color_list[calendar.calendar_index]}};" wx:for="{{calendar_list}}" wx:for-item="calendar" wx:if="{{calendar.calendar_date == weekday}}" bindtap="selectCalendar" data-calendar="{{calendar}}">
             <view style="padding: 10rpx;font-size: 26rpx;word-wrap: break-word;line-height:26rpx;color: #ffffff;">
-              <view style="font-weight: bold;">{{timeslot.course_code}} {{timeslot.subclass_section}}</view>
-              <view style="margin-top: 10rpx;">{{timeslot.venue}}</view>
+              <view style="font-weight: bold;">{{calendar.calendar_title}}</view>
+              <view style="margin-top: 10rpx;">{{calendar.calendar_location}}</view>
             </view>
           </view>
         </view>
       </view>
     </view>
-
-    <button class="mainButton-r" bindtap="bindCalendar" data-subclassterm="{{term_list[term_index].subclass_term}}" wx:if="{{term_list[term_index].one_list[0]}}">导出到日历</button>
-    <view class="item-content">
-      <one wx:for="{{term_list[term_index].one_list}}" type="{{item.type}}" data="{{item.data}}" id='course-{{item.data.course_id}}' />
-    </view>
-    <view style="text-align: center;font-size: 32rpx;margin-top: 100rpx;" bindtap="nav2One" wx:if="{{!term_list[term_index].one_list[0]}}"><text>这学期还没有选课哦\n<text style="text-decoration: underline;">点击这里进入课程搜索界面></text></text></view>
   </view>
   <view style="height: 40rpx;"></view>
+  <button bindtap="nav2AddCalendar" class="mainButton-r">新建日程</button>
 </scroll-view>
+
+
+<view class="overlay" wx:if="{{show_half_modal}}" bindtap="hideHalfModal" animation="{{overlay_animation}}"></view>
+
+
+<view class="half-modal-outer" animation="{{half_modal_animation}}" wx:if="{{show_half_modal}}">
+  <view style="display: flex;flex-direction: row;justify-content: space-between;margin: 10rpx 0 20rpx 0;">
+    <view style="font-size: 40rpx;font-weight: bold;line-height: 50rpx;padding-top: 6rpx;" wx:if="{{calendar_selected.calendar_type == 'course'}}">课程</view>
+    <view style="font-size: 40rpx;font-weight: bold;line-height: 50rpx;padding-top: 6rpx;" wx:elif="{{calendar_selected.calendar_type == 'tutorial'}}">Tutorial</view>
+    <view style="font-size: 40rpx;font-weight: bold;line-height: 50rpx;padding-top: 6rpx;" wx:else>自定日程</view>
+    <view>
+      <!-- <image src="/images/sf-share-circle.svg" style="width: 50rpx;height: 50rpx;margin-right: 20rpx;" bindtap="hideHalfModal" wx:if=""></image> -->
+      <image src="/images/sf-edit-circle.svg" style="width: 50rpx;height: 50rpx;margin-right: 20rpx;" bindtap="editCalendar"></image>
+      <image src="/images/sf-delete-circle.svg" style="width: 50rpx;height: 50rpx;margin-right: 20rpx;" bindtap="deleteCalendar"></image>
+      <image src="/images/sf-close-circle.svg" style="width: 50rpx;height: 50rpx;" bindtap="hideHalfModal"></image>
+    </view>
+  </view>
+  <view style="margin-top:20rpx;">
+    <view style="font-size: 40rpx;font-weight: bold;">{{calendar_selected.calendar_title}}</view>
+    <view style="font-size: 32rpx;font-weight: bold;">{{calendar_selected.calendar_location}}</view>
+    <view style="font-size: 32rpx;font-weight: bold;" wx:if="{{calendar_selected.calendar_type == 'diy_ca'}}">{{calendar_selected.calendar_ca}}: {{calendar_selected.calendar_start_time}} - {{calendar_selected.calendar_end_time}}</view>
+    <view style="font-size: 32rpx;font-weight: bold;" wx:else>{{calendar_selected.calendar_date}}: {{calendar_selected.calendar_start_time}} - {{calendar_selected.calendar_end_time}}</view>
+    <!-- <view style="height: 20rpx;"></view> -->
+    <view style="font-size: 30rpx;color: #666666;" wx:if="{{calendar_selected.calendar_term}}">{{calendar_selected.calendar_term}}</view>
+    <view style="font-size: 30rpx;color: #666666;">{{calendar_selected.calendar_data.course_dept}}</view>
+    <view style="font-size: 30rpx;color: #666666;">
+      <text wx:for="{{calendar_selected.calendar_data.subclass_instructor}}" wx:for-item="instructor" wx:for-index="instructor_index">{{instructor_index + 1 == calendar_selected.calendar_data.subclass_instructor.length ? instructor : instructor + '; '}}</text>
+    </view>
+    <view style="font-size: 30rpx;color: #666666;">提前{{calendar_selected.calendar_notice_pre_time}}分钟提醒</view>
+    <scroll-view scroll-x="true" style="width: 100%;margin-top: 30rpx;">
+    <view style="display: flex;flex-direction: row;width: 100%;box-sizing: border-box;padding: 20rpx;">
+      <view wx:for="{{calendar_selected.calendar_data.course_subclass_list}}" wx:for-item="subclass" wx:for-index="subclass_index" class="subclass-card">
+        <image src="/images/sf-{{subclass.is_added?'minus':'add'}}.svg" style="width: 40rpx;height: 40rpx;position: absolute;right: 20rpx;top: 20rpx;" bindtap="courseAddSubclass" data-subclassid="{{subclass.subclass_id}}" data-index="{{subclass_index}}"></image>
+        <view class="course-subclass-section-added" wx:if="{{subclass.is_added}}">{{subclass.subclass_section}}</view>
+        <view class="course-subclass-section" wx:else>{{subclass.subclass_section}}</view>
+        <block wx:for="{{subclass.subclass_time}}" wx:for-item="time">
+          <view class="course-subclass-time">{{time.date}}: {{time.start_time}} - {{time.end_time}} - {{time.venue}}</view>
+        </block>
+        <view class="course-subclass-instructor">
+          <text wx:for="{{subclass.subclass_instructor}}" wx:for-item="instructor" wx:for-index="instructor_index">{{instructor_index + 1 == subclass.subclass_instructor.length ? instructor : instructor + '; '}}</text>
+        </view>
+      </view>
+      <view style="width: 20rpx;max-width: 20rpx;min-width: 20rpx;"></view>
+    </view>
+    </scroll-view>
+  </view>
+</view>

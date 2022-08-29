@@ -1,10 +1,10 @@
 <view class="avatar-outer" style="margin-top: {{from_miniapp ? 100 : 200}}rpx;">
   <view class="avatar-image-wrapper">
     <view class="avatar-ripple"/>
-    <image class="avatar" src="/images/pootal-logo.svg"/>
+    <image class="avatar" src="https://i.boatonland.com/hkuonelogo.jpg"/>
   </view>
 </view>
-<view class="description">HKU噗噗 · 授权登录</view>
+<view class="description">HKU ONE · 授权登录</view>
 <view class="divider"></view>
 
 <view style="margin: 0rpx 80rpx 120rpx 80rpx;" wx:if="{{dev_name}}">

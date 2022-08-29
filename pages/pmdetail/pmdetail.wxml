@@ -1,5 +1,5 @@
 <scroll-view
-  style="height:calc(100vh - 250rpx);margin-bottom: 250rpx;"
+  style="height:calc(100vh - 220rpx);margin-bottom: 250rpx;"
   scroll-y="{{true}}"
   scroll-top="{{scroll_top}}"
   scroll-into-view="{{toView}}"
@@ -27,6 +27,7 @@
       </view>
     </view>
   </view>
+  <view style="height: 30rpx;"></view>
 </scroll-view>
 
   <view catchtouchmove="stopTouch" class="jz-chat-edit-view-container bottom-extra">

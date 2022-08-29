@@ -2,6 +2,7 @@
   "usingComponents": {
     "singlePostNew": "/components/singlePostNew/singlePostNew",
     "pinned": "/components/pinned/pinned",
+    "one": "/components/one/one",
     "navbarnew": "/components/navbarnew/navbarnew",
     "loadmore": "/components/loadmore/loadmore"
   },

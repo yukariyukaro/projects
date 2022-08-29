@@ -57,6 +57,7 @@
   overflow: hidden;
   border-radius: 100%;
   border:10rpx solid var(--bg-2);
+  background-color: var(--bg-2);
 }
 
 .introduce-view {

@@ -5,16 +5,27 @@
           <text class="comment-floor" wx:if="{{comment_order!='0'}}">LG{{comment_order}} · </text>
           <text class="comment-date">{{comment_date}}</text>
           <view style="float:right" wx:if="{{is_author}}" bindtap="deleteComment">
-            <image class="icon" src="/images/trash-delete.svg"></image>
+            <image class="icon-delete" src="/images/sf-delete.svg"></image>
           </view>
           <view style="float:right; display: flex" wx:else>
-            <image  bindtap="goToComment" class="icon" src="/images/reply.svg"></image>
+            <image  bindtap="goToComment" class="icon-reply" src="/images/sf-reply.svg"></image>
           </view>
       </view>
-      <view class="line"></view>
+      <view class="divider"></view>
+      <view wx:if="{{comment_image}}" style="margin: 15rpx 10rpx 10rpx 10rpx;text-align:center;">
+          <image
+            style="width:100%;border-radius: 10px;" mode="widthFix"
+            src="{{comment_image}}"
+            bindtap="previewPic"
+          ></image>
+        </view>
+      <view style="display: flex;flex-direction: row;padding: 0rpx 0 0rpx 20rpx;margin-bottom: 20rpx;" wx:if="{{comment_father_msg}}">
+        <view class="divider-c"></view>
+        <view class="card-comment-content-q"><text user-select='true'>{{comment_father_msg}}</text></view>
+      </view>
       <view class="card-comment-content"><text user-select='true'>{{comment_msg}}</text></view>
     
-      <image  bindtap="reportComment" class="icon report" src="/images/report.svg"></image>
+      <image  bindtap="reportComment" class="icon-report" src="/images/sf-report.svg"></image>
 
       <view class="alias{{is_org?'-org':''}}" bindtap="visitUser">
         <text>{{comment_alias}}</text>

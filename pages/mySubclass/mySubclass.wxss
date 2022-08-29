@@ -61,3 +61,67 @@
   position: absolute;
   background-color: var(--primary);
 }
+
+.half-modal-outer{
+  padding: 30rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 40rpx);
+  border-radius:40rpx 40rpx 0 0;
+  font-size: 30rpx;
+  background-color: var(--bg-2);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.3);
+  z-index: 10;
+}
+
+.subclass-card{
+  width: 300rpx;
+  min-width: 300rpx;
+  max-width: 300rpx;
+  display: inline-block;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
+  background-color: var(--bg-3);
+  margin-right: 30rpx;
+  padding: 20rpx;
+  word-wrap:break-all;
+  overflow: hidden;
+  position: relative;
+}
+
+.course-subclass-section{
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.course-subclass-section-added{
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.course-subclass-time{
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.course-subclass-instructor{
+  font-size: 28rpx;
+}
+
+.course-subclass-output-button{
+  font-size: 28rpx;
+  text-decoration: underline;
+}

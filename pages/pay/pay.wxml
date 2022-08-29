@@ -1,0 +1,12 @@
+
+<input style="background-color: #f8f8f8;font-size: 50rpx;height: 50rpx;margin: 20rpx;padding: 40rpx;margin-top: 200rpx;border-radius: 10px;font-weight: bold;" placeholder="请输入金额" placeholder-style="font-weight:normal;" type="digit" bindinput="amountInput"></input>
+<button bindtap="requestPay" style="margin-top: 100rpx;background-color: #f8f8f8;border-radius: 10px;">支付</button>
+<button bindtap="chooseFile" style="margin-top: 100rpx;background-color: #f8f8f8;border-radius: 10px;">选择文档</button>
+<view style="width: 100%;justify-content: space-between;display: flex;flex-direction: row;margin-top: 100rpx;">
+  <view></view>
+  <view style="font-size: 34rpx;font-weight: bold;">允许转发/下载</view>
+  <switch bindchange="changeAllowDownload" checked="{{allow_download}}"/>
+  <view></view>
+</view>
+<button bindtap="showFile" style="margin-top: 50rpx;background-color: #f8f8f8;border-radius: 10px;">打开文档</button>
+<text style="margin: 100rpx 20rpx 0 20rpx;font-size: 20rpx;text-align: center;">{{file_url}}</text>

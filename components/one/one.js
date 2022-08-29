@@ -122,6 +122,11 @@ Component({
         url: '/pages/org/org?user_serial=' + this.properties.data.user_serial,
       })
     },
+    nav2MySubclass: function () {
+      wx.navigateTo({
+        url: '/pages/mySubclass/mySubclass',
+      })
+    },
     courseJoinGroup: function() {
       wx.navigateToMiniProgram({
         appId:'wxa5de39979ae7affa',

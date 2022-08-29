@@ -239,6 +239,7 @@
   overflow: hidden;
   border-radius: 100%;
   border:10rpx solid var(--bg-2);
+  background-color: var(--bg-2);
 }
 
 .org-introduce-view {
@@ -556,4 +557,66 @@
   height: 1px;
   margin: 30rpx 0 30rpx 0;
   background-color: var(--divider);
+}
+
+/* course_now */
+
+.calendar-now-outer{
+  margin:40rpx 30rpx 40rpx 30rpx;
+  /* padding: 30rpx; */
+  /* width:690rpx; */
+  border-radius:10rpx;
+  font-size: 30rpx;
+  background-color: var(--bg-2);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
+}
+
+.calendar-now-card{
+  background-color: var(--model-bg-gray);
+  border-radius: 10rpx;
+  padding: 20rpx;
+  /* margin-bottom: 20rpx; */
+}
+
+.calendar-now-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.calendar-now-inner-left{
+  width: 20%;
+  padding: 30rpx;
+}
+
+.calendar-now-inner-right{
+  width: 80%;
+  padding: 30rpx;
+  padding-left: 0;
+}
+
+.calendar-now-title{
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.calendar-now-content{
+  font-size: 28rpx;
+}
+
+.calendar-now-inner-left-inner{
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+.calendar-now-ca{
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: bold;
+}
+
+.calendar-now-date{
+  text-align: center;
+  font-size: 50rpx;
+  font-weight: bold;
 }

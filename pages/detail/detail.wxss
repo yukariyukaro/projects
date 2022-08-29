@@ -482,9 +482,11 @@
 
 .textarea-outer{
   text-align:left;
-  min-height: 120rpx;
+  min-height: 200rpx;
   width: 100%;
   margin-top: 20rpx;
+  display: flex;
+  flex-direction: row;
 }
 
 .textarea-content{
@@ -498,13 +500,25 @@
 }
 
 .reply-outer{
-  margin:40rpx 30rpx 0rpx 30rpx;
   padding: 30rpx;
-  width: 630rpx;
-  border-radius:10rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 40rpx);
+  border-radius:40rpx 40rpx 0 0;
   font-size: 30rpx;
   background-color: var(--bg-2);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 20rpx);
+  bottom: 0;
+  right:0;
+  left:0;
+  z-index: 99;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.3);
+  z-index: 10;
 }
