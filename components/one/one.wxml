@@ -69,7 +69,7 @@
 </view>
 
 <view bindtap="nav2Article" class="post-outer" wx:if="{{type == 'article'}}">
-  <image src="{{data.post_media.article_image}}" style="width: 100%;height:294rpx;overflow: hidden;border-radius: 10rpx 10rpx 0 0;" mode="aspectFill"></image>
+  <image src="{{data.post_media.article_image}}" style="width: 100%;height:294rpx;overflow: hidden;border-radius: 20rpx 20rpx 0 0;" mode="aspectFill"></image>
   <view style="font-size: 32rpx;font-weight: normal;margin:10rpx 30rpx 0 30rpx;padding-bottom: 20rpx;">
     <view class="post-header-title">
       <image class="post-avatar" src="{{preURL+data.user_avatar+'.svg'}}" catchtap="nav2OrgFromArticle" />
@@ -232,4 +232,23 @@
       </view>
     </view>
   </view>
+</view>
+
+<view wx:if="{{type == 'banner'}}" style="margin: -20rpx 0;">
+  <swiper circular="{{data.length > 1}}" autoplay="{{data.length > 1}}" class="banner-swiper" interval="3000" wx:if="{{data[0]}}">
+    <swiper-item wx:for="{{data}}">
+      <view class="banner-outer-o">
+        <image src="{{item.banner_image}}" class="banner-outer" bindtap="orgOnTapBanner" data-banneritem="{{data[index]}}">
+          <view class="banner-title" wx:if="{{item.banner_title}}">
+          <text>{{item.banner_title}}</text>
+        </view>
+        </image>
+      </view>
+      <!-- <view class="banner-outer" style="background-image: url({{item.banner_image}});" bindtap="orgOnTapBanner" data-banneritem="{{data.banner_list[index]}}">
+        <view class="banner-title" wx:if="{{item.banner_title}}">
+          <text>{{item.banner_title}}</text>
+        </view>
+      </view> -->
+    </swiper-item>
+  </swiper>
 </view>

@@ -1,6 +1,6 @@
 {
   "usingComponents": {
-    "singlePostNew": "/components/singlePostNew/singlePostNew",
+    "one": "/components/one/one",
     "loadmore": "/components/loadmore/loadmore"
   },
   "navigationBarTitleText": "我的树洞"

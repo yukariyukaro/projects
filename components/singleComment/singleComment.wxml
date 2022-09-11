@@ -16,7 +16,7 @@
           <image
             style="width:100%;border-radius: 10px;" mode="widthFix"
             src="{{comment_image}}"
-            bindtap="previewPic"
+            bindtap="previewCommentPic"
           ></image>
         </view>
       <view style="display: flex;flex-direction: row;padding: 0rpx 0 0rpx 20rpx;margin-bottom: 20rpx;" wx:if="{{comment_father_msg}}">

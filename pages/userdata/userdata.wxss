@@ -4,7 +4,7 @@
   flex-flow: column nowrap;
   width: 690rpx;
   margin: 40rpx 30rpx 40rpx 30rpx;
-  border-radius: 10rpx;
+  border-radius: 20rpx;
   background-color: var(--bg-2);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
 }
@@ -59,9 +59,9 @@
 }
 
 .menu {
-  margin: 30rpx;
+  margin: 40rpx 30rpx;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
   background-color: var(--bg-2);
 }
 
@@ -109,7 +109,7 @@
 .outer{
   margin:40rpx 30rpx 40rpx 30rpx;
   width:690rpx;
-  border-radius:10rpx;
+  border-radius:20rpx;
   font-size: 30rpx;
   background-color: var(--bg-2);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
@@ -123,14 +123,14 @@
   padding: 2vw;
   margin: 1vw;
   border: 2px solid var(--bg-gray-1);
-  border-radius: 10px;
+  border-radius: 20rpx;
 }
 .avatar-outer-active {
   text-align: center;
   padding: 2vw;
   margin: 1vw;
   border: 2px solid var(--secondary);
-  border-radius: 10px;
+  border-radius: 20rpx;
 }
 
 .mainButton-r{

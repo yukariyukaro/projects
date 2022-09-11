@@ -73,7 +73,7 @@
         </view>
       </view>
 
-      <singlePostNew wx:for="{{postList}}" wx:key="post_id" post_id="{{item.post_id}}" topic_label="{{item.post_topic}}" comment_num="{{item.comment_num}}" post_msg="{{item.post_msg}}" follower_num="{{item.follower_num}}" is_following="{{item.is_following}}" post_is_complete="{{item.post_is_complete}}" user_avatar="{{item.user_avatar}}" pic="{{item.post_image}}" post_media="{{item.post_media}}" post_is_folded="{{item.post_is_folded}}"/>
+      <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{postList}}"/>
       <loadmore end="{{isLast}}" loading="{{is_loading_more}}" />
     </view>
     

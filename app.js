@@ -368,7 +368,6 @@ App({
         'content-type': 'application/x-www-form-urlencoded'
       },
       success (res) {
-        wx.hideLoading()
         if(res.data.code == 200){
           if(res.data.one_latest_id > wx.getStorageSync('oneLatestId')){
             wx.setStorageSync('oneLatestId', res.data.one_latest_id)
@@ -565,38 +564,71 @@ App({
     }
   },
   webSocketConnect:function(){
-    // console.log('开始链接')
+    console.log('开始链接')
     var that = this
-    wx.connectSocket({
+    var websocket = wx.connectSocket({
       url: 'wss://ws.pupu.hkupootal.com:3330',
+      success(res){
+        console.log(res)
+      },
+      fail(res){
+        console.log(res)
+      },
     })
 
-    wx.onSocketOpen(function() {
-      // console.log('WebSocket已连接')
+    websocket.onOpen(function() {
+      console.log('WebSocket已连接')
       that.globalData.wsConnect = true
       var message = {
         type:'bind',
         token:wx.getStorageSync('token')
       }
-      wx.sendSocketMessage({
+      websocket.send({
         data:JSON.stringify(message)
       })
     })
-    
-    wx.onSocketMessage(function(res) {
+
+    websocket.onMessage(function(res) {
       that.messageHandler(res.data)
     })
 
-    wx.onSocketClose(function() {
-      that.globalData.wsConnect = false
-      // console.log('WebSocket 已关闭！')
-    })
-
-    wx.onSocketError(function(res) {
+    websocket.onError(function(res) {
       that.globalData.wsConnect = false
       console.log('出现问题')
       console.log(res)
     })
+
+    websocket.onClose(function() {
+      that.globalData.wsConnect = false
+      console.log('WebSocket 已关闭！')
+    })
+
+    // wx.onSocketOpen(function() {
+    //   console.log('WebSocket已连接')
+    //   that.globalData.wsConnect = true
+    //   var message = {
+    //     type:'bind',
+    //     token:wx.getStorageSync('token')
+    //   }
+    //   wx.sendSocketMessage({
+    //     data:JSON.stringify(message)
+    //   })
+    // })
+    
+    // wx.onSocketMessage(function(res) {
+    //   that.messageHandler(res.data)
+    // })
+
+    // wx.onSocketClose(function() {
+    //   that.globalData.wsConnect = false
+    //   console.log('WebSocket 已关闭！')
+    // })
+
+    // wx.onSocketError(function(res) {
+    //   that.globalData.wsConnect = false
+    //   console.log('出现问题')
+    //   console.log(res)
+    // })
   },
   messageHandler:function(data){
     var that = this

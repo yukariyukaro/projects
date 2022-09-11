@@ -48,7 +48,10 @@
   <view class="contact">
     <!-- <view wx:if="{{mode=='portal'}}" bindtap="changeMode" data-mode="email">使用邮箱验证码登录</view> -->
     <view wx:if="{{mode=='email'}}" bindtap="changeMode" data-mode="portal">使用Portal账号登录</view>
-    <view>联系我们：hkupootal@gmail.com</view>
+    <view>UID为connect教育邮箱前缀</view>
+    <view>如test@connect.hku.hk的UID为test</view>
+    <view>新生请至少修改一次密码后再登录</view>
+    <view>如遇问题，请通过 vector@hkupootal.com 联系我们</view>
     <view style="display: flex; justify-content: space-between; font-weight: bold;margin-top: 20rpx;">
       <view class="other-school-button"><navigator target="miniProgram" open-type="navigate" app-id="wx489029782cc3f033" path="" extra-data="" version="release">HKUST学生入口</navigator></view>
       <view class="other-school-button"><navigator target="miniProgram" open-type="navigate" app-id="wxad4d60c06d39de3c" path="" extra-data="" version="release">CUHK学生入口</navigator></view>

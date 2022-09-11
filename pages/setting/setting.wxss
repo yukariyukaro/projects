@@ -1,7 +1,7 @@
 .menu {
-  margin: 20rpx;
+  margin: 40rpx 20rpx;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
   background-color: var(--bg-2);
 }
 

@@ -25,8 +25,8 @@
   display: flex;
   justify-content: center;
   flex-flow: column nowrap;
-  margin: 130rpx 20rpx 20rpx;
-  border-radius: 10rpx;
+  margin: 130rpx 30rpx 20rpx 30rpx;
+  border-radius: 20rpx;
   background-color: var(--bg-2);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
 }
@@ -115,15 +115,15 @@
 
 .tools {
   position: relative;
-  padding-top: 20rpx;
+  /* padding-top: 20rpx; */
   padding-bottom: 100rpx;
   background-color: var(--bg-1);
 }
 
 .menu {
-  margin: 20rpx;
+  margin: 40rpx 30rpx;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
   background-color: var(--bg-2);
 }
 

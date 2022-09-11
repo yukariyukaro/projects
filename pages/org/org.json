@@ -1,7 +1,6 @@
 {
   "usingComponents": {
-    "singlePostNew": "/components/singlePostNew/singlePostNew",
-    "pinned": "/components/pinned/pinned",
+    "one": "/components/one/one",
     "loadmore": "/components/loadmore/loadmore"
   },
   "navigationStyle":"custom"

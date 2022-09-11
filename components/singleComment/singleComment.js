@@ -92,7 +92,13 @@ Component({
         comment_id: this.data.comment_id,
         comment_order: this.data.comment_order,
       });
-    }
+    },
+    previewCommentPic: function () {
+      wx.previewImage({
+        urls: [this.properties.comment_image],
+      });
+    },
   },
+  
   
 });

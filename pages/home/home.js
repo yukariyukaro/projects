@@ -1,3 +1,5 @@
+const { json2xml } = require("../../utils/cos-wx-sdk-v5");
+
 var app = getApp();
 Page({
   data: {
@@ -22,7 +24,8 @@ Page({
     postButtonIcon:"/images/send-post.svg",
     swiper_current:2,
     nav_to_view:0,
-    allowHomeSwipe:false
+    allowHomeSwipe:false,
+    banner_list:[]
   },
   // 下拉刷新
   onRefresh: function () {
@@ -279,6 +282,7 @@ Page({
         if(res.data.code == 200){
           that.setData({
             bannerList:res.data.bannerList,
+            banner_list:res.data.banner_list
           })
         }else if(res.data.code == 800 ||res.data.code == 900){
           app.launch().then(res=>{

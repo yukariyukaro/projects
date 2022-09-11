@@ -981,7 +981,7 @@ Page({
             that.deletePic();
             break;
           case 1:
-            that.previewPic();
+            that.previewCommentPic();
             break;
         }
       },
@@ -995,7 +995,7 @@ Page({
       comment_image: '',
     });
   },
-  previewPic: function () {
+  previewCommentPic: function () {
     wx.previewImage({
       urls: [this.data.comment_image],
     });

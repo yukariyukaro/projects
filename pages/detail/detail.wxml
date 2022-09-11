@@ -172,7 +172,7 @@
       </view>
       <!-- 广告 -->
       <view>
-        <image wx:if="{{adInfo.ad_image}}" src="{{adInfo.ad_image}}" style="margin:auto;width:640rpx;height:213rpx;padding: 0 15rpx 15rpx 15rpx;" bindtap="onTapAd"></image>
+        <image wx:if="{{adInfo.ad_image}}" src="{{adInfo.ad_image}}" class="detail-ad" bindtap="onTapAd"></image>
       </view>
       <!-- 显示所有评论 -->
       <view>

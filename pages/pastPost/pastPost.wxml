@@ -12,17 +12,7 @@
   bindscroll="bindScroll"
 >
 <view class="post-content">
-  <singlePostNew wx:for="{{postList}}" wx:key="id"
-      post_id="{{item.post_id}}" 
-      topic_label="{{item.post_topic}}" 
-      comment_num="{{item.comment_num}}" 
-      post_msg="{{item.post_msg}}" 
-      follower_num="{{item.follower_num}}" 
-      is_following="{{item.is_following}}"
-      post_is_complete="{{item.post_is_complete}}"
-      user_avatar="{{item.user_avatar}}"
-      pic="{{item.post_image}}"
-      post_media="{{item.post_media}}"/>
+  <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{postList}}"/>
   <loadmore empty="{{postList.length==0}}" end="{{isLast}}" loading="{{is_loading_more}}">
     <text>这里空荡荡的\n快写下自己树洞吧</text>
   </loadmore>

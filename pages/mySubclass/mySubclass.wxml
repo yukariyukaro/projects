@@ -19,8 +19,8 @@
           <view class="timeline-divider-now" style="top:{{now_hour_position}}rpx" wx:if="{{now_hour_position!=0}}"></view>
         </view>
         <view style="width: 18%;position: relative;" wx:for="{{weekday_list}}" wx:for-item="weekday">
-          <view class="class-card" style="height:{{calendar.position_height}}rpx;top:{{calendar.position_top}}rpx;background-color:#{{color_list[calendar.calendar_index]}};" wx:for="{{calendar_list}}" wx:for-item="calendar" wx:if="{{calendar.calendar_date == weekday}}" bindtap="selectCalendar" data-calendar="{{calendar}}">
-            <view style="padding: 10rpx;font-size: 26rpx;word-wrap: break-word;line-height:26rpx;color: #ffffff;">
+          <view class="class-card" style="height:{{calendar.position_height}}rpx;top:{{calendar.position_top}}rpx;background-color:#{{color_list[calendar.calendar_index]}}33;border:4rpx solid #{{color_list[calendar.calendar_index]}};color:#{{color_list[calendar.calendar_index]}}" wx:for="{{calendar_list}}" wx:for-item="calendar" wx:if="{{calendar.calendar_date == weekday}}" bindtap="selectCalendar" data-calendar="{{calendar}}">
+            <view style="padding: 10rpx;font-size: 26rpx;word-wrap: break-word;line-height:26rpx;">
               <view style="font-weight: bold;">{{calendar.calendar_title}}</view>
               <view style="margin-top: 10rpx;">{{calendar.calendar_location}}</view>
             </view>

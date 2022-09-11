@@ -5,7 +5,7 @@
       <image class="avatar" src="/images/pootal-logo.svg" bind:tap="handleLogoTap"/>
     </view>
     <view class="version">
-      <text>2.3.1</text>
+      <text>2.3.2</text>
     </view>
   </view>
   <view class="avatar-outer">

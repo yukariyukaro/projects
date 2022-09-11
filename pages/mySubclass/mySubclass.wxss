@@ -29,9 +29,10 @@
   margin-left: 5%;
   margin-right: 5%;
   position: absolute;
-  border-radius: 10rpx;
+  border-radius: 20rpx;
   overflow: hidden;
-  color: var(--on-primary);
+  /* color: var(--on-primary); */
+  /* opacity: 0.5; */
 }
 
 .weekday-text{
@@ -91,7 +92,7 @@
   min-width: 300rpx;
   max-width: 300rpx;
   display: inline-block;
-  border-radius: 10px;
+  border-radius: 20rpx;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
   background-color: var(--bg-3);
   margin-right: 30rpx;

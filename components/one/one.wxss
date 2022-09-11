@@ -2,7 +2,7 @@
   margin:40rpx 30rpx 40rpx 30rpx;
   padding: 30rpx;
   /* width:690rpx; */
-  border-radius:10rpx;
+  border-radius:20rpx;
   font-size: 30rpx;
   background-color: var(--bg-2);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
@@ -28,7 +28,7 @@
 .post-outer{
   margin:40rpx 30rpx 40rpx 30rpx;
   /* width:690rpx; */
-  border-radius:10rpx;
+  border-radius:20rpx;
   font-size: 30rpx;
   background-color: var(--bg-2);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
@@ -63,7 +63,7 @@
   color: #8C8C8C;
   align-self: center;
   padding: 5rpx 15rpx;
-  border-radius: 10rpx;
+  border-radius: 20rpx;
   background: var(--divider);
   margin-left: 1vw;
 }
@@ -114,7 +114,7 @@
   height: 200rpx;
   position: relative;
   align-self: center;
-  border-radius: 10px;
+  border-radius: 20rpx;
   overflow: hidden;
   margin-left: 10rpx;
 }
@@ -127,7 +127,7 @@
   margin: auto;
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 20rpx;
 }
 .post-function-outer {
   font-size: 28rpx;
@@ -138,7 +138,7 @@
   margin-bottom: 15rpx;
   padding: 15rpx 20rpx;
   box-sizing: border-box;  
-  border-radius: 10rpx;
+  border-radius: 20rpx;
   color: #8C8C8C;
   position: relative;
 }
@@ -205,7 +205,7 @@
   padding-right: 40rpx;
   padding-top: 35rpx;
   padding-bottom: 40rpx;
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .org-user-info {
@@ -270,7 +270,7 @@
   margin: 0 40rpx 0 40rpx;
   width: 610rpx;
   height: 268rpx;
-  border-radius:10px;
+  border-radius:20rpx;
   overflow: hidden;
   font-size: 4vw;
   position: relative;
@@ -301,7 +301,7 @@
   height:100rpx;
   width:610rpx;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .org-model-container:active {
@@ -313,7 +313,7 @@
   width: 295rpx;
   margin-right:20rpx;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .org-model-container-half-left:active {
@@ -324,7 +324,7 @@
   height:100rpx;
   width: 295rpx;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .org-model-container-half-right:active {
@@ -365,7 +365,7 @@
 .link-image{
   width: 150rpx;
   height: 150rpx;
-  border-radius: 10px;
+  border-radius: 20rpx;
 }
 
 .link-text-container{
@@ -436,7 +436,7 @@
   width: 305rpx;
   margin-right:20rpx;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .course-model-container-half-left:active {
@@ -447,7 +447,7 @@
   height:100rpx;
   width: 305rpx;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .course-model-container-half-right:active {
@@ -499,7 +499,7 @@
   height:100rpx;
   width:100%;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .button-container:active {
@@ -548,7 +548,7 @@
 .text-image{
   width: 200rpx;
   height: 200rpx;
-  border-radius: 10px;
+  border-radius: 20rpx;
   float: right;
   margin: 0 0 10rpx 10rpx;
 }
@@ -565,15 +565,19 @@
   margin:40rpx 30rpx 40rpx 30rpx;
   /* padding: 30rpx; */
   /* width:690rpx; */
-  border-radius:10rpx;
+  border-radius:20rpx;
   font-size: 30rpx;
   background-color: var(--bg-2);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
 }
 
+.calendar-now-outer:active {
+  opacity: 0.8;
+}
+
 .calendar-now-card{
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
   padding: 20rpx;
   /* margin-bottom: 20rpx; */
 }
@@ -619,4 +623,40 @@
   text-align: center;
   font-size: 50rpx;
   font-weight: bold;
+}
+
+.banner-swiper {
+  height:334rpx;
+}
+
+.banner-outer{
+  margin:20rpx 30rpx 20rpx 30rpx;
+  width:690rpx;
+  height: 294rpx;
+  border-radius:20rpx;
+  font-size: 30rpx;
+  overflow: hidden;
+  background-size: cover;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
+  position: relative;
+}
+
+.banner-outer:active {
+  opacity: 0.8;
+}
+
+.banner-title {
+  padding: 10rpx 30rpx 10rpx 20rpx;
+  box-sizing: border-box;
+  background-color: rgba(69, 69, 69, 0.4);
+  color: #fff;
+  font-size: 3.5vw;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 3;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

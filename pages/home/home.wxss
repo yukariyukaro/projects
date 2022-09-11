@@ -1,6 +1,7 @@
 .post-content{
   height: 100%;
   width: 100%;
+  margin-top:5vw;
   padding-bottom:10vw;
 }
 .write-button-outer {

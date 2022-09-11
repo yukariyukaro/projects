@@ -19,7 +19,7 @@
   padding-top: 35rpx;
   padding-bottom: 40rpx;
   margin-top:350rpx;
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .user-info {
@@ -88,7 +88,7 @@
   margin: 0 40rpx 0 40rpx;
   width: 610rpx;
   height: 268rpx;
-  border-radius:10px;
+  border-radius: 20rpx;
   overflow: hidden;
   font-size: 4vw;
   position: relative;
@@ -119,7 +119,7 @@
   height:100rpx;
   width:610rpx;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .model-container:active {
@@ -131,7 +131,7 @@
   width: 295rpx;
   margin-right:20rpx;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .model-container-half-left:active {
@@ -142,7 +142,7 @@
   height:100rpx;
   width: 295rpx;
   background-color: var(--model-bg-gray);
-  border-radius: 10rpx;
+  border-radius: 20rpx;
 }
 
 .model-container-half-right:active {

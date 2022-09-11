@@ -68,7 +68,7 @@ opacity: 0.6;
   height:auto;
   border: 1px solid var(--primary);
   padding: 0 2vw 2vw 2vw;
-  border-radius:10px;
+  border-radius:20rpx;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
   background-color: var(--bg-2);
 }
