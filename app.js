@@ -263,17 +263,15 @@ App({
                               }
                             })
                           }
-                        }else if(res2.data.code == 800){
-                          wx.removeStorageSync('token')
-                          that.clearDB()
-                          wx.closeSocket()
-                          wx.setStorageSync('allNoticeCount', 0)
-                          wx.setStorageSync('systemNoticeCount', 0)
-                          that.showModal({
-                            title:"提示",
-                            content:res2.data.msg,
-                            showCancel:false
-                          })
+                        }else if(res2.data.code == 800 || res2.data.code == 801){
+                          var pages = getCurrentPages()
+                          var currentPage = pages[pages.length-1]
+                          var url = currentPage.route
+                          if(url!="pages/banDetail/banDetail"){
+                            wx.reLaunch({
+                              url: '/pages/banDetail/banDetail',
+                            })
+                          }
                         }else{
                           wx.showToast({title: res2.data.msg, icon: "none", duration: 1000})
                         }
@@ -285,17 +283,15 @@ App({
                   }
                 }
             })
-            }else if(res6.data.code == 800){
-              wx.removeStorageSync('token')
-              that.clearDB()
-              wx.closeSocket()
-              wx.setStorageSync('allNoticeCount', 0)
-              wx.setStorageSync('systemNoticeCount', 0)
-              that.showModal({
-                title:"提示",
-                content:res6.data.msg,
-                showCancel:false
-              })
+            }else if(res6.data.code == 800 || res6.data.code == 801){
+              var pages = getCurrentPages()
+              var currentPage = pages[pages.length-1]
+              var url = currentPage.route
+              if(url!="pages/banDetail/banDetail"){
+                wx.reLaunch({
+                  url: '/pages/banDetail/banDetail',
+                })
+              }
             }
             
           }
@@ -330,17 +326,15 @@ App({
                         }
                       })
                     }
-                  }else if(res2.data.code == 800){
-                    wx.removeStorageSync('token')
-                    that.clearDB()
-                    wx.closeSocket()
-                    wx.setStorageSync('allNoticeCount', 0)
-                    wx.setStorageSync('systemNoticeCount', 0)
-                    that.showModal({
-                      title:"提示",
-                      content:res2.data.msg,
-                      showCancel:false
-                    })
+                  }else if(res2.data.code == 800 || res2.data.code == 801){
+                    var pages = getCurrentPages()
+                    var currentPage = pages[pages.length-1]
+                    var url = currentPage.route
+                    if(url!="pages/banDetail/banDetail"){
+                      wx.reLaunch({
+                        url: '/pages/banDetail/banDetail',
+                      })
+                    }
                   }else{
                     wx.showToast({title: res2.data.msg, icon: "none", duration: 1000})
                   }

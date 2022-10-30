@@ -34,7 +34,9 @@
     "pages/followService/followService",
     "pages/pay/pay",
     "pages/upload/upload",
-    "pages/addCalendar/addCalendar"
+    "pages/addCalendar/addCalendar",
+    "pages/chatroom/chatroom",
+    "pages/banDetail/banDetail"
   ],
   "requiredBackgroundModes": [
     "audio",
