@@ -174,7 +174,9 @@ Page({
     statusBarHeight:0,
     statusBarOpacity: 0,
     statusBarOpacityMask:0,
-    theme:''
+    theme:'',
+    hkuOneIcon:'',
+    hkuOneNavigationBarBackground:''
   },
 
   getOneList: function () {
@@ -416,6 +418,12 @@ Page({
     this.setData({
       statusBarHeight:statusBarHeight
     })
+    if (app.globalData.themeInfo.hkuOneLogo) {
+      this.setData({
+        hkuOneLogo: app.globalData.themeInfo.hkuOneLogo,
+        hkuOneNavigationBarBackground: app.globalData.themeInfo.hkuOneNavigationBarBackground
+      })
+    }
   },
 
   /**

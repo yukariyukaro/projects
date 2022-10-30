@@ -8,7 +8,8 @@
 
 <view class="write-button-outer" bind:tap="handleStarTap">
   <view class="write-button-inner">
-    <image class="write-button" src="{{postButtonIcon}}"></image>
+    <image class="write-button" src="{{postButtonIcon?postButtonIcon:'/images/send-post.svg'}}"
+    style="{{postButtonIcon?'width: 150rpx;height: 150rpx;':''}}"></image>
   </view>
 </view>
 
@@ -46,16 +47,16 @@
 <!-- <view wx:if="{{is_error}}">
   <view style="font-size: 50rpx;font-weight: bold;text-align: center;margin-top: 100rpx;margin-bottom: 50rpx;">{{errorInfo.error_title}}</view>
   <view style="font-size: 34rpx;margin-left: 30rpx;margin-right: 30rpx;">{{errorInfo.error_content}}</view>
-</view>
+</view> -->
 
 
 <view class="ad1" wx:if="{{show_ad}}" bindtap="closeAD">
         <view class="ad2">
-            <image mode="aspectFit" style="width:90%;height: 1000rpx;" catchtap="onTapAD" src='{{adInfo.ad_image}}'/>
+            <image mode="aspectFit" style="width:90%;height: 1000rpx;" catchtap="onTapAd" src='{{adInfo.ad_image}}'/>
         </view>
           <view class="back_w">
            <cover-view class="back_image" catchtap="closeAD">
              <cover-image  src="/images/cross-circle.svg"></cover-image>
             </cover-view>
           </view>
-</view> -->
+</view>

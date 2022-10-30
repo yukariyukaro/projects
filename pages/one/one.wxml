@@ -1,15 +1,15 @@
 <view style="position: fixed;top: 0;width: 750rpx;height: {{44+statusBarHeight}}px;opacity:{{one_list[0].type == 'org'?0.2:statusBarOpacityMask}};background: #000000;z-index: 100;" wx:if="{{theme == 'dark'}}">
 </view>
-<image src="https://i.boatonland.com/cj8XpND8T466i2MdG8JfWr78c4FBtrFT" mode="bottomleft" style="position: fixed;top: 0;width: 750rpx;height: {{44+statusBarHeight}}px;;z-index: 98;opacity:{{one_list[0].type == 'org'?1:statusBarOpacity}};"></image>
+<image src="{{hkuOneNavigationBarBackground?hkuOneNavigationBarBackground:'https://i.boatonland.com/cj8XpND8T466i2MdG8JfWr78c4FBtrFT'}}" mode="bottomleft" style="position: fixed;top: 0;width: 750rpx;height: {{44+statusBarHeight}}px;;z-index: 98;opacity:{{one_list[0].type == 'org'?1:statusBarOpacity}};"></image>
 <view style="text-align: center;position:fixed;top: {{statusBarHeight}}px;z-index: 99;width: 100%;height: 100rpx;opacity:{{one_list[0].type == 'org'?1:statusBarOpacity}};">
-  <image src="/images/hku_one_logo_fill.png" mode="aspectFit" style="height:75rpx;"></image>
+  <image src="{{hkuOneLogo?hkuOneLogo:'/images/hku_one_logo_fill.png'}}" mode="aspectFit" style="height:75rpx;"></image>
 </view>
 
 
 <scroll-view scroll-y="true" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="true" bindscrolltolower="onLoadMore" bindscroll="bindScroll">
   <view>
     <view style="text-align: center;">
-      <image src="/images/hku_one_logo.png" mode="aspectFit" style="height:75rpx;margin-top: 180rpx;margin-bottom: 30rpx;opacity:{{one_list[0].type == 'org'?0:1}};"></image>
+      <image src="{{hkuOneLogo?hkuOneLogo:'/images/hku_one_logo_fill.png'}}" mode="aspectFit" style="height:75rpx;margin-top: 180rpx;margin-bottom: 30rpx;opacity:{{one_list[0].type == 'org'?0:1}};"></image>
     </view>
     <image src="{{one_list[0].data.org_bg_image}}" class="background-image" mode="aspectFill" wx:if="{{one_list[0].type == 'org'}}" style="padding-top:{{statusBarHeight + 44}}px;"></image>
     <view class="search-outer" style="{{one_list[0].type == 'org' && !focus ? 'opacity:0.2' : ''}}">

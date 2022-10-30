@@ -731,45 +731,47 @@ App({
   updateTheme:function(withAnimation){
     var that = this
     var systemInfo = wx.getSystemInfoSync()
-    if(that.globalData.themeInfo.navigationBarColorLight){
-      if(systemInfo.theme == 'dark'){
-        if(withAnimation){
-          wx.setNavigationBarColor({
-            frontColor: that.globalData.themeInfo.navigationBarFontColorDark,
-            backgroundColor: that.globalData.themeInfo.navigationBarColorDark,
-            animation: {
-              duration: 1000,
-              timingFunc: 'easeInOut'
-            }
-          })
-        }else{
-          wx.setNavigationBarColor({
-            frontColor: that.globalData.themeInfo.navigationBarFontColorDark,
-            backgroundColor: that.globalData.themeInfo.navigationBarColorDark
-          })
-        }
-      }else{
-        if(withAnimation){
-          wx.setNavigationBarColor({
-            frontColor: that.globalData.themeInfo.navigationBarFontColorLight,
-            backgroundColor: that.globalData.themeInfo.navigationBarColorLight,
-            animation: {
-              duration: 1000,
-              timingFunc: 'easeInOut'
-            }
-          })
-        }else{
-          wx.setNavigationBarColor({
-            frontColor: that.globalData.themeInfo.navigationBarFontColorLight,
-            backgroundColor: that.globalData.themeInfo.navigationBarColorLight
-          })
-        }
-      }
-    }
     var pages = getCurrentPages()
     var currentPage = pages[pages.length-1]
     var url = currentPage.route
-    if(url == "pages/home/home" || url == "pages/pmlist/pmlist" || url == "pages/mine/mine"){
+    if(url != "pages/webview/webview"){
+      if(that.globalData.themeInfo.navigationBarColorLight){
+        if(systemInfo.theme == 'dark'){
+          if(withAnimation){
+            wx.setNavigationBarColor({
+              frontColor: that.globalData.themeInfo.navigationBarFontColorDark,
+              backgroundColor: that.globalData.themeInfo.navigationBarColorDark,
+              animation: {
+                duration: 1000,
+                timingFunc: 'easeInOut'
+              }
+            })
+          }else{
+            wx.setNavigationBarColor({
+              frontColor: that.globalData.themeInfo.navigationBarFontColorDark,
+              backgroundColor: that.globalData.themeInfo.navigationBarColorDark
+            })
+          }
+        }else{
+          if(withAnimation){
+            wx.setNavigationBarColor({
+              frontColor: that.globalData.themeInfo.navigationBarFontColorLight,
+              backgroundColor: that.globalData.themeInfo.navigationBarColorLight,
+              animation: {
+                duration: 1000,
+                timingFunc: 'easeInOut'
+              }
+            })
+          }else{
+            wx.setNavigationBarColor({
+              frontColor: that.globalData.themeInfo.navigationBarFontColorLight,
+              backgroundColor: that.globalData.themeInfo.navigationBarColorLight
+            })
+          }
+        }
+      }
+    }
+    if(url == "pages/home/home" || url == "pages/one/one"|| url == "pages/pmlist/pmlist" || url == "pages/mine/mine"){
       if(that.globalData.themeInfo.tabbarFontSelectedColorLight){
         if(systemInfo.theme == 'dark'){
           wx.setTabBarStyle({

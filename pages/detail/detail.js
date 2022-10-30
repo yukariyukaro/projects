@@ -1022,11 +1022,13 @@ Page({
     if (app.globalData.themeInfo.primaryColorLight) {
       if (systemInfo.theme == 'dark') {
         this.setData({
-          tintStyle: "background:" + app.globalData.themeInfo.primaryColorDark + ";"
+          tintStyle: "background:" + app.globalData.themeInfo.primaryColorDark + ";",
+          primaryColor: app.globalData.themeInfo.primaryColorDark
         })
       } else {
         this.setData({
-          tintStyle: "background:" + app.globalData.themeInfo.primaryColorLight + ";"
+          tintStyle: "background:" + app.globalData.themeInfo.primaryColorLight + ";",
+          primaryColor: app.globalData.themeInfo.primaryColorLight
         })
       }
     }

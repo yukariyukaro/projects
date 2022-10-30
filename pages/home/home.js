@@ -21,7 +21,7 @@ Page({
     is_loading_more:false,
     refresh_triggered: false,
     main_data_received:false,
-    postButtonIcon:"/images/send-post.svg",
+    postButtonIcon:"",
     swiper_current:2,
     nav_to_view:0,
     allowHomeSwipe:false,
@@ -321,6 +321,39 @@ Page({
       }
     })
   },
+  getAd:function(){
+    var that = this
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/info/openad.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        if (res.data.code == 200) {
+
+        } else if (res.data.code == 201) {
+          that.setData({
+            adInfo:res.data.adInfo,
+            show_ad:true
+          })
+        }  else if (res.data.code == 800 || res.data.code == 900) {
+          app.launch().then(res => {
+            that.getAd()
+          })
+        } else {
+          wx.showToast({
+            title: res.data.msg,
+            icon: "error",
+            duration: 1000
+          })
+        }
+      }
+    })
+  },
   getAll:function(){
     if(this.data.currentTab == -4){
       wx.hideLoading()
@@ -364,45 +397,28 @@ Page({
     }
   },
 
-  onTapAD:function(){
-    var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/user/record/ad.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        ad_id: that.data.adInfo.ad_id,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-    })
-    // record记录结束
-    wx.setStorageSync('AD'+ that.data.adInfo.ad_id, true)
-    that.setData({
-      show_ad:false
-    })
-    var adInfo = that.data.adInfo
+  onTapAd:function(){
+    var adInfo = this.data.adInfo
     switch (adInfo.ad_type) {
       case 'article':
         wx.navigateTo({
-          url: '/pages/webview/webview?url=' + adInfo.ad_link,
+          url: '/pages/webview/webview?url=' + adInfo.article_link,
         });
         break;
+      case 'post':
+          wx.navigateTo({
+            url: '/pages/detail/detail?post_id=' + adInfo.post_id,
+          });
+          break;
       case 'inner':
-        wx.navigateTo({ url: adInfo.ad_link });
+        wx.navigateTo({ url: adInfo.inner_path });
         break;
-      case 'miniprogram': {
-        const splitIndex = adInfo.ad_link.indexOf('/');
-        if (splitIndex >= 0) {
-          const appId = adInfo.ad_link.slice(0, splitIndex);
-          const path = adInfo.ad_link.slice(splitIndex + 1);
-          wx.navigateToMiniProgram({ appId, path });
-        } else {
-          wx.navigateToMiniProgram({ appId: adInfo.ad_link });
-        }
+      case 'miniapp': 
+        wx.navigateToMiniProgram({
+          appId: adInfo.miniapp_appid,
+          path: adInfo.miniapp_path,
+        })
         break;
-      }
       case 'none':
       default:
         break;
@@ -517,6 +533,7 @@ Page({
     this.getPost()
     this.getBanner()
     this.getTopic()
+    this.getAd()
   },
 
   /**
@@ -534,11 +551,13 @@ Page({
     this.setData({
       allowHomeSwipe:wx.getStorageSync('allowHomeSwipe')
     })
-    // if(app.globalData.themeInfo.postButtonIcon){
-    //   this.setData({
-    //     postButtonIcon:app.globalData.themeInfo.postButtonIcon
-    //   })
-    // }
+    setTimeout(() => {
+      if(app.globalData.themeInfo.postButtonIcon){
+        this.setData({
+          postButtonIcon:app.globalData.themeInfo.postButtonIcon
+        })
+      }
+    }, 1000);
   },
 
   /**
