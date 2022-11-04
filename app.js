@@ -42,6 +42,7 @@ App({
   onShow:function(){
     this.launchWebSoccket()
     this.getOneLatest()
+    
   },
   onHide: function () {
     this.globalData.redirectToRegister = false

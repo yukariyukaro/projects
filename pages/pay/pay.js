@@ -8,7 +8,14 @@ Page({
   data: {
     amount: 100,
     file_url: '',
-    allow_download: false
+    allow_download: false,
+    mode:"wifi",
+    location_list:["智华1F","智华2F","主图G","主图1F","主图2F","主图3F","主图4F","主图5F","SU食堂","美心食堂","东南亚食堂","A口排队下楼"],
+    location:"请点击选择地点",
+    bssid:'NA',
+    is_recording:false,
+    record_count:0,
+    record_time:0
   },
 
   amountInput: function (e) {
@@ -189,6 +196,7 @@ Page({
       }
     })
   },
+
   randomString(e) {
     e = e || 32;
     var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
@@ -201,6 +209,111 @@ Page({
   getExt:function(filename){
     var idx = filename.lastIndexOf('.');
     return (idx < 1) ? "" : "." + filename.substr(idx + 1);
+  },
+
+  switchMode:function(){
+    var that = this
+    wx.showActionSheet({
+      itemList: ["微信支付","文件","WiFi定位"],
+      success(res){
+        if (res.tapIndex == 0) {
+          that.setData({
+            mode:"pay"
+          })
+        } else if (res.tapIndex == 1) {
+          that.setData({
+            mode:"document"
+          })
+        } else if (res.tapIndex == 2) {
+          that.setData({
+            mode:"wifi"
+          })
+        }
+      }
+    })
+  },
+
+  bindLocationChange: function (e) {
+    this.setData({
+      location: this.data.location_list[e.detail.value],
+    })
+  },
+
+  recordLocation:function(){
+    var that = this
+    if(!this.data.is_recording){
+      return
+    }
+    wx.startWifi({
+      success: (res) => {
+        console.log(res)
+        wx.getConnectedWifi({
+          success: (result) => {
+            console.log(result)
+            console.log(result.wifi.SSID)
+            console.log(result.wifi.BSSID)
+            if(result.wifi.SSID != "HKU"){
+              app.showModal({
+                title: '请连接HKU Wifi',
+                showCancel: false,
+                content: '当前Wifi：' + result.wifi.SSID,
+              })
+              that.setData({
+                is_recording:false
+              })
+              return
+            }
+            if(result.wifi.BSSID != that.data.bssid){
+              // that.recordBssid(result.wifi.BSSID)
+              that.setData({
+                record_count: that.data.record_count + 1,
+                bssid: result.wifi.BSSID
+              })
+            }
+            that.setData({
+              record_time: that.data.record_time + 1
+            })
+            setTimeout(() => {
+              that.recordLocation()
+            }, 1000);
+          },
+          fail: (e) =>{
+            console.log(e)
+            that.setData({
+              is_recording:false
+            })
+            app.showModal({
+              title: '请打开Wifi开关并连接HKU Wifi',
+              showCancel: false,
+              content: 'Detail: ' + e.errMsg,
+            })
+          }
+        })
+      },
+    })
+  },
+
+  startRecording:function(){
+    if(this.data.location == "请点击选择地点"){
+      app.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '请先选择地点'
+      })
+      return
+    }
+    this.setData({
+      record_count:0,
+      record_time:0,
+      is_recording:true
+    })
+    this.recordLocation()
+  },
+
+  endRecording:function(){
+    this.setData({
+      is_recording:false
+    })
   },
 
   /**

@@ -398,6 +398,9 @@ Page({
   },
 
   onTapAd:function(){
+    this.setData({
+      show_ad:false
+    })
     var adInfo = this.data.adInfo
     switch (adInfo.ad_type) {
       case 'article':

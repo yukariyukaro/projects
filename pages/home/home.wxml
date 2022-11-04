@@ -52,7 +52,7 @@
 
 <view class="ad1" wx:if="{{show_ad}}" bindtap="closeAD">
         <view class="ad2">
-            <image mode="aspectFit" style="width:90%;height: 1000rpx;" catchtap="onTapAd" src='{{adInfo.ad_image}}'/>
+            <image mode="aspectFit" style="width:90%;" catchtap="onTapAd" src='{{adInfo.ad_image}}'/>
         </view>
           <view class="back_w">
            <cover-view class="back_image" catchtap="closeAD">
