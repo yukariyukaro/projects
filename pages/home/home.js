@@ -3,7 +3,7 @@ const { json2xml } = require("../../utils/cos-wx-sdk-v5");
 var app = getApp();
 Page({
   data: {
-    scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
+    // scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     scroll_top: 0,
     currentTab: -1,
     startIndex: -3,
@@ -30,6 +30,7 @@ Page({
   // 下拉刷新
   onRefresh: function () {
     this.setData({
+      scroll_top:0,
       page:0,
       is_loading_more:true,
     });
@@ -442,24 +443,24 @@ Page({
     }
   },
 
-  updateTabbar:function(){
-    var notice_count = wx.getStorageSync('allNoticeCount')
-    if(notice_count > 0){
-      wx.setTabBarBadge({
-        index: 2,
-        text: String(notice_count),
-      })
-    }else{
-      wx.removeTabBarBadge({
-        index: 2,
-      })
-    }
-    if(wx.getStorageSync('showOneRedDot')){
-      wx.showTabBarRedDot({
-        index:1
-      })
-    }
-  },
+  // updateTabbar:function(){
+  //   var notice_count = wx.getStorageSync('allNoticeCount')
+  //   if(notice_count > 0){
+  //     wx.setTabBarBadge({
+  //       index: 2,
+  //       text: String(notice_count),
+  //     })
+  //   }else{
+  //     wx.removeTabBarBadge({
+  //       index: 2,
+  //     })
+  //   }
+  //   if(wx.getStorageSync('showOneRedDot')){
+  //     wx.showTabBarRedDot({
+  //       index:1
+  //     })
+  //   }
+  // },
 
   getQueryVariable:function(qrlink,variable) {
        var vars = qrlink.split("&");
@@ -547,7 +548,8 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {    
+  onShow: function () {
+    this.getTabBar().setData({ selected: 0 })
     app.globalData.tabbarJS = this
     app.updateTabbar()
     this.getCalendarNow()

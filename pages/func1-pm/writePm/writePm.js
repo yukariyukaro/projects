@@ -11,7 +11,7 @@ Page({
     to_type: 'user',
     pm_with_serial:true,
     isSending:false,
-    primaryColor: app.globalData.theme.primary,
+    // primaryColor: app.globalData.theme.primary,
   },
   // 绑定内容输入
   bindContentInput: function (e) {

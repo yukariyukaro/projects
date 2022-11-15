@@ -4,7 +4,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
+    // scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     navItems: ['收件箱', '发件箱'],
     currentTab: 0,
     scroll_top: 0,

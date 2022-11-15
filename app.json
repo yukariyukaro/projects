@@ -35,8 +35,8 @@
     "pages/pay/pay",
     "pages/upload/upload",
     "pages/addCalendar/addCalendar",
-    "pages/chatroom/chatroom",
-    "pages/banDetail/banDetail"
+    "pages/banDetail/banDetail",
+    "pages/teasingwall/teasingwall"
   ],
   "requiredBackgroundModes": [
     "audio",
@@ -51,6 +51,7 @@
     "backgroundTextStyle": "@backgroundTextStyle"
   },
   "tabBar": {
+    "custom": true,
     "color": "#8a8a8a",
     "selectedColor": "@tabBarSelectedColor",
     "backgroundColor": "@tabBarBackgroundColor",
@@ -67,6 +68,12 @@
         "iconPath": "images/one-inactive.png",
         "selectedIconPath": "images/one-active.png",
         "text": "ONE"
+      },
+      {
+        "pagePath": "pages/teasingwall/teasingwall",
+        "iconPath": "images/one-inactive.png",
+        "selectedIconPath": "images/one-active.png",
+        "text": "吐槽墙"
       },
       {
         "pagePath": "pages/pmlist/pmlist",

@@ -11,7 +11,7 @@ Page({
     agree: false,
     suffixes: ['@hku.hk', '@connect.hku.hk'],
     suffix_idx: 0,
-    secondaryColor: app.globalData.theme.secondary,
+    // secondaryColor: app.globalData.theme.secondary,
     vcode_vcode:'',
     vcode_key:'',
     isSending:false,

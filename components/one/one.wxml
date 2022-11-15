@@ -19,6 +19,10 @@
         <image class="post-follower-icon" src="/images/sf-comment.svg"></image>
       </view>
       <view class="post-follower-num">{{data.comment_num}}</view>
+      <block wx:if="{{data.post_media.media_type == 'emotion'}}">
+        <view style="font-size: 50rpx;margin-right: -25rpx;margin-top:-15rpx;padding-left: 25rpx;z-index: 9;">{{data.post_media.emotion_emoji}}</view>
+        <view style="width: 0;height: 0;border: 40rpx solid transparent;border-top: 40rpx solid {{is_dark?data.post_media.emotion_color_dark:data.post_media.emotion_color_light}};border-right: 40rpx solid {{is_dark?data.post_media.emotion_color_dark:data.post_media.emotion_color_light}};margin-right: -40rpx;margin-top:-20rpx;position: absolute;right: 0;top: 0;"></view>
+      </block>
     </view>
   </view>
   <block wx:if="{{!data.post_is_folded}}">

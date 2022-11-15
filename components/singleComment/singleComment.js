@@ -17,7 +17,8 @@ Component({
     comment_school_label: String,
     post_is_author: Boolean,
     comment_father_msg: String,
-    comment_image: String
+    comment_image: String,
+    comment_theme_color: String
   },
 
   data: {
@@ -39,6 +40,11 @@ Component({
             borderStyle: "border: 1px solid " + app.globalData.themeInfo.primaryColorLight + ";"
           })
         }
+      }
+      if(this.properties.comment_theme_color){
+        this.setData({
+          borderStyle: "border: 1px solid " + this.properties.comment_theme_color + ";"
+        })
       }
     },
   },

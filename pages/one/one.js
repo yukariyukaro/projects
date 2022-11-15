@@ -302,10 +302,10 @@ Page({
         if(res.data.code == 200){
 
         }else if(res.data.code == 201){
-          wx.setTabBarStyle({
-            color: '#8a8a8a',
-            selectedColor: '#D85050'
-          })
+          // wx.setTabBarStyle({
+          //   color: '#8a8a8a',
+          //   selectedColor: '#D85050'
+          // })
           wx.reLaunch({
             url: '/pages/followService/followService',
           })
@@ -395,19 +395,19 @@ Page({
       focus: false
     })
   },
-  updateTabbar:function(){
-    var notice_count = wx.getStorageSync('allNoticeCount')
-    if(notice_count > 0){
-      wx.setTabBarBadge({
-        index: 2,
-        text: String(notice_count),
-      })
-    }else{
-      wx.removeTabBarBadge({
-        index: 2,
-      })
-    }
-  },
+  // updateTabbar:function(){
+  //   var notice_count = wx.getStorageSync('allNoticeCount')
+  //   if(notice_count > 0){
+  //     wx.setTabBarBadge({
+  //       index: 2,
+  //       text: String(notice_count),
+  //     })
+  //   }else{
+  //     wx.removeTabBarBadge({
+  //       index: 2,
+  //     })
+  //   }
+  // },
 
   /**
    * 生命周期函数--监听页面加载
@@ -437,20 +437,22 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    this.getTabBar().setData({ selected: 1 })
     app.globalData.tabbarJS = this
     this.getPlaceholder()
     this.check()
     this.setData({
       theme:app.globalData.theme.backgroundTextStyle
     })
-    wx.setTabBarStyle({
-      color: '#8a8a8a',
-      selectedColor: '#1f86fc'
-    })
-    wx.hideTabBarRedDot({
-      index: 1,
-    })
+    // wx.setTabBarStyle({
+    //   color: '#8a8a8a',
+    //   selectedColor: '#1f86fc'
+    // })
+    // wx.hideTabBarRedDot({
+    //   index: 1,
+    // })
     wx.setStorageSync('showOneRedDot', false)
+    app.updateTabbar()
     if(this.data.key_word == ''){
       this.getOneList()
     }
@@ -460,22 +462,22 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    app.globalData.indexJS = ''
-    wx.setTabBarStyle({
-      color: '#8a8a8a',
-      selectedColor: '#D85050'
-    })
+    app.globalData.tabbarJS = ''
+    // wx.setTabBarStyle({
+    //   color: '#8a8a8a',
+    //   selectedColor: '#D85050'
+    // })
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    app.globalData.indexJS = ''
-    wx.setTabBarStyle({
-      color: '#8a8a8a',
-      selectedColor: '#D85050'
-    })
+    app.globalData.tabbarJS = ''
+    // wx.setTabBarStyle({
+    //   color: '#8a8a8a',
+    //   selectedColor: '#D85050'
+    // })
   },
 
   /**

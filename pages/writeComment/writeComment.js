@@ -12,7 +12,7 @@ Page({
     post_id: '',
     comment_id:'',
     is_author: false,
-    primaryColor: app.globalData.theme.primary,
+    // primaryColor: app.globalData.theme.primary,
     isSending:false
   },
   // 让输入框聚焦

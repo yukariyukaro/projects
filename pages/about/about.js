@@ -8,11 +8,28 @@ Page({
 
   },
 
+  logoAnimation: function () {
+    this.animate(
+      '.avatar-ripple',
+      [
+        { opacity: 0.8, scale: [1, 1] },
+        { opacity: 0, scale: [1.5, 1.5] },
+      ],
+      1500,
+      () => {
+        this.clearAnimation('.avatar-ripple');
+      }
+    )
+    setTimeout(() => {
+      this.logoAnimation()
+    }, 1000);
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.logoAnimation()
   },
 
   /**

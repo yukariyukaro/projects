@@ -32,6 +32,7 @@
   font-size: 30rpx;
   background-color: var(--bg-2);
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
+  overflow: hidden;
 }
 .post-outer:active {
   opacity: 0.7;
@@ -72,6 +73,7 @@
 }
 .post-follower-comment-outer {
   display: flex;
+  position: relative;
 }
 .post-follower-icon {
   width: 30rpx;

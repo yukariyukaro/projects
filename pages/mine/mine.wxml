@@ -1,4 +1,4 @@
-<view style="padding-top: calc({{navBarHeight}}px + 0rpx)">
+<view style="padding-top: calc({{navBarHeight}}px + 0rpx)" class="fix-tabbar">
     <view class="user-background" style="transform: scale({{userBackgroundScale}});">
         <image class="user-background-image" mode="aspectFill" src="{{mineBackgroundImage}}"
             style="height: 496rpx"></image>

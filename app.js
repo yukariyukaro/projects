@@ -52,6 +52,10 @@ App({
     this.globalData.theme = themes[theme];
     this.globalData.colorScheme = theme;
     this.updateTheme()
+    var tabbarJS = this.globalData.tabbarJS
+    if(tabbarJS != ''){
+      tabbarJS.getTabBar().updateTheme()
+    }
   },
   
 
@@ -645,13 +649,19 @@ App({
       case "message":
         var content = JSON.parse(data.content)
         that.addMessageToDb(content)
-        wx.vibrateShort({type: 'medium',})
+        wx.vibrateShort({type: 'heavy',})
+        setTimeout(() => {
+          wx.vibrateShort({type: 'heavy',})
+        }, 100);
         break
       case "notice":
         wx.setStorageSync('allNoticeCount', wx.getStorageSync('allNoticeCount')+1)
         wx.setStorageSync('systemNoticeCount', wx.getStorageSync('systemNoticeCount')+1)
         that.updateTabbar()
-        wx.vibrateShort({type: 'medium',})
+        wx.vibrateShort({type: 'heavy',})
+        setTimeout(() => {
+          wx.vibrateShort({type: 'heavy',})
+        }, 100);
         break
     }
   },
@@ -678,9 +688,12 @@ App({
   },
   updateTabbar:function(){
     var tabbarJS = this.globalData.tabbarJS
-    if(tabbarJS != '')[
-      tabbarJS.updateTabbar()
-    ]
+    if(tabbarJS != ''){
+      tabbarJS.getTabBar().setData({
+        allNoticeCount: wx.getStorageSync('allNoticeCount'),
+        showOneRedDot: wx.getStorageSync('showOneRedDot')
+      })
+    }
   },
   getBytesLength:function(string) {   
     var totalLength = 0 
@@ -775,15 +788,15 @@ App({
     if(url == "pages/home/home" || url == "pages/one/one"|| url == "pages/pmlist/pmlist" || url == "pages/mine/mine"){
       if(that.globalData.themeInfo.tabbarFontSelectedColorLight){
         if(systemInfo.theme == 'dark'){
-          wx.setTabBarStyle({
-            color: that.globalData.themeInfo.tabbarFontColorDark,
-            selectedColor: that.globalData.themeInfo.tabbarFontSelectedColorDark
-          })
+          // wx.setTabBarStyle({
+          //   color: that.globalData.themeInfo.tabbarFontColorDark,
+          //   selectedColor: that.globalData.themeInfo.tabbarFontSelectedColorDark
+          // })
         }else{
-          wx.setTabBarStyle({
-            color: that.globalData.themeInfo.tabbarFontColorLight,
-            selectedColor: that.globalData.themeInfo.tabbarFontSelectedColorLight
-          })
+          // wx.setTabBarStyle({
+          //   color: that.globalData.themeInfo.tabbarFontColorLight,
+          //   selectedColor: that.globalData.themeInfo.tabbarFontSelectedColorLight
+          // })
         }
       }
       if(that.globalData.themeInfo.tabbarItem){

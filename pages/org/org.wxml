@@ -5,7 +5,7 @@
     <image class="background-image" mode="aspectFill" src="{{orgInfo.org_bg_image}}">
     </image>
 
-    <view style="position: absolute;z-index: 99;">
+    <view style="position: absolute;z-index: 99;width: 100%;">
       <view class="top-view">
         <!-- 头像名称 -->
         <view class="user-info">

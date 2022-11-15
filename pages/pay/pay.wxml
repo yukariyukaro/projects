@@ -22,7 +22,7 @@
     <view style="font-size: 40rpx;font-weight: bold;text-align: center;padding-top: 20rpx;">{{location}}</view>
   </picker>
   <view style="font-size: 40rpx;font-weight: bold;text-align: center;">{{bssid}}</view>
-  <view style="font-size: 40rpx;font-weight: bold;text-align: center;">记录个数：{{record_count}}</view>
+  <view style="font-size: 40rpx;font-weight: bold;text-align: center;">记录个数：{{record_bssid_list.length}}</view>
   <view style="font-size: 40rpx;font-weight: bold;text-align: center;">记录时间：{{record_time}}</view>
   <button style="margin-top: 100rpx;background-color: #f8f8f8;border-radius: 10px;" bindtap="startRecording" wx:if="{{!is_recording}}">开始记录</button>
   <button style="margin-top: 100rpx;background-color: #f8f8f8;border-radius: 10px;" bindtap="endRecording" wx:else>结束记录</button>

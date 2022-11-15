@@ -6,7 +6,21 @@
   <view class="remnant">还可以写{{remnantLen}}字</view>
 </view>
 
-<view class="block shadow radius" style="margin-top:80rpx" bindtap="uploadImage">
+<view class="block shadow radius" style="margin-top:80rpx;background-image: url(https://i.boatonland.com/emotion_tabbar/bg5.png);background-size:cover;color: #000000;" wx:if="{{!post_with_media}}">
+  <view class="pic-outer">
+    <view class="media-single-line" style="background-color: rgb(0,0,0,0.2);border-radius: 20rpx;opacity: 0;">
+      <text style="line-height:8vw;margin-left: 20rpx;">此刻的情绪是...<text style="font-size: 24rpx;">（选择后将同步至吐槽墙）</text></text>
+    </view>
+    <view style="margin-top: -10rpx;text-align:center;display: flex;flex-direction: row;justify-content: space-between;">
+      <view wx:for="{{emotion_list}}">
+        <view style="font-size: 100rpx;opacity: {{emotion_selected_index == index?'1':'0.5'}};" bindtap="bindSelectEmotion" data-emotionindex="{{index}}">{{item.emotion_emoji}}</view>
+        <view style="margin-top: -16rpx;height: 28rpx;"></view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="block shadow radius" bindtap="uploadImage">
   <view class="pic-outer">
     <view class="media-single-line">
       <text style="line-height:8vw">图片</text>
@@ -24,7 +38,7 @@
   </view>
 </view>
 
-<view class="block shadow radius">
+<view class="block shadow radius" wx:if="{{emotion_selected_index == -1}}">
   <view class="pic-outer">
     <view class="media-single-line" bindtap="withMedia">
       <text style="line-height:8vw" wx:if="{{post_with_media}}">请选择功能类型</text>
@@ -166,25 +180,25 @@
     <view class="switch-group-public">
       <text class="switch-question-label">公开发布<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primaryColor}}" checked="{{post_public}}" bindchange="switchPublicChange"/>  
+        <switch color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{post_public}}" bindchange="switchPublicChange"/>  
       </view>
     </view>
     <view class="switch-group-anonymous">
       <text class="switch-question-label">公开Pootal ID<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primaryColor}}" checked="{{post_with_serial}}" bindchange="switchSerialChange"/> 
+        <switch color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{post_with_serial}}" bindchange="switchSerialChange"/> 
       </view>
     </view>
     <view class="switch-group-anonymous">
       <text class="switch-question-label">同步到UNI<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primaryColor}}" checked="{{post_is_uni}}" bindchange="switchUNIChange"/> 
+        <switch color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{post_is_uni}}" bindchange="switchUNIChange"/> 
       </view>
     </view>
     <view class="switch-group-anonymous" wx:if="{{mediaIndex == 2}}">
       <text class="switch-question-label">允许多选<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primaryColor}}" checked="{{vote_is_multi}}" bindchange="switchMultiChange"/> 
+        <switch color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{vote_is_multi}}" bindchange="switchMultiChange"/> 
       </view>
     </view>
   </view>

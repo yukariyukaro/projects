@@ -2,6 +2,7 @@ var app = getApp();
 var COS = require('../../utils/cos-wx-sdk-v5.js')
 Page({
   data: {
+    is_dark:false,
     remnantLen: 750,
     post_msg: '',
     post_public: true,
@@ -12,7 +13,8 @@ Page({
     isSending: false,
     focus: false,
     post_image: '',
-    primaryColor: app.globalData.theme.primary,
+    // primaryColor: app.globalData.theme.primary,
+    primaryColor:'',
     post_with_media:false,
     post_media_received:false,
     post_media:[],
@@ -23,6 +25,35 @@ Page({
     vote_content:'',
     vote_is_multi:false,
     isGettingMedia:false,
+    emotion_list:[
+      {
+        emotion_name:'搏尽',
+        emotion_emoji:'🧐',
+        emotion_color_light:'#F8C794',
+        emotion_color_dark:'#E1A669'
+      },
+      {
+        emotion_name:'摆烂',
+        emotion_emoji:'🤗',
+        emotion_color_light:'#C5FAA8',
+        emotion_color_dark:'#8BB676'
+      },
+      {
+        emotion_name:'发癫',
+        emotion_emoji:'🤪',
+        emotion_color_light:'#D2B6F6',
+        emotion_color_dark:'#C3A6E8'
+      },
+      {
+        emotion_name:'平静',
+        emotion_emoji:'😐',
+        emotion_color_light:'#ABCDFF',
+        emotion_color_dark:'#7BA1D8'
+      },
+    ],
+    emotion_selected_index:-1,
+    post_with_emotion:false,
+    post_media_emotion:{}
   },
   // 让输入框聚焦
   focus: function () {
@@ -113,6 +144,16 @@ Page({
 
       if(that.data.post_with_media && that.data.post_media_received){
         var post_media = JSON.stringify(that.data.post_media)
+      }else if(that.data.emotion_selected_index != -1){
+        var post_media = {
+          media_type:'emotion',
+          emotion_index:that.data.emotion_selected_index,
+          emotion_name:that.data.emotion_list[that.data.emotion_selected_index].emotion_name,
+          emotion_emoji:that.data.emotion_list[that.data.emotion_selected_index].emotion_emoji,
+          emotion_color_light:that.data.emotion_list[that.data.emotion_selected_index].emotion_color_light,
+          emotion_color_dark:that.data.emotion_list[that.data.emotion_selected_index].emotion_color_dark,
+        }
+        post_media = JSON.stringify(post_media)
       }else{
         var post_media = ''
       }
@@ -208,7 +249,7 @@ Page({
             cos.postObject({
                 Bucket: Bucket,
                 Region: Region,
-                Key: that.randomString() + that.getExt(filePath),
+                Key: 'pupu/post/' + that.randomString() + that.getExt(filePath),
                 FilePath: filePath,
                 onProgress: function (info) {
                     console.log(info)
@@ -217,7 +258,7 @@ Page({
             }, function (err, data) {
                 console.log(err || data);
                 if(data.Location){
-                  var location = 'https://i.boatonland.com/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
+                  var location = 'https://i.boatonland.com/pupu/post/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
                   wx.showLoading({
                     title: '安全检测中',
                   })
@@ -515,13 +556,64 @@ Page({
     })
 
   },
-  randomString(e) {
+  randomString:function(e) {
     e = e || 32;
     var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
       a = t.length,
       n = "";
     for (var i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
     return n;
+  },
+  bindSelectEmotion: function (e) {
+    var that = this
+    var systemInfo = wx.getSystemInfoSync()
+    if(e.currentTarget.dataset.emotionindex == that.data.emotion_selected_index){
+      that.setData({
+        emotion_selected_index: -1,
+      })
+      if(systemInfo.theme == 'dark'){
+        wx.setNavigationBarColor({
+          frontColor: "#000000",
+          backgroundColor: "#864442",
+          animation: {
+            duration: 1000,
+            timingFunc: 'easeInOut'
+          }
+        })
+      }else{
+        wx.setNavigationBarColor({
+          frontColor: "#ffffff",
+          backgroundColor: "#D85050",
+          animation: {
+            duration: 1000,
+            timingFunc: 'easeInOut'
+          }
+        })
+      }
+    }else{
+      that.setData({
+        emotion_selected_index: e.currentTarget.dataset.emotionindex,
+      })
+      if(systemInfo.theme == 'dark'){
+        wx.setNavigationBarColor({
+          frontColor: "#000000",
+          backgroundColor: that.data.emotion_list[e.currentTarget.dataset.emotionindex].emotion_color_dark,
+          animation: {
+            duration: 1000,
+            timingFunc: 'easeInOut'
+          }
+        })
+      }else{
+        wx.setNavigationBarColor({
+          frontColor: "#000000",
+          backgroundColor: that.data.emotion_list[e.currentTarget.dataset.emotionindex].emotion_color_light,
+          animation: {
+            duration: 1000,
+            timingFunc: 'easeInOut'
+          }
+        })
+      }
+    }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -540,6 +632,12 @@ Page({
       post_media = JSON.parse(post_media)
       that.setData({
         post_media:post_media,
+      })
+    }
+    var systemInfo = wx.getSystemInfoSync()
+    if(systemInfo.theme == 'dark'){
+      that.setData({
+        is_dark:true
       })
     }
   },

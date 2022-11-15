@@ -1,6 +1,10 @@
 <prompt id="reportPrompt" title='举报原因:' bind:getInput="reportPromptGetInput" bind:modalCancel="reportPromptCancel" bind:modalConfirm="reportPromptConfirm" type="textarea" input_height="18" max_length="30">
 </prompt>
 
+<view style="position: fixed;top: 0;right: 0;bottom: 0;left: 0;font-size: 120rpx;z-index: -90;opacity:{{is_dark?'0.15':0.1}};line-height: 140rpx;letter-spacing: 20rpx;" wx:if="{{postDetail.post_media.media_type == 'emotion'}}">
+  <view style="white-space:nowrap;position: relative; left:-{{60* (index % 2 + 1)}}rpx" wx:for="{{20}}"><text wx:for="{{20}}">{{postDetail.post_media.emotion_emoji}}</text></view>
+</view>
+
 <view class="overlay" wx:if="{{show_comment_box}}" animation="{{overlay_animation}}"></view>
 
 <!-- 漂浮头部 -->
@@ -121,6 +125,17 @@
             </view>
           </view>
         </view>
+        <!-- 吐槽墙 -->
+        <view wx:if="{{postDetail.post_media.media_type == 'emotion'}}">
+          <image class="function_container" wx:if="{{postDetail.post_media.emotion_index == 0}}" bindtap="onTapEmotion" src="https://i.boatonland.com/emotion_tabbar/indetail_bojin.png" mode="aspectFit" style="height: 200rpx;">
+          </image>
+          <image class="function_container" wx:if="{{postDetail.post_media.emotion_index == 1}}" bindtap="onTapEmotion" src="https://i.boatonland.com/emotion_tabbar/indetail_bailan.png" mode="aspectFit" style="height: 200rpx;">
+          </image>
+          <image class="function_container" wx:if="{{postDetail.post_media.emotion_index == 2}}" bindtap="onTapEmotion" src="https://i.boatonland.com/emotion_tabbar/indetail_fadian.png" mode="aspectFit" style="height: 200rpx;">
+          </image>
+          <image class="function_container" wx:if="{{postDetail.post_media.emotion_index == 3}}" bindtap="onTapEmotion" src="https://i.boatonland.com/emotion_tabbar/indetail_pingjing.png" mode="aspectFit" style="height: 200rpx;">
+          </image>
+        </view>
       </view>
       <!-- 日期 -->
       <view class="post-datetime">
@@ -176,7 +191,7 @@
       </view>
       <!-- 显示所有评论 -->
       <view>
-        <singleComment id="commentComponent" wx:for="{{commentList}}" wx:key="index" bind:deleteComment="deleteComment" bind:replyComment="replyComment" bind:reportComment="reportComment" post_id="{{postDetail.post_id}}" comment_id="{{item.comment_id}}" comment_order="{{item.comment_order}}" comment_msg="{{item.comment_msg}}" comment_date="{{item.comment_date}}" is_author="{{item.is_author}}" is_anonymous="{{item.is_anonymous}}" is_org="{{item.is_org}}" comment_alias="{{item.comment_alias}}" user_avatar="{{item.user_avatar}}" user_serial="{{item.user_serial}}" comment_school_label="{{item.comment_school_label}}" post_is_author="{{postDetail.is_author}}" comment_father_msg="{{item.comment_father_msg}}" comment_image="{{item.comment_image}}" />
+        <singleComment id="commentComponent" wx:for="{{commentList}}" wx:key="index" bind:deleteComment="deleteComment" bind:replyComment="replyComment" bind:reportComment="reportComment" post_id="{{postDetail.post_id}}" comment_id="{{item.comment_id}}" comment_order="{{item.comment_order}}" comment_msg="{{item.comment_msg}}" comment_date="{{item.comment_date}}" is_author="{{item.is_author}}" is_anonymous="{{item.is_anonymous}}" is_org="{{item.is_org}}" comment_alias="{{item.comment_alias}}" user_avatar="{{item.user_avatar}}" user_serial="{{item.user_serial}}" comment_school_label="{{item.comment_school_label}}" post_is_author="{{postDetail.is_author}}" comment_father_msg="{{item.comment_father_msg}}" comment_image="{{item.comment_image}}" comment_theme_color="{{comment_theme_color}}"/>
       </view>
     </view>
   </view>
@@ -207,7 +222,7 @@
   <view style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 20rpx;">
     <view style="display: flex;flex-direction: row;" wx:if="{{!postDetail.is_author}}">
       <view style="font-size: 30rpx;line-height: 60rpx;margin-right: -10rpx;color: #8C8C8C;">实名回复</view>
-      <switch class="textarea-switch" color="{{primaryColor?primaryColor:'#D85050'}}" checked="{{comment_with_serial}}" bindchange="switchSerialChange"></switch>
+      <switch class="textarea-switch" color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{comment_with_serial}}" bindchange="switchSerialChange"></switch>
     </view>
     <view wx:else></view>
     <view class="send-button" bindtap="submitComment" style="{{primaryColor?'background:'+primaryColor:''}}">发送</view>

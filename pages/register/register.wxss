@@ -76,7 +76,7 @@
   left: 15vw;
   width: 70vw;
   color: var(--on-bg-2);
-  font-size: 3vw
+  font-size: 20rpx
 }
 .mon-picker {
   align-self: center;

@@ -13,6 +13,19 @@ Component({
    */
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
+    is_dark:false
+  },
+
+  lifetimes: {
+    attached:function(){
+      var that = this
+      var systemInfo = wx.getSystemInfoSync()
+      if(systemInfo.theme == 'dark'){
+        that.setData({
+          is_dark: true
+        })
+      }
+    }
   },
 
   /**

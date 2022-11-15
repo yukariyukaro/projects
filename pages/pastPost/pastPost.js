@@ -5,7 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
+    // scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     refresh_triggered: false,
     is_loading_more: false,
     isLast: false,

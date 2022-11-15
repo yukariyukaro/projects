@@ -60,24 +60,24 @@ Page({
     wx.setStorageSync('systemNoticeCount', 0)
   },
 
-  updateTabbar:function(){
-    var notice_count = wx.getStorageSync('allNoticeCount')
-    if(notice_count > 0){
-      wx.setTabBarBadge({
-        index: 2,
-        text: String(notice_count),
-      })
-    }else{
-      wx.removeTabBarBadge({
-        index: 2,
-      })
-    }
-    if(wx.getStorageSync('showOneRedDot')){
-      wx.showTabBarRedDot({
-        index:1
-      })
-    }
-  },
+  // updateTabbar:function(){
+  //   var notice_count = wx.getStorageSync('allNoticeCount')
+  //   if(notice_count > 0){
+  //     wx.setTabBarBadge({
+  //       index: 2,
+  //       text: String(notice_count),
+  //     })
+  //   }else{
+  //     wx.removeTabBarBadge({
+  //       index: 2,
+  //     })
+  //   }
+  //   if(wx.getStorageSync('showOneRedDot')){
+  //     wx.showTabBarRedDot({
+  //       index:1
+  //     })
+  //   }
+  // },
 
   /**
    * 生命周期函数--监听页面加载
@@ -101,6 +101,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    this.getTabBar().setData({ selected: 3 })
     this.setPageData()
     app.globalData.indexJS = this
     app.globalData.tabbarJS = this
@@ -115,6 +116,7 @@ Page({
    */
   onHide: function () {
     app.globalData.indexJS = ''
+    app.globalData.tabbarJS = ''
   },
 
   /**
@@ -122,6 +124,7 @@ Page({
    */
   onUnload: function () {
     app.globalData.indexJS = ''
+    app.globalData.tabbarJS = ''
   },
 
   /**

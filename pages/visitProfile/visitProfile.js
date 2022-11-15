@@ -2,7 +2,7 @@ var app = getApp();
 const { school_suffix } = require('../../utils/constants');
 Page({
   data: {
-    scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
+    // scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     scroll_top: 0,
     user_serial: '',
     refresh_triggered: false,

@@ -165,10 +165,17 @@ Page({
     this.setData({
       noticeList:noticeList
     })
-    app.subscribe(false)
-    wx.navigateTo({
-      url: e.currentTarget.dataset.url
-    })
+    var match = e.currentTarget.dataset.url.match(/(\/pages\/teasingwall\/teasingwall\?emotion_message_id=)([0-9]+)/)
+    if(match[2]){
+      app.globalData.emotion_message_id = match[2]
+      wx.reLaunch({
+        url: '/pages/teasingwall/teasingwall',
+      })
+    }else{
+      wx.navigateTo({
+        url: e.currentTarget.dataset.url
+      })
+    }
   },
   readNotice: function (e) {
     var that = this

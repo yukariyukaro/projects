@@ -164,11 +164,10 @@ Page({
             wx.showLoading({title: '发送中',})
             console.log(res)
             var filePath = res.tempFiles[0].path;
-            var filename = filePath.substr(filePath.lastIndexOf('/') + 1);
             cos.postObject({
                 Bucket: Bucket,
                 Region: Region,
-                Key: filename,
+                Key: 'pupu/pm/' + that.randomString() + that.getExt(filePath),
                 FilePath: filePath,
                 onProgress: function (info) {
                     console.log(info)
@@ -177,7 +176,7 @@ Page({
             }, function (err, data) {
                 console.log(err || data);
                 if(data.Location){
-                  var location = 'https://i.boatonland.com/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
+                  var location = 'https://i.boatonland.com/pupu/pm/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
                   wx.request({
                     url: 'https://api.pupu.hkupootal.com/v3/pmnew/message/send.php', 
                     method: 'POST',
@@ -212,6 +211,18 @@ Page({
         }
     });
 
+  },
+  randomString:function(e) {
+    e = e || 32;
+    var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
+      a = t.length,
+      n = "";
+    for (var i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+    return n;
+  },
+  getExt:function(filename){
+    var idx = filename.lastIndexOf('.');
+    return (idx < 1) ? "" : "." + filename.substr(idx + 1);
   },
 
   longpress:function(e){

@@ -5,7 +5,6 @@
   <image src="{{hkuOneLogo?hkuOneLogo:'/images/hku_one_logo_fill.png'}}" mode="aspectFit" style="height:75rpx;"></image>
 </view>
 
-
 <scroll-view scroll-y="true" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="true" bindscrolltolower="onLoadMore" bindscroll="bindScroll">
   <view>
     <view style="text-align: center;">

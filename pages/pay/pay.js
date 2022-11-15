@@ -14,8 +14,8 @@ Page({
     location:"请点击选择地点",
     bssid:'NA',
     is_recording:false,
-    record_count:0,
-    record_time:0
+    record_time:0,
+    record_bssid_list:[]
   },
 
   amountInput: function (e) {
@@ -241,7 +241,7 @@ Page({
 
   recordLocation:function(){
     var that = this
-    if(!this.data.is_recording){
+    if(!that.data.is_recording){
       return
     }
     wx.startWifi({
@@ -265,9 +265,11 @@ Page({
             }
             if(result.wifi.BSSID != that.data.bssid){
               // that.recordBssid(result.wifi.BSSID)
+              var record_bssid_list = that.data.record_bssid_list
+              record_bssid_list.push(result.wifi.BSSID)
               that.setData({
-                record_count: that.data.record_count + 1,
-                bssid: result.wifi.BSSID
+                bssid: result.wifi.BSSID,
+                record_bssid_list: record_bssid_list
               })
             }
             that.setData({
@@ -303,7 +305,7 @@ Page({
       return
     }
     this.setData({
-      record_count:0,
+      record_bssid_list:[],
       record_time:0,
       is_recording:true
     })
@@ -311,8 +313,51 @@ Page({
   },
 
   endRecording:function(){
-    this.setData({
+    var that = this
+    that.setData({
       is_recording:false
+    })
+    var record_bssid_list = that.data.record_bssid_list
+    if(record_bssid_list.length == 0){
+      return
+    }
+    app.showModal({
+      title: '提示',
+      showCancel: true,
+      content: '是否确定上传？',
+      success(res){
+        if(res.confirm){
+          that.uploadRecordBssidList(record_bssid_list)
+        }
+      }
+    })
+  },
+
+  uploadRecordBssidList:function(record_bssid_list){
+    console.log(record_bssid_list)
+    var that = this
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/test/record/bssid.php', 
+      method: 'POST',
+      data: {
+        token:wx.getStorageSync('token'),
+        record_bssid_list:JSON.stringify(record_bssid_list),
+        location:that.data.location
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        if(res.data.code == 200){
+          wx.showToast({title: "已发到飞书", icon: "success", duration: 1000})
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.uploadRecordBssidList(record_bssid_list)
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }
+      }
     })
   },
 

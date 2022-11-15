@@ -2,9 +2,11 @@ var app = getApp();
 var COS = require('../../utils/cos-wx-sdk-v5.js')
 Page({
   data: {
-    scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
+    // scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     data_received: false,
     preURL: 'https://i.boatonland.com/avatar/',
+
+    comment_theme_color:'',
 
     // 举报
     reportType: '', // 'comment' or 'post'
@@ -29,7 +31,8 @@ Page({
     is_author: false,
     comment_box_placeholder: '想对洞主说些什么?',
     comment_is_sending:false,
-    focus:false
+    focus:false,
+    is_dark:false
   },
   // 下拉刷新
   onRefresh() {
@@ -181,7 +184,6 @@ Page({
         if (res.data.code == 200) {
           that.setData({
             postDetail: res.data.postDetail,
-            commentList: res.data.commentList,
             data_received: true,
             triggered: false,
           })
@@ -190,6 +192,7 @@ Page({
               comment_placeholder: "想在自己的树洞下补充些什么？"
             })
           }
+          that.checkForEmotion(res.data.commentList)
 
         } else if (res.data.code == 401) {
           wx.navigateBack({
@@ -760,6 +763,12 @@ Page({
         break;
     }
   },
+  onTapEmotion:function(){
+    app.globalData.emotion_message_id = this.data.postDetail.post_media.emotion_message_id
+    wx.reLaunch({
+      url: '/pages/teasingwall/teasingwall',
+    })
+  },
   showCommentBox:function(){
     var that = this;
     var animation  = wx.createAnimation({
@@ -929,7 +938,7 @@ Page({
             cos.postObject({
                 Bucket: Bucket,
                 Region: Region,
-                Key: that.randomString() + that.getExt(filePath),
+                Key: 'pupu/post/' + that.randomString() + that.getExt(filePath),
                 FilePath: filePath,
                 onProgress: function (info) {
                     console.log(info)
@@ -938,7 +947,7 @@ Page({
             }, function (err, data) {
                 console.log(err || data);
                 if(data.Location){
-                  var location = 'https://i.boatonland.com/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
+                  var location = 'https://i.boatonland.com/pupu/post/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
                   wx.showLoading({
                     title: '安全检测中',
                   })
@@ -999,6 +1008,45 @@ Page({
     wx.previewImage({
       urls: [this.data.comment_image],
     });
+  },
+  checkForEmotion:function(commentList){
+    var that = this
+    if(that.data.postDetail.post_media.media_type == 'emotion'){
+      var systemInfo = wx.getSystemInfoSync()
+      if(systemInfo.theme == 'dark'){
+        wx.setNavigationBarColor({
+          frontColor: "#000000",
+          backgroundColor: that.data.postDetail.post_media.emotion_color_dark,
+          animation: {
+            duration: 500,
+            timingFunc: 'easeInOut'
+          }
+        })
+        that.setData({
+          comment_theme_color: that.data.postDetail.post_media.emotion_color_dark,
+          tintStyle: "background:" + that.data.postDetail.post_media.emotion_color_dark + ";",
+          primaryColor: that.data.postDetail.post_media.emotion_color_dark,
+          is_dark:true
+        })
+      }else{
+        wx.setNavigationBarColor({
+          frontColor: "#000000",
+          backgroundColor: that.data.postDetail.post_media.emotion_color_light,
+          animation: {
+            duration: 500,
+            timingFunc: 'easeInOut'
+          }
+        })
+        that.setData({
+          comment_theme_color: that.data.postDetail.post_media.emotion_color_light,
+          tintStyle: "background:" + that.data.postDetail.post_media.emotion_color_light + ";",
+          primaryColor: that.data.postDetail.post_media.emotion_color_light
+        })
+      }
+    }
+    that.setData({
+      commentList: commentList
+    })
   },
 
   /**

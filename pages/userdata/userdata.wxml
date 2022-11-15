@@ -29,7 +29,7 @@
       <view class="u-row-left">
         <view style="display: flex;flex-direction: column;">
           <view class="name">头像兑换码</view>
-          <view class="note">输入兑换码已解锁未拥有的头像</view>
+          <view class="note">输入兑换码以解锁未拥有的头像</view>
         </view>
       </view>
       <view class="u-row-right">

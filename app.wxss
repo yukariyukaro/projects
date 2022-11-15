@@ -114,3 +114,6 @@ button:not([disabled]).primary {
     background-color: var(--bg-2) !important;
   }
 }
+.fix-tabbar{
+  padding-bottom: calc(50px + env(safe-area-inset-bottom));
+}
