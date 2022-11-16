@@ -3,5 +3,6 @@
     "picker": "/components/picker/picker"
   },
   "disableScroll":true,
-  "navigationStyle":"custom"
+  "navigationStyle":"custom",
+  "navigationBarTextStyle": "black"
 }

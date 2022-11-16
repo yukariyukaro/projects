@@ -1,5 +1,6 @@
 {
   "usingComponents": {},
   "navigationBarTitleText": "关于噗噗",
-  "navigationStyle": "custom"
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "black"
 }

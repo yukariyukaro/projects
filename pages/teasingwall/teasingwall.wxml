@@ -1,5 +1,5 @@
-<view wx:if="{{!reload}}">
-  <view style="width: 100%;height: 120rpx;display: flex;flex-direction: row;animation: first 90s linear forwards;position: absolute;top:{{10 + 120*index1}}rpx;color: #000000;" wx:for="{{emotion_message_list_package}}" wx:for-index="index1" wx:for-item="emotion_message_list_in_package">
+<view wx:if="{{!reload}}" style="margin-top: 10rpx;">
+  <view class="rail" wx:for="{{emotion_message_list_package}}" wx:for-index="index1" wx:for-item="emotion_message_list_in_package">
     <view class="msg-outer" wx:for="{{emotion_message_list_in_package}}" wx:for-index="index2" wx:for-item="emotion_message_item"  style="background-color: {{is_dark?emotion_message_item.emotion_color_dark:emotion_message_item.emotion_color_light}};" bindtap="multipleTap" bindtouchstart="touchStart" bindtouchend="touchEnd" data-emotionmessage="{{emotion_message_item}}" data-index1="{{index1}}"
     data-index2="{{index2}}" id="{{index1 + '-' + index2}}">
       <view style="font-size: 40rpx">{{emotion_message_item.emotion_emoji}}</view>

@@ -9,7 +9,7 @@ Page({
     amount: 100,
     file_url: '',
     allow_download: false,
-    mode:"wifi",
+    mode:"pay",
     location_list:["智华1F","智华2F","主图G","主图1F","主图2F","主图3F","主图4F","主图5F","SU食堂","美心食堂","东南亚食堂","A口排队下楼"],
     location:"请点击选择地点",
     bssid:'NA',

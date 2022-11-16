@@ -12,7 +12,7 @@ Page({
     touchEndTime: 0,
     emotion_message_seleted: {},
     show_bubble: false,
-    show_input: true,
+    show_input: false,
     reload: false,
     to_post: false,
     emotion_list:[

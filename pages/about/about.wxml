@@ -5,7 +5,7 @@
       <image class="more-avatar" src="/images/pootal-logo.svg" bind:tap="handleLogoTap" />
     </view>
     <view style="margin-top: 40rpx;font-size: 40rpx;font-weight: 500;">HKU噗噗</view>
-    <view style="margin-top: 10rpx;font-size: 34rpx;">Version: 3.4.0</view>
+    <view style="margin-top: 10rpx;font-size: 34rpx;">Version: 3.4.1</view>
   </view>
   <view class="more-avatar-outer">
     <image class="media-qr" show-menu-by-longpress="true" src="/images/media-qr.jpg"></image>
@@ -15,7 +15,7 @@
 </view>
 
 <view class="outer">
-  <view style="padding:40rpx">
+  <view style="padding:30rpx 40rpx">
     <view style="font-weight: bold;font-size: 34rpx;">3.4.0</view>
     <view class="divider"></view>
     <text style="font-size: 28rpx;">新功能「吐槽墙」正式上线，你的每一种情绪，都值得被领聆听
@@ -26,7 +26,7 @@
 </view>
 
 <view class="outer">
-  <view style="padding:40rpx">
+  <view style="padding:30rpx 40rpx">
     <view style="font-weight: bold;font-size: 34rpx;">3.3.0</view>
     <view class="divider"></view>
     <text style="font-size: 28rpx;">页面「我的课表」升级为「我的日程」，功能更强大
@@ -36,7 +36,7 @@
 </view>
 
 <view class="outer">
-  <view style="padding:40rpx">
+  <view style="padding:30rpx 40rpx">
     <view style="font-weight: bold;font-size: 34rpx;">3.2.0</view>
     <view class="divider"></view>
     <text style="font-size: 28rpx;">新增了「HKU ONE」功能，一站式聚合校内信息
@@ -47,7 +47,7 @@
 </view>
 
 <view class="outer">
-  <view style="padding:40rpx">
+  <view style="padding:30rpx 40rpx">
     <view style="font-weight: bold;font-size: 34rpx;">3.0.0</view>
     <view class="divider"></view>
     <text style="font-size: 28rpx;">采用了新的UI设计风格

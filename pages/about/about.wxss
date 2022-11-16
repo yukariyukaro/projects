@@ -1,7 +1,8 @@
 .more-avatar-outer {
   margin-top: 100rpx;
   text-align: center;
-  flex: 1
+  flex: 1;
+  margin-bottom: 100rpx;
 }
 .avatar-image-wrapper {
   width: 160rpx;
