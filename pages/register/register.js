@@ -9,7 +9,7 @@ Page({
     mode:'portal',
     authSent: false,
     agree: false,
-    suffixes: ['@hku.hk', '@connect.hku.hk'],
+    suffixes: ['@connect.hku.hk','@hku.hk'],
     suffix_idx: 0,
     // secondaryColor: app.globalData.theme.secondary,
     vcode_vcode:'',
@@ -260,11 +260,40 @@ Page({
       mode:e.currentTarget.dataset.mode
     })
   },
+  logoAnimation: function () {
+    this.animate(
+      '.avatar-ripple',
+      [
+        { opacity: 0.8, scale: [1, 1] },
+        { opacity: 0, scale: [1.5, 1.5] },
+      ],
+      1500,
+      () => {
+        this.clearAnimation('.avatar-ripple');
+      }
+    )
+    setTimeout(() => {
+      this.logoAnimation()
+    }, 1000);
+  },
+  changeSuffix:function(){
+    var that = this
+    wx.showActionSheet({
+      alertText: "选择邮箱后缀",
+      itemList: that.data.suffixes,
+      success(res) {
+        that.setData({
+          suffix_idx: res.tapIndex
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function () {
-    wx.hideHomeButton();
+    this.logoAnimation()
+    wx.hideHomeButton()
     wx.setNavigationBarTitle({ title: '验证UID' })
     if(app.globalData.from_miniapp){
       this.setData({

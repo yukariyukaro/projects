@@ -1,59 +1,67 @@
-
-  <view class="avatar-outer" style="margin-top: {{from_miniapp ? 100 : 200}}rpx;">
-    <view class="avatar-image-wrapper">
-      <view class="avatar-ripple"/>
-      <image class="avatar" src="/images/pootal-logo.svg" bind:tap="handleLogoTap"/>
-    </view>
+<view class="avatar-outer" style="margin-top: {{from_miniapp ? 100 : 200}}rpx;">
+  <view class="avatar-image-wrapper">
+    <view class="avatar-ripple" />
+    <image class="avatar" src="/images/pootal-logo.svg" />
   </view>
+  <view style="margin-top: 40rpx;font-size: 40rpx;font-weight: 500;">HKU噗噗</view>
+</view>
 
-  <view class="description">HKU 噗噗</view>
+<view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;margin-top: 100rpx;" wx:if="{{mode=='portal'}}">需要使用你的Portal账号验证HKU学生身份</view>
+<view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;" wx:if="{{mode=='email'}}">需要使用你的教育邮箱验证HKU学生身份</view>
 
-  <view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;" wx:if="{{mode=='portal'}}">需要使用你的Portal账号验证HKU学生身份</view>
-  <view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;" wx:if="{{mode=='email'}}">需要使用你的教育邮箱验证HKU学生身份</view>
-  <view class="inputbar radius">
-      <input type="text" class="inputbar-input" placeholder="UID" maxlength="20" bindinput="uidInput"></input>
+
+<view class="common-outer">
+  <view class="inputbar">
+    <input type="text" class="inputbar-input" placeholder="UID" maxlength="20" bindinput="uidInput"></input>
   </view>
+</view>
+
+<view class="common-outer" wx:if="{{mode=='portal'}}">
+  <view class="inputbar">
+    <input type="text" password class="inputbar-input" placeholder="PIN" maxlength="20" bindinput="passwordInput"></input>
+  </view>
+</view>
+
+<view class="common-outer" wx:if="{{mode=='email'}}">
+  <view class="inputbar inputbar-input" bindtap="changeSuffix">
+    {{suffixes[suffix_idx]}}
+  </view>
+  <image style="width: 50rpx;height: 50rpx;position: absolute;right: 30rpx;top:30rpx" src="/images/arrow-all.svg"></image>
+</view>
+
+
+
 <block wx:if="{{mode=='email'}}">
-    <view class="inputbar radius">
-      <picker
-        class="mon-picker"
-        options="{{suffixes}}"
-        index="{{suffix_idx}}"
-        bind:change="handleSuffixChange"
-      />
+  <view class="inputbar-auth-group">
+    <view class="inputbar-auth radius">
+      <input type="text" class="inputbar-input" placeholder="验证码" bindinput="vcodeInput"></input>
     </view>
-    <view class="inputbar-auth-group">
-      <view class="inputbar-auth radius">
-        <input type="text" class="inputbar-input" placeholder="验证码" bindinput="vcodeInput"></input>       
-      </view>
-      <button class="inputbtn-getauth radius" bindtap="sendVcode" disabled="{{isSending||authSent}}">发送验证码</button>
-    </view>
+    <button class="inputbtn-getauth radius" bindtap="sendVcode" disabled="{{isSending||authSent}}">发送验证码</button>
+  </view>
 </block>
 
-<block wx:if="{{mode=='portal'}}">
-    <view class="inputbar radius">
-      <input type="text" password class="inputbar-input" placeholder="PIN" maxlength="20" bindinput="passwordInput"></input>
-    </view>
-</block>
+<view class="inputbar-auth-group">
+  <checkbox-group bindchange="agreeChange">
+    <checkbox color="{{secondaryColor}}" value="true" style="margin-right: 3vw" />
+  </checkbox-group>
+  <navigator style="align-self: center;font-size: 34rpx;" url="/pages/disclaimer/disclaimer">我同意「用户条款及声明」</navigator>
+</view>
 
-    <view class="inputbar-auth-group">
-      <checkbox-group bindchange="agreeChange">
-        <checkbox color="{{secondaryColor}}" value="true" style="margin-right: 3vw"/>
-      </checkbox-group>
-      <navigator style="align-self: center;font-size: 34rpx;" url="/pages/disclaimer/disclaimer">我同意「用户条款及声明」</navigator>
-    </view>
+<button class="inputbtn-submit secondary radius" bindtap="register" disabled="{{isPosting}}">登录</button>
 
-    <button class="inputbtn-submit secondary radius" bindtap="register" disabled="{{isPosting}}">登录</button>
- 
-  <view class="contact">
-    <!-- <view wx:if="{{mode=='portal'}}" bindtap="changeMode" data-mode="email">使用邮箱验证码登录</view> -->
-    <view wx:if="{{mode=='email'}}" bindtap="changeMode" data-mode="portal">使用Portal账号登录</view>
-    <view>UID为connect教育邮箱前缀</view>
-    <view>如test@connect.hku.hk的UID为test</view>
-    <view>新生请至少修改一次密码后再登录</view>
-    <view>如遇问题，请通过 contact@hkupootal.com 联系我们</view>
-    <view style="display: flex; justify-content: space-between; font-weight: bold;margin-top: 20rpx;">
-      <view class="other-school-button"><navigator target="miniProgram" open-type="navigate" app-id="wx489029782cc3f033" path="" extra-data="" version="release">HKUST学生入口</navigator></view>
-      <view class="other-school-button"><navigator target="miniProgram" open-type="navigate" app-id="wxad4d60c06d39de3c" path="" extra-data="" version="release">CUHK学生入口</navigator></view>
+<view class="contact">
+  <view wx:if="{{mode=='portal'}}" bindtap="changeMode" data-mode="email">使用邮箱验证码登录</view>
+  <view wx:if="{{mode=='email'}}" bindtap="changeMode" data-mode="portal">使用Portal账号登录</view>
+  <view>UID为connect教育邮箱前缀</view>
+  <view>如test@connect.hku.hk的UID为test</view>
+  <view>新生请至少修改一次密码后再登录</view>
+  <view>如遇问题，请通过 contact@hkupootal.com 联系我们</view>
+  <view style="display: flex; justify-content: space-between; font-weight: bold;margin-top: 20rpx;">
+    <view class="other-school-button">
+      <navigator target="miniProgram" open-type="navigate" app-id="wx489029782cc3f033" path="" extra-data="" version="release">HKUST学生入口</navigator>
+    </view>
+    <view class="other-school-button">
+      <navigator target="miniProgram" open-type="navigate" app-id="wxad4d60c06d39de3c" path="" extra-data="" version="release">CUHK学生入口</navigator>
     </view>
   </view>
+</view>
