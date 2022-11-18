@@ -166,7 +166,7 @@ Page({
       noticeList:noticeList
     })
     var match = e.currentTarget.dataset.url.match(/(\/pages\/teasingwall\/teasingwall\?emotion_message_id=)([0-9]+)/)
-    if(match[2]){
+    if(match){
       app.globalData.emotion_message_id = match[2]
       wx.reLaunch({
         url: '/pages/teasingwall/teasingwall',
