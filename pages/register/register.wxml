@@ -6,7 +6,7 @@
   <view style="margin-top: 40rpx;font-size: 40rpx;font-weight: 500;">HKU噗噗</view>
 </view>
 
-<view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;margin-top: 100rpx;" wx:if="{{mode=='portal'}}">需要使用你的Portal账号验证HKU学生身份</view>
+<view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;margin-top: 80rpx;" wx:if="{{mode=='portal'}}">需要使用你的Portal账号验证HKU学生身份</view>
 <view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;" wx:if="{{mode=='email'}}">需要使用你的教育邮箱验证HKU学生身份</view>
 
 
@@ -16,42 +16,57 @@
   </view>
 </view>
 
-<view class="common-outer" wx:if="{{mode=='portal'}}">
+<view class="common-outer" wx:if="{{mode=='portal'}}" style="margin-bottom: 20rpx;">
   <view class="inputbar">
     <input type="text" password class="inputbar-input" placeholder="PIN" maxlength="20" bindinput="passwordInput"></input>
   </view>
 </view>
 
 <view class="common-outer" wx:if="{{mode=='email'}}">
-  <view class="inputbar inputbar-input" bindtap="changeSuffix">
-    {{suffixes[suffix_idx]}}
-  </view>
-  <image style="width: 50rpx;height: 50rpx;position: absolute;right: 30rpx;top:30rpx" src="/images/arrow-all.svg"></image>
+  <view class="inputbar">
+    <view class=" inputbar-input" bindtap="changeSuffix">
+      {{suffixes[suffix_idx]}}
+    </view>
+    <image style="width: 50rpx;height: 50rpx; position: absolute;right: 30rpx;top:30rpx;" src="/images/arrow-all.svg" bindtap="changeSuffix"></image>
+</view>
 </view>
 
 
-
 <block wx:if="{{mode=='email'}}">
-  <view class="inputbar-auth-group">
-    <view class="inputbar-auth radius">
-      <input type="text" class="inputbar-input" placeholder="验证码" bindinput="vcodeInput"></input>
+  <view class="inputbar-authcode-group">
+    <view class="common-outer" style="margin:0; padding:0">
+      <view class="inputbar-auth radius" >
+        <input type="text" class="inputbar-input" placeholder="验证码" bindinput="vcodeInput"></input>
+      </view>
     </view>
-    <button class="inputbtn-getauth radius" bindtap="sendVcode" disabled="{{isSending||authSent}}">发送验证码</button>
+    <view class="common-outer" style="margin:0 0 0 20rpx; padding:0;">
+      <button class="inputbtn-getauth radius" bindtap="sendVcode" disabled="{{isSending||authSent}}" style="width: 285rpx; height: 100%;">发送验证码</button>
+    </view>
   </view>
 </block>
 
 <view class="inputbar-auth-group">
-  <checkbox-group bindchange="agreeChange">
-    <checkbox color="{{secondaryColor}}" value="true" style="margin-right: 3vw" />
+  <checkbox-group bindchange="agreeChange" >
+    <checkbox color="{{secondaryColor}}" value="true"/>
   </checkbox-group>
-  <navigator style="align-self: center;font-size: 34rpx;" url="/pages/disclaimer/disclaimer">我同意「用户条款及声明」</navigator>
+  <navigator style="align-self: center;font-size: 27rpx; margin-left: 10rpx;" url="/pages/disclaimer/disclaimer">我同意「用户条款及声明」</navigator>
 </view>
 
-<button class="inputbtn-submit secondary radius" bindtap="register" disabled="{{isPosting}}">登录</button>
+<view class="common-outer" style="padding: 0; margin-top: 20rpx">
+  <button class="inputbtn-submit primary radius" bindtap="register" disabled="{{isPosting}}">登录</button>
+</view>
+
+<view class="divider"></view>
+
+<view class="common-outer" style="padding: 0; margin-top: 20rpx;" wx:if="{{mode=='portal'}}">
+  <button class="inputbtn-submit" bindtap="changeMode" data-mode="email" style="color: var(--primary)">使用邮箱验证码登录</button>
+</view>
+
+<view class="common-outer" style="padding: 0; margin-top: 20rpx" wx:if="{{mode=='email'}}">
+  <button class="inputbtn-submit" bindtap="changeMode" data-mode="portal" style="color: var(--primary)" >使用Portal账号登录</button>
+</view>
 
 <view class="contact">
-  <view wx:if="{{mode=='portal'}}" bindtap="changeMode" data-mode="email">使用邮箱验证码登录</view>
-  <view wx:if="{{mode=='email'}}" bindtap="changeMode" data-mode="portal">使用Portal账号登录</view>
   <view>UID为connect教育邮箱前缀</view>
   <view>如test@connect.hku.hk的UID为test</view>
   <view>新生请至少修改一次密码后再登录</view>

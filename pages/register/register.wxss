@@ -19,52 +19,64 @@
   padding-bottom: 100rpx;
   font-weight: bold;
 }
+
 .inputbar-auth-group {
   display: flex;
-  width: 70vw;
-  margin: 3vw 15vw;
-
+  width: 100%;
+  justify-content: left;
+  margin: 30rpx 95rpx;
+  color: var(--on-bg-2);
 }
+
+.inputbar-authcode-group {
+  display: flex;
+  justify-content: left;
+  color: var(--on-bg-2);
+  height: 90rpx;
+  width: 90%;
+  margin: 0 10.5%;
+}
+
 .inputbar{
   width: 90%;
   display: flex;
-  font-size: 34rpx;
-  font-weight: 500;
-  height: 50rpx;
+  font-size: 32rpx;
+  font-weight: 400;
+  height: 40rpx;
 }
 .inputbar-auth{
-  background-color: var(--bg-gray-1);
-  margin-right: 5vw;
-  height:13vw;
+  margin:0;
+  height: 100%;
   box-sizing:border-box;
+  width: 285rpx;
+  font-size: 32rpx;
+  font-weight: 400;
 }
+
 .inputbar-input{
   width:100%;
   height:100%;
   padding-left: 40rpx;
+  color: var(--text);
 }
+
 .inputbtn-getauth{
-  cursor:pointer;
-  padding: 0;
-  text-align:center;
-  line-height:13vw;
+  line-height: 8.5vw;
   font-size:3.5vw;
-  font-weight:900;
-  background-color: var(--secondary);
-  color: var(--on-secondary)
+  background-color: var(--primary);
+  color: var(--on-primary)
 }
 
 .inputbtn-submit{
-  width:70vw !important;
-  margin:3vw 15vw;
-  padding: 0;
-  height:13vw;
+  width:100% !important;
+  height: 100%;
   box-sizing:border-box;
   text-align:center;
-  line-height:13vw;
-  font-size:4vw;
-  font-weight:900;
+  line-height:8vw;
+  font-size: 4vw;
+  font-weight:500;
 }
+
 .contact {
   position: fixed;
   bottom: 10vw;
@@ -81,8 +93,8 @@
 .other-school-button {
   background-color: var(--bg-gray-1);
   color: var(--on-bg-gray-2);
-  border-radius: 3px;
-  padding: 3px;
+  border-radius: 5px;
+  padding: 15rpx 20rpx;
 }
 .avatar-outer {
   text-align: center;
@@ -123,8 +135,16 @@
   position: relative;
 }
 
+
 .divider{
   height: 1px;
-  margin:  20rpx;
+  margin-left: 80rpx;
+  margin-right: 80rpx;
+  margin-top: 20rpx;
+  margin-bottom: 35rpx;
   background-color: var(--divider);
+}
+
+checkbox {
+  transform: scale(0.8,0.8);
 }
