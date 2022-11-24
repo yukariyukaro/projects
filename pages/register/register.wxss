@@ -34,7 +34,7 @@
   display: flex;
   width: 100%;
   justify-content: left;
-  margin: 30rpx 95rpx;
+  margin: 20rpx 95rpx;
   color: var(--on-bg-2);
 }
 
@@ -43,7 +43,7 @@
   justify-content: left;
   color: var(--on-bg-2);
   height: 90rpx;
-  margin: 40rpx 80rpx;
+  margin: 40rpx 80rpx 20rpx 80rpx;
 }
 
 .inputbar{
@@ -171,8 +171,6 @@
   height: 1px;
   margin-left: 80rpx;
   margin-right: 80rpx;
-  margin-top: 20rpx;
-  margin-bottom: 35rpx;
   background-color: var(--divider);
 }
 
@@ -288,5 +286,12 @@ checkbox {
     width: 60vw;
     color: var(--on-bg-2);
     font-size: 15rpx
+  }
+  .arrow{
+    width: 40rpx;
+    height: 40rpx; 
+    position: absolute;
+    right: 30rpx;
+    top:18%;
   }
 }
