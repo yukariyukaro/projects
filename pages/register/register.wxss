@@ -9,6 +9,16 @@
   width: 25vw;
   height: 25vw;
 } */
+.title{
+  margin-top: 40rpx;
+  font-size: 40rpx;
+  font-weight: 500;
+}
+.prompt{
+  text-align: center;
+  font-size: 28rpx;
+  color: var(--on-bg-2);
+}
 
 .description{
   margin-top: 20rpx;
@@ -182,15 +192,11 @@ checkbox {
     font-size: 26rpx;
     margin: 0;
   }
-  .common-outer{
+  .common-outer,  .inputbar-authcode-group{
     margin: 20rpx 100rpx;
     height: 80rpx;
   }
 
-  .inputbar-authcode-group{
-    margin: 20rpx 100rpx;
-    height: 80rpx;
-  }
   .inputbtn-getauth, .inputbar-auth{
     font-size:26rpx;
     line-height: 50rpx;
@@ -222,5 +228,65 @@ checkbox {
 
   .arrow{
     top:23%;
+  }
+}
+
+@media (min-width: 600px){
+  .title{
+    margin: 30rpx;
+    font-size: 30rpx;
+    font-weight: 500;
+  }
+  .avatar-outer {
+    margin-top: 100rpx;
+  }
+  .avatar-image-wrapper {
+    width: 100rpx;
+    height: 100rpx;
+  }
+  .common-outer,  .inputbar-authcode-group{
+    margin: 20rpx 20%;
+    height: 60rpx;
+  }
+  .prompt{
+    font-size: 19rpx;
+  }
+
+  .inputbar{
+    font-size: 20rpx;
+  }
+  .inputbtn-getauth, .inputbar-auth{
+    font-size:20rpx;
+    line-height: 50rpx;
+  }
+  .inputbar-auth-group {
+    margin: 20rpx 170rpx;
+  }
+  .other-school-button {
+    font-size: 15rpx;
+    padding: 5rpx 10rpx;
+  }
+  .inputbtn-submit{
+    line-height:7vw;
+    font-size: 2.8vw;
+    font-weight:450;
+    border-radius: 20rpx !important;
+  }
+  .inputbtn-getauth{
+    border-radius: 20rpx !important;
+  }
+  .divider{
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 10rpx;
+  }
+  .contact {
+    position: fixed;
+    bottom: 5vw;
+    text-align: center;
+    left: 20vw;
+    width: 60vw;
+    color: var(--on-bg-2);
+    font-size: 15rpx
   }
 }

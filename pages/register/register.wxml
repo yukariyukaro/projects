@@ -3,11 +3,11 @@
     <view class="avatar-ripple" />
     <image class="avatar" src="/images/pootal-logo.svg" />
   </view>
-  <view style="margin-top: 40rpx;font-size: 40rpx;font-weight: 500;">HKU噗噗</view>
+  <view class='title'>HKU噗噗</view>
 </view>
 
-<view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;margin-top: 80rpx;" wx:if="{{mode=='portal'}}">需要使用你的Portal账号验证HKU学生身份</view>
-<view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;margin-top: 40rpx;" wx:if="{{mode=='email'}}">需要使用你的教育邮箱验证HKU学生身份</view>
+<view class="prompt"style="margin-bottom: 20rpx;margin-top: 80rpx;" wx:if="{{mode=='portal'}}">需要使用你的Portal账号验证HKU学生身份</view>
+<view class="prompt" style="margin-bottom: 20rpx;margin-top: 40rpx;" wx:if="{{mode=='email'}}">需要使用你的教育邮箱验证HKU学生身份</view>
 
 
 <view class="common-outer">
@@ -49,7 +49,7 @@
   <checkbox-group bindchange="agreeChange" >
     <checkbox color="{{secondaryColor}}" value="true"/>
   </checkbox-group>
-  <navigator style="align-self: center;font-size: 27rpx; margin-left: 10rpx;" url="/pages/disclaimer/disclaimer">我同意「用户条款及声明」</navigator>
+  <navigator class="prompt" style=" margin-left: 10rpx;" url="/pages/disclaimer/disclaimer">我同意「用户条款及声明」</navigator>
 </view>
 
 <view class="common-outer" style="padding: 0; margin-top: 20rpx">
