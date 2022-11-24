@@ -34,7 +34,7 @@
   display: flex;
   width: 100%;
   justify-content: left;
-  margin: 20rpx 95rpx;
+  margin: 30rpx 95rpx;
   color: var(--on-bg-2);
 }
 
@@ -169,8 +169,7 @@
 
 .divider{
   height: 1px;
-  margin-left: 80rpx;
-  margin-right: 80rpx;
+  margin: 40rpx 80rpx;
   background-color: var(--divider);
 }
 
@@ -200,15 +199,13 @@ checkbox {
     line-height: 50rpx;
   }
   .inputbar-auth-group {
-    margin: 25rpx 110rpx;
+    margin: 35rpx 110rpx;
   }
   .inputbar-input{
     margin-top: 3.5%rpx;
   }
   .divider{
-    margin-left: 100rpx;
-    margin-right: 100rpx;
-    margin-bottom: 10rpx;
+    margin: 20rpx 100rpx;
   }
   .description{
     padding-bottom: 50rpx;
@@ -258,7 +255,7 @@ checkbox {
     line-height: 50rpx;
   }
   .inputbar-auth-group {
-    margin: 20rpx 170rpx;
+    margin: 30rpx 170rpx;
   }
   .other-school-button {
     font-size: 15rpx;
@@ -274,9 +271,7 @@ checkbox {
     border-radius: 20rpx !important;
   }
   .divider{
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-bottom: 10rpx;
+    margin: 40rpx 20%;
   }
   .contact {
     position: fixed;

@@ -5,7 +5,7 @@
       <image class="more-avatar" src="/images/pootal-logo.svg" bind:tap="handleLogoTap" />
     </view>
     <view style="margin-top: 40rpx;font-size: 40rpx;font-weight: 500;">HKU噗噗</view>
-    <view style="margin-top: 10rpx;font-size: 34rpx;">Version: 3.4.2</view>
+    <view style="margin-top: 10rpx;font-size: 34rpx;">Version: 3.4.3</view>
   </view>
   <view class="more-avatar-outer">
     <image class="media-qr" show-menu-by-longpress="true" src="/images/media-qr.jpg"></image>
@@ -20,6 +20,7 @@
     <view class="divider"></view>
     <text style="font-size: 28rpx;">新功能「吐槽墙」正式上线，你的每一种情绪，都值得被领聆听
     重新设计的Tabbar上线，提供更多功能
+    更新了「注册」页面的设计
     更新了活动期间的主题配置
     优化了一些其他内容</text>
   </view>

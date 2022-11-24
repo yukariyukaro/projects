@@ -1,6 +1,3 @@
-const Mutex = require('async-mutex').Mutex;
-const mutex = new Mutex();
-// 获取 AV 命名空间的方式根据不同的安装方式而异，这里假设是通过手动导入文件的方式安装的 SDK
 const AV = require('./libs/av-core-min.js');
 const adapters = require('./libs/leancloud-adapters-weapp.js');
 const themes = require('./theme');

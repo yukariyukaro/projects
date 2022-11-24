@@ -47,7 +47,7 @@
 
 <view class="inputbar-auth-group">
   <checkbox-group bindchange="agreeChange" >
-    <checkbox color="{{secondaryColor}}" value="true"/>
+    <checkbox color="#D85050" value="true"/>
   </checkbox-group>
   <navigator class="prompt" style="margin:auto; margin-left: 10rpx;" url="/pages/disclaimer/disclaimer">我同意「用户条款及声明」</navigator>
 </view>
