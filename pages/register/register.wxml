@@ -1,4 +1,4 @@
-<view class="avatar-outer" style="margin-top: {{from_miniapp ? 100 : 200}}rpx;">
+<view class="avatar-outer">
   <view class="avatar-image-wrapper">
     <view class="avatar-ripple" />
     <image class="avatar" src="/images/pootal-logo.svg" />
@@ -7,7 +7,7 @@
 </view>
 
 <view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;margin-top: 80rpx;" wx:if="{{mode=='portal'}}">需要使用你的Portal账号验证HKU学生身份</view>
-<view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;" wx:if="{{mode=='email'}}">需要使用你的教育邮箱验证HKU学生身份</view>
+<view style="text-align: center;font-size: 28rpx;color: var(--on-bg-2);margin-bottom: 20rpx;margin-top: 40rpx;" wx:if="{{mode=='email'}}">需要使用你的教育邮箱验证HKU学生身份</view>
 
 
 <view class="common-outer">
@@ -24,23 +24,23 @@
 
 <view class="common-outer" wx:if="{{mode=='email'}}">
   <view class="inputbar">
-    <view class=" inputbar-input" bindtap="changeSuffix">
+    <view class="inputbar-input" bindtap="changeSuffix" style="margin-top: 3.9%;">
       {{suffixes[suffix_idx]}}
     </view>
-    <image style="width: 50rpx;height: 50rpx; position: absolute;right: 30rpx;top:30rpx;" src="/images/arrow-all.svg" bindtap="changeSuffix"></image>
+    <image class="arrow" src="/images/arrow-all.svg" bindtap="changeSuffix"></image>
 </view>
 </view>
 
 
 <block wx:if="{{mode=='email'}}">
   <view class="inputbar-authcode-group">
-    <view class="common-outer" style="margin:0; padding:0">
-      <view class="inputbar-auth radius" >
-        <input type="text" class="inputbar-input" placeholder="验证码" bindinput="vcodeInput"></input>
+    <view class="auth-outer" style="margin-right: 4%">
+      <view class="inputbar-auth" >
+        <input type="text" class="inputbar-input" placeholder="验证码" bindinput="vcodeInput" value="{{vcode_vcode}}"></input>
       </view>
     </view>
-    <view class="common-outer" style="margin:0 0 0 20rpx; padding:0;">
-      <button class="inputbtn-getauth radius" bindtap="sendVcode" disabled="{{isSending||authSent}}" style="width: 285rpx; height: 100%;">发送验证码</button>
+    <view class="auth-outer">
+      <button class="inputbtn-getauth" bindtap="sendVcode" disabled="{{isSending||authSent}}">发送验证码</button>
     </view>
   </view>
 </block>
@@ -58,18 +58,17 @@
 
 <view class="divider"></view>
 
-<view class="common-outer" style="padding: 0; margin-top: 20rpx;" wx:if="{{mode=='portal'}}">
+<view class="common-outer" wx:if="{{mode=='portal'}}">
   <button class="inputbtn-submit" bindtap="changeMode" data-mode="email" style="color: var(--primary)">使用邮箱验证码登录</button>
 </view>
 
-<view class="common-outer" style="padding: 0; margin-top: 20rpx" wx:if="{{mode=='email'}}">
-  <button class="inputbtn-submit" bindtap="changeMode" data-mode="portal" style="color: var(--primary)" >使用Portal账号登录</button>
+<view class="common-outer" style="padding: 0;" wx:if="{{mode=='email'}}">
+  <button class="inputbtn-submit" bindtap="changeMode" data-mode="portal" style="color: var(--primary)" >使用账号密码登录</button>
 </view>
 
 <view class="contact">
   <view>UID为connect教育邮箱前缀</view>
   <view>如test@connect.hku.hk的UID为test</view>
-  <view>新生请至少修改一次密码后再登录</view>
   <view>如遇问题，请通过 contact@hkupootal.com 联系我们</view>
   <view style="display: flex; justify-content: space-between; font-weight: bold;margin-top: 20rpx;">
     <view class="other-school-button">

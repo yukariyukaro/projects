@@ -6,7 +6,7 @@ Page({
   data: {
     user_itsc:'',
     user_portal_password:'',
-    mode:'portal',
+    mode:'email',
     authSent: false,
     agree: false,
     suffixes: ['@connect.hku.hk','@hku.hk'],
@@ -18,61 +18,65 @@ Page({
     isPosting:false,
     from_miniapp:false
   },
-  // sendVcode:function(){
-  //   var that = this
-  //   if (that.data.authSent) {
-  //     app.showModal({
-  //       title: '请勿重复操作',
-  //       showCancel: false,
-  //       content: '验证码已发送，有一定几率在垃圾邮件箱噢',
-  //     });
-  //     return;
-  //   }
-  //   if (that.data.user_itsc.match(/^\s*$/)) {
-  //     app.showModal({
-  //       title: '警告',
-  //       showCancel: false,
-  //       content: 'UID不能为空',
-  //     });
-  //     return;
-  //   }
-  //   wx.showLoading({
-  //     title: '发送中',
-  //   });
-  //   that.setData({
-  //     isSending:true
-  //   })
-  //   wx.request({
-  //     url: 'https://api.pupu.hkupootal.com/v2/user/sendVcode.php', 
-  //     method: 'POST',
-  //     data: {
-  //       user_itsc:that.data.user_itsc,
-  //       user_email_suffix:that.data.suffixes[that.data.suffix_idx],
-  //     },
-  //     header: {
-  //       'content-type': 'application/x-www-form-urlencoded'
-  //     },
-  //     success (res) {
-  //       wx.hideLoading()
-  //       that.setData({
-  //         isSending:false
-  //       })
-  //       if(res.data.code == 200){
-  //           that.setData({
-  //             authSent:true,
-  //             vcode_key:res.data.vcode_key,
-  //           })
-  //           app.showModal({
-  //             title: '验证码已发送',
-  //             showCancel: false,
-  //             content:'验证码已发送,请留意垃圾邮件箱!',
-  //           });
-  //       }else{
-  //         app.showModal({title: '提示',content:res.data.msg,showCancel: false,})
-  //       }
-  //     }
-  //   })
-  // },
+
+  sendVcode:function(){
+    var that = this
+    if (that.data.authSent) {
+      app.showModal({
+        title: '请勿重复操作',
+        showCancel: false,
+        content: '验证码已发送，有一定几率在垃圾邮件箱噢',
+      });
+      return;
+    }
+    if (that.data.user_itsc.match(/^\s*$/)) {
+      app.showModal({
+        title: '警告',
+        showCancel: false,
+        content: 'UID不能为空',
+      });
+      return;
+    }
+    wx.showLoading({
+      title: '发送中',
+    });
+
+    that.setData({
+      isSending:true
+    })
+
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/user/register/vcode.php', 
+      method: 'POST',
+      data: {
+        user_itsc:that.data.user_itsc,
+        user_email_suffix:that.data.suffixes[that.data.suffix_idx],
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        wx.hideLoading()
+        that.setData({
+          isSending:false
+        })
+        if(res.data.code == 200){
+            that.setData({
+              authSent:true,
+              vcode_key:res.data.vcode_key,
+            })
+            app.showModal({
+              title: '验证码已发送',
+              showCancel: false,
+              content:'验证码已发送,请留意垃圾邮件箱!',
+            });
+        }else{
+          app.showModal({title: '提示',content:res.data.msg,showCancel: false,})
+        }
+      }
+    })
+  },
+
   register:function(){
     var mode = this.data.mode
     if(mode == 'portal'){
@@ -82,84 +86,91 @@ Page({
       this.registerByEmail()
     }
   },
-  // registerByEmail:function(){
-  //   var that = this
-  //   if (!that.data.authSent) {
-  //     app.showModal({
-  //       title: '提示',
-  //       showCancel: false,
-  //       content: '请先获取验证码',
-  //     });
-  //     return;
-  //   }
-  //   if (that.data.user_itsc.match(/^\s*$/)) {
-  //     app.showModal({
-  //       title: '警告',
-  //       showCancel: false,
-  //       content: 'UID不能为空',
-  //     });
-  //     return;
-  //   }
-  //   if (that.data.vcode_vcode.match(/^\s*$/)) {
-  //     app.showModal({
-  //       title: '警告',
-  //       showCancel: false,
-  //       content: '验证码不能为空',
-  //     });
-  //     return;
-  //   }
-  //   if (!that.data.agree) {
-  //     app.showModal({
-  //       title: '提示',
-  //       showCancel: false,
-  //       content: '请先同意「用户条款及声明」',
-  //     });
-  //     return;
-  //   }
-  //   wx.showLoading({
-  //     title: '提交中',
-  //   })
-  //   that.setData({
-  //     isPosting:true
-  //   })
-  //   wx.login({
-  //     success (res) {
-  //       if(res.code){
-  //         wx.request({
-  //           url: 'https://api.pupu.hkupootal.com/v2/user/register.php', 
-  //           method: 'POST',
-  //           data: {
-  //             user_itsc:that.data.user_itsc,
-  //             user_email_suffix:that.data.suffixes[that.data.suffix_idx],
-  //             vcode_vcode:that.data.vcode_vcode,
-  //             vcode_key:that.data.vcode_key,
-  //             code:res.code
-  //           },
-  //           header: {
-  //             'content-type': 'application/x-www-form-urlencoded'
-  //           },
-  //           success (res2) {
-  //             wx.hideLoading()
-  //             that.setData({
-  //               isPosting:false
-  //             })
-  //             if(res2.data.code == 200){
-  //                 wx.setStorageSync('token', res2.data.token)
-  //                 wx.reLaunch({
-  //                   url: '/pages/home/home',
-  //                 })
-  //             }else{
-  //               app.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
-  //             }
-  //           }
-  //         })
-  //       }else{
-  //         wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
-  //       }
-  //     }
-  // })
+
+  registerByEmail:function(){
+    var that = this
+    if (!that.data.authSent) {
+      app.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '请先获取验证码',
+      });
+      return;
+    }
+    if (that.data.user_itsc.match(/^\s*$/)) {
+      app.showModal({
+        title: '警告',
+        showCancel: false,
+        content: 'UID不能为空',
+      });
+      return;
+    }
+    if (that.data.vcode_vcode.match(/^\s*$/)) {
+      app.showModal({
+        title: '警告',
+        showCancel: false,
+        content: '验证码不能为空',
+      });
+      return;
+    }
+    if (!that.data.agree) {
+      app.showModal({
+        title: '提示',
+        showCancel: false,
+        content: '请先同意「用户条款及声明」',
+      });
+      return;
+    }
+    wx.showLoading({
+      title: '提交中',
+    })
+    that.setData({
+      isPosting:true
+    })
+    wx.login({
+      success (res) {
+        if(res.code){
+          wx.request({
+            url: 'https://api.pupu.hkupootal.com/v3/user/register/email.php', 
+            method: 'POST',
+            data: {
+              user_itsc:that.data.user_itsc,
+              user_email_suffix:that.data.suffixes[that.data.suffix_idx],
+              vcode_vcode:that.data.vcode_vcode,
+              vcode_key:that.data.vcode_key,
+              code:res.code,
+              system_info:JSON.stringify(wx.getSystemInfoSync())
+            },
+            header: {
+              'content-type': 'application/x-www-form-urlencoded'
+            },
+            success (res2) {
+              wx.hideLoading()
+              that.setData({
+                isPosting:false
+              })
+              if(res2.data.code == 200){
+                  wx.setStorageSync('token', res2.data.token)
+                  wx.reLaunch({
+                    url: '/pages/home/home',
+                  })
+                  wx.closeSocket()
+                  app.launchWebSoccket()
+              }else{
+                app.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
+              }
+            }
+          })
+        }else{
+          wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
+          that.setData({
+            'vcode_vcode':''
+          })
+        }
+      }
+  })
     
-  // },
+  },
   registerByPortal:function(){
     var that = this
     if (that.data.user_itsc.match(/^\s*$/)) {
