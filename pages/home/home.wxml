@@ -6,12 +6,12 @@
   </scroll-view>
 </view>
 
-<view class="write-button-outer" bind:tap="handleStarTap">
+<!-- <view class="write-button-outer" bind:tap="handleStarTap">
   <view class="write-button-inner">
     <image class="write-button" src="{{postButtonIcon?postButtonIcon:'/images/send-post.svg'}}"
     style="{{postButtonIcon?'width: 150rpx;height: 150rpx;':''}}"></image>
   </view>
-</view>
+</view> -->
 
 <swiper class="scroll-outer" current="{{swiper_current}}" bindchange="swiperChange" wx:if="{{allowHomeSwipe}}">
   <swiper-item wx:for="{{navItems}}">

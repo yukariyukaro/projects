@@ -36,7 +36,8 @@
     "pages/upload/upload",
     "pages/addCalendar/addCalendar",
     "pages/banDetail/banDetail",
-    "pages/teasingwall/teasingwall"
+    "pages/teasingwall/teasingwall",
+    "pages/report2022/report2022"
   ],
   "requiredBackgroundModes": [
     "audio",
@@ -68,12 +69,6 @@
         "iconPath": "images/one-inactive.png",
         "selectedIconPath": "images/one-active.png",
         "text": "ONE"
-      },
-      {
-        "pagePath": "pages/teasingwall/teasingwall",
-        "iconPath": "images/one-inactive.png",
-        "selectedIconPath": "images/one-active.png",
-        "text": "吐槽墙"
       },
       {
         "pagePath": "pages/pmlist/pmlist",

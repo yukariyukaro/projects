@@ -28,8 +28,8 @@ Component({
         is_one: true
       },
       {
-        pagePath: "/pages/teasingwall/teasingwall",
-        iconPath: "https://i.boatonland.com/emotion_tabbar/fadian.png",
+        pagePath: "/pages/write/write",
+        iconPath: "https://i.boatonland.com/emotion_tabbar/add2.png",
         selectedIconPath: "https://i.boatonland.com/emotion_tabbar/add2.png",
         text: "",
         is_special: true
@@ -57,11 +57,9 @@ Component({
   lifetimes: {
     attached(){
       this.updateTheme()
-      this.changeEmotionIcon()
     },
     moved(){
       this.updateTheme()
-      this.changeEmotionIcon()
     }
   },
   methods: {
@@ -69,25 +67,20 @@ Component({
       var that = this
       var index = e.currentTarget.dataset.index
       if(that.data.selected != index){
-        wx.switchTab({
-          url: that.data.list[index].pagePath
-        })
-        this.changeEmotionIcon()
+        if(index == 2){
+          wx.navigateTo({
+            url: that.data.list[index].pagePath
+          })
+        }else{
+          wx.switchTab({
+            url: that.data.list[index].pagePath
+          })
+        }
       }else{
         if(index == 0){
           var allpages = getCurrentPages()  
           var nowpage = allpages[allpages.length - 1]
           nowpage.onRefresh()
-        }else if(index == 2){
-          var is_sending = that.data.is_sending
-          var allpages = getCurrentPages()  
-          var nowpage = allpages[allpages.length - 1]
-          if(is_sending){
-            nowpage.hideInput()
-          }else{
-            nowpage.showInput()
-          }
-          that.rotateIcon(is_sending)
         }
       }     
     },
@@ -100,36 +93,6 @@ Component({
       }else{
         this.setData({
           is_dark: false
-        })
-      }
-    },
-    changeEmotionIcon:function(){
-      var emotion_tabbar_icon_list = this.data.emotion_tabbar_icon_list
-      var iconPath = emotion_tabbar_icon_list[Math.floor((Math.random()*emotion_tabbar_icon_list.length))]
-      var list = this.data.list
-      list[2].iconPath = iconPath
-      this.setData({
-        list: list
-      })
-    },
-    rotateIcon: function (e) {
-      var that = this;
-      var animation = wx.createAnimation({
-        duration: 300,
-        timingFunction: 'ease-out'
-      })
-      that.animation = animation
-      if(!e){
-        animation.rotate(405).step()
-        that.setData({
-          animation: animation.export(),
-          is_sending: true
-        })
-      }else{
-        animation.rotate(0).step()
-        that.setData({
-          animation: animation.export(),
-          is_sending: false
         })
       }
     },

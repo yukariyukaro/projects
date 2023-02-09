@@ -6,7 +6,7 @@
   <view class="remnant">还可以写{{remnantLen}}字</view>
 </view>
 
-<view class="block shadow radius" style="margin-top:80rpx;background-image: url(https://i.boatonland.com/emotion_tabbar/bg5.png);background-size:cover;color: #000000;" wx:if="{{!post_with_media}}">
+<!-- <view class="block shadow radius" style="margin-top:80rpx;background-image: url(https://i.boatonland.com/emotion_tabbar/bg5.png);background-size:cover;color: #000000;" wx:if="{{!post_with_media}}">
   <view class="pic-outer">
     <view class="media-single-line" style="background-color: rgb(0,0,0,0.2);border-radius: 20rpx;opacity: 0;">
       <text style="line-height:8vw;margin-left: 20rpx;">此刻的情绪是...<text style="font-size: 24rpx;">（选择后将同步至吐槽墙）</text></text>
@@ -18,9 +18,9 @@
       </view>
     </view>
   </view>
-</view>
+</view> -->
 
-<view class="block shadow radius" bindtap="uploadImage">
+<view class="block shadow radius" bindtap="uploadImage" style="margin-top:80rpx;">
   <view class="pic-outer">
     <view class="media-single-line">
       <text style="line-height:8vw">图片</text>
