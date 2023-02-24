@@ -12,7 +12,6 @@ Page({
     page:0,
     isLast:false,
     topicList:[],
-    bannerList:[],
     is_error:false,
     errorInfo:{},
     show_ad:false,
@@ -25,7 +24,11 @@ Page({
     swiper_current:2,
     nav_to_view:0,
     allowHomeSwipe:false,
-    banner_list:[]
+    banner_list:[],
+    sticky_post_num:0,
+    sticky_posts:[],
+    sticky_text: "",
+    collapsed: true
   },
   // 下拉刷新
   onRefresh: function () {
@@ -64,6 +67,9 @@ Page({
     this.setData({
       is_loading_more:true,
       postList:[],
+      sticky_posts:[],
+      sticky_post_num: 0,
+      sticky_text: "",
       page:0,
       scroll_top:0,
       currentTab:index
@@ -240,13 +246,30 @@ Page({
         wx.hideLoading()
         if(res.data.code == 200){
           if(that.data.page == '0'){
-            that.setData({
-              postList:res.data.postList,
-              isLast:res.data.isLast,
-              main_data_received:true,
-              refresh_triggered: false,
-              is_loading_more: false,
-            })
+            //折叠置顶功能
+            if(res.data.stickey_text){
+              that.setData({
+                isLast:res.data.isLast,
+                main_data_received:true,
+                refresh_triggered: false,
+                is_loading_more: false,
+                sticky_posts: res.data.stickeyPostList,
+                sticky_post_num: res.data.stickeyPostList.length,
+                sticky_text: res.data.stickey_text,
+                postList: res.data.postList,
+              })
+            }else{
+              that.setData({
+                postList:res.data.postList,
+                isLast:res.data.isLast,
+                main_data_received:true,
+                refresh_triggered: false,
+                is_loading_more: false,
+                sticky_posts: [],
+                sticky_post_num: 0,
+                sticky_text: "",
+              })
+            }
             wx.stopPullDownRefresh()
           }else{
             that.setData({
@@ -282,7 +305,6 @@ Page({
       success (res) {
         if(res.data.code == 200){
           that.setData({
-            bannerList:res.data.bannerList,
             banner_list:res.data.banner_list
           })
         }else if(res.data.code == 800 ||res.data.code == 900){
@@ -360,7 +382,7 @@ Page({
       wx.hideLoading()
     }else if(this.data.currentTab == -3){
       this.getPostByLatest();
-    }else if(this.data.currentTab == -2){
+    }else if(this.data.currentTab == -2){ 
       this.getPostByHot();
     }else if(this.data.currentTab == -1){
       this.getPost();
@@ -505,6 +527,13 @@ Page({
     })
   },
 
+  //折叠 展开置顶树洞
+  changeCollapse:function(){
+    this.setData({
+          collapsed: !this.data.collapsed
+        })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -543,7 +572,8 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {},
+  onReady: function () {
+  },
 
   /**
    * 生命周期函数--监听页面显示
@@ -563,7 +593,9 @@ Page({
         })
       }
     }, 1000);
+    
   },
+
 
   /**
    * 生命周期函数--监听页面隐藏

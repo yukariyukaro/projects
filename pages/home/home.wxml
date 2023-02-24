@@ -1,6 +1,7 @@
+<!-- 导航栏 -->
 <view class="navbar shadow">
   <scroll-view scroll-x enhanced show-scrollbar="false" style="height: 100%;white-space: nowrap;" scroll-into-view="nav-{{nav_to_view}}">
-    <view wx:for="{{navItems}}" id='nav-{{index + startIndex}}' wx:for-item="name" wx:key="unique" data-index="{{index + startIndex}}" class="item {{currentTab==(index + startIndex) ? 'active-class active' : ''}}" style="{{index + startIndex < -1 ? 'width:80rpx;' : ''}}" bindtap="navbarTapPre">
+    <view wx:for="{{navItems}}" id='nav-{{index + startIndex}}' wx:for-item="name" wx:key="unique" data-index="{{index + startIndex}}" class="item {{currentTab==(index + startIndex) ? 'active-class active' : ''}}" style="{{index + startIndex < -1 ? 'width:40rpx;' : ''}}" bindtap="navbarTapPre">
       <text>{{prop ? name[prop] : name}}</text>
     </view>
   </scroll-view>
@@ -13,6 +14,7 @@
   </view>
 </view> -->
 
+<!-- 滑动切换分栏 -->
 <swiper class="scroll-outer" current="{{swiper_current}}" bindchange="swiperChange" wx:if="{{allowHomeSwipe}}">
   <swiper-item wx:for="{{navItems}}">
     <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:if="{{index == currentTab - startIndex}}">
@@ -20,6 +22,22 @@
       <view class="post-content" style="margin-top:5vw">
         <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}"/>
         <one type="calendar_now" data="{{calendar_now_data}}" wx:if="{{calendar_now_data.calendar_now_list[0]&&currentTab == -1}}"/>
+        <!-- 置顶折叠 -->
+        <view class="collapsable" wx:if="{{sticky_post_num > 0}}">
+          <view class="prompt-bar" bindtap="changeCollapse">
+            <text class="prompt" wx:if="{{!collapsed}}">{{sticky_text + ' ('  + sticky_post_num + ')'}}</text>
+            <text class="prompt" wx:else>折叠置顶树洞</text>
+            <image src="/images/arrow-all.svg" class=" arrow {{collapsed? '':'retracted'}}"/>
+          </view>
+          <view  class="{{collapsed? '':'hide'}}">
+            <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{sticky_posts}}" wx:key="post_id"/> 
+            <view class="prompt-bar" bindtap="changeCollapse">
+              <text class="prompt" wx:if="{{!collapsed}}">{{sticky_text + ' ('  + sticky_post_num + ')'}}</text>
+              <text class="prompt" wx:else>折叠置顶树洞</text>
+              <image src="/images/arrow-all.svg" class="arrow {{collapsed? '':'retracted'}}"/>
+            </view>
+          </view>
+        </view>
         <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{postList}}"/>
         <loadmore end="{{isLast}}" loading="{{is_loading_more}}" />
       </view>
@@ -27,13 +45,34 @@
     </scroll-view>
   </swiper-item>
 </swiper>
-<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:else>
 
+
+<!-- 默认 -->
+<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:else>
 
   <view class="post-content">
     <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}"/>
     <one type="calendar_now" data="{{calendar_now_data}}" wx:if="{{calendar_now_data.calendar_now_list[0]&&currentTab == -1}}"/>
-    <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{postList}}"/>
+
+    <!-- 置顶折叠 -->
+    <view class="collapsable" wx:if="{{sticky_post_num > 0}}">
+      <view class="prompt-bar" bindtap="changeCollapse">
+        <text class="prompt" wx:if="{{!collapsed}}">{{sticky_text + ' ('  + sticky_post_num + ')'}}</text>
+        <text class="prompt" wx:else>折叠置顶树洞</text>
+        <image src="/images/arrow-all.svg" class=" arrow {{collapsed? '':'retracted'}}"/>
+      </view>
+      <view  class="{{collapsed? '':'hide'}}">
+        <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{sticky_posts}}" wx:key="post_id"/> 
+        <view class="prompt-bar" bindtap="changeCollapse">
+          <text class="prompt" wx:if="{{!collapsed}}">{{sticky_text + ' ('  + sticky_post_num + ')'}}</text>
+          <text class="prompt" wx:else>折叠置顶树洞</text>
+          <image src="/images/arrow-all.svg" class="arrow {{collapsed? '':'retracted'}}"/>
+        </view>
+      </view>
+      
+    </view>
+
+    <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{postList}}" wx:key="post_id"/>
     <loadmore end="{{isLast}}" loading="{{is_loading_more}}" />
   </view>
 

@@ -105,7 +105,8 @@
   text-align: center;
   line-height: 12vw;
   position: relative;
-  width: 100rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
   display: inline-block;
 }
 .navbar .item.active::after {
@@ -116,4 +117,55 @@
   right: 35%;
   height: 1vw;
   background: var(--secondary);
+}
+
+.collapsable {
+  margin-top: 40rpx;
+  padding: 0vw 0 0vw 0;
+  background-color: var(--bg-gray-1);
+  border-radius: 20rpx;
+  width: 100%;
+  height: var(--calc-height);
+}
+
+.collapsable .hide {
+  height: 0;
+  transition: height 5s ease-out;
+  padding-bottom: 0rpx;
+  overflow: hidden;
+
+}
+
+.prompt-bar {
+  position: relative;
+  margin: 0;
+  border-radius: 20rpx;
+  box-sizing: content-box;
+  width: 99%;
+  height: 70rpx;
+  border: solid 5rpx;
+  border-color:var(--divider);
+}
+
+.prompt-bar .prompt{
+
+  color: var(--on-bg-2);
+  margin-left: 7vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.prompt-bar .arrow{
+  top: 12rpx;
+  right: -7.8em;
+  position:absolute;
+  height: 50rpx;
+  transform: rotate(-90deg);
+  transition-duration: 0.7s;
+}
+
+.prompt-bar .retracted{
+  transform: rotate(90deg) ;
+  transition-duration: 0.7s;
 }

@@ -199,7 +199,7 @@
 
 <view class="common-outer" wx:if="{{type == 'button'}}">
   <view class="button-title" wx:if="{{data.button_title}}">{{data.button_title}}</view>
-  <view class="button-container" wx:for="{{data.button_list}}" style="margin-top:{{index == 0 ? '0' : '20rpx'}}" wx:if="{{index < 3 || data.button_show_all}}">
+  <view class="button-container" wx:for="{{data.button_list}}" we:key="index" style="margin-top:{{index == 0 ? '0' : '20rpx'}}" wx:if="{{index < 3 || data.button_show_all}}">
     <view class="button-inner-container">
       <view class="button-text">{{item.button_text}}</view>
     </view>
@@ -230,7 +230,7 @@
       </view>
     </view>
     <view class="calendar-now-inner-right">
-      <view class="calendar-now-card" wx:for="{{data.calendar_now_list}}" style="{{index == data.calendar_now_list.length - 1 ? '' : 'margin-bottom:20rpx'}}">
+      <view class="calendar-now-card" wx:for="{{data.calendar_now_list}}" wx:key="index" style="{{index == data.calendar_now_list.length - 1 ? '' : 'margin-bottom:20rpx'}}">
         <view class="calendar-now-title">{{item.calendar_title}}</view>
         <view class="calendar-now-content">{{item.calendar_start_time}} - {{item.calendar_end_time}} - {{item.calendar_location}}</view>
       </view>
@@ -240,7 +240,7 @@
 
 <view wx:if="{{type == 'banner'}}" style="margin: -20rpx 0;">
   <swiper circular="{{data.length > 1}}" autoplay="{{data.length > 1}}" class="banner-swiper" interval="3000" wx:if="{{data[0]}}">
-    <swiper-item wx:for="{{data}}">
+    <swiper-item wx:for="{{data}}" wx:key="index">
       <view class="banner-outer-o">
         <image src="{{item.banner_image}}" class="banner-outer" bindtap="orgOnTapBanner" data-banneritem="{{data[index]}}">
           <view class="banner-title" wx:if="{{item.banner_title}}">
