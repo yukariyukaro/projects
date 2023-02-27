@@ -108,13 +108,30 @@ Page({
             var postList = res.data.postList
           }
           if(that.data.page == '0'){
-            that.setData({
-              postList:postList,
-              isLast:res.data.isLast,
-              main_data_received:true,
-              refresh_triggered: false,
-              is_loading_more: false,
-            })
+            //折叠置顶功能
+            if(res.data.stickey_text){
+              that.setData({
+                isLast:res.data.isLast,
+                main_data_received:true,
+                refresh_triggered: false,
+                is_loading_more: false,
+                sticky_posts: res.data.stickeyPostList,
+                sticky_post_num: res.data.stickeyPostList.length,
+                sticky_text: res.data.stickey_text,
+                postList: res.data.postList,
+              })
+            }else{
+              that.setData({
+                postList:res.data.postList,
+                isLast:res.data.isLast,
+                main_data_received:true,
+                refresh_triggered: false,
+                is_loading_more: false,
+                sticky_posts: [],
+                sticky_post_num: 0,
+                sticky_text: "",
+              })
+            }
             wx.stopPullDownRefresh()
           }else{
             that.setData({

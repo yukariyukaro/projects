@@ -382,46 +382,33 @@ Page({
     that.setData({
       isGettingMedia:true
     })
-    wx.cloud.init();
-    wx.cloud.callFunction({
-      name: 'searchMusic',
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/media/netease.php', 
+      method: 'POST',
       data: {
-        body: {
-          inputTxt: that.data.netease_link,
-        },
+        token:wx.getStorageSync('token'),
+        netease_link: that.data.netease_link
       },
-      success: (res) => {
-        wx.hideLoading()
-        that.setData({
-          isGettingMedia:false
-        })
-        const result = res.result;
-        console.log(result);
-        if (result.error != 'false') {
-          wx.showToast({ title: '获取失败', icon: 'none', duration: 1000,})
-        } else {
-          var post_media = {
-            media_type:'netease',
-            netease_id:result.data.musicId,
-            netease_title:result.data.title,
-            netease_artist:result.data.player,
-            netease_image:result.data.cover,
-            netease_epname:result.data.epname
-          }
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        if(res.data.code == 200){
+          wx.hideLoading()
           that.setData({
-            post_media: post_media,
-            post_media_received:true
-          });
+            isGettingMedia: false,
+            post_media_received: true,
+            post_media: res.data.post_media
+          })
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.getNeteaseDetail()
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
         }
-      },
-      fail: (err) => {
-        wx.hideLoading()
-        that.setData({
-          isGettingMedia:false
-        })
-        wx.showToast({ title: '获取失败', icon: 'none', duration: 1000,})
-      },
-    });
+      }
+    })
   },
   getBilibiliDetail:function(){
     var that = this
@@ -431,45 +418,33 @@ Page({
     that.setData({
       isGettingMedia:true
     })
-    wx.cloud.init();
-    wx.cloud.callFunction({
-      name: 'searchBilibili',
+    wx.request({
+      url: 'https://api.pupu.hkupootal.com/v3/media/bilibili.php', 
+      method: 'POST',
       data: {
-        body: {
-          inputTxt: that.data.bilibili_bv,
-        },
+        token:wx.getStorageSync('token'),
+        bilibili_bv: that.data.bilibili_bv
       },
-      success: (res) => {
-        wx.hideLoading()
-        that.setData({
-          isGettingMedia:false
-        })
-        const result = res.result;
-        console.log(result);
-        if (result.error != 'false') {
-          wx.showToast({ title: '获取失败', icon: 'none', duration: 1000,})
-        } else {
-          var post_media = {
-            media_type:'bilibili',
-            bilibili_bv:result.data.epname,
-            bilibili_title:result.data.title,
-            bilibili_image:result.data.cover,
-            bilibili_author:result.data.player
-          }
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success (res) {
+        if(res.data.code == 200){
+          wx.hideLoading()
           that.setData({
-            post_media: post_media,
-            post_media_received:true
-          });
+            isGettingMedia: false,
+            post_media_received: true,
+            post_media: res.data.post_media
+          })
+        }else if(res.data.code == 800 ||res.data.code == 900){
+          app.launch().then(res=>{
+            that.getBilibiliDetail()
+          })
+        }else{
+          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
         }
-      },
-      fail: (err) => {
-        wx.hideLoading()
-        that.setData({
-          isGettingMedia:false
-        })
-        wx.showToast({ title: '获取失败', icon: 'none', duration: 1000,})
-      },
-    });
+      }
+    })
   },
   setVote:function(){
     var that = this
