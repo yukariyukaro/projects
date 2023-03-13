@@ -122,7 +122,7 @@
 .collapsable {
   margin-top: 40rpx;
   padding: 0vw 0 0vw 0;
-  background-color: var(--model-bg-gray);
+  background-color: var(--bg-gray-3);
   border-radius: 20rpx;
   width: 100%;
   height: var(--calc-height);
@@ -144,7 +144,7 @@
   width: 99%;
   height: 70rpx;
   border: solid 5rpx;
-  border-color:var(--divider);
+  border-color: var(--divider);
 }
 
 .prompt-bar .prompt{

@@ -64,6 +64,9 @@ Page({
     wx.showLoading({
       title: '加载中',
     })
+    if(this.data.sticky_post_num > 0){
+      this.storeCollapseStatus()
+    }
     this.setData({
       is_loading_more:true,
       postList:[],
@@ -75,6 +78,7 @@ Page({
       currentTab:index
     })
     this.getAll()
+    
   },
 
   closeAD:function(){
@@ -142,6 +146,7 @@ Page({
               is_loading_more: false,
             })
           }
+          that.setCollapseStatus()
         }else if(res.data.code == 800 ||res.data.code == 900){
           app.launch().then(res=>{
             that.getPost()
@@ -288,6 +293,7 @@ Page({
               })
             }
             wx.stopPullDownRefresh()
+            that.setCollapseStatus()
           }else{
             that.setData({
               postList:that.data.postList.concat(res.data.postList),
@@ -351,6 +357,7 @@ Page({
             navItems:that.data.navItems.concat(res.data.topicList),
             topicList:res.data.topicList
           })
+
         }else if(res.data.code == 800 ||res.data.code == 900){
           app.launch().then(res=>{
             that.getTopic()
@@ -551,6 +558,34 @@ Page({
         })
   },
 
+  postIdSum:function(posts){
+    var idSum = ""
+    for (var post of posts){
+      idSum += post.post_id
+    }
+    return idSum
+  },
+
+  storeCollapseStatus: function(){
+    var collapsedStatus = wx.getStorageSync('collapsed')
+    if (!this.data.collapsed){
+      collapsedStatus[this.data.currentTab] = this.postIdSum(this.data.sticky_posts)
+    }else{
+      collapsedStatus[this.data.currentTab] = null
+    }
+    wx.setStorageSync('collapsed', collapsedStatus)
+  },
+
+  setCollapseStatus: function(){
+    var that = this
+    var collapsedStatus = wx.getStorageSync('collapsed')
+    if (collapsedStatus[that.data.currentTab] == that.postIdSum(that.data.sticky_posts)){
+      that.setData({collapsed: false})
+    }else{
+      that.setData({collapsed: true})
+    }
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -596,6 +631,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    if (!wx.getStorageSync('collapsed')){
+      wx.setStorageSync('collapsed', {})
+    } else{
+      this.setCollapseStatus()
+    }   
+    
     this.getTabBar().setData({ selected: 0 })
     app.globalData.tabbarJS = this
     app.updateTabbar()
@@ -619,6 +660,7 @@ Page({
    */
   onHide: function () {
     app.globalData.indexJS = ''
+    this.storeCollapseStatus()
   },
 
   /**
@@ -626,6 +668,7 @@ Page({
    */
   onUnload: function () {
     app.globalData.indexJS = ''
+    this.storeCollapseStatus()
   },
 
   /**
