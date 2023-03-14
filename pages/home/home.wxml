@@ -17,7 +17,7 @@
 <!-- 滑动切换分栏 -->
 <swiper class="scroll-outer" current="{{swiper_current}}" bindchange="swiperChange" wx:if="{{allowHomeSwipe}}">
   <swiper-item wx:for="{{navItems}}">
-    <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:if="{{index == currentTab - startIndex}}">
+    <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" scroll-with-animation="true" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:if="{{index == currentTab - startIndex}}">
 
       <view class="post-content" style="margin-top:5vw">
         <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}"/>
@@ -29,7 +29,7 @@
             <text class="prompt" wx:else>折叠置顶树洞</text>
             <image src="/images/arrow-all.svg" class=" arrow {{collapsed? '':'retracted'}}"/>
           </view>
-          <view  class="{{collapsed? '':'hide'}}">
+          <view id="stickyPostArea" class="{{collapsed? '':'hide'}}">
             <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{sticky_posts}}" wx:key="post_id"/> 
             <view class="prompt-bar" bindtap="changeCollapse">
               <text class="prompt" wx:if="{{!collapsed}}">{{sticky_text + ' ('  + sticky_post_num + ')'}}</text>
@@ -48,7 +48,7 @@
 
 
 <!-- 默认 -->
-<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:else>
+<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" scroll-with-animation="true" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:else>
 
   <view class="post-content">
     <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}"/>
@@ -61,7 +61,7 @@
         <text class="prompt" wx:else>折叠置顶树洞</text>
         <image src="/images/arrow-all.svg" class=" arrow {{collapsed? '':'retracted'}}"/>
       </view>
-      <view  class="{{collapsed? '':'hide'}}">
+      <view id="stickyPostArea" class="{{collapsed? '':'hide'}}"> 
         <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{sticky_posts}}" wx:key="post_id"/> 
         <view class="prompt-bar" bindtap="changeCollapse">
           <text class="prompt" wx:if="{{!collapsed}}">{{sticky_text + ' ('  + sticky_post_num + ')'}}</text>

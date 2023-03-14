@@ -125,16 +125,14 @@
   background-color: var(--bg-gray-3);
   border-radius: 20rpx;
   width: 100%;
-  height: var(--calc-height);
+  overflow: hidden;
 }
 
 .collapsable .hide {
   height: 0;
-  transition: height 5s ease-out;
   padding-bottom: 0rpx;
   overflow: hidden;
-
-}
+} 
 
 .prompt-bar {
   position: relative;
@@ -167,6 +165,6 @@
 }
 
 .prompt-bar .retracted{
-  transform: rotate(90deg) ;
+  transform: rotate(0deg) ;
   transition-duration: 0.7s;
 }

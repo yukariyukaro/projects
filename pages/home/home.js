@@ -14,7 +14,7 @@ Page({
     topicList:[],
     is_error:false,
     errorInfo:{},
-    show_ad:false,
+    show_ad: false,
     adInfo:{},
     functionList:{},
     is_loading_more:false,
@@ -28,7 +28,9 @@ Page({
     sticky_post_num:0,
     sticky_posts:[],
     sticky_text: "",
-    collapsed: true
+    collapsed: true,
+    collapsedHeight: 'auto',
+    collapsableTopPostion: 0
   },
   // 下拉刷新
   onRefresh: function () {
@@ -115,6 +117,7 @@ Page({
             //折叠置顶功能
             if(res.data.stickey_text){
               that.setData({
+                collapsed:true,
                 isLast:res.data.isLast,
                 main_data_received:true,
                 refresh_triggered: false,
@@ -123,6 +126,9 @@ Page({
                 sticky_post_num: res.data.stickeyPostList.length,
                 sticky_text: res.data.stickey_text,
                 postList: res.data.postList,
+              }, ()=>{
+                that.checkStickyHeight()
+                that.setCollapseStatus()
               })
             }else{
               that.setData({
@@ -146,7 +152,6 @@ Page({
               is_loading_more: false,
             })
           }
-          that.setCollapseStatus()
         }else if(res.data.code == 800 ||res.data.code == 900){
           app.launch().then(res=>{
             that.getPost()
@@ -271,6 +276,7 @@ Page({
             //折叠置顶功能
             if(res.data.stickey_text){
               that.setData({
+                collapsed:true,
                 isLast:res.data.isLast,
                 main_data_received:true,
                 refresh_triggered: false,
@@ -279,6 +285,9 @@ Page({
                 sticky_post_num: res.data.stickeyPostList.length,
                 sticky_text: res.data.stickey_text,
                 postList: res.data.postList,
+              }, ()=>{
+                that.checkStickyHeight()
+                that.setCollapseStatus()
               })
             }else{
               that.setData({
@@ -293,7 +302,7 @@ Page({
               })
             }
             wx.stopPullDownRefresh()
-            that.setCollapseStatus()
+            
           }else{
             that.setData({
               postList:that.data.postList.concat(res.data.postList),
@@ -553,9 +562,30 @@ Page({
 
   //折叠 展开置顶树洞
   changeCollapse:function(){
-    this.setData({
-          collapsed: !this.data.collapsed
-        })
+    if(this.data.collapsed){
+      this.animate('#stickyPostArea', [
+        { height: String(this.data.collapsedHeight)+"px" },
+        { height: 0}
+        ], 500, function () {
+          this.clearAnimation('#stickyPostArea')
+          this.setData({
+            collapsed: !this.data.collapsed,
+            scroll_top: this.data.collapsableTopPostion
+          })
+      }.bind(this))
+
+    }else{
+      this.animate('#stickyPostArea', [
+        { height: 0},
+        { height:  String(this.data.collapsedHeight)+"px"}
+        ], 500, function () {
+          this.clearAnimation('#stickyPostArea')
+          this.setData({
+            collapsed: !this.data.collapsed
+          })
+      }.bind(this))
+    }
+
   },
 
   postIdSum:function(posts){
@@ -584,6 +614,21 @@ Page({
     }else{
       that.setData({collapsed: true})
     }
+  },
+
+  checkStickyHeight: function(){
+    let qSearch = this.createSelectorQuery()
+    qSearch.select('#stickyPostArea').boundingClientRect()
+    qSearch.exec( (res) => {
+      let qSearch2 = this.createSelectorQuery()
+      qSearch2.select('.collapsable').boundingClientRect()
+      qSearch2.exec( (res2) => {
+        this.setData({
+          collapsedHeight: res[0].height,
+          collapsableTopPostion: res2[0].top - 60
+        })
+      })
+    })
   },
 
   /**
@@ -625,18 +670,18 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    
+    // 检查置顶树洞折叠状态
     if (!wx.getStorageSync('collapsed')){
       wx.setStorageSync('collapsed', {})
-    } else{
-      this.setCollapseStatus()
-    }   
-    
+    }
     this.getTabBar().setData({ selected: 0 })
     app.globalData.tabbarJS = this
     app.updateTabbar()
@@ -644,6 +689,7 @@ Page({
     this.setData({
       allowHomeSwipe:wx.getStorageSync('allowHomeSwipe')
     })
+    
     setTimeout(() => {
       if(app.globalData.themeInfo.postButtonIcon){
         this.setData({
