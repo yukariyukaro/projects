@@ -570,7 +570,6 @@ Page({
           this.clearAnimation('#stickyPostArea')
           this.setData({
             collapsed: !this.data.collapsed,
-            scroll_top: this.data.collapsableTopPostion
           })
       }.bind(this))
 
