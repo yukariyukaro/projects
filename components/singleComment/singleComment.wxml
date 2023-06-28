@@ -19,7 +19,7 @@
             bindtap="previewCommentPic"
           ></image>
         </view>
-      <view style="display: flex;flex-direction: row;padding: 0rpx 0 0rpx 20rpx;margin-bottom: 20rpx;" wx:if="{{comment_father_msg}}">
+      <view style="display: inline-flex; padding: 0 0 0 20rpx;margin-bottom: 20rpx;" wx:if="{{comment_father_msg}}">
         <view class="divider-c"></view>
         <view class="card-comment-content-q"><text user-select='true'>{{comment_father_msg}}</text></view>
       </view>

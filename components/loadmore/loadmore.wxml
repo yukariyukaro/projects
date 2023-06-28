@@ -1,4 +1,4 @@
-<view wx:if="{{empty}}" class="no-content"><slot/></view>
+<view wx:if="{{empty}}" class="no-content"><slot></slot></view>
 <view wx:else class="loadmore">
   <text wx:if="{{end}}">——就咁多——</text>
   <text wx:elif="{{loading}}">加载中...</text>

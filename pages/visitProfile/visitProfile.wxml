@@ -9,14 +9,14 @@
         <view class="own-header-r-t text-overflow">{{userInfo.user_serial}}</view>
       </view>
       <view>
-        <view class="header-right" bindtap="nav2Pm">私信</view>
+        <view class="header-right" bindtap="nav2Pm" >私信</view>
       </view>
     </view>
   </view>
 
   <view class="post-content">
-    <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{postList}}"/>
-    <loadmore empty="{{postList.length==0}}" end="{{isLast}}" loading="{{is_loading_more}}">
+    <one type="{{item.type}}" data="{{item.data}}" wx:for="{{postList}}" wx:key="index"/>
+    <loadmore empty="{{postList.length==0}}" end="{{is_last}}" loading="{{is_loading_more}}">
       这里空荡荡的
     </loadmore>
   </view>

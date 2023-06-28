@@ -18,15 +18,15 @@
         <view class="divider"></view>
       </view>
 
-      <view bindtap="nav2PmDetail" data-chatid="{{item.chat_id}}" wx:for="{{chatList}}" wx:key="index">
+      <view bindtap="nav2PmDetail" data-chatid="{{item.chat_id}}" data-unreadcount="{{item.chat_unread_count}}" wx:for="{{chat_list}}" wx:key="index" bindlongpress="longpress">
         <view class="dialog-item" hoverClass="hover">
           <view class="item-head">
             <image class="icon" mode="aspectFill"
-              src="{{preURL + item.chat_avatar}}.svg"></image>
+              src="{{preURL + item.user_avatar}}.svg"></image>
           </view>
           <view class="item-body">
             <view class="info">
-              <view class="name"> {{item.chat_alias}}</view>
+              <view class="name"> {{item.user_alias}}</view>
               <view class="time">{{item.chat_update_date}}</view>
             </view>
             <view class="content">
@@ -35,7 +35,7 @@
             </view>
           </view>
         </view>
-        <view class="divider" wx:if="{{index + 1 !=chatList.length}}"></view>
+        <view class="divider" wx:if="{{index + 1 !=chat_list.length}}"></view>
       </view>
       
     </view>

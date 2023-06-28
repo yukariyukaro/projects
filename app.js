@@ -1,33 +1,30 @@
-const AV = require('./libs/av-core-min.js');
-const adapters = require('./libs/leancloud-adapters-weapp.js');
 const themes = require('./theme');
+const info = require('./utils/info')
+
 const localDB = require('utils/database.js')
 const _ = localDB.command
+import newRequest from "./utils/request"
 
-AV.setAdapters(adapters);
-AV.init({
-  appId: 'tjIhHKbi6UO6zQpYezL6OmfI-9Nh9j0Va',
-  appKey: 'IHIuPgFAEEDHAbFLhoYOOTt8',
-  // 请将 xxx.example.com 替换为你的应用绑定的自定义 API 域名
-  serverURLs: 'https://api.12345toolapi.xyz',
-});
 App({
   onLaunch(){
     var that = this
-    this.launch()
-    this.watchCaptureScreen()
-    this.getTheme()
+    this.launch().then( () => {
+      this.watchCaptureScreen()
+      // this.getTheme() 
+      }   
+    )
+  
     if(!wx.getStorageSync('allNoticeCount')){
       wx.setStorageSync('allNoticeCount', 0)
     }
     if(!wx.getStorageSync('systemNoticeCount')){
       wx.setStorageSync('systemNoticeCount', 0)
     }
-    if(!wx.getStorageSync('banUniPost')){
-      wx.setStorageSync('banUniPost', false)
+    if(!wx.getStorageSync('ban_uni_post')){
+      wx.setStorageSync('ban_uni_post', false)
     }
-    if(!wx.getStorageSync('allowHomeSwipe')){
-      wx.setStorageSync('allowHomeSwipe', false)
+    if(!wx.getStorageSync('allow_home_swipe')){
+      wx.setStorageSync('allow_home_swipe', false)
     }
     if(!wx.getStorageSync('oneLatestId')){
       wx.setStorageSync('oneLatestId', 0)
@@ -36,30 +33,37 @@ App({
       wx.setStorageSync('showOneRedDot', false)
     }
   },
+
   onShow:function(){
-    this.launchWebSoccket()
-    this.getOneLatest()
+    // if (wx.getStorageSync('token')){
+    //   this.launchWebSoccket()
+    //   this.checkUnread()
+    // }
     
+    // this.getOneLatest()
   },
+
   onHide: function () {
     this.globalData.redirectToRegister = false
     wx.closeSocket()
   },
+
   onThemeChange: function ({ theme }) {
     this.globalData.theme = themes[theme];
     this.globalData.colorScheme = theme;
     this.updateTheme()
     var tabbarJS = this.globalData.tabbarJS
-    if(tabbarJS != ''){
+    if(tabbarJS){
       tabbarJS.getTabBar().updateTheme()
     }
   },
   
 
   globalData: {
-    URL: 'https://service-74x06cvh-1301435395.sh.apigw.tencentcs.com/release/prod_hku',
-    // URL: 'http://yapi.demo.qunar.com/mock/75500',
-    school_label: 'HKU',
+    // URL: 'https://service-74x06cvh-1301435395.sh.apigw.tencentcs.com/release/prod_hku',
+    app_name: info.app_name,
+    school_label: info.school_label,
+    email_suffixes: info.email_suffixes,
     userInfo: null,
     tem_comment: '',
     tem_comment_with_serial: true,
@@ -180,7 +184,9 @@ App({
 
     })
   },
+
   // 记录截屏开始
+  // /user/record/capturescreen
   watchCaptureScreen:function(){
     wx.onUserCaptureScreen(function (res) {
       var pages = getCurrentPages()
@@ -193,17 +199,8 @@ App({
           urlWithArgs += key + '=' + value + '&'
       }
       urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length-1)
-      wx.request({
-        url: 'https://api.pupu.hkupootal.com/v3/user/record/capturescreen.php', 
-        method: 'POST',
-        data: {
-          token:wx.getStorageSync('token'),
-          url: urlWithArgs,
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        }
-      })
+      newRequest('/user/record/capturescreen', {url: urlWithArgs})
+      .then()
     })
   },
   // 记录截屏结束
@@ -213,6 +210,7 @@ App({
    * @param {WechatMiniprogram.ShowModalOption} options
    * @returns {WechatMiniprogram.PromisifySuccessResult<WechatMiniprogram.ShowModalOption,WechatMiniprogram.ShowModalOption>}
    */
+
   showModal(options) {
     return wx.showModal({
       confirmColor: this.globalData.theme.primary,
@@ -224,163 +222,103 @@ App({
     var that = this
     return new Promise(function (resolve, reject) {
       var token = wx.getStorageSync('token')
+      wx.showLoading({})
       if(token){
-        wx.request({
-          url: 'https://api.pupu.hkupootal.com/v3/user/check/wechat.php',
-          method:'POST',
-          data: {
-            token: token
-          },
-          header: {
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          success(res6){
-            if(res6.data.code == 900){
-              wx.login({
-                success (res) {
-                  if(res.code){
-                    wx.request({
-                      url: 'https://api.pupu.hkupootal.com/v3/user/login/wechat.php',
-                      method:'POST',
-                      data: {
-                        code: res.code,
-                        system_info:JSON.stringify(wx.getSystemInfoSync())
-                      },
-                      header: {
-                        'content-type': 'application/x-www-form-urlencoded'
-                      },
-                      success(res2){
-                        if(res2.data.code == 200){
-                          wx.setStorageSync('token', res2.data.token)
-                          resolve()
-                        }else if(res2.data.code == 401){
-                          var pages = getCurrentPages()
-                          var currentPage = pages[pages.length-1]
-                          var url = currentPage.route
-                          if(url!="pages/register/register"){
-                            wx.reLaunch({
-                              url: '/pages/register/register',
-                              success(){
-                                wx.showToast({title: '请先注册', icon: "none", duration: 1000})
-                              }
-                            })
-                          }
-                        }else if(res2.data.code == 800 || res2.data.code == 801){
-                          var pages = getCurrentPages()
-                          var currentPage = pages[pages.length-1]
-                          var url = currentPage.route
-                          if(url!="pages/banDetail/banDetail"){
-                            wx.reLaunch({
-                              url: '/pages/banDetail/banDetail',
-                            })
-                          }
-                        }else{
-                          wx.showToast({title: res2.data.msg, icon: "none", duration: 1000})
-                        }
-                        
-                      }
-                    })
-                  }else{
-                    wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
-                  }
-                }
-            })
-            }else if(res6.data.code == 800 || res6.data.code == 801){
-              var pages = getCurrentPages()
-              var currentPage = pages[pages.length-1]
-              var url = currentPage.route
-              if(url!="pages/banDetail/banDetail"){
-                wx.reLaunch({
-                  url: '/pages/banDetail/banDetail',
-                })
-              }
-            }
-            
+      // user already logged in
+        console.log("has token")
+        newRequest("/user/check/wechat", {}).then((res) => {
+          if(res.code != 200){           
           }
-        }) 
+        })
       }else{
+        // user not logged in
+        console.log("no token")
         wx.login({
+          
           success (res) {
             if(res.code){
-              wx.request({
-                url: 'https://api.pupu.hkupootal.com/v3/user/login/wechat.php',
-                method:'POST',
-                data: {
-                  code: res.code,
-                  system_info:JSON.stringify(wx.getSystemInfoSync())
-                },
-                header: {
-                  'content-type': 'application/x-www-form-urlencoded'
-                },
-                success(res2){
-                  if(res2.data.code == 200){
-                    wx.setStorageSync('token', res2.data.token)
-                    resolve()
-                  }else if(res2.data.code == 401){
-                    var pages = getCurrentPages()
-                    var currentPage = pages[pages.length-1]
-                    var url = currentPage.route
-                    if(url!="pages/register/register"){
-                      wx.reLaunch({
-                        url: '/pages/register/register',
-                        success(){
-                          wx.showToast({title: '请先注册', icon: "none", duration: 1000})
-                        }
-                      })
-                    }
-                  }else if(res2.data.code == 800 || res2.data.code == 801){
-                    var pages = getCurrentPages()
-                    var currentPage = pages[pages.length-1]
-                    var url = currentPage.route
-                    if(url!="pages/banDetail/banDetail"){
-                      wx.reLaunch({
-                        url: '/pages/banDetail/banDetail',
-                      })
-                    }
-                  }else{
-                    wx.showToast({title: res2.data.msg, icon: "none", duration: 1000})
+              // 请求开发者服务器
+              newRequest('/user/login/wechat', {
+                code: res.code,
+                system_info:JSON.stringify(wx.getSystemInfoSync())
+              }, ()=>{} ,false, true)
+              .then( (res2) => {
+                if(res2.code == 200){
+                  //保存登陆状态
+                  wx.setStorageSync('token', res2.token)
+                  resolve()
+                }else if(res2.code == 401){
+                  //未注册，跳转注册页
+                  var pages = getCurrentPages()
+                  var currentPage = pages[pages.length-1]
+                  var url = currentPage.route
+                  if(url!="pages/register/register"){
+                    wx.reLaunch({
+                      url: '/pages/register/register',
+                      success(){
+                        wx.showToast({title: '请先注册', icon: "none", duration: 1000})
+                      }
+                    })
                   }
-                  
+                }else{
+                  wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
                 }
               })
+            
             }else{
               wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
+              wx.hideLoading()
             }
-          }
+          } 
       })
       }
     })
   },
 
-  getOneLatest: function () {
-    var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/one/getlatest.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token')
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        if(res.data.code == 200){
-          if(res.data.one_latest_id > wx.getStorageSync('oneLatestId')){
-            wx.setStorageSync('oneLatestId', res.data.one_latest_id)
-            wx.setStorageSync('showOneRedDot', true)
-            that.updateTabbar()
-          }
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          that.launch().then(res=>{
-            that.getOneLatest()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+  checkUnread: function(){
+    newRequest("/notice/checkunread", {}, this.checkUnread)
+    .then(res => {
+      if(res.code == 200){
+        wx.setStorageSync('allNoticeCount', res.notice_count)
+        this.updateTabbar
+      }else{
+        wx.showToast({title: '请先注册', icon: "none", duration: 1000})
       }
     })
-
   },
+
+
+  // getOneLatest: function () {
+  //   var that = this
+  //   // console.log(5)
+  //   newRequest()
+  //   wx.request({
+  //     url: 'https://api.pupu.hkupootal.com/v3/one/getlatest.php', 
+  //     method: 'POST',
+  //     data: {
+  //       token:wx.getStorageSync('token')
+  //     },
+  //     header: {
+  //       'content-type': 'application/x-www-form-urlencoded'
+  //     },
+  //     success (res) {
+  //       if(res.data.code == 200){
+  //         console.log(6)
+  //         if(res.data.one_latest_id > wx.getStorageSync('oneLatestId')){
+  //           wx.setStorageSync('oneLatestId', res.data.one_latest_id)
+  //           wx.setStorageSync('showOneRedDot', true)
+  //           that.updateTabbar()
+  //         }
+  //       }else if(res.data.code == 800 ||res.data.code == 900){
+  //         that.launch().then(res=>{
+  //           that.getOneLatest()
+  //         })
+  //       }else{
+  //         wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+  //       }
+  //     }
+  //   })
+  // },
 
   //新消息推送
   initDatabase:function(){
@@ -411,6 +349,74 @@ App({
     that.clearStorage(chat,pm,1)
     return{chat,pm}
   },
+
+  deletePm: function(pmId){
+    var that = this
+    var pm = localDB.collection('pm')
+        var pm_chat_id = pm.where({pm_id: pmId}).limit(1).get()[0].chat_id
+        // console.log(pm_chat_id)
+        var latest_two_msg_in_chat = pm.where({chat_id: pm_chat_id}).orderBy('pm_id', 'desc').limit(2).get()
+        // console.log(latest_two_msg_in_chat)
+        if (latest_two_msg_in_chat[0].pm_id == pmId){
+          var new_chat_detail = localDB.collection('chat').where({
+            chat_id: pm_chat_id
+          }).limit(1).get()[0]
+          if(latest_two_msg_in_chat[1]){
+            new_chat_detail.chat_update_date = that.formatTime(latest_two_msg_in_chat[1].pm_create_time)
+            new_chat_detail.chat_latest_msg = latest_two_msg_in_chat[1].pm_msg
+            new_chat_detail.chat_latest_pm_id = latest_two_msg_in_chat[1].pm_id
+          }else{
+            new_chat_detail.chat_update_date = ""
+            new_chat_detail.chat_latest_msg = ""
+            new_chat_detail.chat_latest_pm_id = ""
+          }
+          localDB.collection('chat').where({
+            chat_id: pm_chat_id
+          }).update(new_chat_detail)
+          that.updateData()
+        }
+        pm.where({
+          pm_id: pmId
+        }).remove()
+    newRequest("/pm/message/delete", {
+      pm_id: pmId
+    }).then(res=>{
+      if(res.code == 200){
+        
+      }else{
+        wx.showToast({
+          title: '私信删除失败',
+          icon: "error",
+          duration: 1000
+        })
+      }
+    })
+    
+  },
+
+  deleteChat: function(chatId, unreadCount) {
+    var pm = localDB.collection('pm')
+        var chat = localDB.collection('chat')
+        chat.where({chat_id: chatId}).remove()
+        pm.where({chat_id: chatId}).remove()
+        this.updateData()
+    newRequest("/pm/chat/ban",{
+      chat_id: chatId
+    }).then(res=>{
+      if (res.code == 200){
+        wx.setStorageSync('allNoticeCount', wx.getStorageSync('allNoticeCount') - unreadCount)
+        this.updateTabbar()
+        
+      } else {
+        wx.showToast({
+          title: '删除失败',
+          icon: "error",
+          duration: 1000
+        })
+      }
+    })
+  },
+
   clearStorage:function(chat,pm,i){
     var that = this
     // console.log("开始清理存储")
@@ -430,6 +436,8 @@ App({
       // console.log("不需要清理")
     }
   },
+
+  // /pm/message/history
   getHistoryMessage:function(){
     var that = this
     return new Promise(function (resolve, reject) {
@@ -443,30 +451,29 @@ App({
         var latset_pm_id = latset_pm_id_list[0].pm_id
       }
       // console.log("latset_pm_id为"+latset_pm_id)
-      wx.request({
-        url: 'https://api.pupu.hkupootal.com/v3/pmnew/message/get.php', 
-        method: 'POST',
-        data: {
-          token:wx.getStorageSync('token'),
-          pm_id:latset_pm_id
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        success (res) {
-          // console.log(res)
-          if(res.data.code == 200){
-            var pmList = res.data.pmList
-            // console.log(pmList)
-            pmList.forEach(item => {
-              that.addMessageToDb(item)
-            })
-            resolve()
-          }
-        }
+      newRequest("/pm/message/history", {
+        pm_id:latset_pm_id
+      }).then(res=>{
+        // console.log(res)
+        if(res.code == 200){
+          var pm_list = res.pm_list
+          // console.log(pm_list)
+          pm_list.forEach(item => {
+            that.addMessageToDb(item)
+          })
+          resolve()
+        }else{reject()}
       })
+
     })
   },
+
+  formatTime: function(timestamp){
+    var s = new Date(timestamp*1000);
+    return (s.getYear()+1900)+"-"+String(s.getMonth()+1).padStart(2, "0")+"-"+String(s.getDate()).padStart(2, "0")+" "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+
+  },
+
   addMessageToDb:function(item){
     // console.log(item)
     var that = this
@@ -490,7 +497,7 @@ App({
     }else{
       var newChatDetail = chat_list[0]
       newChatDetail.chat_latest_msg = item.pm_msg
-      newChatDetail.chat_update_date = item.pm_date
+      newChatDetail.chat_update_date = that.formatTime(item.pm_create_time)
       newChatDetail.chat_latest_pm_id = item.pm_id
       if(!item.pm_is_from_me && that.globalData.chat_id!=item.chat_id){
         newChatDetail.chat_unread_count += 1
@@ -503,52 +510,48 @@ App({
       that.updateData()
     }
   },
+
+  // /pm/chat/get
   addChatToDb:function(item){
+    console.log(item)
     var that = this
     if(that.globalData.gettingChatList.includes(item.chat_id)){
       // console.log("已经在获取"+item.chat_id)
       return
     }
     that.globalData.gettingChatList.push(item.chat_id)
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/pmnew/chat/get.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        chat_id:item.chat_id
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        if(res.data.code == 200){
-          var chatDetail = res.data.chatDetail
-          chatDetail.chat_latest_msg = item.pm_msg
-          chatDetail.chat_update_date = item.pm_date
-          chatDetail.chat_latest_pm_id = item.pm_id
-          if(item.pm_is_from_me){
-            chatDetail.chat_unread_count = 0
-          }else{
-            chatDetail.chat_unread_count = 1
-            wx.setStorageSync('allNoticeCount', wx.getStorageSync('allNoticeCount')+1)
-            that.updateTabbar()
-          }
-          var db = that.initDatabase()
-          var chat = db.chat
-          var chat_list = chat.where({
-            chat_id: item.chat_id
-          }).limit(1).get()
-          // console.log(chat_list)
-          if(!chat_list[0]){
-            chatDetail._timeout = Date.now() + 30 * 24 * 3600000
-            chat.add(chatDetail)
-            that.updateData()
-          }
-          that.globalData.gettingChatList.delete(item.chat_id)
+    newRequest("/pm/chat/get", {
+      chat_id:item.chat_id
+    }).then(res=>{
+      if(res.code == 200){
+        var chat_detail = res.chat_detail
+        chat_detail.chat_latest_msg = item.pm_msg
+        chat_detail.chat_update_date = that.formatTime(item.pm_create_time)
+        chat_detail.chat_latest_pm_id = item.pm_id
+        if(item.pm_is_from_me){
+          chat_detail.chat_unread_count = 0
+        }else{
+          chat_detail.chat_unread_count = 1
+          wx.setStorageSync('allNoticeCount', wx.getStorageSync('allNoticeCount')+1)
+          that.updateTabbar()
         }
+        var db = that.initDatabase()
+        var chat = db.chat
+        var chat_list = chat.where({
+          chat_id: item.chat_id
+        }).limit(1).get()
+        // console.log(chat_list)
+        if(!chat_list[0]){
+          chat_detail._timeout = Date.now() + 30 * 24 * 3600000
+          chat.add(chat_detail)
+          that.updateData()
+        }
+        // that.globalData.gettingChatList.delete(item.chat_id)
       }
     })
+
   },
+
   updateData:function(){
     var that = this
     // console.log("调用")
@@ -559,11 +562,12 @@ App({
       // console.log("调用失败")
     }
   },
+
   webSocketConnect:function(){
     console.log('开始链接')
     var that = this
     var websocket = wx.connectSocket({
-      url: 'wss://ws.pupu.hkupootal.com:3330',
+      url: info.socket,
       success(res){
         console.log(res)
       },
@@ -626,6 +630,7 @@ App({
     //   console.log(res)
     // })
   },
+
   messageHandler:function(data){
     var that = this
     // console.log(data)
@@ -644,7 +649,8 @@ App({
         }
         break
       case "message":
-        var content = JSON.parse(data.content)
+        var content = data.content
+        // console.log(content)
         that.addMessageToDb(content)
         wx.vibrateShort({type: 'heavy',})
         setTimeout(() => {
@@ -662,13 +668,16 @@ App({
         break
     }
   },
+
   launchWebSoccket:function(){
     var that = this
     if(!that.globalData.wsConnect){
       console.log("先获取历史消息")
-      that.getHistoryMessage().then(res=>{
+      that.getHistoryMessage().then(()=>{
         console.log("然后链接")
         that.webSocketConnect()
+      }).catch(()=>{
+        that.launchWebSoccket()
       })
     }else{
       var message = {
@@ -683,6 +692,7 @@ App({
       that.launchWebSoccket()
     }, 10000); 
   },
+
   updateTabbar:function(){
     var tabbarJS = this.globalData.tabbarJS
     if(tabbarJS != ''){
@@ -717,28 +727,29 @@ App({
   },
 
 
-  getTheme:function(){
-    var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/info/theme.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        if(res.data.code == 200){
-          that.globalData.themeInfo = []
-          that.updateTheme(true)
-        }else if(res.data.code == 201){
-          that.globalData.themeInfo = res.data.themeInfo
-          that.updateTheme(true)
-        }
-      }
-    })
-  },
+  // getTheme:function(){
+  //   var that = this
+  //   wx.request({
+  //     url: 'https://api.pupu.hkupootal.com/v3/info/theme.php', 
+  //     method: 'POST',
+  //     data: {
+  //       token:wx.getStorageSync('token'),
+  //     },
+  //     header: {
+  //       'content-type': 'application/x-www-form-urlencoded'
+  //     },
+  //     success (res) {
+  //       if(res.data.code == 200){
+  //         that.globalData.themeInfo = []
+  //         that.updateTheme(true)
+  //       }else if(res.data.code == 201){
+  //         that.globalData.themeInfo = res.data.themeInfo
+  //         that.updateTheme(true)
+  //       }
+  //     }
+  //   })
+  // },
+
   updateTheme:function(withAnimation){
     var that = this
     var systemInfo = wx.getSystemInfoSync()

@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "singlePm": "/pages/func1-pm/singlePm/singlePm",
-    "navbar": "/components/navbar/navbar"
-  },
-  "disableScroll":true
-}

@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "singlePostNew": "/components/singlePostNew/singlePostNew",
     "one": "/components/one/one",
     "loadmore": "/components/loadmore/loadmore"
   },

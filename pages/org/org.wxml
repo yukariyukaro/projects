@@ -2,79 +2,87 @@
 
   <view style="position:relative;">
 
-    <image class="background-image" mode="aspectFill" src="{{orgInfo.org_bg_image}}">
+    <image class="background-image" mode="aspectFill" src="{{org_info.org_bg_image}}">
     </image>
 
     <view style="position: absolute;z-index: 99;width: 100%;">
       <view class="top-view">
         <!-- 头像名称 -->
         <view class="user-info">
-          <view class="user-name limit-text-widht">{{orgInfo.org_name}}</view>
+          <view class="user-name limit-text-widht">{{org_info.org_name}}</view>
           <view class="head-view">
-            <image class="avatar-image" mode="aspectFill" src="{{orgInfo.org_avatar}}"></image>
+            <image class="avatar-image" mode="aspectFill" src="{{org_info.org_avatar}}"></image>
           </view>
         </view>
         <!-- 简介 -->
         <view class="introduce-view">
-          <text class="introduce-text">{{orgInfo.org_intro}}</text>
+          <text class="introduce-text">{{org_info.org_intro}}</text>
         </view>
         <!-- 轮播图 -->
-        <swiper circular="{{orgInfo.org_banner.length > 1}}" autoplay="{{orgInfo.org_banner.length > 1}}" class="swiper" interval="3000" wx:if="{{orgInfo.org_banner[0]}}">
-          <swiper-item wx:for="{{orgInfo.org_banner}}">
-            <view class="banner-outer" style="background-image: url({{item.banner_image}});" bindtap="onTapBanner" data-banneritem="{{orgInfo.org_banner[index]}}">
+        <swiper circular="{{org_info.org_banner.length > 1}}" autoplay="{{org_info.org_banner.length > 1}}" class="swiper" interval="3000" wx:if="{{org_info.org_banner[0]}}">
+          <swiper-item wx:for="{{org_info.org_banner}}">
+            <view class="banner-outer" style="background-image: url({{item.banner_image}});" bindtap="onTapBanner" data-banneritem="{{org_info.org_banner[index]}}">
               <view class="pinned-content" wx:if="{{item.banner_title}}">
                 <text>{{item.banner_title}}</text>
               </view>
             </view>
           </swiper-item>
         </swiper>
+
+
         <view
         class="model-container"
-        wx:if="{{orgInfo.org_model_main.function_title}}"
+        wx:if="{{have_full_width_func}}"
         bindtap="handleFunctionPre"
-        data-functionlist="{{orgInfo.org_model_main}}"
-        style="margin-top: {{!orgInfo.org_banner[0]?'20rpx':'0'}};"
+        data-functionlist="{{org_info.org_function[0].function_list}}"
+        style="margin-top: {{!org_info.org_banner[0]?'30rpx':'0'}};"
         >
           <view class="model-inner-container">
-            <view class="model-text">{{orgInfo.org_model_main.function_title}}</view>
-            <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+            <view class="model-text">{{org_info.org_function[0].function_title}}</view>
+            <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
           </view>
         </view>
-        <view style="display: flex;flex-direction: row;margin-top: {{orgInfo.org_model_main.function_title?'20rpx':'0'}};" wx:if="{{orgInfo.org_model_half[0]}}">
-          <view class="model-container-half-left" wx:if="{{orgInfo.org_model_half[0]}}" bindtap="handleFunctionPre" data-functionlist="{{orgInfo.org_model_half[0]}}">
+
+
+        <view style="display: flex;flex-direction: row;margin-top: {{have_full_width_func?'20rpx':'30rpx'}};" wx:if="{{half_list[0]}}">
+          <view class="model-container-half-left" wx:if="{{half_list[0]}}" bindtap="handleFunctionPre" data-functionlist="{{half_list[0]}}">
             <view class="model-inner-container">
-              <view class="model-text">{{orgInfo.org_model_half[0].function_title}}</view>
-              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+              <view class="model-text">{{half_list[0].function_title}}</view>
+              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
             </view>
           </view>
-          <view class="model-container-half-right" wx:if="{{orgInfo.org_model_half[1]}}"
-          bindtap="handleFunctionPre" data-functionlist="{{orgInfo.org_model_half[1]}}">
+
+
+          <view class="model-container-half-right" wx:if="{{half_list[1]}}"
+          bindtap="handleFunctionPre" data-functionlist="{{half_list[1]}}">
             <view class="model-inner-container">
-              <view class="model-text">{{orgInfo.org_model_half[1].function_title}}</view>
-              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+              <view class="model-text">{{half_list[1].function_title}}</view>
+              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
             </view>
           </view>
         </view>
-        <view style="display: flex;flex-direction: row;margin-top: 20rpx;" wx:if="{{orgInfo.org_model_half[2]}}">
-          <view class="model-container-half-left" wx:if="{{orgInfo.org_model_half[2]}}"
-          bindtap="handleFunctionPre" data-functionlist="{{orgInfo.org_model_half[2]}}">
+
+
+        <view style="display: flex;flex-direction: row;margin-top: 20rpx;" wx:if="{{half_list[2]}}">
+          <view class="model-container-half-left" wx:if="{{half_list[2]}}"
+          bindtap="handleFunctionPre" data-functionlist="{{half_list[2]}}">
             <view class="model-inner-container">
-              <view class="model-text">{{orgInfo.org_model_half[2].function_title}}</view>
-              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+              <view class="model-text">{{half_list[2].function_title}}</view>
+              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
             </view>
           </view>
-          <view class="model-container-half-right" wx:if="{{orgInfo.org_model_half[3]}}"
-          bindtap="handleFunctionPre" data-functionlist="{{orgInfo.org_model_half[3]}}">
+          <view class="model-container-half-right" wx:if="{{half_list[3]}}"
+          bindtap="handleFunctionPre" data-functionlist="{{half_list[3]}}">
             <view class="model-inner-container">
-              <view class="model-text">{{orgInfo.org_model_half[3].function_title}}</view>
-              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-{{theme}}.svg"></image>
+              <view class="model-text">{{half_list[3].function_title}}</view>
+              <image style="width: 40rpx;height: 40rpx;position: absolute;right: 30rpx;" src="/images/arrow-all.svg"></image>
             </view>
           </view>
         </view>
       </view>
 
-      <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{postList}}"/>
-      <loadmore end="{{isLast}}" loading="{{is_loading_more}}" />
+      <one type="{{item.type}}" data="{{item.data}}" wx:for="{{postList}}" wx:key="index"/>
+      <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />
     </view>
     
   </view>

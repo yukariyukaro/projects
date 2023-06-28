@@ -1,20 +1,20 @@
 <view class="avatar-outer">
   <view class="avatar-image-wrapper">
     <view class="avatar-ripple" />
-    <image class="avatar" src="/images/pootal-logo.svg" />
+    <image class="avatar" src="/images/logo.svg" />
   </view>
-  <view class='title'>HKU噗噗</view>
+  <view class='title'>{{app_name}}</view>
 </view>
 
-<view class="prompt"style="margin-bottom: 20rpx;margin-top: 80rpx;" wx:if="{{mode=='portal'}}">需要使用你的Portal账号验证HKU学生身份</view>
-<view class="prompt" style="margin-bottom: 20rpx;margin-top: 40rpx;" wx:if="{{mode=='email'}}">需要使用你的教育邮箱验证HKU学生身份</view>
-
+<view class="prompt" style="margin-bottom: 40rpx;margin-top: 40rpx;" wx:if="{{mode == 'email'}}">需要使用你的教育邮箱验证{{ school_label }}学生身份</view>
+<view class="prompt" style="margin-bottom: 40rpx;margin-top: 40rpx;" wx:else>需要使用你的账号与密码验证社团身份</view>
 
 <view class="common-outer">
   <view class="inputbar">
     <input type="text" class="inputbar-input" placeholder="UID" maxlength="20" bindinput="uidInput"></input>
   </view>
 </view>
+
 
 <view class="common-outer" wx:if="{{mode=='portal'}}" style="margin-bottom: 20rpx;">
   <view class="inputbar">
@@ -40,42 +40,49 @@
       </view>
     </view>
     <view class="auth-outer">
-      <button class="inputbtn-getauth" bindtap="sendVcode" disabled="{{isSending||authSent}}">发送验证码</button>
+      <button class="inputbtn-getauth" bindtap="sendVcode" disabled="{{is_sending||auth_sent}}">发送验证码</button>
     </view>
   </view>
 </block>
 
 <view class="inputbar-auth-group">
   <checkbox-group bindchange="agreeChange" >
-    <checkbox color="#D85050" value="true"/>
+    <checkbox color="#7A4BED" value="{{agree}}"/>
   </checkbox-group>
-  <navigator class="prompt" style="margin:auto; margin-left: 10rpx;" url="/pages/disclaimer/disclaimer">我同意「用户条款及声明」</navigator>
+  <view  style="display: flex; padding-top: 7rpx;">
+    <text class="prompt" style=" margin-left: 10rpx;">我同意</text>
+    <navigator class="prompt"  url="/pages/webview/webview?url=https://hkupootal.com/{{school_label_lower}}/agreement">「用户协议」</navigator>
+    <text class="prompt" >和</text>
+    <navigator class="prompt"  url="/pages/webview/webview?url=https://hkupootal.com/{{school_label_lower}}/privacy">「隐私政策」</navigator>
+  </view>
 </view>
 
 <view class="common-outer" style="padding: 0; margin-top: 20rpx; margin-bottom: 20rpx">
-  <button class="inputbtn-submit primary radius" bindtap="register" disabled="{{isPosting}}">登录</button>
+  <button class="inputbtn-submit primary radius" bindtap="register" disabled="{{is_posting}}">登录</button>
 </view>
 
 <view class="divider"></view>
 
-<view class="common-outer" style="margin-top:20rpx;" wx:if="{{mode=='portal'}}">
-  <button class="inputbtn-submit" bindtap="changeMode" data-mode="email" style="color: var(--primary)">使用邮箱验证码登录</button>
+<view class="common-outer" style="margin-top:30rpx;" wx:if="{{mode=='portal'}}">
+  <button class="inputbtn-submit" bindtap="changeMode" data-mode="email" style="color: {{theme=='light'? 'var(--primary)': 'var(--on-primary)'}}">使用邮箱验证码登录</button>
 </view>
 
-<view class="common-outer" style="margin-top:20rpx; padding: 0;" wx:if="{{mode=='email'}}">
-  <button class="inputbtn-submit" bindtap="changeMode" data-mode="portal" style="color: var(--primary)" >使用账号密码登录</button>
+<view class="common-outer" style="margin-top:30rpx; padding: 0;" wx:if="{{mode=='email'}}">
+  <button class="inputbtn-submit" bindtap="changeMode" data-mode="portal" style="color: {{theme=='light'? 'var(--primary)': 'var(--on-primary)'}}" >使用账号密码登录</button>
 </view>
+
+
 
 <view class="contact">
   <view>UID为connect教育邮箱前缀</view>
-  <view>如test@connect.hku.hk的UID为test</view>
-  <view>如遇问题，请通过 contact@hkupootal.com 联系我们</view>
+  <view>如test{{suffixes[0]}}的UID为test</view>
+  <view>如遇问题，请通过 {{contact_email}} 联系我们</view>
   <view style="display: flex; justify-content: space-between; font-weight: bold;margin-top: 20rpx;">
     <view class="other-school-button">
       <navigator target="miniProgram" open-type="navigate" app-id="wx489029782cc3f033" path="" extra-data="" version="release">HKUST学生入口</navigator>
     </view>
     <view class="other-school-button">
-      <navigator target="miniProgram" open-type="navigate" app-id="wxad4d60c06d39de3c" path="" extra-data="" version="release">CUHK学生入口</navigator>
+      <navigator target="miniProgram" open-type="navigate" app-id="wxa394693d65e17c6a" path="" extra-data="" version="release">CUHK学生入口</navigator>
     </view>
   </view>
 </view>

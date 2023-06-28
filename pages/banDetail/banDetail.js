@@ -1,11 +1,15 @@
 // pages/banDetail/banDetail.js
+import newRequest from '../../utils/request'
+import info from '../../utils/info'
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    app_name: info.app_name,
+    team_name: info.team_name
   },
 
   exit: function () {
@@ -18,35 +22,30 @@ Page({
     })
   },
 
+  // /user/ban/detail
   getBanDetail: function () {
     var that = this
     wx.login({
       success(res) {
         if (res.code) {
-          wx.request({
-            url: 'https://api.pupu.hkupootal.com/v3/user/ban/detail.php',
-            method: 'POST',
-            data: {
-              code: res.code,
-              system_info: JSON.stringify(wx.getSystemInfoSync())
-            },
-            header: {
-              'content-type': 'application/x-www-form-urlencoded'
-            },
-            success(res2) {
-              if(res2.data.code == 200){
-                that.setData({
-                  ban_detail: res2.data.ban_detail
-                })
-              }else if(res2.data.code == 300){
-                wx.reLaunch({
-                  url: '/pages/home/home',
-                })
-              }else{
-                wx.showToast({title: res2.data.msg, icon: "none", duration: 1000})
-              }
-
+          newRequest('/user/ban/detail', {
+            code: res.code,
+            system_info: JSON.stringify(wx.getSystemInfoSync())
+          }, () => {}, false)
+          .then((res2) => {
+            
+            if(res2.code == 200 || res2.code == 201){
+              that.setData({
+                ban_detail: res2.ban_detail
+              })
+            }else if(res2.code == 202){
+              wx.reLaunch({
+                url: '/pages/home/home',
+              })
+            }else{
+              wx.showToast({title: res2.msg, icon: "none", duration: 1000})
             }
+            
           })
         } else {
           wx.showToast({

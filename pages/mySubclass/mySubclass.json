@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "one": "/components/one/one"
-  },
-  "navigationBarTitleText": "我的日程",
-  "disableScroll":true
-}

@@ -1,38 +1,33 @@
-<prompt id="reportPrompt" title='举报原因:' bind:getInput="reportPromptGetInput" bind:modalCancel="reportPromptCancel" bind:modalConfirm="reportPromptConfirm" type="textarea" input_height="18" max_length="30">
-</prompt>
 
-<view style="position: fixed;top: 0;right: 0;bottom: 0;left: 0;font-size: 120rpx;z-index: -90;opacity:{{is_dark?'0.15':0.1}};line-height: 140rpx;letter-spacing: 20rpx;" wx:if="{{postDetail.post_media.media_type == 'emotion'}}">
-  <view style="white-space:nowrap;position: relative; left:-{{60* (index % 2 + 1)}}rpx" wx:for="{{20}}"><text wx:for="{{20}}">{{postDetail.post_media.emotion_emoji}}</text></view>
-</view>
 
-<view class="overlay" wx:if="{{show_comment_box}}" animation="{{overlay_animation}}"></view>
+<view class="overlay" wx:if="{{show_comment_box || show_report_box}}" animation="{{overlay_animation}}"></view>
 
 <!-- 漂浮头部 -->
 <view class="header-outer">
   <view class="header" wx:if="{{data_received}}">
     <view class="header-title">
-      <text style="font-weight:bold;align-self:center;font-size: 30rpx;">#{{postDetail.post_id}}</text>
-      <view class="topic">{{postDetail.post_topic}}</view>
+      <text style="font-weight:bold;align-self:center;font-size: 30rpx;">#{{post_detail.post_id}}</text>
+      <view class="topic">{{post_detail.post_topic}}</view>
     </view>
     <view class="header-control">
       <!-- 围观/公开状态 -->
       <view class="header-status">
-        <view wx:if="{{!postDetail.is_author && postDetail.is_following}}" bindtap="follow">
+        <view wx:if="{{!post_detail.is_author && post_detail.is_following}}" bindtap="follow">
           正在围观
         </view>
-        <view class="status-active" wx:if="{{!postDetail.is_author && postDetail.is_following}}" bindtap="follow"></view>
-        <view wx:if="{{!postDetail.is_author && !postDetail.is_following}}" bindtap="follow">
+        <view class="status-active" wx:if="{{!post_detail.is_author && post_detail.is_following}}" bindtap="follow"></view>
+        <view wx:if="{{!post_detail.is_author && !post_detail.is_following}}" bindtap="follow">
           尚未围观
         </view>
-        <view class="status-inactive" wx:if="{{!postDetail.is_author && !postDetail.is_following}}" bindtap="follow" style="{{tintStyle?tintStyle:''}}"></view>
-        <view wx:if="{{postDetail.is_author && postDetail.post_public == '1'}}" bindtap="setPrivate">
+        <view class="status-inactive" wx:if="{{!post_detail.is_author && !post_detail.is_following}}" bindtap="follow" style="{{tintStyle?tintStyle:''}}"></view>
+        <view wx:if="{{post_detail.is_author && post_detail.post_public == '1'}}" bindtap="setPrivate">
           公开状态
         </view>
-        <view class="status-active" wx:if="{{postDetail.is_author && postDetail.post_public == '1'}}" bindtap="setPrivate"></view>
-        <view wx:if="{{postDetail.is_author && postDetail.post_public == '2'}}" bindtap="setPublic">
+        <view class="status-active" wx:if="{{post_detail.is_author && post_detail.post_public == '1'}}" bindtap="setPrivate"></view>
+        <view wx:if="{{post_detail.is_author && post_detail.post_public == '2'}}" bindtap="setPublic">
           私密状态
         </view>
-        <view class="status-inactive" wx:if="{{postDetail.is_author && postDetail.post_public == '2'}}" bindtap="setPublic" style="{{tintStyle?tintStyle:''}}"></view>
+        <view class="status-inactive" wx:if="{{post_detail.is_author && post_detail.post_public == '2'}}" bindtap="setPublic" style="{{tintStyle?tintStyle:''}}"></view>
       </view>
       <!-- 更多操作 -->
       <view class="icon-more-outer" bindtap="showMainMenu">
@@ -48,113 +43,107 @@
     <view class="post-outer">
       <view class="post-content">
         <view class="post-text">
-          <text user-select='true'>{{postDetail.post_msg}}</text>
+          <text user-select='true'>{{post_detail.post_msg}}</text>
         </view>
         <!-- 图片 -->
-        <view wx:if="{{postDetail.post_image != ''}}" style="margin-top: 5vw;text-align:center">
-          <image style="width:100%;border-radius: 10px" mode="widthFix" src="{{postDetail.post_image}}" bindtap="previewPic"></image>
+        <view wx:if="{{post_detail.post_image}}" style="margin-top: 5vw; margin-right:20rpx;text-align:center" wx:for="{{post_detail.post_image}}" wx:key="index">
+          <image style="width:100%;border-radius: 10px" mode="widthFix" src="{{item}}" data-index="{{index}}" bindtap="previewPic"></image>
         </view>
         <!-- Bilibili -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'bilibili'}}" bindtap="onTapBilibili">
-          <image class="function_bilibili_image" mode="aspectFill" src="{{postDetail.post_media.bilibili_image}}"></image>
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'bilibili'}}" bindtap="onTapBilibili">
+          <image class="function_bilibili_image" mode="aspectFill" src="{{post_detail.post_media.bilibili_image}}"></image>
           <view class="function_bilibili_right">
             <view class="function_text_container">
-              <view class="function_text_title">{{postDetail.post_media.bilibili_title}}</view>
-              <view class="function_text_detail">{{postDetail.post_media.bilibili_author}}</view>
+              <view class="function_text_title">{{post_detail.post_media.bilibili_title}}</view>
+              <view class="function_text_detail">{{post_detail.post_media.bilibili_author}}</view>
             </view>
             <image class="function_bilibili_icon" src="/images/bilibili.svg"></image>
           </view>
         </view>
         <!-- 文章 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'article'}}" bindtap="onTapArticle">
-          <image class="function_bilibili_image" mode="aspectFill" src="{{postDetail.post_media.article_image}}"></image>
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'article'}}" bindtap="onTapArticle">
+          <image class="function_bilibili_image" mode="aspectFill" src="{{post_detail.post_media.article_image}}"></image>
           <view class="function_bilibili_right">
             <view class="function_text_container">
-              <view class="function_text_title">{{postDetail.post_media.article_title}}</view>
-              <view class="function_text_detail">{{postDetail.post_media.article_author}}</view>
+              <view class="function_text_title">{{post_detail.post_media.article_title}}</view>
+              <view class="function_text_detail">{{post_detail.post_media.article_author}}</view>
             </view>
           </view>
         </view>
         <!-- 网易云 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'netease'}}" bindtap="onTapNetease">
-          <image class="function_netease_image" mode="aspectFill" src="{{postDetail.post_media.netease_image}}"></image>
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'netease'}}" bindtap="onTapNetease">
+          <image class="function_netease_image" mode="aspectFill" src="{{post_detail.post_media.netease_image}}"></image>
           <view class="function_netease_right">
             <view class="function_text_container">
-              <view class="function_text_title">{{postDetail.post_media.netease_title}}</view>
-              <view class="function_text_detail">{{postDetail.post_media.netease_artist}} - {{postDetail.post_media.netease_epname}}</view>
+              <view class="function_text_title">{{post_detail.post_media.netease_title}}</view>
+              <view class="function_text_detail">{{post_detail.post_media.netease_artist}} - {{post_detail.post_media.netease_epname}}</view>
             </view>
             <image class="function_netease_icon" src="/images/netease.svg"></image>
           </view>
         </view>
         <!-- 投票 -->
-        <view class="function_container" style="padding-bottom: 20rpx;  flex-direction: column;" wx:if="{{postDetail.post_media.media_type == 'vote'}}">
-          <view class="function_vote_title">{{postDetail.post_media.vote_title}}</view>
-          <view class="function_vote_subtitle" wx:if="{{postDetail.post_media.user_voted_option_title}}">你已选择：{{postDetail.post_media.user_voted_option_title}}</view>
-          <view class="function_vote_subtitle" wx:else>你尚未投票{{postDetail.post_media.user_voted_option_title}}</view>
-          <view class="function_vote_option_list" wx:for="{{postDetail.post_media.optionList}}" bindtap="vote" data-optionid="{{item.option_id}}">
+        <view class="function_container" style="padding-bottom: 20rpx;  flex-direction: column;" wx:if="{{post_detail.post_media.media_type == 'vote'}}">
+          <view class="function_vote_title">{{post_detail.post_media.vote_title}}</view>
+
+          <view class="function_vote_subtitle" wx:if="{{post_detail.post_media.user_voted_option_title}}">你已选择：{{post_detail.post_media.user_voted_option_title}}</view>
+          <view class="function_vote_subtitle" wx:else>你尚未投票{{post_detail.post_media.user_voted_option_title}}</view>
+
+          <view class="function_vote_option_list" wx:for="{{post_detail.post_media.option_list}}" bindtap="vote" data-optionid="{{item.option_id}}" wx:key="index">
+            
             <view class="function_vote_option_lower">
               <view class="{{item.is_voted ? 'function_vote_option_lower_text_left_voted' :'function_vote_option_lower_text_left'}}">{{item.option_title}}</view>
               <view class="{{item.is_voted ? 'function_vote_option_lower_text_right_voted' :'function_vote_option_lower_text_right'}}">{{item.option_num}}</view>
             </view>
-            <view class="{{item.is_voted ? 'function_vote_option_upper_voted' :'function_vote_option_upper'}}" style="width:{{item.option_percentage}};">
+
+            <view class="{{item.is_voted ? 'function_vote_option_upper_voted' :'function_vote_option_upper'}}" style="width:{{item.option_percentage_str}};">
               <view class="function_vote_option_upper_inner">
                 <view class="function_vote_option_upper_text_left">{{item.option_title}}</view>
                 <view class="function_vote_option_upper_text_right">{{item.option_num}}</view>
               </view>
             </view>
+
           </view>
 
         </view>
         <!-- 引用树洞 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'quote'}}" bindtap="onTapQuote">
-          <image class="function_netease_image" mode="aspectFill" src="/images/pootal-logo.svg"></image>
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'quote'}}" bindtap="onTapQuote">
+          <image class="function_netease_image" mode="aspectFill" src="/images/logo.svg"></image>
           <view class="function_netease_right">
             <view class="function_text_container">
-              <view class="function_text_title">{{postDetail.post_media.quote_title}}</view>
-              <view class="function_text_detail_quote">{{postDetail.post_media.quote_content}}</view>
+              <view class="function_text_title">{{post_detail.post_media.quote_title}}</view>
+              <view class="function_text_detail_quote">{{post_detail.post_media.quote_content}}</view>
             </view>
           </view>
         </view>
         <!-- 小程序 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{postDetail.post_media.media_type == 'miniapp'}}" bindtap="onTapMiniapp">
-          <image class="function_netease_image" mode="aspectFill" src="{{postDetail.post_media.miniapp_image}}"></image>
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'miniapp'}}" bindtap="onTapMiniapp">
+          <image class="function_netease_image" mode="aspectFill" src="{{post_detail.post_media.miniapp_image}}"></image>
           <view class="function_netease_right">
             <view class="function_text_container">
-              <view class="function_text_title">{{postDetail.post_media.miniapp_msg}}</view>
-              <view class="function_text_detail_quote">{{postDetail.post_media.miniapp_name}}</view>
+              <view class="function_text_title">{{post_detail.post_media.miniapp_msg}}</view>
+              <view class="function_text_detail_quote">{{post_detail.post_media.miniapp_name}}</view>
             </view>
           </view>
         </view>
-        <!-- 吐槽墙 -->
-        <view wx:if="{{postDetail.post_media.media_type == 'emotion'}}">
-          <image class="function_container" wx:if="{{postDetail.post_media.emotion_index == 0}}" bindtap="onTapEmotion" src="https://i.boatonland.com/emotion_tabbar/indetail_bojin.png" mode="aspectFit" style="height: 200rpx;">
-          </image>
-          <image class="function_container" wx:if="{{postDetail.post_media.emotion_index == 1}}" bindtap="onTapEmotion" src="https://i.boatonland.com/emotion_tabbar/indetail_bailan.png" mode="aspectFit" style="height: 200rpx;">
-          </image>
-          <image class="function_container" wx:if="{{postDetail.post_media.emotion_index == 2}}" bindtap="onTapEmotion" src="https://i.boatonland.com/emotion_tabbar/indetail_fadian.png" mode="aspectFit" style="height: 200rpx;">
-          </image>
-          <image class="function_container" wx:if="{{postDetail.post_media.emotion_index == 3}}" bindtap="onTapEmotion" src="https://i.boatonland.com/emotion_tabbar/indetail_pingjing.png" mode="aspectFit" style="height: 200rpx;">
-          </image>
-        </view>
-      </view>
+
       <!-- 日期 -->
       <view class="post-datetime">
-        <view wx:if="{{postDetail.post_school_label == 'CUHK' || postDetail.post_school_label == 'UST'}}">来自UNI</view>
-        <view wx:if="{{postDetail.post_school_label == 'HKU'}}">已同步至UNI</view>
-        <view>发表于{{postDetail.post_date}}</view>
+        <view wx:if="{{post_detail.post_is_uni && post_detail.user_school_label == my_school_label}}">已同步至UNI</view>
+        <view wx:if="{{post_detail.post_is_uni && post_detail.user_school_label != my_school_label}}">来自UNI</view>
+        <view>发表于{{post_date}}</view>
       </view>
       <!-- 署名 -->
-      <view class="alias{{postDetail.is_org?'-org':''}}" bindtap="visitUser">
-        <text>{{postDetail.post_alias}}</text>
+      <view class="alias{{post_detail.user_is_org?'-org':''}}" bindtap="visitUser">
+        <text>{{post_detail.user_alias}}</text>
       </view>
       <view class="avatar-outer" bindtap="visitUser">
-        <image class="avatar" src="{{preURL+postDetail.user_avatar+'.svg'}}" />
+        <image class="avatar" src="{{pre_url+post_detail.user_avatar+'.svg'}}" />
       </view>
 
-      <view class="org-box" wx:if="{{postDetail.is_org}}" bindtap="visitUser">
+      <view class="org-box" wx:if="{{post_detail.user_is_org && post_detail.user_is_real_name}}" bindtap="visitUser">
         <view class="org-box-cor"></view>
         <view class="org-box-text">
-          <view class="org-box-inner">{{postDetail.post_alias}}已开通社团主页</view>
+          <view class="org-box-inner">{{post_detail.user_alias}}已开通社团主页</view>
         </view>
       </view>
 
@@ -169,16 +158,16 @@
           <image class="icon" src="/images/sf-comment.svg"></image>
         </view>
         <view class="comment-num">
-          <text>{{postDetail.comment_num}}</text>
+          <text>{{post_detail.post_comment_num}}</text>
         </view>
         <!-- 围观数 -->
         <view class="follower-icon-outer">
-          <image wx-if="{{postDetail.is_following}}" bindtap="follow" class="icon" src="/images/sf-star-fill.svg"></image>
-          <image wx-if="{{!postDetail.is_following}}" bindtap="follow" class="icon" src="/images/sf-star.svg"></image>
+          <image wx-if="{{post_detail.is_following}}" bindtap="follow" class="icon" src="/images/sf-star-fill.svg"></image>
+          <image wx-if="{{!post_detail.is_following}}" bindtap="follow" class="icon" src="/images/sf-star.svg"></image>
         </view>
-        <view class="follower-num">{{postDetail.follower_num}}</view>
+        <view class="follower-num">{{post_detail.post_follower_num}}</view>
         <!-- 倒序 -->
-        <view bindtap="reverseComments" style="width: 100%; margin-right: 5vw" wx:if="{{commentList.length > 0}}">
+        <view bindtap="reverseComments" style="width: 100%; " wx:if="{{comment_list.length > 0}}">
           <view style="text-align: right">
             <image wx:if="{{!comment_reverse}}" class="icon" src="/images/sort.svg"></image>
             <image wx:if="{{comment_reverse}}" class="icon" style="transform: rotate(180deg)" src="/images/sort.svg"></image>
@@ -187,14 +176,15 @@
       </view>
       <!-- 广告 -->
       <view>
-        <image wx:if="{{adInfo.ad_image}}" src="{{adInfo.ad_image}}" class="detail-ad" bindtap="onTapAd"></image>
+        <image wx:if="{{ad_info.ad_image}}" src="{{ad_info.ad_image}}" class="detail-ad" bindtap="onTapAd"></image>
       </view>
       <!-- 显示所有评论 -->
       <view>
-        <singleComment id="commentComponent" wx:for="{{commentList}}" wx:key="index" bind:deleteComment="deleteComment" bind:replyComment="replyComment" bind:reportComment="reportComment" post_id="{{postDetail.post_id}}" comment_id="{{item.comment_id}}" comment_order="{{item.comment_order}}" comment_msg="{{item.comment_msg}}" comment_date="{{item.comment_date}}" is_author="{{item.is_author}}" is_anonymous="{{item.is_anonymous}}" is_org="{{item.is_org}}" comment_alias="{{item.comment_alias}}" user_avatar="{{item.user_avatar}}" user_serial="{{item.user_serial}}" comment_school_label="{{item.comment_school_label}}" post_is_author="{{postDetail.is_author}}" comment_father_msg="{{item.comment_father_msg}}" comment_image="{{item.comment_image}}" comment_theme_color="{{comment_theme_color}}"/>
+        <singleComment id="commentComponent" wx:for="{{comment_list}}" wx:key="index" bind:deleteComment="deleteComment" bind:replyComment="replyComment" bind:reportComment="reportComment" uni_post_id="{{item.uni_post_id}}" comment_id="{{item.comment_id}}" comment_order="{{item.comment_order}}" comment_msg="{{item.comment_msg_display? item.comment_msg_display:item.comment_msg}}" comment_create_time="{{item.comment_create_time}}" is_author="{{item.is_author}}" is_anonymous="{{!item.user_is_real_name}}" is_org="{{item.user_is_org}}" comment_alias="{{item.user_alias}}" user_avatar="{{item.user_avatar}}" user_serial="{{item.user_serial}}" comment_school_label="{{item.user_school_label}}" post_is_author="{{post_detail.is_author}}" comment_father_msg="{{item.comment_father_msg}}" comment_image="{{item.comment_image}}" comment_theme_color="{{comment_theme_color}}"/>
       </view>
     </view>
   </view>
+</view>
 </scroll-view>
 
 <!-- 追加补充信息 -->
@@ -206,25 +196,33 @@
 </view>
 
 
-
-<view class="reply-outer" animation="{{comment_box_animation}}" wx:if="{{show_comment_box}}">
+<!-- 评论/举报弹窗 -->
+<view class="reply-outer" animation="{{comment_report_box_animation}}" wx:if="{{show_comment_box || show_report_box}}">
+  <!-- 标题 -->
   <view style="display: flex;flex-direction: row;justify-content: space-between;margin: 10rpx 0 20rpx 0;">
-    <view style="font-size: 34rpx;font-weight: bold;line-height: 40rpx;">评论</view>
-    <image src="/images/delete.svg" style="width: 40rpx;height: 40rpx;" bindtap="hideCommentBox"></image>
+    <view style="font-size: 34rpx;font-weight: bold;line-height: 40rpx;">{{show_comment_box? "评论": "举报"}}</view>
+    <image src="/images/delete.svg" style="width: 40rpx;height: 40rpx;" bindtap="hideCommentReportBox"></image>
   </view>
-  <view class="textarea-outer" bindtap="focus">
+  <!-- 输入框 -->
+  <view class="textarea-outer" bindtap="focus" wx:if="{{show_comment_box}}">
     <textarea class="textarea-content" maxlength="500" placeholder="{{comment_box_placeholder}}" show-confirm-bar="{{false}}" bindinput="bindCommentMsgInput" value="{{comment_msg}}" focus="{{focus}}" cursor-spacing="360rpx" adjust-position auto-height style="width: {{comment_image != ''?'80%':'100%'}};">
     </textarea>
     <view wx:if="{{comment_image != ''}}" style="text-align:center;width:20%;">
       <image style="width:100%;border-radius: 10px" mode="widthFix" src="{{comment_image}}" catchtap="picTap"></image>
     </view>
   </view>
+  
+  <view class="textarea-outer" bindtap="focus" wx:else >
+    <textarea class="textarea-content" maxlength="500" placeholder="举报原因" show-confirm-bar="{{false}}" bindinput="reportPromptGetInput" value="{{report_user_msg}}" focus="{{focus}}" cursor-spacing="360rpx" adjust-position auto-height style="width: 100%;">
+    </textarea>
+  </view>
+
   <view style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 20rpx;">
-    <view style="display: flex;flex-direction: row;" wx:if="{{!postDetail.is_author}}">
+    <view style="display: flex;flex-direction: row;" wx:if="{{!post_detail.is_author && show_comment_box}}">
       <view style="font-size: 30rpx;line-height: 60rpx;margin-right: -10rpx;color: #8C8C8C;">实名回复</view>
-      <switch class="textarea-switch" color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{comment_with_serial}}" bindchange="switchSerialChange"></switch>
+      <switch class="textarea-switch" color="{{primary_color}}" checked="{{comment_with_serial}}" bindchange="switchSerialChange"></switch>
     </view>
     <view wx:else></view>
-    <view class="send-button" bindtap="submitComment" style="{{primaryColor?'background:'+primaryColor:''}}">发送</view>
+    <view class="send-button" bindtap="{{show_comment_box? 'submitComment':'reportPromptConfirm'}}" >发送</view>
   </view>
 </view>

@@ -8,7 +8,7 @@ Page({
    */
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
-    chatList: [],
+    chat_list: [],
     systemNoticeCount:0
   },
 
@@ -16,9 +16,10 @@ Page({
     var that = this
     var db = app.initDatabase()
     var chat = db.chat
-    var chatList = chat.orderBy('chat_latest_pm_id', 'desc').get()
+    var chat_list = chat.orderBy('chat_latest_pm_id', 'desc').get()
+    // console.log(chat_list)
     that.setData({
-      chatList:chatList
+      chat_list:chat_list
     })
   },
   nav2PmDetail:function(e){
@@ -58,6 +59,21 @@ Page({
         wx.setStorageSync('allNoticeCount', 0)
       }
     wx.setStorageSync('systemNoticeCount', 0)
+  },
+
+  longpress:function(e){
+    var that = this
+    wx.showActionSheet({
+      itemList: ['删除'],
+      success (res) {
+        if(res.tapIndex == 0){
+          app.deleteChat(e.currentTarget.dataset.chatid, e.currentTarget.dataset.unreadcount)
+          setTimeout(() => {
+            that.setPageData()
+          }, 1000);
+        } 
+      }
+    })
   },
 
   // updateTabbar:function(){

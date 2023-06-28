@@ -1,5 +1,5 @@
 page{
-  background: var(--bg-gray-4);
+  background-color: var(--pm-bg);
 }
 .user-avatar {
   position: relative;
@@ -383,7 +383,7 @@ padding-bottom:80rpx;
   font-size: 32rpx;
   color: var(--text);
   margin-top: 20rpx;
-  background: var(--bg--gray-5);
+  background: var(--inputinner);
   border-radius: 10rpx;
   box-sizing: border-box;
 }
@@ -503,7 +503,7 @@ padding-bottom:80rpx;
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
-  padding: 0 32rpx;
+  padding: 0 32rpx 25rpx 32rpx;
 }
 
 .item-container {
@@ -535,6 +535,7 @@ padding-bottom:80rpx;
   width: 80rpx;
   height: 80rpx;
   margin-top: 6rpx;
+
 }
 
 .item-right {
@@ -587,13 +588,14 @@ padding-bottom:80rpx;
   padding: 18rpx 20rpx;
   margin-top: 8rpx;
   box-sizing: border-box;
-  background: var(--bg--gray-5);
+  background: var(--bg-1);
   border-top-left-radius: 8rpx;
   border-top-right-radius: 8rpx;
   border-bottom-left-radius: 8rpx;
   border-bottom-right-radius: 8rpx;
   word-wrap: break-word;
   word-break: break-all;
+  background-color: var(--bg-2);
 }
 
 .item-right-text-me {

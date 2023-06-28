@@ -1,80 +1,70 @@
 page {
-  --primary: #D85050;
-  --primary-gradient: linear-gradient(to bottom right, #c53d3d, #e96b6b);
+  --primary:  #D85050;
+  /* --primary-gradient: linear-gradient(to bottom right, #c53d3d, #e96b6b); */
   --secondary: #ffd700;
-  --secondary-gradient: linear-gradient(to bottom right, #e9c602, #ffe760);
-  --gray-gradient: linear-gradient(to bottom right, #b4b4b4, #d6d6d6);
-  --primary-shadow: 0 0 18px -4px rgba(216, 80, 80, 0.8);
-  --secondary-shadow: 0 0 18px -4px rgba(233, 198, 2, 0.8);
+  /* --secondary-gradient: linear-gradient(to bottom right, #fcd64e, #fad240); */
+  /* --gray-gradient: linear-gradient(to bottom right, #b4b4b4, #d6d6d6); */
+  /* --primary-shadow: 0 0 18px -4px rgba(216, 80, 80, 0.8);
+  --secondary-shadow: 0 0 18px -4px rgba(233, 198, 2, 0.8); */
   --gray-shadow: 0 0 18px -4px rgba(128, 128, 128, 0.8);
   --bg-1: #fff;
   --bg-2: #fff;
-  --bg-3: #fff;
-  --bg-gray-1: #ddd;
+  --bg-gray-1: rgb(228, 228, 228);
   --bg-gray-2: #c2c2c2;
   --bg-gray-3: #eeeeee;
-  --bg-gray-4: #F8F8F8;
-  --bg--gray-5: #ffffff;
   --on-primary: #fff;
-  --on-secondary: #000;
+  --on-secondary: #202020;
   --on-bg-1: #000;
-  --on-bg-2: #808080;
-  --on-bg-3: #606060;
-  --on-bg-gray-1: #000;
-  --on-bg-gray-2: #000;
+  --on-bg-2: #5f5f5f;
+
+  --on-bg-gray-1: #5e5d5d;
+  --on-bg-gray-2: #252628;
   --shadow-1: 0 0 18px 4px rgba(0, 0, 0, 0.1);
-  --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.1);
-  --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15);
+  /* --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.1);
+  --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15); */
   --text: #333333;
-  /* --divider: #eeeeee; */
-  --divider:#e8e8e8;
-  --pmtext: #252628;
-  --pmsubtext: #b7b5c2;
+  --divider: #eeeeee;
   --inputouter: #F2F2F2;
   --inputinner: #FFFFFF;
   --model-bg-gray: #f8f8f8;
+  --pm-bg: #faf9f9;
   --alias-org-bg: linear-gradient(to bottom right, #55A5FF, #A7F7FF);
   --alias-org-text: #000000;
-  --hku-one-primary: #1F86FC;
 }
 @media (prefers-color-scheme: dark) {
   page {
     --primary: #864442;
     --secondary: #f3ec68;
-    --primary-gradient: linear-gradient(to bottom right, #b44d56, #cc7980);
-    --secondary-gradient: linear-gradient(to bottom right, #EDDE3F, #f6f194);
-    --gray-gradient: linear-gradient(to bottom right, #424242, #646464);
-    --primary-shadow: 0 0 18px -8px rgba(133, 68, 66, 0.8);
-    --secondary-shadow: 0 0 18px -8px rgba(233, 198, 2, 0.8);
-    --gray-shadow: 0 0 18px -8px rgba(128, 128, 128, 0.8);
+    /* --primary-gradient: linear-gradient(to bottom right, #b44d56, #cc7980); */
+    /* --secondary-gradient: linear-gradient(to bottom right, #EDDE3F, #f6f194); */
+    /* --gray-gradient: linear-gradient(to bottom right, #424242, #646464); */
+    /* --primary-shadow: 0 0 18px -8px rgba(133, 68, 66, 0.8);
+    --secondary-shadow: 0 0 18px -8px rgba(233, 198, 2, 0.8); */
+    /* --gray-shadow: 0 0 18px -8px rgba(128, 128, 128, 0.8); */
     --bg-1: #000000;
     --bg-2: #1c1c1c;
-    --bg-3: #212121;
-    --bg-gray-1: #2e2e2e;
+    --bg-gray-1: #282828;
     --bg-gray-2: #4f4f4f;
-    --bg-gray-3: #2e2e2e;
-    --bg-gray-4: #000000;
-    --bg--gray-5: #4f4f4f;
+    --bg-gray-3: #3d3d3d;
+
     --on-primary: #000;
     --on-secondary: #000;
     --on-bg-1: rgba(255, 255, 255, 0.8);
     --on-bg-2: rgba(175, 175, 175, 0.8);
-    --on-bg-3: rgb(158, 158, 158, 0.8);
-    --on-bg-gray-1: #000;
+
+    --on-bg-gray-1: rgb(170, 169, 169);
     --on-bg-gray-2: rgb(200, 200, 200, 0.8);
     --shadow-1: 0 0 18px 4px rgba(0, 0, 0, 0.1), 0 0 8px 4px rgba(0, 0, 0, 0.1);
-    --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.2), 0 0 4px 2px rgba(0, 0, 0, 0.3);
-    --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15);
+    /* --shadow-2: 0 0 18px 0px rgba(0, 0, 0, 0.2), 0 0 4px 2px rgba(0, 0, 0, 0.3);
+    --shadow-3: 0 0 8px 4px rgba(0, 0, 0, 0.15); */
     --text: #dddddd;
     --divider: #282828;
-    --pmtext: #4f4f4f
-    --pmsubtext: #b7b5c2;
     --inputouter: #323232;
     --inputinner: #666666;
-    --model-bg-gray: #282828;
+    --model-bg-gray: #1f1e1e;
+    --pm-bg: #000000;
     --alias-org: linear-gradient(to bottom right, #55A5FF, #ffffff);
     --alias-org-text: #000000;
-    --hku-one-primary: #55A5FF;
   }
 }
 page {

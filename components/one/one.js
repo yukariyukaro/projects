@@ -25,6 +25,26 @@ Component({
           is_dark: true
         })
       }
+      
+      if (that.data.type == 'post'){
+        const regex_emoji = /[\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}\u{1F9B0}-\u{1F9B3}]+/gu;
+        const emoji = that.data.data.post_topic.match(regex_emoji);
+        let temp = that.data.data
+        if(emoji){
+          
+          let post_fix = temp.post_topic.slice(2)
+          if (post_fix.length > 9){
+            post_fix = post_fix.slice(5,10)
+
+          }
+          temp.post_topic = emoji+" "+post_fix
+        }
+        temp.post_msg = temp.post_msg.replaceAll("\\n", "\n")
+
+        that.setData({
+          data: temp
+        })
+      }
     }
   },
 
@@ -46,58 +66,7 @@ Component({
         data: data
       });
     },
-    courseAddSubclass: function (e) {
-      var that = this
-      console.log(e.currentTarget.dataset.subclassid)
-      console.log(e.currentTarget.dataset.index)
-      wx.request({
-        url: 'https://api.pupu.hkupootal.com/v3/course/add.php', 
-        method: 'POST',
-        data: {
-          token:wx.getStorageSync('token'),
-          subclass_id:e.currentTarget.dataset.subclassid,
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        success (res) {
-          wx.hideLoading()
-          if(res.data.code == 200){
-            var data = that.properties.data
-            data.course_subclass_list[e.currentTarget.dataset.index].is_added = true
-            that.setData({
-              data: data
-            });
-            wx.showToast({title: "选课成功", icon: "success", duration: 1000})
-            var pages = getCurrentPages()
-            var currentPage = pages[pages.length-1]
-            var url = currentPage.route
-            if(url=="pages/mySubclass/mySubclass"){
-              currentPage.getSubclass()
-            }
-          }else if(res.data.code == 201){
-            var data = that.properties.data
-            data.course_subclass_list[e.currentTarget.dataset.index].is_added = false
-            that.setData({
-              data: data
-            });
-            wx.showToast({title: "取消选课成功", icon: "success", duration: 1000})
-            var pages = getCurrentPages()
-            var currentPage = pages[pages.length-1]
-            var url = currentPage.route
-            if(url=="pages/mySubclass/mySubclass"){
-              currentPage.getSubclass()
-            }
-          }else if(res.data.code == 800 ||res.data.code == 900){
-            app.launch().then(res=>{
-              that.courseAddSubclass(e)
-            })
-          }else{
-            wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-          }
-        }
-      })
-    },
+
     buttonShowAll: function () {
       var data = this.properties.data
       data.button_show_all = true
@@ -115,7 +84,7 @@ Component({
     },
     nav2Post: function () {
       wx.navigateTo({
-        url: '/pages/detail/detail?post_id=' + this.properties.data.post_id,
+        url: '/pages/detail/detail?uni_post_id=' + this.properties.data.uni_post_id,
       })
     },
     nav2OrgFromArticle: function () {
@@ -124,10 +93,10 @@ Component({
       })
     },
     nav2Article: function () {
-      if(!this.properties.data.post_media.open_comment){
-        wx.navigateTo({url: '/pages/webview/webview?url=' + this.properties.data.post_media.article_link,})
+      if(this.properties.data.article_link){
+        wx.navigateTo({url: '/pages/webview/webview?url=' + this.properties.data.article_link,})
       }else{
-        wx.navigateTo({url: '/pages/detail/detail?post_id=' + this.properties.data.post_id,})
+        wx.navigateTo({url: '/pages/detail/detail?uni_post_id=' + this.properties.data.uni_post_id,})
       }
     },
     nav2OrgFromOrg: function () {
@@ -146,24 +115,11 @@ Component({
         path:'/pages/newindex/newindex?group_code=' + this.properties.data.course_code,
       })
     },
-    courseNav2My: function(){
-      var pages = getCurrentPages()
-      var currentPage = pages[pages.length-1]
-      var url = currentPage.route
-      if(url!="pages/mySubclass/mySubclass"){
-        wx.navigateTo({
-          url: '/pages/mySubclass/mySubclass'
-        })
-      }else{
-        wx.showToast({
-          title: '点击下方按钮即可导出到日历',icon: "none",duration: 2000
-        })
-      }
-      
-    },
+
     copyUrl: function (e) {
       this.copyUrlReal(e.currentTarget.dataset.urllink, e.currentTarget.dataset.urltitle)
     },
+
     copyUrlReal: function (url_link, url_title) {
       wx.setClipboardData({
         data: url_link,
@@ -176,19 +132,20 @@ Component({
           })
         }
       })
-      wx.request({
-        url: 'https://api.pupu.hkupootal.com/v3/one/sendurl.php', 
-        method: 'POST',
-        data: {
-          token:wx.getStorageSync('token'),
-          url_link:url_link,
-          url_title:url_title
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        }
-      })
+      // wx.request({
+      //   url: 'https://api.pupu.hkupootal.com/v3/one/sendurl.php', 
+      //   method: 'POST',
+      //   data: {
+      //     token:wx.getStorageSync('token'),
+      //     url_link:url_link,
+      //     url_title:url_title
+      //   },
+      //   header: {
+      //     'content-type': 'application/x-www-form-urlencoded'
+      //   }
+      // })
     },
+    
     orgOnTapBanner: function (e) {
       var banner_item = e.currentTarget.dataset.banneritem
       switch (banner_item.banner_type) {
@@ -199,7 +156,7 @@ Component({
           break;
         case 'post':
           wx.navigateTo({
-            url: '/pages/detail/detail?post_id=' + banner_item.post_id,
+            url: '/pages/detail/detail?uni_post_id=' + banner_item.uni_post_id,
           });
           break;
         case 'inner':
@@ -221,6 +178,7 @@ Component({
     handleFunctionPre: function (e) {
       this.handleFunction(e.currentTarget.dataset.functionitem)
     },
+
     handleFunction: function (function_item) {
       var that = this
       switch (function_item.function_type) {
@@ -241,7 +199,7 @@ Component({
           break;
         case 'post':
           wx.navigateTo({
-            url: '/pages/detail/detail?post_id=' + function_item.post_id,
+            url: '/pages/detail/detail?uni_post_id=' + function_item.uni_post_id,
           });
           break;
         case 'inner':

@@ -3,41 +3,25 @@
   "themeLocation": "theme.json",
   "pages": [
     "pages/home/home",
-    "pages/profile/profile",
-    "pages/more/more",
     "pages/write/write",
     "pages/register/register",
     "pages/detail/detail",
-    "components/singleComment/singleComment",
-    "pages/writeComment/writeComment",
-    "pages/visitProfile/visitProfile",
-    "pages/avatarPicker/avatarPicker",
     "pages/disclaimer/disclaimer",
     "pages/search/search",
-    "pages/func1-pm/writePm/writePm",
     "pages/pastPost/pastPost",
     "pages/followPost/followPost",
-    "pages/func1-pm/pm/pm",
-    "pages/func1-pm/pmDetail/pmDetail",
     "pages/webview/webview",
     "pages/pmdetail/pmdetail",
     "pages/pmlist/pmlist",
     "pages/notice/notice",
-    "pages/auth/auth",
-    "pages/org/org",
     "pages/mine/mine",
+    "pages/org/org",
     "pages/about/about",
     "pages/setting/setting",
     "pages/userdata/userdata",
-    "pages/one/one",
-    "pages/mySubclass/mySubclass",
     "pages/followService/followService",
-    "pages/pay/pay",
-    "pages/upload/upload",
-    "pages/addCalendar/addCalendar",
     "pages/banDetail/banDetail",
-    "pages/teasingwall/teasingwall",
-    "pages/report2022/report2022"
+    "pages/visitProfile/visitProfile"
   ],
   "requiredBackgroundModes": [
     "audio",
@@ -60,30 +44,24 @@
     "list": [
       {
         "pagePath": "pages/home/home",
-        "iconPath": "images/home-inactive.png",
-        "selectedIconPath": "images/home-active.png",
         "text": "树洞"
       },
       {
-        "pagePath": "pages/one/one",
-        "iconPath": "images/one-inactive.png",
-        "selectedIconPath": "images/one-active.png",
-        "text": "ONE"
+        "pagePath": "pages/search/search",
+        "text": "搜索"
       },
+
       {
         "pagePath": "pages/pmlist/pmlist",
-        "iconPath": "images/profile-inactive.png",
-        "selectedIconPath": "images/profile-active.png",
         "text": "消息"
       },
       {
         "pagePath": "pages/mine/mine",
-        "iconPath": "images/more-inactive.png",
-        "selectedIconPath": "images/more-active.png",
         "text": "我的"
       }
     ]
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
 }

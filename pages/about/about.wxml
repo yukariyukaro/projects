@@ -2,15 +2,26 @@
   <view class="more-avatar-outer">
     <view class="avatar-image-wrapper">
       <view class="avatar-ripple" />
-      <image class="more-avatar" src="/images/pootal-logo.svg" bind:tap="handleLogoTap" />
+      <image style="{{is_dark? 'background-color: grey;':''}}" class="more-avatar" src="/images/logo.svg" bind:tap="handleLogoTap" />
     </view>
-    <view style="margin-top: 40rpx;font-size: 40rpx;font-weight: 500;">HKU噗噗</view>
-    <view style="margin-top: 10rpx;font-size: 34rpx;">Version: 3.5.1</view>
+    <view style="margin-top: 40rpx;font-size: 40rpx;font-weight: 500;">{{app_name}}</view>
+    <view style="margin-top: 10rpx;font-size: 34rpx;">Version: 4.0.2</view>
   </view>
   <view class="more-avatar-outer">
     <image class="media-qr" show-menu-by-longpress="true" src="/images/media-qr.jpg"></image>
     <view style="margin-top: -10rpx;font-size: 28rpx;">由 HKUPootal 提供</view>
     <view style="margin-top: -10rpx;font-size: 28rpx;">长按识别，发现更多</view>
+  </view>
+</view>
+
+<view class="outer">
+  <view style="padding:30rpx 40rpx">
+    <view style="font-weight: bold;font-size: 34rpx;">4.0.0</view>
+    <view class="divider"></view>
+    <text style="font-size: 28rpx;"> 「HKU ONE」 更新
+    新增跨校私信功能
+    私信新增删除功能
+    </text>
   </view>
 </view>
 
@@ -67,5 +78,8 @@
     新增了「用户资料」页面，提供了新的修改头像与Pootal ID的方式</text>
   </view>
 </view>
+
+
+
 
 <view style="height: 100rpx;"></view>

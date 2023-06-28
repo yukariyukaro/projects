@@ -1,11 +1,13 @@
 // pages/about/about.js
+const info = require("../../utils/info")
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    app_name:info.app_name,
+    is_dark: '',
   },
 
   logoAnimation: function () {
@@ -30,7 +32,13 @@ Page({
    */
   onLoad: function (options) {
     this.logoAnimation()
+    var systemInfo = wx.getSystemInfoSync()
+    this.setData({
+      is_dark: systemInfo.theme == 'dark',
+    })
+    console.log(systemInfo)
   },
+
 
   /**
    * 生命周期函数--监听页面初次渲染完成

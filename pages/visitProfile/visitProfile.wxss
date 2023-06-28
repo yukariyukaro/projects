@@ -34,10 +34,11 @@
   width: 100rpx;
   height: 54rpx;
   border-radius: 27rpx;
-  background-color: var(--divider);
+  color: var(--on-bg-gray-1);
+  background-color: var(--bg-gray-1);
   text-align: center;
   line-height: 54rpx;
-  font-size: 24rpx;
+  font-size: 28rpx;
   position: relative;
   top: 50%;
   transform: translate(0, -50%);

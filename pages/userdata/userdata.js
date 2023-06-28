@@ -1,4 +1,6 @@
 var app = getApp();
+import newRequest from '../../utils/request'
+
 Page({
 
   /**
@@ -12,91 +14,63 @@ Page({
     avatarCollection:[]
   },
 
+  // /user/profile/get
   getUserInfo: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/user/profile/my.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-            that.setData({
-              user_serial:res.data.userInfo.user_serial,
-              user_avatar:res.data.userInfo.user_avatar,
-            })
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getUserInfo()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
-      }
+    newRequest('/user/profile/get', {}, that.getUserInfo)
+    .then((res) => {
+      if(res.code == 200){
+        that.setData({
+          user_serial:res.user_info.user_serial,
+          user_avatar:res.user_info.user_avatar,
+        })
+    }else{
+      wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
+    }
     })
 
   },
+
+  // /user/avatar/get
   getAvatarCollection: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/user/avatarnew/get.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-            that.setData({
-              avatarCollection:res.data.avatarCollection
-            })
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getAvatarCollection()
+    newRequest('/user/avatar/get', {}, that.getAvatarCollection)
+    .then((res) => {
+      wx.hideLoading()
+      if(res.code == 200){
+          console.log(res.avatar_collection)
+          that.setData({
+            avatarCollection:res.avatar_collection
           })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
 
   },
+  
+  // /user/avatar/exchange
   useSdk: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/user/avatarnew/exchange.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        avatar_sdk_content:that.data.avatar_sdk_content,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          wx.showToast({title: "兑换成功", icon: "none", duration: 1000})
-          that.getAvatarCollection()
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.useSdk()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+    newRequest('/user/avatar/exchange', {avatar_sdk_content:that.data.avatar_sdk_content}, that.useSdk)
+    .then((res) => {
+      if(res.code == 200){
+        wx.showToast({title: "兑换成功", icon: "none", duration: 1000})
+        that.getAvatarCollection()
+      }else if(res.code == 400){
+        wx.showToast({title: "兑换码错误:(", icon: "none", duration: 1000})
+      }else if(res.code == 401 || res.code == 402){
+        wx.showToast({title: "你已经拥有它啦`^`", icon: "none", duration: 1000})
+      }else if(res.code == 500){
+        wx.showToast({title: "请输入兑换码", icon: "none", duration: 1000})
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
 
   },
+
+  // /user/profile/update
   update: function () {
     if (this.data.user_serial.match(/^\s*$/) || this.data.user_serial.length < 3) {
       wx.showToast({
@@ -115,38 +89,27 @@ Page({
         title: '提交中',
       });
       var that = this
-      wx.request({
-        url: 'https://api.pupu.hkupootal.com/v3/user/profile/update.php', 
-        method: 'POST',
-        data: {
-          token:wx.getStorageSync('token'),
-          user_serial:that.data.user_serial,
-          user_avatar:that.data.user_avatar
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        success (res) {
-          wx.hideLoading()
-          if(res.data.code == 200){
-            wx.navigateBack({
-              delta: 1,
-              success(){
-                wx.showToast({title: "设置成功", icon: "none", duration: 1000})
-              }
-            })
-            
-          }else if(res.data.code == 800 ||res.data.code == 900){
-            app.launch().then(res=>{
-              that.update()
-            })
-          }else{
-            wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-          }
+      newRequest('/user/profile/update', {user_serial:that.data.user_serial, user_avatar:that.data.user_avatar}, that.update)
+      .then((res) => {
+        wx.hideLoading()
+        if(res.code == 200){
+          wx.navigateBack({
+            delta: 1,
+            success(){
+              wx.showToast({title: "修改成功!", icon: "none", duration: 1000})
+            }
+          })
+        }else if(res.code == 400){
+          wx.showToast({title: "这个id被别人抢注了:(", icon: "none", duration: 1000})
+        }else if(res.data.code == 401){
+          wx.showToast({title: "你还未拥有这个头像:P", icon: "none", duration: 1000})
+        }else{
+          wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
         }
       })
     }
   },
+
   bindSerialInput: function (e) {
     this.setData({
       user_serial: e.detail.value,

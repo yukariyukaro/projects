@@ -61,11 +61,11 @@
   height: 45rpx;
 }
 .post-topic {
-  color: #8C8C8C;
+  color: var(--on-bg-gray-1);
   align-self: center;
   padding: 5rpx 15rpx;
   border-radius: 20rpx;
-  background: var(--divider);
+  background: var(--bg-gray-1);
   margin-left: 1vw;
 }
 .post-topic-text {
@@ -89,7 +89,7 @@
 .post-divider{
   height: 1px;
   margin: 15rpx 20rpx 20rpx 20rpx;
-  background-color: var(--divider);
+  background-color: var(--bg-gray-3);
 }
 .post-content {
   text-align:left;
@@ -134,14 +134,14 @@
 .post-function-outer {
   font-size: 28rpx;
   display: flex;
-  background: var(--divider);
+  background: var(--bg-gray-1);
   width: 90%;
   margin: auto;
   margin-bottom: 15rpx;
   padding: 15rpx 20rpx;
   box-sizing: border-box;  
   border-radius: 20rpx;
-  color: #8C8C8C;
+  color: var(--on-bg-gray-1);
   position: relative;
 }
 .post-function-title {
@@ -183,6 +183,7 @@
   width: 4vw;
 }
 .post-icon-quote {
+  transform: translate(0, -5rpx);
   height: 5vw;
   width: 5vw;
 }
@@ -421,7 +422,7 @@
 .course-divider{
   height: 1px;
   margin: 30rpx 0 30rpx 0;
-  background-color: var(--divider);
+  background-color: var(--bg-gray-3);
 }
 
 .course-add-button{
@@ -558,7 +559,7 @@
 .text-divider{
   height: 1px;
   margin: 30rpx 0 30rpx 0;
-  background-color: var(--divider);
+  background-color: var(--bg-gray-3);
 }
 
 /* course_now */

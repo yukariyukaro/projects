@@ -1,16 +1,17 @@
-var e = getApp();
+// var e = getApp();
+import info from "../utils/info.js"
 
 Component({
   data: {
     is_dark:false,
     tabbarFontColorLight:"#8a8a8a",
-    tabbarFontSelectedColorLight:"#d85050",
+    tabbarFontSelectedColorLight: info.primary_color_on_light,
     tabbarFontColorDark:"#8a8a8a",
-    tabbarFontSelectedColorDark:"#864442",
-    tabbarFontSelectedColorOne:"#1f86fc",
+    tabbarFontSelectedColorDark: info.primary_color_on_dark,
     allNoticeCount: 0,
+    one_color: '#1F86FC',
     showOneRedDot: false,
-    selected: 0,
+    selected: 1,
     fontWeight: "bold",
     is_sending:false,
     list: [
@@ -21,11 +22,10 @@ Component({
         text: "树洞"
       },
       {
-        pagePath: "/pages/one/one",
-        iconPath: "/images/one-inactive.png",
-        selectedIconPath: "/images/one-active.png",
-        text: "ONE",
-        is_one: true
+        pagePath: "/pages/search/search",
+        iconPath: "/images/search-inactive.png",
+        selectedIconPath: "/images/search-active.png",
+        text: "搜索",
       },
       {
         pagePath: "/pages/write/write",
@@ -36,23 +36,18 @@ Component({
       },
       {
         pagePath: "/pages/pmlist/pmlist",
-        iconPath: "/images/profile-inactive.png",
-        selectedIconPath: "/images/profile-active.png",
+        iconPath: "/images/pm-inactive.png",
+        selectedIconPath: "/images/pm-active.png",
         text: "消息"
       },
       {
         pagePath: "/pages/mine/mine",
-        iconPath: "/images/more-inactive.png",
-        selectedIconPath: "/images/more-active.png",
+        iconPath: "/images/mine-inactive.png",
+        selectedIconPath: "/images/mine-active.png",
         text: "我的"
       }
     ],
-    emotion_tabbar_icon_list:[
-      "https://i.boatonland.com/emotion_tabbar/fadian.png",
-      "https://i.boatonland.com/emotion_tabbar/bojin.png",
-      "https://i.boatonland.com/emotion_tabbar/bailan.png",
-      "https://i.boatonland.com/emotion_tabbar/pingjing.png",
-    ]   
+    
   },
   lifetimes: {
     attached(){
@@ -65,38 +60,46 @@ Component({
   methods: {
     switchTab: function (e) {
       var that = this
-      var index = e.currentTarget.dataset.index
-      if(that.data.selected != index){
-        if(index == 2){
+      var data = e.currentTarget.dataset
+      var index = data.index
+
+      if(index != that.data.selected){
+        if(index== 2){
+          console.log(data)
           wx.navigateTo({
-            url: that.data.list[index].pagePath
+            url: data.url
           })
+
         }else{
           wx.switchTab({
-            url: that.data.list[index].pagePath
+            url: data.url
           })
         }
+
       }else{
-        if(index == 0){
-          var allpages = getCurrentPages()  
-          var nowpage = allpages[allpages.length - 1]
-          nowpage.onRefresh()
-        }
+          if(index === 0){
+            var allpages = getCurrentPages()  
+            var nowpage = allpages[allpages.length - 1]
+            nowpage.onRefresh()
+          }
       }     
     },
     updateTheme:function(){
       var systemInfo = wx.getSystemInfoSync()
-      if(systemInfo.theme == 'dark'){
-        this.setData({
-          is_dark: true
-        })
-      }else{
-        this.setData({
-          is_dark: false
-        })
+      if(systemInfo.theme != (this.data.is_dark? "dark": "light")){ 
+        if(systemInfo.theme == 'dark'){
+          this.setData({
+            is_dark: true
+          })
+        }else{
+          this.setData({
+            is_dark: false
+          })
+        }
       }
     },
   },
+
   observers:{
     'selected': function() {
       this.updateTheme()

@@ -56,5 +56,5 @@
   margin-right: 80rpx;
   margin-top: 50rpx;
   margin-bottom: 60rpx;
-  background-color: var(--divider);
+  background-color: var(--bg-gray-3);
 }

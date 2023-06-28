@@ -1,29 +1,36 @@
 var app = getApp();
 var COS = require('../../utils/cos-wx-sdk-v5.js')
+const info = require("../../utils/info.js")
+import newRequest from "../../utils/request"
+
+
 Page({
   data: {
     // scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     data_received: false,
-    preURL: 'https://i.boatonland.com/avatar/',
-
+    pre_url: 'https://i.boatonland.com/avatar/',
+    school_label: info.school_label,
     comment_theme_color:'',
+    primary_color: info.primary_color_on_light,
 
     // 举报
-    reportType: '', // 'comment' or 'post'
-    reportMsg: '',
-    reportId: '',
-    reportIndex: '',
-    reportUserMsg: '',
-    comment_placeholder: '想对洞主说些什么？',
+    report_type: '', // 'comment' or 'post'
+    report_msg: '',
+    report_id: '',
+    report_index: '',
+    report_user_msg: '',
 
-    post_id: '',
-    postDetail: {},
-    commentList: [],
+    comment_placeholder: '想对洞主说些什么？',
+    uni_post_id: '',
+    post_serial: '',
+    post_detail: {},
+    post_date: '',
+    comment_list: [],
     comment_reverse: false,
 
-    adInfo:[],
+    ad_info:[],
     show_comment_box:false,
-    comment_box_animation:'',
+    comment_report_box_animation:'',
     comment_id:'',
     comment_msg: '',
     comment_image:'',
@@ -32,7 +39,9 @@ Page({
     comment_box_placeholder: '想对洞主说些什么?',
     comment_is_sending:false,
     focus:false,
-    is_dark:false
+    is_dark:false,
+    show_report_box:false,
+    my_school_label: info.school_label
   },
   // 下拉刷新
   onRefresh() {
@@ -44,36 +53,38 @@ Page({
     })
     this.getPostDetail()
   },
+
+  onRestore() {
+    this.setData({
+      triggered: false,
+    });
+    wx.hideLoading()
+  },
+
   visitUser: function () {
-    if (this.data.postDetail.post_school_label == "CUHK" || this.data.postDetail.post_school_label == "UST") {
-      wx.showToast({
-        title: '暂不支持UNI用户',
-        icon: 'none',
-        duration: 1000,
-      });
-      return;
-    }
-    if (this.data.postDetail.is_org) {
+
+    if (this.data.post_detail.user_is_org && this.data.post_detail.user_is_real_name) {
       wx.navigateTo({
-        url: "/pages/org/org?user_serial=" + this.data.postDetail.user_serial
+        url: "/pages/org/org?user_serial=" + this.data.post_detail.user_serial +"&school_label=" + this.data.post_detail.user_school_label
       })
-    } else if (this.data.postDetail.is_anonymous) {
+    } else if (!this.data.post_detail.user_is_real_name) {
       wx.navigateTo({
-        url: "/pages/visitProfile/visitProfile?is_anonymous=true&user_serial=NA&post_id=" + this.data.postDetail.post_id + "&comment_order=-1"
+        url: "/pages/visitProfile/visitProfile?is_anonymous=true&user_serial=NA&comment_order=null&uni_post_id=" + this.data.post_detail.uni_post_id + "&avatar=" + this.data.post_detail.user_avatar + "&school_label=" + this.data.post_detail.user_school_label
       })
     } else {
       wx.navigateTo({
-        url: "/pages/visitProfile/visitProfile?&user_serial=" + this.data.postDetail.user_serial + "&post_id=" + this.data.postDetail.post_id
+        url: "/pages/visitProfile/visitProfile?&user_serial=" + this.data.post_detail.user_serial + "&uni_post_id=" + this.data.post_detail.uni_post_id + "&school_label=" + this.data.post_detail.user_school_label
       })
     }
   },
+
   replyComment: function (e) {
     if(e.detail.comment_order == 0){
       var comment_box_placeholder = "Re G:"
     }else{
       var comment_box_placeholder = "Re LG" + e.detail.comment_order + ":"
     }
-    if(this.data.postDetail.is_author){
+    if(this.data.post_detail.is_author){
       this.setData({
         comment_msg:'',
         comment_box_placeholder:comment_box_placeholder,
@@ -88,174 +99,158 @@ Page({
         comment_with_serial:false
       })
     }
-    this.showCommentBox()
+    this.showCommentReportBox()
   },
 
   reportPost: function () {
-    this.reportPrompt.show();
     this.setData({
-      reportMsg: this.data.postDetail.post_msg,
-      reportId: this.data.postDetail.post_id,
-      reportType: 'post',
+      report_msg: this.data.post_detail.post_msg,
+      report_id: this.data.post_detail.post_id,
+      report_type: 'post',
     });
+    this.showCommentReportBox()
   },
+
   reportComment: function (e) {
     const {
       comment_msg,
       comment_index,
       comment_id
     } = e.detail;
-    this.reportPrompt.show();
     this.setData({
-      reportMsg: comment_msg,
-      reportId: comment_id,
-      reportIndex: comment_index,
-      reportType: 'comment',
+      report_msg: comment_msg,
+      report_id: comment_id,
+      report_index: comment_index,
+      report_type: 'comment',
     });
+    this.showCommentReportBox()
   },
+  
   reportPromptGetInput: function (e) {
     this.setData({
-      reportUserMsg: e.detail.value,
+      report_user_msg: e.detail.value,
     });
   },
-  reportPromptCancel: function () {
-    this.reportPrompt.hide();
-  },
+
   reportPromptConfirm: function () {
     var that = this;
     wx.showLoading({
       title: '加载中',
     });
-    if (that.data.reportType == 'post') {
-      var report_msg = "举报了#" + that.data.postDetail.post_id + "「" + that.data.postDetail.post_msg + "」，理由为「" + that.data.reportUserMsg + "」"
+    if (that.data.report_type == 'post') {
+      var report_msg = "举报了#" + that.data.post_detail.post_id + "「" + that.data.post_detail.post_msg + "」，理由为「" + that.data.report_user_msg + "」"
     }
-    if (that.data.reportType == 'comment') {
-      var report_msg = "举报了#" + that.data.postDetail.post_id + "的评论LG" + that.data.reportIndex + "「" + that.data.reportMsg + "」，理由为「" + that.data.reportUserMsg + "」"
+    if (that.data.report_type == 'comment') {
+      var report_msg = "举报了#" + that.data.post_detail.post_id + "的评论LG" + that.data.report_index + "「" + that.data.report_msg + "」，理由为「" + that.data.report_user_msg + "」"
     }
-    var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/single/report.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token'),
-        report_msg: report_msg,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        wx.hideLoading()
-        if (res.data.code == 200) {
+
+    newRequest("/post/single/report", {uni_post_id: that.data.uni_post_id, report_msg: report_msg}, that.reportPromptConfirm)
+    .then(res => {
+      that.setData({show_report_box: false})
+      if (res.code == 200) {
           wx.showToast({
             title: '举报成功',
             icon: 'none',
             duration: 1000,
           });
-        } else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.reportPromptConfirm()
-          })
         } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
-      }
+          wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
+        } 
     })
   },
 
+
+  time: function(){
+    var date=new Date();
+    var time=date.getTime().toString();
+    return parseInt(time.substring(0,time.length-3));
+  },
+
+  format_time: function(timestamp){
+    var dur = this.time() - timestamp;
+    if(dur < 60){
+      return '刚刚';
+    }else if(dur < 3600){
+      return parseInt(dur/60)+'分钟前';
+    }else if(dur < 86400){
+      return parseInt(dur/3600)+'小时前';
+    }else if(dur < 172800){
+      var s = new Date(timestamp*1000);
+      return "昨天 "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }else if(dur < 259200){
+      var s = new Date(timestamp*1000);
+      return "前天 "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }else{
+      var s = new Date(timestamp*1000);
+      return (s.getYear()+1900)+"-"+(s.getMonth()+1)+"-"+s.getDate()+" "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }
+
+  },
+
+// /post/single/get
   getPostDetail: function () {
-    var that = this;
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/single/get.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token'),
-        post_id: that.data.post_id,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        wx.hideLoading()
-        if (res.data.code == 200) {
+    newRequest('/post/single/get', {uni_post_id: that.data.uni_post_id, post_id: that.data.post_serial}, that.getPostDetail)
+    .then((res) => {
+      if (res.code == 200) {
+        res.post_detail.post_msg = res.post_detail.post_msg.replaceAll("\\n", "\n")
+        for(let i = 0; i<res.comment_list.length ; i++){
+          res.comment_list[i].comment_msg = res.comment_list[i].comment_msg.replaceAll("\\n", "\n")
+        }
+        
+        that.setData({
+          post_detail: res.post_detail,
+          post_date: that.format_time(res.post_detail.post_create_time),
+          data_received: true,
+          comment_list: res.comment_list,
+          triggered: false,
+          uni_post_id: res.post_detail.uni_post_id
+        })
+        if (res.post_detail.is_author) {
           that.setData({
-            postDetail: res.data.postDetail,
-            data_received: true,
-            triggered: false,
+            comment_placeholder: "想在自己的树洞下补充些什么？"
           })
-          if (res.data.postDetail.is_author) {
-            that.setData({
-              comment_placeholder: "想在自己的树洞下补充些什么？"
+        }
+        
+      } else if (res.code == 400) {
+        wx.navigateBack({
+          delta: 1,
+          success() {
+            wx.showToast({
+              title: "它好像不见了>.<",
+              icon: "none",
+              duration: 1000
             })
           }
-          that.checkForEmotion(res.data.commentList)
-
-        } else if (res.data.code == 401) {
-          wx.navigateBack({
-            delta: 1,
-            success() {
-              wx.showToast({
-                title: "树洞不存在或已被删除",
-                icon: "none",
-                duration: 1000
-              })
-            }
-          })
-        } else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.getPostDetail()
-          })
-        } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
+        })
+      } else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
   },
+
+  // /info/detailad
   getAd: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/info/detailad.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token')
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        if (res.data.code == 200) {
-          that.setData({
-            adInfo:res.data.adInfo
-          })
-        }  else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.getAd()
-          })
-        } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
+    newRequest('/info/detailad', {}, that.getAd)
+    .then((res) => {
+      if (res.code == 200) {
+        that.setData({
+          ad_info:res.ad_info
+        })
+      } else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
   },
+
   showMainMenu: function () {
     var that = this
-    if (that.data.postDetail.is_author) {
-      if (that.data.postDetail.post_public == '1') {
-        if(that.data.postDetail.post_uni_id){
+    if (that.data.post_detail.is_author) {
+      if (that.data.post_detail.post_public == '1') {
+
           wx.showActionSheet({
-            alertText: 'UNI ID: U' + that.data.postDetail.post_uni_id,
+            alertText: 'UNI ID: U' + that.data.uni_post_id,
             itemList: ['设为私密', '删除'],
             success(res) {
               if (res.tapIndex == 0) {
@@ -273,30 +268,11 @@ Page({
               }
             }
           })
-        }else{
+   
+      } else if (that.data.post_detail.post_public == '2') {
+
           wx.showActionSheet({
-            itemList: ['设为私密', '删除'],
-            success(res) {
-              if (res.tapIndex == 0) {
-                that.setPrivate()
-              } else if (res.tapIndex == 1) {
-                app.showModal({
-                  title: "确认删除？",
-                  content: "删除后将无法恢复",
-                  success(res) {
-                    if (res.confirm) {
-                      that.delete()
-                    }
-                  }
-                })
-              }
-            }
-          })
-        }     
-      } else if (that.data.postDetail.post_public == '2') {
-        if(that.data.postDetail.post_uni_id){
-          wx.showActionSheet({
-            alertText: 'UNI ID: U' + that.data.postDetail.post_uni_id,
+            alertText: 'UNI ID: U' + that.data.uni_post_id,
             itemList: ['设为公开', '删除'],
             success(res) {
               if (res.tapIndex == 0) {
@@ -314,32 +290,13 @@ Page({
               }
             }
           })
-        }else{
-          wx.showActionSheet({
-            itemList: ['设为公开', '删除'],
-            success(res) {
-              if (res.tapIndex == 0) {
-                that.setPublic()
-              } else if (res.tapIndex == 1) {
-                app.showModal({
-                  title: "确认删除？",
-                  content: "删除后将无法恢复",
-                  success(res) {
-                    if (res.confirm) {
-                      that.delete()
-                    }
-                  }
-                })
-              }
-            }
-          })
-        }
+        
       }
     } else {
-      if (that.data.postDetail.is_following) {
-        if(that.data.postDetail.post_uni_id){
+      if (that.data.post_detail.is_following) {
+    
           wx.showActionSheet({
-            alertText: 'UNI ID: U' + that.data.postDetail.post_uni_id,
+            alertText: 'UNI ID: U' + that.data.uni_post_id,
             itemList: ['取消围观', '举报'],
             success(res) {
               if (res.tapIndex == 0) {
@@ -349,22 +306,11 @@ Page({
               }
             }
           })
-        }else{
-          wx.showActionSheet({
-            itemList: ['取消围观', '举报'],
-            success(res) {
-              if (res.tapIndex == 0) {
-                that.follow()
-              } else if (res.tapIndex == 1) {
-                that.reportPost()
-              }
-            }
-          })
-        }    
+        
       } else {
-        if(that.data.postDetail.post_uni_id){
+        
           wx.showActionSheet({
-            alertText: 'UNI ID: U' + that.data.postDetail.post_uni_id,
+            alertText: 'UNI ID: U' + that.data.uni_post_id,
             itemList: ['围观', '举报'],
             success(res) {
               if (res.tapIndex == 0) {
@@ -374,318 +320,208 @@ Page({
               }
             }
           })
-        }else{
-          wx.showActionSheet({
-            itemList: ['围观', '举报'],
-            success(res) {
-              if (res.tapIndex == 0) {
-                that.follow()
-              } else if (res.tapIndex == 1) {
-                that.reportPost()
-              }
-            }
-          })
-        }
+
       }
 
     }
 
   },
+
+  // /post/single/follow
   follow: function () {
     var that = this;
     wx.showLoading({
       title: '加载中',
     });
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/single/follow.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token'),
-        post_id: that.data.postDetail.post_id,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        wx.hideLoading()
-        if (res.data.code == 200) {
-          that.data.postDetail.is_following = !that.data.postDetail.is_following
-          that.data.postDetail.follower_num = Number(that.data.postDetail.follower_num) + 1
-          that.setData({
-            postDetail: that.data.postDetail,
-          })
-          wx.showToast({
-            title: '开始围观⭐w⭐',
-            icon: 'none',
-            duration: 1000,
-          });
-        } else if (res.data.code == 201) {
-          that.data.postDetail.is_following = !that.data.postDetail.is_following
-          that.data.postDetail.follower_num = Number(that.data.postDetail.follower_num) - 1
-          that.setData({
-            postDetail: that.data.postDetail,
-          })
-          wx.showToast({
-            title: '停止了围观',
-            icon: 'none',
-            duration: 1000,
-          });
-        } else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.follow()
-          })
-        } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
+    newRequest("/post/single/follow", {uni_post_id: that.data.uni_post_id}, that.follow)
+    .then( res => {
+      if (res.code == 200) {
+        that.data.post_detail.is_following = !that.data.post_detail.is_following
+        that.data.post_detail.post_follower_num = Number(that.data.post_detail.post_follower_num) + 1
+        that.setData({
+          post_detail: that.data.post_detail,
+        })
+        wx.showToast({
+          title: '开始围观⭐w⭐',
+          icon: 'none',
+          duration: 1000,
+        });
+      } else if (res.code == 201) {
+        that.data.post_detail.is_following = !that.data.post_detail.is_following
+        that.data.post_detail.post_follower_num = Number(that.data.post_detail.post_follower_num) - 1
+        that.setData({
+          post_detail: that.data.post_detail,
+        })
+        wx.showToast({
+          title: '停止了围观',
+          icon: 'none',
+          duration: 1000,
+        });
+      } else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
-    })
+    }
+    )
   },
+
+  // /post/single/private
   setPrivate: function () {
     var that = this;
     wx.showLoading({
       title: '加载中',
     });
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/single/private.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token'),
-        post_id: that.data.postDetail.post_id,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        wx.hideLoading()
-        if (res.data.code == 200) {
-          that.data.postDetail.post_public = '2'
-          that.setData({
-            postDetail: that.data.postDetail,
-          })
-          wx.showToast({
-            title: '成功设为私密',
-            icon: 'none',
-            duration: 1000,
-          });
-        } else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.setPrivate()
-          })
-        } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
-      }
-    })
+    newRequest("/post/single/private", {uni_post_id: that.data.uni_post_id}, that.setPrivate)
+    .then( res => {
+      if (res.code == 200) {
+        that.data.post_detail.post_public = '2'
+        that.setData({
+          post_detail: that.data.post_detail,
+        })
+        wx.showToast({
+          title: '成功设为私密',
+          icon: 'none',
+          duration: 1000,
+        });
+      } else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
+      } 
+    }
+    )
   },
+
+  // /post/single/public
   setPublic: function () {
     var that = this;
     wx.showLoading({
       title: '加载中',
     });
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/single/public.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token'),
-        post_id: that.data.postDetail.post_id,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        wx.hideLoading()
-        if (res.data.code == 200) {
-          that.data.postDetail.post_public = '1'
-          that.setData({
-            postDetail: that.data.postDetail,
-          })
-          wx.showToast({
-            title: '成功设为公开',
-            icon: 'none',
-            duration: 1000,
-          });
-        } else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.setPublic()
-          })
-        } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
+    newRequest("/post/single/public", {uni_post_id: that.data.uni_post_id}, that.setPublic)
+    .then( res=>{
+      if (res.code == 200) {
+        that.data.post_detail.post_public = '1'
+        that.setData({
+          post_detail: that.data.post_detail,
+        })
+        wx.showToast({
+          title: '成功设为公开',
+          icon: 'none',
+          duration: 1000,
+        });
+      } else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
+
   },
+
+  // /post/single/delete
   delete: function () {
     var that = this;
     wx.showLoading({
       title: '加载中',
     });
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/single/delete.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token'),
-        post_id: that.data.postDetail.post_id,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        wx.hideLoading()
-        if (res.data.code == 200) {
-          wx.showToast({
-            title: '删除成功',
-            icon: 'none',
-            duration: 1000,
-          });
-          setTimeout(() => {
-            that.getPostDetail()
-          }, 1000)
-        } else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.delete()
-          })
-        } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
+    newRequest("/post/single/delete", {uni_post_id: that.data.uni_post_id}, that.delete)
+    .then(res => {
+      if (res.code == 200) {
+        wx.showToast({
+          title: '删除成功',
+          icon: 'none',
+          duration: 1000,
+        });
+        setTimeout(() => {
+          that.getPostDetail()
+        }, 1000)
+      } else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
   },
+
+  // /comment/delete
   deleteComment: function (e) {
     var that = this;
     wx.showLoading({
       title: '加载中',
     });
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/comment/delete.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token'),
-        comment_id: e.detail,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        wx.hideLoading()
-        if (res.data.code == 200) {
-          wx.showToast({
-            title: '删除成功',
-            icon: 'none',
-            duration: 1000,
-          });
-          setTimeout(() => {
-            that.getPostDetail()
-          }, 1000)
-        } else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.deleteComment(e)
-          })
-        } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
+    newRequest("/comment/delete", {
+      comment_id: e.detail,
+    },that.delete).then( res => {
+      if (res.code == 200) {
+        wx.showToast({
+          title: '删除成功',
+          icon: 'none',
+          duration: 1000,
+        });
+        setTimeout(() => {
+          that.getPostDetail()
+        }, 1000)
+      } else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
+
   },
+
+  // /post/media/vote/vote
   vote: function (e) {
     var that = this;
     wx.showLoading({
       title: '加载中',
     });
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/vote/post.php',
-      method: 'POST',
-      data: {
-        token: wx.getStorageSync('token'),
-        option_id: e.currentTarget.dataset.optionid,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success(res) {
-        wx.hideLoading()
-        if (res.data.code == 200) {
-          that.getPostDetail()
-        } else if (res.data.code == 201) {
-          that.getPostDetail()
-        } else if (res.data.code == 800 || res.data.code == 900) {
-          app.launch().then(res => {
-            that.vote(e)
-          })
-        } else {
-          wx.showToast({
-            title: res.data.msg,
-            icon: "error",
-            duration: 1000
-          })
-        }
+    newRequest("/post/media/vote/vote", {option_id: e.currentTarget.dataset.optionid}, that.vote)
+    .then( res => {
+      if (res.code == 200) {
+        that.getPostDetail()
+      } else if (res.code == 201) {
+        that.getPostDetail()
+      } else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
   },
 
 
-  previewPic: function () {
+  previewPic: function (e) {
     wx.previewImage({
-      urls: [this.data.postDetail.post_image],
+      current: this.data.post_detail.post_image[e.currentTarget.dataset.index],
+      urls: this.data.post_detail.post_image,
     });
   },
   goToComment: function () {
-    // wx.navigateTo({
-    //   url: '/pages/writeComment/writeComment?post_id=' + this.data.postDetail.post_id + '&is_author=' + this.data.postDetail.is_author,
-    // });
-    if(this.data.postDetail.is_author){
+    if(this.data.post_detail.is_author){
       this.setData({
         comment_msg:'',
         comment_box_placeholder:'想在自己的树洞下补充些什么？',
         comment_id:'',
-        comment_with_serial:true
+        comment_with_serial:true,
       })
     }else{
       this.setData({
         comment_msg:'',
         comment_box_placeholder:'想对洞主说些什么',
         comment_id:'',
-        comment_with_serial:false
+        comment_with_serial:false,
       })
     }
-    this.showCommentBox()
+    this.showCommentReportBox()
   },
   // 评论倒序
   reverseComments: function () {
-    const commentList = this.data.commentList.reverse();
+    const comment_list = this.data.comment_list.reverse();
     this.setData({
-      commentList: commentList,
+      comment_list: comment_list,
       comment_reverse: !this.data.comment_reverse,
     });
   },
   onTapBilibili: function () {
     wx.navigateToMiniProgram({
       appId: 'wx7564fd5313d24844',
-      path: "pages/video/video?bvid=" + this.data.postDetail.post_media.bilibili_bv
+      path: "pages/video/video?bvid=" + this.data.post_detail.post_media.bilibili_bv
     })
   },
   onTapNetease: function () {
@@ -693,13 +529,13 @@ Page({
       title: '获取中',
     });
     const backgroundAudioManager = wx.getBackgroundAudioManager();
-    backgroundAudioManager.title = this.data.postDetail.post_media.netease_title;
-    backgroundAudioManager.epname = this.data.postDetail.post_media.netease_epname;
-    backgroundAudioManager.singer = this.data.postDetail.post_media.netease_aritst;
-    backgroundAudioManager.coverImgUrl = this.data.postDetail.post_media.netease_image;
+    backgroundAudioManager.title = this.data.post_detail.post_media.netease_title;
+    backgroundAudioManager.epname = this.data.post_detail.post_media.netease_epname;
+    backgroundAudioManager.singer = this.data.post_detail.post_media.netease_aritst;
+    backgroundAudioManager.coverImgUrl = this.data.post_detail.post_media.netease_image;
     // 设置了 src 之后会自动播放
     backgroundAudioManager.src =
-      'http://music.163.com/song/media/outer/url?id=' + this.data.postDetail.post_media.netease_id;
+      'http://music.163.com/song/media/outer/url?id=' + this.data.post_detail.post_media.netease_id;
     backgroundAudioManager.onPlay(() => {
       wx.hideLoading();
     });
@@ -713,7 +549,7 @@ Page({
     })
   },
   onTapQuote: function () {
-    if (this.data.postDetail.post_media.post_id == '') {
+    if (this.data.post_detail.post_media.uni_post_id == '') {
       wx.showToast({
         title: '该内容不存在或已被删除',
         icon: 'none',
@@ -722,40 +558,40 @@ Page({
       return
     }
     wx.navigateTo({
-      url: '/pages/detail/detail?post_id=' + this.data.postDetail.post_media.post_id,
+      url: '/pages/detail/detail?uni_post_id=' + this.data.post_detail.post_media.uni_post_id,
     })
   },
   onTapArticle: function () {
     wx.navigateTo({
-      url: '/pages/webview/webview?url=' + this.data.postDetail.post_media.article_link,
+      url: '/pages/webview/webview?url=' + this.data.post_detail.post_media.article_link,
     })
   },
   onTapMiniapp: function () {
     wx.navigateToMiniProgram({
-      appId: this.data.postDetail.post_media.miniapp_appid,
-      path: this.data.postDetail.post_media.miniapp_path,
+      appId: this.data.post_detail.post_media.miniapp_appid,
+      path: this.data.post_detail.post_media.miniapp_path,
     })
   },
   onTapAd:function(){
-    var adInfo = this.data.adInfo
-    switch (adInfo.ad_type) {
+    var ad_info = this.data.ad_info
+    switch (ad_info.ad_type) {
       case 'article':
         wx.navigateTo({
-          url: '/pages/webview/webview?url=' + adInfo.article_link,
+          url: '/pages/webview/webview?url=' + ad_info.article_link,
         });
         break;
       case 'post':
           wx.navigateTo({
-            url: '/pages/detail/detail?post_id=' + adInfo.post_id,
+            url: '/pages/detail/detail?post_id=' + ad_info.post_id,
           });
           break;
       case 'inner':
-        wx.navigateTo({ url: adInfo.inner_path });
+        wx.navigateTo({ url: ad_info.inner_path });
         break;
       case 'miniapp': 
         wx.navigateToMiniProgram({
-          appId: adInfo.miniapp_appid,
-          path: adInfo.miniapp_path,
+          appId: ad_info.miniapp_appid,
+          path: ad_info.miniapp_path,
         })
         break;
       case 'none':
@@ -763,13 +599,8 @@ Page({
         break;
     }
   },
-  onTapEmotion:function(){
-    app.globalData.emotion_message_id = this.data.postDetail.post_media.emotion_message_id
-    wx.reLaunch({
-      url: '/pages/teasingwall/teasingwall',
-    })
-  },
-  showCommentBox:function(){
+
+  showCommentReportBox:function(){
     var that = this;
     var animation  = wx.createAnimation({
         duration:500,
@@ -782,26 +613,36 @@ Page({
     that.animation = animation
     that.overlay_animation = overlay_animation
     animation.translateY(400).step()
-    that.setData({
-      comment_box_animation: animation.export(),
-      overlay_animation: overlay_animation.export(),
-      show_comment_box:true,
-    })
+    if(that.data.report_type!=""){
+      that.setData({
+        comment_report_box_animation: animation.export(),
+        overlay_animation: overlay_animation.export(),
+        show_report_box: true
+      })
+    }else{
+      that.setData({
+        comment_report_box_animation: animation.export(),
+        overlay_animation: overlay_animation.export(),
+        show_comment_box: true
+      })
+    }
+  
     setTimeout(function(){
       animation.translateY(0).step()
       overlay_animation.opacity(1).step()
       that.setData({
-        comment_box_animation: animation.export(),
+        comment_report_box_animation: animation.export(),
         overlay_animation: overlay_animation.export(),
       })
     },1)
+
     setTimeout(function(){
       that.setData({
         focus:true
       })
     },800)
   },
-  hideCommentBox:function(){
+  hideCommentReportBox:function(){
     var that = this;
     var animation  = wx.createAnimation({
         duration:500,
@@ -816,13 +657,15 @@ Page({
     animation.translateY(400).step()
     overlay_animation.opacity(0).step()
     that.setData({
-      comment_box_animation: animation.export(),
+      comment_report_box_animation: animation.export(),
       overlay_animation: overlay_animation.export(),
     })
     setTimeout(function(){
       animation.translateY(0).step()
       that.setData({
+        show_report_box:false,
         show_comment_box:false,
+        report_type: "",
         focus:false,
         comment_msg:'',
         comment_image:'',
@@ -834,7 +677,7 @@ Page({
   },
   bindCommentMsgInput: function (e) {
     var regex = /\/\/HKUPootal:picture/
-    console.log(regex.test(e.detail.value))
+
     if(regex.test(e.detail.value)){
       this.uploadImage()
       e.detail.value = e.detail.value.replace(regex, '')
@@ -847,6 +690,8 @@ Page({
   switchSerialChange: function (e) {
     this.setData({ comment_with_serial: e.detail.value });
   },
+
+  // /comment/post
   submitComment: function () {
     var that = this
     if(that.data.comment_is_sending){
@@ -858,38 +703,27 @@ Page({
     that.setData({
       comment_is_sending:true
     })
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/comment/post.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        post_id:that.data.postDetail.post_id,
-        comment_id:that.data.comment_id,
-        comment_msg:that.data.comment_msg,
-        comment_image:that.data.comment_image,
-        comment_with_serial:that.data.comment_with_serial,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        that.setData({
-          comment_is_sending:false
-        })
-        if(res.data.code == 200){
-          wx.showToast({title: "发布成功", icon: "none", duration: 1000})
-          that.hideCommentBox()
-          that.getPostDetail()
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.submitComment()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+    newRequest("/comment/post", {
+      comment_msg:that.data.comment_msg,
+      uni_post_id:that.data.post_detail.uni_post_id,
+      user_is_real_name:that.data.comment_with_serial,
+      comment_image:that.data.comment_image,
+      comment_father_id: that.data.comment_id
+    }, that.submitComment).then( res=>{
+      that.setData({
+        comment_is_sending:false
+      })
+      if(res.code == 200){
+        
+        that.hideCommentReportBox()
+        that.getPostDetail()
+        wx.showToast({title: "发布成功", icon: "none", duration: 1000})
+        
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
+
 
   },
   uploadImage:function(){
@@ -927,44 +761,44 @@ Page({
     // TODO
 
     // 选择文件
-    wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认用原图
-        sourceType: ['album','camera'], // 可以指定来源是相册还是相机，默认二者都有
-        success: function (res) {
-            wx.showLoading({title: '上传中',})
-            console.log(res)
-            var filePath = res.tempFiles[0].path;
-            cos.postObject({
-                Bucket: Bucket,
-                Region: Region,
-                Key: 'pupu/post/' + that.randomString() + that.getExt(filePath),
-                FilePath: filePath,
-                onProgress: function (info) {
-                    console.log(info)
-                    console.log(JSON.stringify(info));
-                }
-            }, function (err, data) {
-                console.log(err || data);
-                if(data.Location){
-                  var location = 'https://i.boatonland.com/pupu/post/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
-                  wx.showLoading({
-                    title: '安全检测中',
-                  })
-                  setTimeout(function () {
-                    wx.hideLoading()
-                    wx.showToast({title: '上传成功' ,icon:'success',})
-                    that.setData({
-                      comment_image: location,
-                    })
-                   }, 1000) 
-                }else{
-                  wx.hideLoading()
-                  wx.showToast({title: '上传失败' ,icon:'error',})
-                }
-            });
-        }
-    });
+    // wx.chooseImage({
+    //     count: 1, // 默认9
+    //     sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认用原图
+    //     sourceType: ['album','camera'], // 可以指定来源是相册还是相机，默认二者都有
+    //     success: function (res) {
+    //         wx.showLoading({title: '上传中',})
+    //         console.log(res)
+    //         var filePath = res.tempFiles[0].path;
+    //         cos.postObject({
+    //             Bucket: Bucket,
+    //             Region: Region,
+    //             Key: 'pupu/post/' + that.randomString() + that.getExt(filePath),
+    //             FilePath: filePath,
+    //             onProgress: function (info) {
+    //                 console.log(info)
+    //                 console.log(JSON.stringify(info));
+    //             }
+    //         }, function (err, data) {
+    //             console.log(err || data);
+    //             if(data.Location){
+    //               var location = 'https://i.boatonland.com/pupu/post/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
+    //               wx.showLoading({
+    //                 title: '安全检测中',
+    //               })
+    //               setTimeout(function () {
+    //                 wx.hideLoading()
+    //                 wx.showToast({title: '上传成功' ,icon:'success',})
+    //                 that.setData({
+    //                   comment_image: location,
+    //                 })
+    //                }, 1000) 
+    //             }else{
+    //               wx.hideLoading()
+    //               wx.showToast({title: '上传失败' ,icon:'error',})
+    //             }
+    //         });
+    //     }
+    // });
 
   },
   randomString:function(e) {
@@ -1009,45 +843,7 @@ Page({
       urls: [this.data.comment_image],
     });
   },
-  checkForEmotion:function(commentList){
-    var that = this
-    if(that.data.postDetail.post_media.media_type == 'emotion'){
-      var systemInfo = wx.getSystemInfoSync()
-      if(systemInfo.theme == 'dark'){
-        wx.setNavigationBarColor({
-          frontColor: "#000000",
-          backgroundColor: that.data.postDetail.post_media.emotion_color_dark,
-          animation: {
-            duration: 500,
-            timingFunc: 'easeInOut'
-          }
-        })
-        that.setData({
-          comment_theme_color: that.data.postDetail.post_media.emotion_color_dark,
-          tintStyle: "background:" + that.data.postDetail.post_media.emotion_color_dark + ";",
-          primaryColor: that.data.postDetail.post_media.emotion_color_dark,
-          is_dark:true
-        })
-      }else{
-        wx.setNavigationBarColor({
-          frontColor: "#000000",
-          backgroundColor: that.data.postDetail.post_media.emotion_color_light,
-          animation: {
-            duration: 500,
-            timingFunc: 'easeInOut'
-          }
-        })
-        that.setData({
-          comment_theme_color: that.data.postDetail.post_media.emotion_color_light,
-          tintStyle: "background:" + that.data.postDetail.post_media.emotion_color_light + ";",
-          primaryColor: that.data.postDetail.post_media.emotion_color_light
-        })
-      }
-    }
-    that.setData({
-      commentList: commentList
-    })
-  },
+
 
   /**
    * 生命周期函数--监听页面加载
@@ -1056,13 +852,18 @@ Page({
     wx.showLoading({
       title: '加载中',
     })
+    console.log(options)
     if (options.post_serial) {
       this.setData({
-        post_id: options.post_serial
+        post_serial: options.post_serial
+      })
+    } else if (options.post_id){
+      this.setData({
+        post_serial: options.post_id
       })
     } else {
       this.setData({
-        post_id: options.post_id
+        uni_post_id: options.uni_post_id
       });
     }
     this.getAd()
@@ -1071,12 +872,12 @@ Page({
       if (systemInfo.theme == 'dark') {
         this.setData({
           tintStyle: "background:" + app.globalData.themeInfo.primaryColorDark + ";",
-          primaryColor: app.globalData.themeInfo.primaryColorDark
+          primary_color: info.primary_color_on_dark
         })
       } else {
         this.setData({
           tintStyle: "background:" + app.globalData.themeInfo.primaryColorLight + ";",
-          primaryColor: app.globalData.themeInfo.primaryColorLight
+          primary_color: info.primary_color_on_light
         })
       }
     }
@@ -1121,14 +922,14 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-    let msg = this.data.postDetail.post_msg
+    let msg = this.data.post_detail.post_msg
     if (msg.length > 20) {
       msg = msg.slice(0, 20) + '...';
     }
     console.log(msg)
     return {
-      path: `/pages/home/home?jump_page=detail&post_serial=${this.data.postDetail.post_id}`,
-      title: 'HKU树洞用户: ' + msg,
+      path: `/pages/home/home?jump_page=detail&uni_post_id=${this.data.post_detail.uni_post_id}`,
+      title: info.app_name + '用户: ' + msg,
     };
   },
 });

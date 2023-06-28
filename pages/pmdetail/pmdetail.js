@@ -1,6 +1,8 @@
 var app = getApp()
 var COS = require('../../utils/cos-wx-sdk-v5.js')
 const localDB = require('../../utils/database.js')
+const info = require('../../utils/info.js')
+const { default: newRequest } = require('../../utils/request.js')
 const _ = localDB.command
 Page({
 
@@ -14,11 +16,11 @@ Page({
     emojiChars: ["😀", "😁", "😂", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "😇", "😐", "😑", "😶", "😏", "😣", "😥", "😮", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "😒", "😓", "😔", "😕", "😲", "😷", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😬", "😰", "😱", "😳", "😵", "😡", "😠", "👦", "👧", "👨", "👩", "👴", "👵", "👶", "👱", "👮", "👲", "👳", "👷", "👸", "💂", "🎅", "👰", "👼", "💆", "💇", "🙍", "🙎", "🙅", "🙆", "💁", "🙋", "🙇", "🙌", "🙏", "👤", "👥", "🚶", "🏃", "👯", "💃", "👫", "👬", "👭", "💏", "💑", "👪", "💪", "👈", "👉", "☝", "👆", "👇", "✌", "✋", "👌", "👍", "👎", "✊", "👊", "👋", "👏", "👐", "✍", "👣", "👀", "👂", "👃", "👅", "👄", "💋", "👓", "👔", "👕", "👖", "👗", "👘", "👙", "👚", "👛", "👜", "👝", "🎒", "💼", "👞", "👟", "👠", "👡", "👢", "👑", "👒", "🎩", "🎓", "💄", "💅", "💍", "🌂"],
     keyboardHeight: 400,
     page:1,
-    pmList:[],
+    pm_list:[],
     toView:'',
     keyboardPosition:0,
     inputFocus:false,
-    chatStyle:""
+    chatStyle:"",
   },
 
   bindInput: function (e) {
@@ -64,6 +66,25 @@ Page({
     });
   },
 
+
+  formatTime: function(timestamp){
+    var s = new Date(timestamp*1000);
+    var today = new Date();
+    var day_diff = today.setHours(0,0,0,0) - s.setHours(0,0,0,0)
+    var s = new Date(timestamp*1000);
+    //same day
+    if(day_diff == 0){
+      return "今天 " + String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }else if(day_diff == 86400000){
+      return "昨天 "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }else if(day_diff == 172800000){
+      return "前天 "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }else{
+      return (s.getYear()+1900)+"-"+(s.getMonth()+1)+"-"+s.getDate()+" "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }
+
+  },
+
   getHistoryMessage:function(){
     app.getHistoryMessage()
   },
@@ -72,17 +93,22 @@ Page({
     var that = this
     var db = app.initDatabase()
     var pm = db.pm
-    var pmList = pm.where({chat_id:that.data.chat_id}).orderBy('pm_id', 'asc').get()
+    var pm_list = pm.where({chat_id:that.data.chat_id}).orderBy('pm_id', 'asc').get()
+    for (let i=0; i<pm_list.length; i++){
+      pm_list[i].pm_display_date = this.formatTime(pm_list[i].pm_create_time)
+    }
+    // console.log(pm_list)
     that.setData({
-      pmList:pmList
+      pm_list:pm_list
     })
     setTimeout(function () {
       that.setData({
-        toView: "pm-" + (pmList.length - 1),
+        toView: "pm-" + (pm_list.length - 1),
       })
     }, 100)
   },
 
+  // /pm/message/send
   sendMessage: function () {
     app.subscribe(false)
     var that = this
@@ -98,25 +124,14 @@ Page({
       pm_msg:'',
       emojiShow:false
     })
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/pmnew/message/send.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        chat_id:that.data.chat_id,
-        pm_msg:pm_msg,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        if(res.data.code == 200){
+    newRequest("/pm/message/send", {
+      chat_id:that.data.chat_id,
+      pm_msg:pm_msg,
+    }).then(res=>{
+      if(res.code == 200){
 
-        }else if(res.data.code == 800 ||res.data.code == 900){
-
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "error", duration: 1000})
       }
     })
 
@@ -156,18 +171,19 @@ Page({
     // TODO
 
     // 选择文件
-    wx.chooseImage({
+    wx.chooseMedia({
         count: 1, // 默认9
+        mediaType: ['image'], //只允许照片
         sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认用原图
         sourceType: ['album','camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function (res) {
             wx.showLoading({title: '发送中',})
             console.log(res)
-            var filePath = res.tempFiles[0].path;
+            var filePath = res.tempFiles[0].tempFilePath;
             cos.postObject({
                 Bucket: Bucket,
                 Region: Region,
-                Key: 'pupu/pm/' + that.randomString() + that.getExt(filePath),
+                Key: info.school_label + '/pm/' + that.randomString() + that.getExt(filePath),
                 FilePath: filePath,
                 onProgress: function (info) {
                     console.log(info)
@@ -176,31 +192,17 @@ Page({
             }, function (err, data) {
                 console.log(err || data);
                 if(data.Location){
-                  var location = 'https://i.boatonland.com/pupu/pm/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
-                  wx.request({
-                    url: 'https://api.pupu.hkupootal.com/v3/pmnew/message/send.php', 
-                    method: 'POST',
-                    data: {
-                      token:wx.getStorageSync('token'),
-                      chat_id:that.data.chat_id,
-                      pm_msg:"[Image]",
-                      pm_media:JSON.stringify({
-                        type:"image",
-                        "image_link":location
-                      })
-                    },
-                    header: {
-                      'content-type': 'application/x-www-form-urlencoded'
-                    },
-                    success (res) {
-                      wx.hideLoading()
-                      if(res.data.code == 200){
-              
-                      }else if(res.data.code == 800 ||res.data.code == 900){
-              
-                      }else{
-                        wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-                      }
+                  var location = 'https://i.boatonland.com/'+info.school_label +'/pm/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
+                  newRequest("/pm/message/send", {
+                    chat_id:that.data.chat_id,
+                    pm_msg:"[Image]",
+                    pm_media:JSON.stringify({
+                      type:"image",
+                      "image_link":location
+                    })
+                  }).then( res=>{
+                    if (res.code != 200){
+                      wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
                     }
                   })
                 }else{
@@ -226,13 +228,19 @@ Page({
   },
 
   longpress:function(e){
+    var that = this
     wx.showActionSheet({
-      itemList: ['复制'],
+      itemList: ['复制', '删除'],
       success (res) {
         if(res.tapIndex == 0){
           wx.setClipboardData({
             data: e.currentTarget.dataset.pmmsg,
           })
+        } else if(res.tapIndex == 1){
+          app.deletePm(e.currentTarget.dataset.pmid)
+          setTimeout(() => {
+            that.setPageData()
+          }, 1000);
         }
       }
     })
@@ -260,6 +268,7 @@ Page({
         })
       }
     }
+
   },
 
   /**

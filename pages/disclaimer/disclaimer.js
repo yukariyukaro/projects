@@ -1,9 +1,14 @@
 // pages/disclaimer/disclaimer.js
+import info from "../../utils/info.js"
+
 Page({
   /**
    * 页面的初始数据
    */
-  data: {},
+  data: {
+    app_name: info.app_name,
+    team_name: info.team_name
+  },
 
   /**
    * 生命周期函数--监听页面加载

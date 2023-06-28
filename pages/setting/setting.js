@@ -1,4 +1,7 @@
 var app = getApp()
+import newRequest from "../../utils/request"
+const info = require("../../utils/info.js")
+
 Page({
 
   /**
@@ -6,178 +9,59 @@ Page({
    */
   data: {
     subscribe_accept:false,
-    banUniPost:false,
-    allowHomeSwipe:false
+    ban_uni_post:false,
+    allow_home_swipe:false,
+    primary_color:app.globalData.theme.primary,
+    service_account_name: info.service_account
   },
-  getUserInfo: function () {
-    var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/user/profile/my.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-            that.setData({
-              subscribe_accept:res.data.userInfo.subscribe_accept
-            })
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getUserInfo()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
-      }
-    })
 
-  },
   checkMethod: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/notice/checkmethod.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-            that.setData({
-              subscribe_accept:res.data.subscribe_accept
-            })
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.checkMethod()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+    newRequest("/notice/checkaccept", {}, that.checkMethod)
+    .then( res => {
+      if(res.code == 200){
+        that.setData({
+          subscribe_accept:res.notice_accept
+        })
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
-
   },
-  acceptSubscribe: function (e) {
-    var that = this
-    if(e.detail.value){
-      app.showModal({
-        title:"开启推送",
-        content:"请在新界面勾选「总是保持以上选择，不再询问」并选择「允许」",
-        showCancel:false,
-        success(res){
-          if(res.confirm){
-            app.subscribe(true).then(function(bool){
-              console.log(bool)
-              if(bool){
-                that.accept(true)
-              }else{
-                that.data.userInfo.subscribe_accept = false
-                that.setData({
-                  userInfo:that.data.userInfo
-                })
-              }
-            }
-            )
-          }
-        }
-      })
-    }else{
-      that.accept(false)
-    }
 
-  },
+
+  // /notice/accept
   acceptSubscribeNew: function (e) {
     var that = this
     var that = this
     wx.showLoading({
       title: '加载中',
     })
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/notice/acceptnew.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        subscribe_accept:e.detail.value
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          that.setData({
-            subscribe_accept:true
-          })
-          wx.showToast({title: '开启推送成功', icon: "none", duration: 1000})
-        }else if(res.data.code == 201){
-          that.setData({
-            subscribe_accept:false
-          })
-          wx.showToast({title: '关闭推送成功', icon: "none", duration: 1000})
-        }else if(res.data.code == 401){
-          that.setData({
-            subscribe_accept:false
-          })
-          wx.showToast({title: '没有关注HKU ONE', icon: "none", duration: 1000})
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.acceptSubscribeNew(e)
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+    newRequest("/notice/accept", {
+      notice_accept:e.detail.value
+    }, that.acceptSubscribeNew).then(res=>{
+      if(res.code == 200){
+        that.setData({
+          subscribe_accept:true
+        })
+        wx.showToast({title: '开启推送成功', icon: "none", duration: 1000})
+      }else if(res.code == 201){
+        that.setData({
+          subscribe_accept:false
+        })
+        wx.showToast({title: '关闭推送成功', icon: "none", duration: 1000})
+      }else if(res.code == 401){
+        that.setData({
+          subscribe_accept:false
+        })
+        wx.showToast({title: '没有关注'+info.service_account, icon: "none", duration: 1000})
+      }else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
-
   },
-  accept: function (e) {
-    var that = this
-    wx.showLoading({
-      title: '加载中',
-    })
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/notice/accept.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        subscribe_accept:e
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          that.data.userInfo.subscribe_accept = true
-          that.setData({
-            userInfo:that.data.userInfo
-          })
-          wx.showToast({title: '开启推送成功', icon: "none", duration: 1000})
-        }else if(res.data.code == 201){
-          that.data.userInfo.subscribe_accept = false
-          that.setData({
-            userInfo:that.data.userInfo
-          })
-          wx.showToast({title: '关闭推送成功', icon: "none", duration: 1000})
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.accept(e)
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
-      }
-    })
 
-  },
+
   clearUnread:function(){
     var that = this
     app.showModal({
@@ -186,22 +70,33 @@ Page({
       showCancel:true,
       success(res){
         if(res.confirm){
-          var db = app.initDatabase()
-          var chat = db.chat
-          var chat_list = chat.get()
-          chat_list.forEach(item => {
-            item.chat_unread_count = 0
-            chat.where({
-              chat_id: item.chat_id
-            }).update(item)
+          newRequest("/notice/clear", {})
+          .then(res => {
+            if (res.code == 200){
+              var db = app.initDatabase()
+              var chat = db.chat
+              var chat_list = chat.get()
+              chat_list.forEach(item => {
+                item.chat_unread_count = 0
+                chat.where({
+                  chat_id: item.chat_id
+                }).update(item)
+              })
+              wx.removeTabBarBadge({
+                ndex: 1,
+              })
+              wx.setStorageSync('allNoticeCount', 0)
+              wx.setStorageSync('systemNoticeCount', 0)
+              wx.showToast({title: '清理成功', icon: "none", duration: 1000})
+            }else{
+              wx.showToast({title: '清理失败', icon: "none", duration: 1000})
+            }
           })
-          wx.setStorageSync('allNoticeCount', 0)
-          wx.setStorageSync('systemNoticeCount', 0)
-          wx.showToast({title: '清理成功', icon: "none", duration: 1000})
         }
       }
     })
   },
+
   regetMessage:function(){
     var that = this
     app.showModal({
@@ -221,10 +116,10 @@ Page({
     })
   },
   setBanUniPost:function(e){
-    wx.setStorageSync('banUniPost', e.detail.value)
+    wx.setStorageSync('ban_uni_post', e.detail.value)
   },
   setAllowHomeSwipe:function(e){
-    wx.setStorageSync('allowHomeSwipe', e.detail.value)
+    wx.setStorageSync('allow_home_swipe', e.detail.value)
   },
 
   /**
@@ -233,8 +128,8 @@ Page({
   onLoad: function (options) {
     this.checkMethod()
     this.setData({
-      banUniPost:wx.getStorageSync('banUniPost'),
-      allowHomeSwipe:wx.getStorageSync('allowHomeSwipe')
+      ban_uni_post:wx.getStorageSync('ban_uni_post'),
+      allow_home_swipe:wx.getStorageSync('allow_home_swipe')
     })
   },
 

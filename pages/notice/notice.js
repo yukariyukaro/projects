@@ -1,3 +1,5 @@
+const { default: newRequest } = require("../../utils/request")
+
 var app = getApp()
 Page({
 
@@ -5,246 +7,119 @@ Page({
    * 页面的初始数据
    */
   data: {
-    noticeList:[],
-    userInfo:[],
+    notice_list:[],
+    user_info:[],
     scroll_top: 0,
     page:0,
-    isLast:false,
+    is_last:false,
     is_loading_more:false,
     refresh_triggered: false,
   },
 
-  getUserInfo: function () {
-    var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/user/profile/my.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-            that.setData({
-              userInfo:res.data.userInfo
-            })
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getUserInfo()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
-      }
-    })
-
-  },
-  acceptSubscribe: function (e) {
-    var that = this
-    if(e.detail.value){
-      app.showModal({
-        title:"开启推送",
-        content:"请在新界面勾选「总是保持以上选择，不再询问」并选择「允许」",
-        showCancel:false,
-        success(res){
-          if(res.confirm){
-            app.subscribe(true).then(function(bool){
-              console.log(bool)
-              if(bool){
-                that.accept(true)
-              }else{
-                that.data.userInfo.subscribe_accept = false
-                that.setData({
-                  userInfo:that.data.userInfo
-                })
-              }
-            }
-            )
-          }
-        }
-      })
+  formatTime: function(timestamp){
+    var s = new Date(timestamp*1000);
+    var today = new Date();
+    var day_diff = today.setHours(0,0,0,0) - s.setHours(0,0,0,0)
+    var s = new Date(timestamp*1000);
+    //same day
+    if(day_diff == 0){
+      return "今天 " + String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }else if(day_diff == 86400000){
+      return "昨天 "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    }else if(day_diff == 172800000){
+      return "前天 "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
     }else{
-      that.accept(false)
+      return (s.getYear()+1900)+"-"+(s.getMonth()+1)+"-"+s.getDate()+" "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
     }
 
   },
-  accept: function (e) {
+
+  getUserInfo: function () {
     var that = this
-    wx.showLoading({
-      title: '加载中',
-    })
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/notice/accept.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        subscribe_accept:e
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          that.data.userInfo.subscribe_accept = true
-          that.setData({
-            userInfo:that.data.userInfo
-          })
-          wx.showToast({title: '开启推送成功', icon: "none", duration: 1000})
-        }else if(res.data.code == 201){
-          that.data.userInfo.subscribe_accept = false
-          that.setData({
-            userInfo:that.data.userInfo
-          })
-          wx.showToast({title: '关闭推送成功', icon: "none", duration: 1000})
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.accept(e)
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+    newRequest("/user/profile/get",{}, that.getUserInfo)
+    .then((res) => {
+      if(res.code == 200){
+        that.setData({
+          user_info:res.user_info,
+        })
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
+    
+    
 
   },
+ 
+
   getNotice: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/notice/get.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        page:that.data.page,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          if(that.data.page == '0'){
-            that.setData({
-              noticeList:res.data.noticeList,
-              isLast:res.data.isLast,
-              refresh_triggered: false,
-              is_loading_more: false,
-            })
-            wx.stopPullDownRefresh()
-          }else{
-            that.setData({
-              noticeList:that.data.noticeList.concat(res.data.noticeList),
-              isLast:res.data.isLast,
-              refresh_triggered: false,
-              is_loading_more: false,
-            })
+    newRequest('/notice/get', {page:that.data.page}, that.getNotice)
+    .then(res=>{
+      if(res.code == 200){
+        
+        if (res.notice_list){
+          for (let i=0; i<res.notice_list.length; i++){
+            res.notice_list[i].notice_display_date = this.formatTime(res.notice_list[i].notice_create_time)
           }
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getPost()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
         }
+
+        if(that.data.page == '0'){
+          that.setData({notice_list: []})
+          that.setData({
+            notice_list:res.notice_list,
+            is_last:res.is_last,
+            refresh_triggered: false,
+            is_loading_more: false,
+          })
+          wx.stopPullDownRefresh()
+        }else{
+          that.setData({
+            notice_list:that.data.notice_list.concat(res.notice_list),
+            is_last:res.is_last,
+            refresh_triggered: false,
+            is_loading_more: false,
+          })
+        }
+      }else {
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
 
   },
   nav2Notice:function(e){
     this.readNotice(e)
-    var noticeList = this.data.noticeList
-    noticeList = noticeList.map(item => {
+    var notice_list = this.data.notice_list
+    notice_list = notice_list.map(item => {
       if(item.notice_url == e.currentTarget.dataset.url){
         item.notice_is_read = '1'
       }
       return item
     })
     this.setData({
-      noticeList:noticeList
+      notice_list:notice_list
     })
-    var match = e.currentTarget.dataset.url.match(/(\/pages\/teasingwall\/teasingwall\?emotion_message_id=)([0-9]+)/)
-    if(match){
-      app.globalData.emotion_message_id = match[2]
-      wx.reLaunch({
-        url: '/pages/teasingwall/teasingwall',
-      })
-    }else{
-      wx.navigateTo({
-        url: e.currentTarget.dataset.url
-      })
-    }
+    
+    wx.navigateTo({
+      url: e.currentTarget.dataset.url
+    })
+    
   },
+
   readNotice: function (e) {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/notice/read.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        notice_id:e.currentTarget.dataset.noticeid
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.readNotice()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+    newRequest("/notice/read", {notice_id:e.currentTarget.dataset.noticeid}, that.readNotice)
+    .then(res=>{
+      if(res.code == 200){
+
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
 
-  },
-  clearNotice: function () {
-    var that = this
-    app.showModal({
-      title:"提示",
-      content:"确认清空未读通知？",
-      showCancel:true,
-      success(res){
-        if(res.confirm){
-          wx.showLoading({
-            title: '加载中',
-          })
-          wx.request({
-            url: 'https://api.pupu.hkupootal.com/v3/notice/clear.php', 
-            method: 'POST',
-            data: {
-              token:wx.getStorageSync('token'),
-            },
-            header: {
-              'content-type': 'application/x-www-form-urlencoded'
-            },
-            success (res) {
-              wx.hideLoading()
-              if(res.data.code == 200){
-                that.onRefresh()
-                wx.removeTabBarBadge({
-                  index: 1,
-                })
-                wx.setStorageSync('notice_count', '0')
-              }else if(res.data.code == 800 ||res.data.code == 900){
-                app.launch().then(res=>{
-                  that.clearNotice()
-                })
-              }else{
-                wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-              }
-            }
-          })
-        }
-      }
-    })
 
   },
+
   onRefresh() {
     this.setData({
       page:0,
@@ -256,7 +131,7 @@ Page({
     this.getNotice()
   },
   onLoadMore: function () {
-    if(this.data.isLast){
+    if(this.data.is_last){
       return
     }
     this.setData({

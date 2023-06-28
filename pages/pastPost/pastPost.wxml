@@ -12,9 +12,9 @@
   bindscroll="bindScroll"
 >
 <view class="post-content">
-  <one type="{{item.post_media.media_type == 'article'?'article':'post'}}" data="{{item}}" wx:for="{{postList}}"/>
-  <loadmore empty="{{postList.length==0}}" end="{{isLast}}" loading="{{is_loading_more}}">
-    <text>这里空荡荡的\n快写下自己树洞吧</text>
+  <one type="{{item.type}}" data="{{item.data}}" wx:for="{{one_list}}" wx:key="index"/>
+  <loadmore empty="{{one_list.length==0}}" end="{{is_last}}" loading="{{is_loading_more}}">
+    <text class="loadmore-text">这里空荡荡的\n快写下自己树洞吧</text>
   </loadmore>
 </view>
 </scroll-view>

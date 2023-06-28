@@ -1,9 +1,11 @@
 <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll">
-  <view wx:for="{{noticeList}}" wx:key="index" class="outer" wx:if="{{noticeList.length > 0}}" data-url="{{item.notice_url}}" data-index="{{index}}" data-noticeid="{{item.notice_id}}" bindtap="nav2Notice">
+
+  <view wx:for="{{notice_list}}" wx:key="index" class="outer" wx:if="{{notice_list.length > 0}}" data-url="{{item.notice_url}}" data-index="{{index}}" data-noticeid="{{item.notice_id}}" bindtap="nav2Notice">
       <view class="tab-bar-tip" wx:if="{{item.notice_is_read==0}}"></view>
       <view style="padding:40rpx">{{item.notice_msg}}</view>
-      <view style="text-align: right;padding-bottom: 20rpx;padding-right: 20rpx;color: #8C8C8C;font-size: 26rpx;">{{item.notice_create_date}}</view>
+      <view style="text-align: right;padding-bottom: 20rpx;padding-right: 20rpx;color: #8C8C8C;font-size: 26rpx;">{{item.notice_display_date}}</view>
   </view>
-  <loadmore end="{{isLast}}" loading="{{is_loading_more}}" wx:if="{{noticeList.length != 0}}" />
-  <view wx:if="{{noticeList.length == 0}}" class="no-content">暂时没有新通知</view>
+  
+  <loadmore end="{{is_last}}" loading="{{is_loading_more}}" wx:if="{{notice_list.length != 0}}" />
+  <view wx:if="{{notice_list.length == 0}}" class="no-content">暂时没有新通知</view>
 </scroll-view>

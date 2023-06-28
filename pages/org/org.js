@@ -1,3 +1,6 @@
+import newRequest from "../../utils/request";
+const info = require("../../utils/info")
+
 var app = getApp();
 Page({
 
@@ -7,13 +10,15 @@ Page({
   data: {
     theme:'light',
     user_serial:'',
-    orgInfo:{},
+    org_info:{},
     page:0,
     postList:[],
     refresh_triggered: false,
     is_loading_more: false,
     scroll_top: 0,
-    isLast:false,
+    is_last:false,
+    have_full_width_func:false,
+    half_list:[]
   },
    // 下拉刷新
    onRefresh() {
@@ -25,6 +30,14 @@ Page({
       title: '加载中',
     })
     this.getPostByUser()
+  },
+
+  onRestore() {
+    this.setData({
+      refresh_triggered: false,
+      is_loading_more:false,
+    });
+    wx.hideLoading()
   },
   // 上拉加载更多
   onLoadMore: function () {
@@ -45,74 +58,63 @@ Page({
   },
   getOrgInfo: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/user/org/get.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        visit_user_serial:that.data.user_serial
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-            that.setData({
-              orgInfo:res.data.orgInfo
-            })
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getOrgInfo()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+    newRequest("/user/profile/org", {visit_user_serial: that.data.user_serial}, that.getOrgInfo) 
+    .then(res =>{
+      if (res.code == 200){
+        var have_full_width_func = false;
+        if (res.org_info.org_function){
+          var have_full_width_func = (res.org_info.org_function.length % 2 != 0)
         }
+        var half_list=[]
+        if(have_full_width_func){
+          half_list = res.org_info.org_function.slice(1)
+        }else{
+          half_list = res.org_info.org_function
+        }
+        that.setData({
+          org_info: res.org_info,
+          have_full_width_func: have_full_width_func,
+          half_list: half_list
+        })
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "error", duration: 1000})
       }
     })
 
+
   },
+
   getPostByUser:function(){
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/list/user.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        visit_user_serial:that.data.user_serial,
-        page:that.data.page,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          if(that.data.page == '0'){
+      newRequest("/post/list/user", {
+          visit_user_serial:that.data.user_serial,
+          page:that.data.page,
+          visit_user_school_label: that.data.school_label
+      }, that.getPostByUser)
+      .then(res => {
+        if(res.code == 200){
+          if(that.page == '0'){
+            that.setData({postList: []})
             that.setData({
-              postList:res.data.postList,
-              isLast:res.data.isLast,
+              postList:res.one_list,
+              is_last:res.is_last,
               refresh_triggered: false,
               is_loading_more: false,
             })
             wx.stopPullDownRefresh()
           }else{
             that.setData({
-              postList:that.data.postList.concat(res.data.postList),
-              isLast:res.data.isLast,
+              postList:that.data.postList.concat(res.one_list),
+              is_last:res.is_last,
               refresh_triggered: false,
               is_loading_more: false,
             })
           }
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getPostByUser()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+        }else {
+          wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
         }
-      }
-    })
+      })
+    
 
   },
   onTapBanner:function(e){
@@ -152,39 +154,31 @@ Page({
         })
         if(res.tapIndex == 0){
             var data = {
-              token:wx.getStorageSync('token'),
               sender_is_real_name:"true",
               to_type:"user",
               receiver_serial:that.data.user_serial,
+              receiver_school_label: that.data.school_label
             }
         }else if(res.tapIndex == 1){
-          var data = {
-            token:wx.getStorageSync('token'),
-            sender_is_real_name:"false",
-            to_type:"user",
-            receiver_serial:that.data.user_serial,
-          }
-        }
-        wx.request({
-          url: 'https://api.pupu.hkupootal.com/v3/pmnew/chat/create.php', 
-          method: 'POST',
-          data: data,
-          header: {
-            'content-type': 'application/x-www-form-urlencoded'
-          },
-          success (res) {
-            wx.hideLoading()
-            if(res.data.code == 200){
-              wx.navigateTo({
-                url: '/pages/pmdetail/pmdetail?chat_id='+ res.data.chat_id,
-              })
-            }else if(res.data.code == 800 ||res.data.code == 900){
-              app.launch().then(res=>{
-                that.nav2Pm()
-              })
-            }else{
-              wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+            var data = {
+              sender_is_real_name:"false",
+              to_type:"user",
+              receiver_serial:that.data.user_serial,
+              receiver_school_label: that.data.school_label
             }
+        }
+        newRequest("/pm/chat/create", data, that.nav2Pm)
+        .then(res=>{
+          if(res.code == 200){
+            wx.navigateTo({
+              url: '/pages/pmdetail/pmdetail?chat_id='+ res.chat_id,
+            })
+          }else{
+            wx.showToast({
+              title: res.msg? res.msg : "错误",
+              icon: 'error',
+              duration: 1000
+            })
           }
         })
       }
@@ -192,6 +186,7 @@ Page({
   },
   handleFunctionPre:function(e){
     this.handleFunction(e.currentTarget.dataset.functionlist)
+    console.log(e.currentTarget.dataset.functionlist)
   },
   handleFunction:function(function_item){
     var that = this
@@ -211,7 +206,7 @@ Page({
         break;
       case 'post':
           wx.navigateTo({
-            url: '/pages/detail/detail?post_id=' + function_item.post_id,
+            url: '/pages/detail/detail?uni_post_id=' + function_item.uni_post_id,
           });
           break;
       case 'inner':
@@ -237,8 +232,13 @@ Page({
    */
   onLoad: function (options) {
     var that = this
+    var school_label = info.school_label
+    if(options.school_label){
+      school_label = options.school_label
+    }
     that.setData({
       user_serial:options.user_serial,
+      school_label:school_label
     })
     that.getOrgInfo()
     that.getPostByUser()

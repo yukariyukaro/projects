@@ -138,7 +138,7 @@
 
 .dialog-item .item-body .name {
   font-size: 30rpx;
-  color: var(--pmtext);
+  color: var(--on-bg-1);
   width:300rpx;
   overflow: hidden;
   white-space: nowrap; 
@@ -153,7 +153,7 @@
 
 .dialog-item .item-body .time {
   flex: 1;
-  color: var(--pmsubtext);
+  color: var(--on-bg-2);
   font-size: 22rpx;
   text-align: right;
 }
@@ -206,5 +206,5 @@ padding-top: 100rpx;
   height: 1px;
   margin-left: 20rpx;
   margin-right: 20rpx;
-  background-color: var(--divider);
+  background-color: var(--bg-gray-3);
 }

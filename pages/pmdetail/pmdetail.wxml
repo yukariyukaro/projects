@@ -4,12 +4,12 @@
   scroll-top="{{scroll_top}}"
   scroll-into-view="{{toView}}"
 >
-  <view class="content-container">
-    <view class="item-container" wx:for="{{pmList}}" wx:key="index" id='pm-{{index}}'>
-      <text class="item-top" wx:if="{{index==0||pmList[index].pm_timestamp-pmList[index-1].pm_timestamp>60*5}}">{{item.pm_date}}</text>
+  <view class="content-container" >
+    <view class="item-container" wx:for="{{pm_list}}" wx:key="index" id='pm-{{index}}'>
+      <text class="item-top" wx:if="{{index==0||pm_list[index].pm_create_time-pm_list[index-1].pm_create_time>60*5}}">{{item.pm_display_date}}</text>
       <view class="item" style="flex-direction: {{item.pm_is_from_me?'row-reverse':'row'}}">
         <image bindtap="onMemberClick" class="item-left" data-id="{{message.user.id}}" mode="aspectFill"
-          src="{{preURL + item.pm_avatar}}.svg"></image>
+          src="{{preURL + item.user_avatar}}.svg"></image>
         <view class="item-right {{item.pm_is_from_me?'item-right-me':''}}">
           <view class="item-right-text-container {{item.pm_is_from_me?'item-right-text-container-me':''}}">
             <image 
@@ -21,13 +21,13 @@
             data-image="{{item.pm_media.image_link}}"
             ></image>
             <text class="item-right-text {{item.pm_is_from_me?'item-right-text-me':''}}"
-              selectable="true" wx:else bindlongpress="longpress" data-pmid="{{item.pm_id}}" data-pmmsg="{{item.pm_msg}}" style="{{item.pm_is_from_me?chatStyle:''}}">{{item.pm_msg}}</text>
+              user-select="true" wx:else bindlongpress="longpress" data-pmid="{{item.pm_id}}" data-pmmsg="{{item.pm_msg}}" style="{{item.pm_is_from_me?chatStyle:''}}">{{item.pm_msg}}</text>
           </view>
         </view>
       </view>
     </view>
   </view>
-  <view style="height: 30rpx;"></view>
+  
 </scroll-view>
 
   <view catchtouchmove="stopTouch" class="jz-chat-edit-view-container bottom-extra">

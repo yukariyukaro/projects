@@ -1,33 +1,36 @@
-<view style="padding-top: calc({{navBarHeight}}px + 0rpx)" class="fix-tabbar">
-    <view class="user-background" style="transform: scale({{userBackgroundScale}});">
-        <image class="user-background-image" mode="aspectFill" src="{{mineBackgroundImage}}"
+<scroll-view scroll-y="{{true}}" >
+<view style="padding-top: calc({{nav_bar_height}}px + 0rpx)" class="fix-tabbar">
+    <view class="user-background" style="transform: scale({{user_background_scale}});">
+        <image class="user-background-image" mode="aspectFill" src="{{mine_background_image}}"
             style="height: 496rpx"></image>
         <view class="user-background-gradient"></view>
     </view>
+
     <view class="own-header">
         <view class="header-top">
             <view class="own-header-img-div" data-url="/pages/userdata/userdata" bindtap="nav2Url">
-                <image mode="aspectFill" class="own-header-img" src="{{preURL + userInfo.user_avatar}}.svg" wx:if="{{userInfo.user_avatar}}"></image>
+                <image mode="aspectFill" class="own-header-img" src="{{pre_url + user_info.user_avatar}}.svg" wx:if="{{user_info.user_avatar}}"></image>
             </view>
             <view class="header-middle" url="/pages/mine/editmine/editmine">
-                <view class="own-header-r-t text-overflow">{{userInfo.user_serial}}</view>
+                <view class="own-header-r-t text-overflow">{{user_info.user_serial}}</view>
             </view>
 
         </view>
         <view class="header-bottom">
             <view class="header-bottom-li" data-url="/pages/pastPost/pastPost" bindtap="nav2Url">
-                <view class="own-header-num">{{userInfo.post_count||0}}</view>
+                <view class="own-header-num">{{user_info.post_count||0}}</view>
                 <view class="own-header-text">树洞</view>
             </view>
             <view class="header-bottom-li" data-url="/pages/followPost/followPost" bindtap="nav2Url">
-                <view class="own-header-num">{{userInfo.follow_count||0}}</view>
+                <view class="own-header-num">{{user_info.follow_count||0}}</view>
                 <view class="own-header-text">围观</view>
             </view>
         </view>
     </view>
-    <view class="tools">
 
+    <view class="tools">
         <view class="menu">
+            <!-- 我的树洞 -->
             <view class="u-flex-item" data-url="/pages/pastPost/pastPost" bindtap="nav2Url">
                 <view class="u-row-left">
                     <image src="/images/ui-data.svg"></image>
@@ -38,6 +41,7 @@
                     <view class="arror-right"></view>
                 </view>
             </view>
+            <!-- 我的围观 -->
             <view class="u-flex-item" data-url="/pages/followPost/followPost" bindtap="nav2Url">
                 <view class="u-row-left">
                     <image src="/images/ui-following.svg"></image>
@@ -48,18 +52,10 @@
                     <view class="arror-right"></view>
                 </view>
             </view>
-            <view class="u-flex-item" data-url="/pages/mySubclass/mySubclass" bindtap="nav2Url">
-                <view class="u-row-left">
-                    <image src="/images/ui-course.svg"></image>
-                    <view class="name">我的日程</view>
-                </view>
-                <view class="u-row-right">
-                    <view class="u-light-color"></view>
-                    <view class="arror-right"></view>
-                </view>
-            </view>
         </view>
+
         <view class="menu">
+            <!-- 用户资料 -->
             <view class="u-flex-item" data-url="/pages/userdata/userdata" bindtap="nav2Url">
                 <view class="u-row-left">
                     <image src="/images/ui-user.svg"></image>
@@ -70,6 +66,7 @@
                     <view class="arror-right"></view>
                 </view>
             </view>
+            <!-- 设置 -->
             <view class="u-flex-item" data-url="/pages/setting/setting" bindtap="nav2Url">
                 <view class="u-row-left">
                     <image src="/images/ui-setting.svg"></image>
@@ -81,17 +78,20 @@
                 </view>
             </view>
         </view>
+
         <view class="menu">
+            <!-- 关于我们 -->
             <view class="u-flex-item" data-url="/pages/about/about" bindtap="nav2Url">
                 <view class="u-row-left">
                     <image src="/images/ui-about.svg"></image>
-                    <view class="name">关于噗噗</view>
+                    <view class="name">关于我们</view>
                 </view>
                 <view class="u-row-right">
                     <view class="u-light-color"></view>
                     <view class="arror-right"></view>
                 </view>
             </view>
+            <!-- 联系我们 -->
             <view class="u-flex-item" bindtap="nav2Pm">
                 <view class="u-row-left">
                     <image src="/images/ui-contact.svg"></image>
@@ -102,7 +102,11 @@
                     <view class="arror-right"></view>
                 </view>
             </view>
-            <!-- <view class="u-flex-item" data-url="/pages/followPost/followPost" bindtap="nav2Url">
+          
+        </view> 
+
+        <view class="menu">
+          <view class="u-flex-item" data-url="https://hkupootal.com/{{school_label}}/agreement" bindtap="nav2Web">
                 <view class="u-row-left">
                     <image src="/images/ui-term.svg"></image>
                     <view class="name">用户协议</view>
@@ -112,18 +116,21 @@
                     <view class="arror-right"></view>
                 </view>
             </view>
-            <view class="u-flex-item" data-url="/pages/followPost/followPost" bindtap="nav2Url">
+            <view class="u-flex-item" data-url="https://hkupootal.com/{{school_label}}/privacy" bindtap="nav2Web">
                 <view class="u-row-left">
                     <image src="/images/ui-privacy.svg"></image>
-                    <view class="name">隐私条款</view>
+                    <view class="name">隐私政策</view>
                 </view>
                 <view class="u-row-right">
                     <view class="u-light-color"></view>
                     <view class="arror-right"></view>
                 </view>
-            </view> -->
-        </view> 
+            </view>
+          </view> 
+        
+
         <view class="menu">
+            <!-- 退出登录 -->
             <view class="u-flex-item" bindtap="logout">
                 <view class="u-row-left">
                     <image src="/images/ui-logout.svg"></image>
@@ -138,3 +145,4 @@
     </view>
 
 </view>
+</scroll-view>

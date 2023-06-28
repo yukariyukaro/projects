@@ -1,7 +1,6 @@
 {
   "usingComponents": {
-    "singleComment": "/components/singleComment/singleComment",
-    "prompt": "/components/prompt/prompt"
+    "singleComment": "/components/singleComment/singleComment"
   },
   "disableScroll":true,
   "navigationBarTitleText": "树洞详情"

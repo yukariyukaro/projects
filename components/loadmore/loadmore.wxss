@@ -4,11 +4,13 @@
   text-align:center;
 }
 .no-content {
+  width: 100%;
   margin-top: 30vw;
 }
 .loadmore {
   height: 5%;
   margin-top: 2vw;
+  padding-bottom: 50rpx;
 }
 .running {
   width: 20px;

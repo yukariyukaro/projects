@@ -35,7 +35,7 @@
   width: 100rpx;
   height: 54rpx;
   border-radius: 27rpx;
-  background-color: var(--divider);
+  background-color: var(--bg-gray-2);
   text-align: center;
   line-height: 54rpx;
   font-size: 24rpx;
@@ -136,9 +136,9 @@
 .mainButton-r{
   background-color: var(--primary);
   color: #FFFFFF;
+  line-height: 60rpx;
   margin-bottom: 60rpx;
-  padding-bottom: 60rpx;
-  margin-top:60rpx;
+  margin-top:40rpx;
   font-size: 34rpx;
   border-radius: 20rpx;
   height: 90rpx;

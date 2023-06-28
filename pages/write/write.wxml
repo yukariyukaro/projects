@@ -3,22 +3,8 @@
   <view class="textarea-outer" bindtap="focus">
     <textarea class="content" value="{{post_msg}}" maxlength="750" placeholder="树洞我想对你说..." show-confirm-bar="{{false}}" bindinput="bindContent" focus="{{focus}}"></textarea>
   </view>
-  <view class="remnant">还可以写{{remnantLen}}字</view>
+  <view class="remnant">还可以写{{remain_len}}字</view>
 </view>
-
-<!-- <view class="block shadow radius" style="margin-top:80rpx;background-image: url(https://i.boatonland.com/emotion_tabbar/bg5.png);background-size:cover;color: #000000;" wx:if="{{!post_with_media}}">
-  <view class="pic-outer">
-    <view class="media-single-line" style="background-color: rgb(0,0,0,0.2);border-radius: 20rpx;opacity: 0;">
-      <text style="line-height:8vw;margin-left: 20rpx;">此刻的情绪是...<text style="font-size: 24rpx;">（选择后将同步至吐槽墙）</text></text>
-    </view>
-    <view style="margin-top: -10rpx;text-align:center;display: flex;flex-direction: row;justify-content: space-between;">
-      <view wx:for="{{emotion_list}}">
-        <view style="font-size: 100rpx;opacity: {{emotion_selected_index == index?'1':'0.5'}};" bindtap="bindSelectEmotion" data-emotionindex="{{index}}">{{item.emotion_emoji}}</view>
-        <view style="margin-top: -16rpx;height: 28rpx;"></view>
-      </view>
-    </view>
-  </view>
-</view> -->
 
 <view class="block shadow radius" bindtap="uploadImage" style="margin-top:80rpx;">
   <view class="pic-outer">
@@ -28,17 +14,18 @@
         <image class="media-icon" src="/images/photograph.svg"></image>
       </view>
     </view>
-    <view wx:if="{{post_image != ''}}" style="margin-top: 2vw;text-align:center">
+    <view wx:if="{{post_image[0] != ''}}" style="margin-top: 2vw;text-align:center" wx:for="{{post_image}}" wx:key="index">
       <image
         style="width:100%;border-radius: 10px" mode="widthFix"  
-        src="{{post_image}}"
+        src="{{item}}"
         catchtap="picTap"
       ></image>
     </view>
   </view>
 </view>
 
-<view class="block shadow radius" wx:if="{{emotion_selected_index == -1}}">
+<view class="block shadow radius">
+  <!-- 百宝箱 -->
   <view class="pic-outer">
     <view class="media-single-line" bindtap="withMedia">
       <text style="line-height:8vw" wx:if="{{post_with_media}}">请选择功能类型</text>
@@ -48,29 +35,98 @@
       </view>
     </view>
     <view wx:if="{{post_with_media}}" style="margin-top: 2vw;text-align:center">
-    <radio-group bindchange="bindSelectMedia">
-      <label wx:for="{{mediaList}}" wx:key="index" data-id="index" class="{{mediaIndex==index?'topic-chosen':'topic'}}">
+    <radio-group bindchange="{{post_media_received? '': 'bindSelectMedia'}}">
+      <label wx:for="{{media_list}}" wx:key="index" data-id="index" class="{{media_index==index?'topic-chosen':'topic'}}">
         <radio value="{{index}}" name="{{item}}"></radio>
         <label data-id="index" class="free-text">{{item}}</label>
       </label>
     </radio-group>
     </view>
 
-    <view class="media_input" wx:if="{{mediaIndex == 0 && !post_media_received}}">
+    <!-- 0.网易云 -->
+    <view class="media_input" wx:if="{{media_index == 0 && !post_media_received}}">
       <view class="media_input_container">
       <image src="/images/netease.svg" class="media_icon_netease"></image>
       <input placeholder="请粘贴网易云分享链接（可包含文字）" class="media_input_netease" bindinput="bindMediaInput" value="{{netease_link}}"></input>
       </view>
     </view>
 
-    <view class="media_input" wx:if="{{mediaIndex == 1 && !post_media_received}}">
+    <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_media.media_type == 'netease'}}">
+      <image
+        class="function_netease_image" mode="aspectFill" src="{{post_media.netease_image}}"
+      ></image>
+      <view class="function_netease_right">
+        <view class="function_text_container">
+          <view class="function_text_title">{{post_media.netease_title}}</view>
+          <view class="function_text_detail">{{post_media.netease_artist}} - {{post_media.netease_epname}}</view>
+        </view>
+        <image class="function_netease_icon" src="/images/netease.svg"></image>
+      </view>
+    </view>
+
+    <!-- 1.Bili -->
+    <view class="media_input" wx:if="{{media_index == 1 && !post_media_received}}">
       <view class="media_input_container">
       <image src="/images/bilibili.svg" class="media_icon_bilibili"></image>
       <input placeholder="请输入BV号" class="media_input_bilibili" bindinput="bindMediaInput" value="{{bilibili_bv}}"></input>
       </view>
     </view>
 
-    <view  wx:if="{{mediaIndex == 3}}">
+    <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_media.media_type == 'bilibili'}}">
+      <image
+        class="function_bilibili_image" mode="aspectFill" src="{{post_media.bilibili_image}}"
+      ></image>
+      <view class="function_bilibili_right">
+        <view class="function_text_container">
+          <view class="function_text_title">{{post_media.bilibili_title}}</view>
+          <view class="function_text_detail">{{post_media.bilibili_author}}</view>
+        </view>
+        <image class="function_bilibili_icon" src="/images/bilibili.svg"></image>
+      </view>
+    </view>
+
+      <!-- 0/1 取消/获取 -->
+      <view class="media_button_box" wx:if="{{(media_index == 0 || media_index == 1) && !post_media_received}}">
+        <button class="cancel gray" bindtap="removeMedia">取消</button>
+        <button class="save secondary" bindtap="getMedia" disabled="{{isGettingMedia}}">获取</button>
+      </view>
+
+    <!-- 2.投票 -->
+    <view class="function_container" style="{{'padding-bottom: 20rpx;  flex-direction: column;' + (post_media_received? 'border: solid; ':'')}}" wx:if="{{media_index == 2}}">
+      <view class="function_vote_title_container" >
+        <image src="/images/vote.svg" class="media_icon_vote" style="margin-top: 20rpx;"></image>
+        <input class="function_vote_title" placeholder="请输入投票主题" bindinput="bindMediaInput" value="{{vote_title}}" disabled="{{post_media_received}}"></input>
+      </view>
+
+      <view class="function_vote_option_list" wx:for="{{vote_option_list}}" wx:key="index">
+        <view class="function_vote_option_lower">
+          <input data-index="{{index}}" class="function_vote_option_lower_text_left" value="{{item.option_title}}" placeholder="请输入投票选项" bindinput="bindVoteOption" disabled="{{post_media_received}}"></input>
+          <image data-index="{{index}}" class="function_vote_option_lower_icon_right" src="/images/delete.svg" bindtap="removeOption" wx:if="{{!post_media_received}}"></image>
+        </view>
+      </view>
+
+      <view class="function_vote_option_list" bindtap="addOption" wx:if="{{!post_media_received}}">
+        <view class="function_vote_option_lower" >
+          <view class="function_vote_option_lower_add_left">+</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="function_vote_option_list" wx:if="{{media_index == 2}}" style="margin-right:10rpx; background-color: var(--bg-2);">
+      <text class="switch-question-label" >允许多选</text>
+      <view class="switch">
+        <switch color="{{primary_color}}" checked="{{vote_is_multi}}" disabled="{{post_media_received}}" bindchange="switchMultiChange"/> 
+      </view>
+    </view>
+
+      <!-- 2。取消获取 -->
+      <view class="media_button_box" wx:if="{{media_index == 2}}">
+        <button class="cancel gray" bindtap="removeMedia">取消</button>
+        <button class="save secondary" bindtap="setVote" disabled="{{isGettingMedia}}">设置</button>
+      </view>
+
+    <!-- 3.引用 -->
+    <view  wx:if="{{media_index == 3}}">
       <view class="serial-input-outer">
         <view style="align-self:center"><text>树洞编号<text style="color:red"> *</text> </text></view>
         <view style="display: flex">
@@ -95,82 +151,32 @@
       </view>
     </view>
 
-    <view class="media_button_box" wx:if="{{mediaIndex == 3}}">
+    <view class="media_button_box" wx:if="{{media_index == 3}}">
       <button class="cancel gray" bindtap="removeMedia">取消</button>
     </view>
 
-    <view class="media_button_box" wx:if="{{(mediaIndex == 0 || mediaIndex == 1) && !post_media_received}}">
-      <button class="cancel gray" bindtap="removeMedia">取消</button>
-      <button class="save secondary" bindtap="getMedia" disabled="{{isGettingMedia}}">获取</button>
-    </view>
 
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_media.media_type == 'bilibili'}}">
-          <image
-            class="function_bilibili_image" mode="aspectFill" src="{{post_media.bilibili_image}}"
-          ></image>
-          <view class="function_bilibili_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{post_media.bilibili_title}}</view>
-              <view class="function_text_detail">{{post_media.bilibili_author}}</view>
-            </view>
-            <image class="function_bilibili_icon" src="/images/bilibili.svg"></image>
+
+        
+        
+
+      <!-- 小程序 -->
+      <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_media.media_type == 'miniapp'}}">
+        <image
+          class="function_netease_image" mode="aspectFill" src="{{post_media.miniapp_image}}"
+        ></image>
+        <view class="function_netease_right">
+          <view class="function_text_container">
+            <view class="function_text_title">{{post_media.miniapp_msg}}</view>
+            <view class="function_text_detail_quote">{{post_media.miniapp_name}}</view>
           </view>
         </view>
-
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_media.media_type == 'netease'}}">
-          <image
-            class="function_netease_image" mode="aspectFill" src="{{post_media.netease_image}}"
-          ></image>
-          <view class="function_netease_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{post_media.netease_title}}</view>
-              <view class="function_text_detail">{{post_media.netease_artist}} - {{post_media.netease_epname}}</view>
-            </view>
-            <image class="function_netease_icon" src="/images/netease.svg"></image>
-          </view>
-        </view>
-
-        <view class="function_container" style="padding-bottom: 20rpx;  flex-direction: column;" wx:if="{{post_media.media_type == 'vote'}}">
-          <view class="function_vote_title">{{post_media.vote_title}}</view>
-          <view class="function_vote_option_list" wx:for="{{post_media.optionList}}" bindtap="removeOption" data-index="{{index}}">
-            <view class="function_vote_option_lower">
-              <view class="function_vote_option_lower_text_left">{{item.option_title}}</view>
-            </view>
-          </view>
-
-        </view>
-
-        <!-- 小程序 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_media.media_type == 'miniapp'}}">
-          <image
-            class="function_netease_image" mode="aspectFill" src="{{post_media.miniapp_image}}"
-          ></image>
-          <view class="function_netease_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{post_media.miniapp_msg}}</view>
-              <view class="function_text_detail_quote">{{post_media.miniapp_name}}</view>
-            </view>
-          </view>
-        </view>
+      </view>
 
 
-    <view class="media_button_box" wx:if="{{(mediaIndex == 0 || mediaIndex == 1) && post_media_received}}">
+    <view class="media_button_box" wx:if="{{(media_index == 0 || media_index == 1) && post_media_received}}">
       <button class="cancel gray" bindtap="removeMedia">移除</button>
     </view>
-
-
-    <view class="media_input" wx:if="{{mediaIndex == 2}}">
-      <view class="media_input_container">
-      <image src="/images/vote.svg" class="media_icon_vote"></image>
-      <input placeholder="{{post_media.media_type == 'vote' ? '请添加选项' : '请设置投票主题'}}" class="media_input_vote" bindinput="bindMediaInput" value="{{vote_content}}"></input>
-      </view>
-    </view>
-
-    <view class="media_button_box" wx:if="{{mediaIndex == 2}}">
-      <button class="cancel gray" bindtap="removeMedia">取消</button>
-      <button class="save secondary" bindtap="setVote" disabled="{{isGettingMedia}}">{{post_media.media_type == 'vote' ? '添加' : '设置'}}</button>
-    </view>
-
 
   </view>
 </view>
@@ -180,36 +186,31 @@
     <view class="switch-group-public">
       <text class="switch-question-label">公开发布<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{post_public}}" bindchange="switchPublicChange"/>  
+        <switch color="{{primary_color?primary_color:is_dark?'#864442':'#D85050'}}" checked="{{post_public}}" bindchange="switchPublicChange"/>  
       </view>
     </view>
     <view class="switch-group-anonymous">
       <text class="switch-question-label">公开Pootal ID<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{post_with_serial}}" bindchange="switchSerialChange"/> 
+        <switch color="{{primary_color?primary_color:is_dark?'#864442':'#D85050'}}" checked="{{post_with_serial}}" bindchange="switchSerialChange"/> 
       </view>
     </view>
     <view class="switch-group-anonymous">
       <text class="switch-question-label">同步到UNI<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{post_is_uni}}" bindchange="switchUNIChange"/> 
+        <switch color="{{primary_color?primary_color:is_dark?'#864442':'#D85050'}}" checked="{{post_is_uni}}" bindchange="switchUNIChange"/> 
       </view>
     </view>
-    <view class="switch-group-anonymous" wx:if="{{mediaIndex == 2}}">
-      <text class="switch-question-label">允许多选<text style="color:red"> *</text> </text>
-      <view class="switch" >
-        <switch color="{{primaryColor?primaryColor:is_dark?'#864442':'#D85050'}}" checked="{{vote_is_multi}}" bindchange="switchMultiChange"/> 
-      </view>
-    </view>
+    
   </view>
 </view>
 
 <view class="block shadow radius">
   <view class="topic-outer">
-  <text class="topic-question-label" wx:if="{{!topicList[0]}}">加载中...</text>
+  <text class="topic-question-label" wx:if="{{!topic_list[0]}}">加载中...</text>
   <text class="topic-question-label" wx:else>选择发布的话题<text style="color:red"> *</text></text>
     <radio-group bindchange="bindTopic">
-      <label wx:for="{{topicList}}" wx:key="index" data-id="index" class="{{topicIndex==index?'topic-chosen':'topic'}}">
+      <label wx:for="{{topic_list}}" wx:key="index" data-id="index" class="{{topic_index==index?'topic-chosen':'topic'}}">
         <radio value="{{index}}" name="{{item}}"></radio>
         <label data-id="index" class="free-text">{{item}}</label>
       </label>
@@ -217,7 +218,7 @@
   </view>
 </view>
 
-<view wx-if="{{!isSending}}">
+<view wx-if="{{!is_sending}}">
   <button class="secondary" bindtap="submitNewPost">发布</button>
 </view>
 </view>

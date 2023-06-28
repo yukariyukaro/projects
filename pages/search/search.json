@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "singlePostNew": "/components/singlePostNew/singlePostNew",
-    "loadmore": "/components/loadmore/loadmore"
-  },
-  "navigationBarTitleText": "搜索",
-  "disableScroll":true
-}

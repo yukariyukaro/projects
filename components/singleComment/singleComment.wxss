@@ -36,7 +36,7 @@ float: right;
 display: inline;
 padding: 0.5vw 2vw;
 border-radius: 5px;
-background: var(--secondary-gradient);
+background: var(--secondary);
 font-size: 4vw;
 }
 .alias-org {
@@ -64,14 +64,32 @@ opacity: 0.6;
 .card-outer{
   position: relative;
   margin: auto;
+  margin-left: 7%;
+  margin-right: 0;
   width: 90%;
   height:auto;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--primary); 
   padding: 0 2vw 2vw 2vw;
   border-radius:20rpx;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
   background-color: var(--bg-2);
 }
+
+/* 彩虹主题适配 */
+.hide_card-outer::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20rpx; /*1*/
+  border: 2px solid transparent; /*2*/
+  background: linear-gradient(to bottom right, #e50000 0%, #ff8d00 25%, #ffee00 50%, #028121 75%, #004cff, #770088 100%) border-box; /*3*/
+  -webkit-mask: /*4*/
+     linear-gradient(#fff 0 0) padding-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; /*5'*/
+      mask-composite: exclude;  
+}
+
 .icon-report {
   width: 3vw;
   height: 3.5vw;
@@ -93,13 +111,13 @@ opacity: 0.6;
 .divider{
   height: 1px;
   margin: 15rpx 0 20rpx 0;
-  background-color: var(--divider);
+  background-color: var(--bg-gray-3);
 }
 
 .music-outer {
   font-size: 28rpx;
   display: flex;
-  background: var(--divider);
+  background: var(--bg-gray-2);
   /* width: 90%; */
   margin: 15rpx 10rpx 10rpx 10rpx;
   padding: 15rpx 20rpx;
@@ -121,4 +139,5 @@ opacity: 0.6;
   width: 1px;
   padding: 20rpx 0 20rpx 0;
   background-color: #8c8c8c;
+  display: inline-block;
 }

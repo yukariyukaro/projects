@@ -252,12 +252,20 @@ button {
 }
 
 .function_vote_title{
+  display:inline-flex;
   margin-left:30rpx;
   margin-right:30rpx;
   margin-top:20rpx;
   text-align: left;
   font-size: 32rpx;
   font-weight: bold;
+}
+
+.function_vote_title_container{
+  display: flex;
+  height: 70rpx;
+  margin: 20rpx 20rpx 10rpx 20rpx;
+  position: relative;
 }
 
 .function_vote_subtitle{
@@ -269,6 +277,7 @@ button {
 }
 
 .function_vote_option_list{
+  display: flex;
   background-color: var(--bg-1);
   height: 70rpx;
   margin: 20rpx 20rpx 10rpx 20rpx;
@@ -324,7 +333,7 @@ button {
 }
 
 .function_vote_option_lower_text_left{
-  color:var(--primary);
+  color:var(--secondary);
   font-size: 30rpx;
   position: absolute;
   text-align: left;
@@ -336,12 +345,26 @@ button {
   text-overflow:ellipsis
 }
 
-.function_vote_option_lower_text_right{
-  color:var(--primary);
-  font-size: 30rpx;
+.function_vote_option_lower_add_left{
+  color: #a9a9a9;
+
+  font-size: 55rpx;
+  position: absolute;
+  text-align: left;
+  left:30rpx;
+  right:100rpx;
+  top: -10rpx;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+
+.function_vote_option_lower_icon_right{
+
+  width: 35rpx;
   position: absolute;
   right:30rpx;
-  top: 15rpx;
+  top: -6.4rem;
   white-space:nowrap;
 }
 

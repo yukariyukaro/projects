@@ -1,6 +1,4 @@
 **/node_modules/
 **/miniprogram_npm/
 
-theme.js
-theme.json
 *.config.json

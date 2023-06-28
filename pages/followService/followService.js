@@ -1,3 +1,5 @@
+const { default: newRequest } = require("../../utils/request")
+
 // pages/followService/followService.js
 Page({
 
@@ -9,33 +11,16 @@ Page({
   },
   check: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/one/check.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token')
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
+    newRequest("/user/profile/get", {}, that.check)
+    .then(res=>{
+      if(res.code == 200){
+        if(res.user_info.is_following_service_account){
           wx.reLaunch({
-            url: '/pages/one/one',
+            url: '/pages/search/search',
           })
-        }else if(res.data.code == 201){
-          
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.check()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
         }
       }
     })
-
   },
   nav2Home:function(){
     wx.reLaunch({

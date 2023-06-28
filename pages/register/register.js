@@ -1,27 +1,36 @@
 var app = getApp();
+import newRequest from "../../utils/request"
+const info = require("../../utils/info")
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    app_name: app.globalData.app_name,
+    school_label: app.globalData.school_label,
+    school_label_lower: app.globalData.school_label.toLowerCase(),
+    primary_color: info.primary_color_on_light,
     user_itsc:'',
-    user_portal_password:'',
-    mode:'email',
-    authSent: false,
+    auth_sent: false,
     agree: false,
-    suffixes: ['@connect.hku.hk','@hku.hk'],
+    suffixes: app.globalData.email_suffixes,
     suffix_idx: 0,
-    // secondaryColor: app.globalData.theme.secondary,
     vcode_vcode:'',
     vcode_key:'',
-    isSending:false,
-    isPosting:false,
-    from_miniapp:false
+    is_sending:false,
+    is_posting:false,
+    from_miniapp:false,
+    mode: 'email',
+    user_portal_password: '',
+    theme: wx.getSystemInfoSync().theme,
+    contact_email: info.contact_email
   },
 
+  // /user/register/wechat/email
   sendVcode:function(){
     var that = this
-    if (that.data.authSent) {
+    if (that.data.auth_sent) {
       app.showModal({
         title: '请勿重复操作',
         showCancel: false,
@@ -42,138 +51,137 @@ Page({
     });
 
     that.setData({
-      isSending:true
+      is_sending:true
     })
 
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/user/register/vcode.php', 
-      method: 'POST',
-      data: {
-        user_itsc:that.data.user_itsc,
-        user_email_suffix:that.data.suffixes[that.data.suffix_idx],
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        that.setData({
-          isSending:false
-        })
-        if(res.data.code == 200){
-            that.setData({
-              authSent:true,
-              vcode_key:res.data.vcode_key,
-            })
-            app.showModal({
-              title: '验证码已发送',
-              showCancel: false,
-              content:'验证码已发送,请留意垃圾邮件箱!',
-            });
+    newRequest("/user/register/wechat/email", {
+            user_itsc: that.data.user_itsc,
+            user_email_suffix: that.data.suffixes[that.data.suffix_idx],
+      }, ()=>{}, false, true)
+      .then((res) => {
+        that.setData({is_sending:false})
+        if(res.code == 200){
+          that.setData({
+            auth_sent:true,
+            vcode_key:res.vcode_key,
+          })
+          app.showModal({
+            title: '验证码已发送',
+            showCancel: false,
+            content:'验证码已发送,请留意垃圾邮件箱!',
+          });
         }else{
-          app.showModal({title: '提示',content:res.data.msg,showCancel: false,})
+          app.showModal({title: '提示',content:res.msg,showCancel: false,})
         }
       }
-    })
+      )
   },
 
-  register:function(){
-    var mode = this.data.mode
-    if(mode == 'portal'){
-      this.registerByPortal()
-    }
-    if(mode == 'email'){
-      this.registerByEmail()
-    }
-  },
-
-  registerByEmail:function(){
+   
+  // /user/register/wechat/verify
+  register: function(){
     var that = this
-    if (!that.data.authSent) {
-      app.showModal({
-        title: '提示',
-        showCancel: false,
-        content: '请先获取验证码',
-      });
-      return;
-    }
-    if (that.data.user_itsc.match(/^\s*$/)) {
-      app.showModal({
-        title: '警告',
-        showCancel: false,
-        content: 'UID不能为空',
-      });
-      return;
-    }
-    if (that.data.vcode_vcode.match(/^\s*$/)) {
-      app.showModal({
-        title: '警告',
-        showCancel: false,
-        content: '验证码不能为空',
-      });
-      return;
-    }
-    if (!that.data.agree) {
-      app.showModal({
-        title: '提示',
-        showCancel: false,
-        content: '请先同意「用户条款及声明」',
-      });
-      return;
-    }
-    wx.showLoading({
-      title: '提交中',
-    })
-    that.setData({
-      isPosting:true
-    })
-    wx.login({
-      success (res) {
-        if(res.code){
-          wx.request({
-            url: 'https://api.pupu.hkupootal.com/v3/user/register/email.php', 
-            method: 'POST',
-            data: {
-              user_itsc:that.data.user_itsc,
-              user_email_suffix:that.data.suffixes[that.data.suffix_idx],
-              vcode_vcode:that.data.vcode_vcode,
-              vcode_key:that.data.vcode_key,
-              code:res.code,
-              system_info:JSON.stringify(wx.getSystemInfoSync())
-            },
-            header: {
-              'content-type': 'application/x-www-form-urlencoded'
-            },
-            success (res2) {
-              wx.hideLoading()
-              that.setData({
-                isPosting:false
-              })
-              if(res2.data.code == 200){
-                  wx.setStorageSync('token', res2.data.token)
+    if (that.data.mode == "email"){
+      if (!that.data.auth_sent) {
+        app.showModal({
+          title: '提示',
+          showCancel: false,
+          content: '请先获取验证码',
+        });
+        return;
+      }
+      if (that.data.user_itsc.match(/^\s*$/)) {
+        app.showModal({
+          title: '警告',
+          showCancel: false,
+          content: 'UID不能为空',
+        });
+        return;
+      }
+      if (that.data.vcode_vcode.match(/^\s*$/)) {
+        app.showModal({
+          title: '警告',
+          showCancel: false,
+          content: '验证码不能为空',
+        });
+        return;
+      }
+      if (!that.data.agree) {
+        app.showModal({
+          title: '提示',
+          showCancel: false,
+          content: '请先同意「用户协议」与「隐私政策」',
+        });
+        return;
+      }
+      wx.showLoading({
+        title: '提交中',
+      })
+      that.setData({
+        is_posting:true
+      })
+      wx.login({
+        success (res) {
+          if(res.code){
+              newRequest("/user/register/wechat/verify", {
+                user_itsc:that.data.user_itsc,
+                user_email_suffix:that.data.suffixes[that.data.suffix_idx],
+                vcode_vcode:that.data.vcode_vcode,
+                vcode_key:that.data.vcode_key,
+                code:res.code,
+                system_info:JSON.stringify(wx.getSystemInfoSync())
+              }, () => {}, false, true).then( (res2) => {
+                if(res2.code == 200){
+                  wx.setStorageSync('token', res2.token)
                   wx.reLaunch({
                     url: '/pages/home/home',
                   })
                   wx.closeSocket()
                   app.launchWebSoccket()
-              }else{
-                app.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
+                }else if(res2.code == 401){
+                  app.showModal({title: '注册失败',content:'验证码错误', showCancel: false,})
+                  that.setData({
+                    auth_sent: false,
+                    is_posting: false
+                  })
+                }else if(res2.code == 402){
+                  app.showModal({title: '注册失败',content:'您的微信号已注册', showCancel: false,})
+                  that.setData({
+                    auth_sent: false,
+                    is_posting: false
+                  })
+                }else if(res2.code == 403){
+                  app.showModal({title: '注册失败',content:'社团账号请使用密码登录', showCancel: false,})
+                  that.setData({
+                    auth_sent: false,
+                    is_posting: false
+                  })
+                }else if(res2.code == 404){
+                  app.showModal({title: '注册失败',content:'该邮箱已注册', showCancel: false,})
+                  that.setData({
+                    auth_sent: false,
+                    is_posting: false
+                  })
+                }else{
+                  app.showModal({title: '登录失败，请稍后再试',content:res2.msg, showCancel: false,})
+                  that.setData({
+                    auth_sent: false,
+                    is_posting: false
+                  })
+                }
               }
-            }
-          })
-        }else{
-          wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
-          that.setData({
-            'vcode_vcode':''
-          })
-        }
+              )
+          }else{
+            wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
+            that.setData({
+              'vcode_vcode':''
+            })
+          }
+        
       }
-  })
-    
-  },
-  registerByPortal:function(){
-    var that = this
-    if (that.data.user_itsc.match(/^\s*$/)) {
+    })
+  }else{
+    if (that.data.user_itsc == "") {
       app.showModal({
         title: '警告',
         showCancel: false,
@@ -193,7 +201,7 @@ Page({
       app.showModal({
         title: '提示',
         showCancel: false,
-        content: '请先同意「用户条款及声明」',
+        content: '请先同意「用户协议」与「隐私政策」',
       });
       return;
     }
@@ -201,47 +209,43 @@ Page({
       title: '提交中',
     })
     that.setData({
-      isPosting:true
+      is_posting:true
     })
     wx.login({
       success (res) {
         if(res.code){
-          wx.request({
-            url: 'https://api.pupu.hkupootal.com/v3/user/register/portal.php', 
-            method: 'POST',
-            data: {
-              user_itsc:that.data.user_itsc,
-              user_portal_password:that.data.user_portal_password,
-              code:res.code,
-              system_info:JSON.stringify(wx.getSystemInfoSync())
-            },
-            header: {
-              'content-type': 'application/x-www-form-urlencoded'
-            },
-            success (res2) {
-              wx.hideLoading()
-              that.setData({
-                isPosting:false
+          newRequest("/user/register/wechat/org", {
+            user_itsc:that.data.user_itsc,
+            org_password:that.data.user_portal_password,
+            code:res.code,
+          }, () => {}, false, true)
+          .then( res2 => {
+            if(res2.code == 200){
+              wx.setStorageSync('token', res2.token)
+              wx.reLaunch({
+                url: '/pages/home/home',
               })
-              if(res2.data.code == 200){
-                  wx.setStorageSync('token', res2.data.token)
-                  wx.reLaunch({
-                    url: '/pages/home/home',
-                  })
-                  wx.closeSocket()
-                  app.launchWebSoccket()
-              }else{
-                app.showModal({title: '提示',content:res2.data.msg,showCancel: false,})
-              }
+              wx.closeSocket()
+              app.launchWebSoccket()
+            }else{
+              app.showModal({title: '提示',content:res2.msg, showCancel: false,})
+              that.setData({
+                auth_sent: false,
+                is_posting: false
+              })
             }
           })
+
         }else{
           wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
         }
       }
   })
+  }
+  
     
   },
+
   agreeChange: function (e) {
     this.setData({
       agree:!this.data.agree
@@ -261,16 +265,19 @@ Page({
       vcode_vcode:e.detail.value
     })
   },
+
   passwordInput:function(e){
     this.setData({
       user_portal_password:e.detail.value
     })
   },
+
   changeMode:function(e){
     this.setData({
       mode:e.currentTarget.dataset.mode
     })
   },
+
   logoAnimation: function () {
     this.animate(
       '.avatar-ripple',
@@ -311,6 +318,11 @@ Page({
         from_miniapp:true
       })
     }
+    wx.onThemeChange((result) => {
+      this.setData({
+        theme: result.theme
+      })
+    })
   },
 
   /**
@@ -348,8 +360,8 @@ Page({
    */
   onShareAppMessage: function () {
     return {
-      title: 'HKU噗噗',
-      imageUrl: '/images/cover.png',
+      title: info.slogan,
+      imageUrl: info.share_cover,
     };
   },
 });

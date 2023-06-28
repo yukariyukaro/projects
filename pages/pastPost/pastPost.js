@@ -1,5 +1,7 @@
 // pages/pastPost/pastPost.js
 var app = getApp();
+import newRequest from '../../utils/request'
+
 Page({
   /**
    * 页面的初始数据
@@ -8,11 +10,9 @@ Page({
     // scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     refresh_triggered: false,
     is_loading_more: false,
-    isLast: false,
-    postList: [],
+    is_last: false,
+    one_list: [],
     page:0,
-    navItems: ['本校'],
-    currentTab: 0,
     scroll_top: 0
   },
   // 下拉刷新
@@ -29,7 +29,7 @@ Page({
   // 上拉加载更多
   onLoadMore: function () {
     if(this.data.is_loading_more){return}
-    if(this.data.isLast){return}
+    if(this.data.is_last){return}
     this.setData({
       is_loading_more: true,
       page:this.data.page + 1
@@ -37,46 +37,32 @@ Page({
     this.getPostByMy();
   },
 
+  // /post/list/my
   getPostByMy: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/post/list/my.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        page:that.data.page,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          if(that.data.page == '0'){
-            that.setData({
-              postList:res.data.postList,
-              isLast:res.data.isLast,
-              main_data_received:true,
-              refresh_triggered: false,
-              is_loading_more: false,
-            })
-            wx.stopPullDownRefresh()
-          }else{
-            that.setData({
-              postList:that.data.postList.concat(res.data.postList),
-              isLast:res.data.isLast,
-              main_data_received:true,
-              refresh_triggered: false,
-              is_loading_more: false,
-            })
-          }
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getPostByMy()
+    newRequest('/post/list/my', {page:that.data.page}, that.getPostByMy)
+    .then((res) => {
+      if(res.code == 200){
+        if(that.data.page == '0'){
+          that.setData({
+            one_list:res.one_list,
+            is_last:res.is_last,
+            main_data_received:true,
+            refresh_triggered: false,
+            is_loading_more: false,
           })
+          wx.stopPullDownRefresh()
         }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+          that.setData({
+            one_list:that.data.one_list.concat(res.one_list),
+            is_last:res.is_last,
+            main_data_received:true,
+            refresh_triggered: false,
+            is_loading_more: false,
+          })
         }
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
 

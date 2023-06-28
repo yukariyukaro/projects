@@ -52,11 +52,11 @@
   z-index: 3
 }
 .topic {
-  color: #8C8C8C;
+  color: var(--on-bg-gray-1);
   align-self: center;
   padding: 5rpx 15rpx;
   border-radius: 20rpx;
-  background: var(--divider);
+  background: var(--bg-gray-1);
   margin-left: 20rpx;
 }
 .topic-school {
@@ -76,15 +76,17 @@
 }
 .post-content {
   text-align:left;
-  padding: 0.5vw 5vw 3.5vw 5vw;
+  padding: 0.5vw 1vw 3.5vw 5vw;
   white-space: pre-wrap;
   word-break: break-word;
 }
 .post-text {
   width:100%;
   word-break: break-word;
+  white-space: pre-line;
 }
 .post-datetime {
+  margin-top:25rpx;
   color: var(--on-bg-2);
   text-align: right;
 }
@@ -99,7 +101,7 @@
   display: inline;
   padding: 0.5vw 2vw;
   border-radius: 10rpx;
-  background: var(--secondary-gradient);
+  background: var(--secondary);
   font-size: 4vw;
   margin-top: 2vw;
 }
@@ -139,7 +141,9 @@
 }
 /* 显示评论数和围观数的区域 */
 .comment-follower-num-area {
-  width: 100%;
+  margin-left: 5vw;
+  margin-right: 2vw;
+  width: 95%;
   height: 8vw;
   display: flex;
 }
@@ -163,7 +167,7 @@
 }
 /* 显示所有评论 */
 .comment-area {
-  width: 90%;
+  width: 100%;
   float: right;
   padding-bottom: calc(env(safe-area-inset-bottom) + 100rpx);
 }
@@ -202,7 +206,7 @@
   background-color:var(--model-bg-gray);
   border-radius: 20rpx;
   display: flex;
-  width: 600rpx;
+  width: 610rpx;
 }
 
 .function_text_container{
@@ -409,7 +413,7 @@
 }
 
 .function_vote_option_upper_text_left{
-  color:var(--bg-1);
+  color:white;
   font-size: 30rpx;
   position: absolute;
   left:30rpx;
@@ -423,7 +427,7 @@
   color:var(--bg-1);
   font-size: 30rpx;
   position: absolute;
-  right:30rpx;
+  right:20rpx;
   top: 15rpx;
   white-space:nowrap;
 }
@@ -520,15 +524,15 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, 0.425);
   z-index: 10;
 }
 
 .detail-ad{
   /* margin:auto; */
-  width:640rpx;
+  width:95%;
   height:213rpx;
-  margin: 0 15rpx 15rpx 15rpx;
+  margin: 0 0 15rpx 7%;
   /* position: relative; */
   /* margin: auto; */
   /* width: 90%; */

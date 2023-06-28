@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "picker": "/components/picker/picker"
   },
   "disableScroll":true,
   "navigationStyle":"custom",
