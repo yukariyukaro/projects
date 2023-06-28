@@ -15,3 +15,4 @@ theme.json
 /pages/followService
 /pages/register/register.wxml
 /pages/search/search.wxml
+/utils/info.js
