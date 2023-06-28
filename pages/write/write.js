@@ -218,8 +218,9 @@ Page({
         success: function (res) {
             wx.showLoading({title: '上传中'})
             console.log(res)
-            var filePath = res.tempFiles[0].tempFilePath;
-            cos.postObject({
+            res.tempFiles.forEach((tempfile, i) => {
+              var filePath = tempfile.tempFilePath;
+              cos.postObject({
                 Bucket: Bucket,
                 Region: Region,
                 Key: info.school_label + '/post/' + that.randomString() + that.getExt(filePath),
@@ -233,13 +234,15 @@ Page({
                 console.log(err || data);
                 if(data.Location){
                   var location = 'https://i.boatonland.com/'+ info.school_label +'/post/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
-                  wx.showLoading({
-                    title: '安全检测中',
-                  })
+                  // wx.showLoading({
+                  //   title: '安全检测中',
+                  // })
                   
                   setTimeout(function () {
-                    wx.hideLoading()
-                    wx.showToast({title: '上传成功' ,icon:'success',})
+                    if (i == res.tempFiles.length-1){
+                      wx.hideLoading()
+                      wx.showToast({title: '照片上传成功' ,icon:'success',})
+                    }
                     var newimg = that.data.post_image
                     newimg.push(location)
                     console.log(newimg)
@@ -249,9 +252,12 @@ Page({
                    }, 1000) 
                 }else{
                   wx.hideLoading()
-                  wx.showToast({title: '上传失败' ,icon:'error',})
+                  wx.showToast({title: '照片'+String(i+1)+'上传失败' ,icon:'error',})
                 }
             });
+            })
+            
+           
         }
     });
 
