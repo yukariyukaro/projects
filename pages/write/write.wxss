@@ -333,7 +333,7 @@ button {
 }
 
 .function_vote_option_lower_text_left{
-  color:var(--secondary);
+  color:var(--primary);
   font-size: 30rpx;
   position: absolute;
   text-align: left;

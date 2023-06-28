@@ -211,7 +211,7 @@ Page({
     // 接下来可以通过 cos 实例调用 COS 请求。
   
     wx.chooseMedia({
-        count: 1, // 默认9
+        count: 5, // 默认9
         mediaType: ['image'],
         sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认用原图
         sourceType: ['album','camera'], // 可以指定来源是相册还是相机，默认二者都有
@@ -262,7 +262,7 @@ Page({
     return (idx < 1) ? "" : "." + filename.substr(idx + 1);
   },
 
-  picTap: function () {
+  picTap: function (e) {
     var that = this;
     wx.showActionSheet({
       itemList: ['删除', '查看'],
@@ -270,10 +270,11 @@ Page({
         const index = res.tapIndex;
         switch (index) {
           case 0:
-            that.deletePic();
+            console.log(e.currentTarget.dataset.index)
+            that.deletePic(e.currentTarget.dataset.index);
             break;
           case 1:
-            that.previewPic();
+            that.previewPic(e.currentTarget.dataset.index);
             break;
         }
       },
@@ -283,15 +284,18 @@ Page({
     });
   },
 
-  deletePic: function () {
+  deletePic: function (n) {
+    var new_post_image = this.data.post_image
+    new_post_image.splice(n,1)
     this.setData({
-      post_image: '',
+      post_image: new_post_image,
     });
   },
 
-  previewPic: function () {
+  previewPic: function (n) {
     wx.previewImage({
-      urls: [this.data.post_image],
+      current: this.data.post_image[n],
+      urls: this.data.post_image,
     });
   },
 

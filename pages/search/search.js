@@ -286,9 +286,13 @@ Page({
   setPlaceholder: function() {
     if(!this.data.key_word){
       this.setData({
-        key_word: this.data.search_placeholder
+        key_word: this.data.search_placeholder,
       })
     }
+    this.setData({
+      page:0,
+      scroll_top:0
+    })
     this.getBySearch()
   },
   onLoadMore: function () {
