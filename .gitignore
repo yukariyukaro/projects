@@ -2,3 +2,16 @@
 **/miniprogram_npm/
 
 *.config.json
+*.DS_Store
+
+
+app.json
+app.wxss
+theme.js
+theme.json
+
+/images
+/pages/about
+/pages/followService
+/pages/register/register.wxml
+/pages/search/search.wxml
