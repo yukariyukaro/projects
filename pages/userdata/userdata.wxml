@@ -14,7 +14,7 @@
     <view class="u-flex-item">
       <view class="u-row-left">
         <view style="display: flex;flex-direction: column;">
-          <view class="name">编辑用户 ID</view>
+          <view class="name">编辑{{user_id_name}}</view>
           <view class="note">只能含有数字和小写字母</view>
         </view>
       </view>

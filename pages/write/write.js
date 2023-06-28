@@ -29,6 +29,7 @@ Page({
     vote_option_list:[],
     vote_is_multi:false,
     isGettingMedia:false,
+    user_id_name: info.user_id_name
     // emotion_selected_index:-1,
     // post_with_emotion:false,
     // post_media_emotion:{}

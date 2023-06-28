@@ -1,5 +1,6 @@
 var app = getApp();
 import newRequest from '../../utils/request'
+const info = require("../../utils/info")
 
 Page({
 
@@ -11,7 +12,8 @@ Page({
     user_avatar:'',
     user_serial:'',
     avatar_sdk_content:'',
-    avatarCollection:[]
+    avatarCollection:[],
+    user_id_name: info.user_id_name
   },
 
   // /user/profile/get

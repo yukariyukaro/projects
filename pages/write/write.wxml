@@ -190,7 +190,7 @@
       </view>
     </view>
     <view class="switch-group-anonymous">
-      <text class="switch-question-label">公开Pootal ID<text style="color:red"> *</text> </text>
+      <text class="switch-question-label">公开{{user_id_name}}<text style="color:red"> *</text> </text>
       <view class="switch" >
         <switch color="{{primary_color?primary_color:is_dark?'#864442':'#D85050'}}" checked="{{post_with_serial}}" bindchange="switchSerialChange"/> 
       </view>
