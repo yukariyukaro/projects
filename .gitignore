@@ -16,3 +16,4 @@ theme.json
 /pages/register/register.wxml
 /pages/search/search.wxml
 /utils/info.js
+/custom-tab-bar/index.js
