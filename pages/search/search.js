@@ -1,4 +1,6 @@
 var app = getApp();
+import info from '../../utils/info';
+import newRequest from '../../utils/request';
 Page({
 
   /**
@@ -171,164 +173,123 @@ Page({
     key_word: '',
     page: 0,
     scroll_top: 0,
-    statusBarHeight:0,
-    statusBarOpacity: 0,
-    statusBarOpacityMask:0,
+    status_bar_height:0,
+    status_bar_opacity: 0,
+    status_bar_opacity_mask:0,
     theme:'',
-    hkuOneIcon:'',
-    hkuOneNavigationBarBackground:''
+    hku_one_logo:'',
+    navigation_bar_background_color: info.search_nav_bar_color,
+    result_shown:false,
+    search_mode: "default",
+    show_modes: false,
+    mode_list: ['默认', '最新' , '最热'],
+    mode_list_eng: ['default', 'latest', 'hot'],
+    mode_index: 0,
+    type_list: ['全部', '树洞' , '推送'],
+    type_index: 0,
+    allow_scroll: true
   },
 
   getOneList: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/one/get.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        page:that.data.page,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          if(that.data.page == '0'){
-            that.setData({
-              one_list:res.data.one_list,
-              is_last:res.data.is_last,
-              is_loading_more:false
-            })
-          }else{
-            that.setData({
-              one_list:that.data.one_list.concat(res.data.one_list),
-              is_last:res.data.is_last,
-              is_loading_more:false
-            })
-          }
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getOneList()
+    newRequest("/post/list/topic", {post_topic: info.search_page_topic, page: that.data.page}, that.getOneList)
+    .then(res => {
+
+      if(res.code == 200){
+        if(that.data.page == '0'){
+          // that.setData({one_list: []})
+          that.setData({
+            one_list:res.one_list,
+            is_last:res.is_last,
+            is_loading_more:false
           })
         }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+          that.setData({
+            one_list:that.data.one_list.concat(res.one_list),
+            is_last:res.is_last,
+            is_loading_more:false
+          })
         }
+      }else{
+        wx.showToast({title: res.msg, icon: "error", duration: 1000})
       }
     })
 
   },
+
   getBySearch: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/one/search.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token'),
-        key_word:that.data.key_word,
-        page:that.data.page,
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          if(that.data.page == '0'){
-            that.setData({
-              one_list:res.data.one_list,
-              is_last:res.data.is_last,
-              is_loading_more:false
-            })
-          }else{
-            that.setData({
-              one_list:that.data.one_list.concat(res.data.one_list),
-              is_last:res.data.is_last,
-              is_loading_more:false
-            })
-          }
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getBySearch()
+    if(that.data.page == '0'){
+      wx.showLoading({
+        title: '搜索中',
+      })
+    }
+    
+    newRequest("/post/list/search", {
+      key_word:that.data.key_word,
+      page:that.data.page,
+      search_mode:that.data.search_mode
+    }, that.getBySearch, true, true)
+    .then( res=>{
+      if(res.code == 200){
+        if(that.data.page == '0'){
+          // that.setData({one_list: []})
+          that.setData({
+            one_list:res.one_list,
+            is_last:res.is_last,
+            is_loading_more:false,
+            result_shown: true,
           })
         }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
+          that.setData({
+            one_list:that.data.one_list.concat(res.one_list),
+            is_last:res.is_last,
+            is_loading_more:false,
+          })
         }
+      }else{
+        wx.showToast({title: res.msg? res.msg:"错误", icon: "error", duration: 1000})
       }
     })
+ 
 
   },
   getPlaceholder: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/one/placeholder.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token')
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-          that.setData({
-            search_placeholder: res.data.search_placeholder
-          })
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.getPlaceholder()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
-        }
+    newRequest("/info/placeholder",{}, that.getPlaceholder)
+    .then( res => {
+      if(res.code == 200){
+        that.setData({
+          search_placeholder: res.placeholder
+        })
+      }else{
+        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
     })
-
   },
+
   check: function () {
     var that = this
-    wx.request({
-      url: 'https://api.pupu.hkupootal.com/v3/one/check.php', 
-      method: 'POST',
-      data: {
-        token:wx.getStorageSync('token')
-      },
-      header: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
-      success (res) {
-        wx.hideLoading()
-        if(res.data.code == 200){
-
-        }else if(res.data.code == 201){
-          // wx.setTabBarStyle({
-          //   color: '#8a8a8a',
-          //   selectedColor: '#D85050'
-          // })
+    newRequest("/user/profile/get", {}, that.check)
+    .then(res=>{
+      if(res.code == 200){
+        if(!res.user_info.is_following_service_account){
           wx.reLaunch({
             url: '/pages/followService/followService',
           })
-        }else if(res.data.code == 800 ||res.data.code == 900){
-          app.launch().then(res=>{
-            that.check()
-          })
-        }else{
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
         }
       }
     })
 
   },
+
   setPlaceholder: function() {
-    if(!this.data.search_placeholder || this.data.key_word){
-      return
+    if(!this.data.key_word){
+      this.setData({
+        key_word: this.data.search_placeholder
+      })
     }
-    this.setData({
-      key_word: this.data.search_placeholder
-    })
     this.getBySearch()
-    this.getPlaceholder()
   },
   onLoadMore: function () {
     if(this.data.is_loading_more){return}
@@ -344,44 +305,47 @@ Page({
     }
   },
   bindScroll:function(e){
-    var scrollTop = e.detail.scrollTop
-    if(scrollTop<100){ scrollTop = 100 }
-    let opacity = (scrollTop - 100) / 100;
-    if (scrollTop > 200) {
-      opacity = 1;
-    }
-    this.setData({
-      statusBarOpacity:opacity,
-      statusBarOpacityMask:0.3*opacity
-    });
+    // var scrollTop = e.detail.scrollTop
+    // if(scrollTop<100){ scrollTop = 100 }
+    // let opacity = (scrollTop - 100) / 100;
+    // if (scrollTop > 200) {
+    //   opacity = 1;
+    // }
+    // this.setData({
+    //   status_bar_opacity:opacity,
+    //   status_bar_opacity_mask:0.3*opacity
+    // });
     this.setData({
       focus: false
     })
     if(this.data.is_loading_more){return}
-    if(e.detail.scrollHeight - e.detail.scrollTop < 2500){
+    if(e.detail.scrollHeight - e.detail.scrollTop < 3500){
       this.onLoadMore()
     }
   },
+
   onInputKeyWord:function(e){
     this.setData({
       key_word:e.detail.value,
       page:0,
-      scroll_top:0,
-      is_loading_more:true
     })
-    if(this.data.key_word){
-      this.getBySearch()
-    }else{
-      this.getOneList()
-    }
+    // if(this.data.key_word){
+    //   this.getBySearch()
+    // }else{
+    //   this.getOneList()
+    // }
   },
   clearInput:function(){
     this.setData({
       key_word:'',
       page:0,
       scroll_top:0,
-      is_loading_more:true,
-      focus: true
+      is_loading_more:false,
+      show_modes:false,
+      focus: false,
+      result_shown: false,
+      search_mode: this.data.mode_list_eng[0],
+      mode_index: 0
     })
     this.getOneList()
   },
@@ -395,19 +359,48 @@ Page({
       focus: false
     })
   },
-  // updateTabbar:function(){
-  //   var notice_count = wx.getStorageSync('allNoticeCount')
-  //   if(notice_count > 0){
-  //     wx.setTabBarBadge({
-  //       index: 2,
-  //       text: String(notice_count),
-  //     })
-  //   }else{
-  //     wx.removeTabBarBadge({
-  //       index: 2,
-  //     })
-  //   }
-  // },
+  bindModeTap: function(){
+    var that = this
+    that.setData({
+      show_modes: !that.data.show_modes,
+      allow_scroll: that.data.show_modes
+    })
+  },
+  bindModes: function(e){
+    var that = this
+    var new_mode = that.data.mode_list_eng[e.detail.value]
+    that.setData({
+      mode_index: e.detail.value,
+      search_mode: new_mode,
+      page: 0,
+      is_loading_more: true,
+      allow_scroll: true,
+      scroll_top: 0,
+    })
+
+    if(that.data.show_modes){
+      setTimeout(()=>{
+        that.setData({
+          scroll_top: 0,
+          allow_scroll: false,
+        }, 2)
+      })
+    }
+    that.getBySearch()
+  },
+  updateTabbar:function(){
+    var notice_count = wx.getStorageSync('allNoticeCount')
+    if(notice_count > 0){
+      wx.setTabBarBadge({
+        index: 2,
+        text: String(notice_count),
+      })
+    }else{
+      wx.removeTabBarBadge({
+        index: 2,
+      })
+    }
+  },
 
   /**
    * 生命周期函数--监听页面加载
@@ -416,12 +409,12 @@ Page({
     this.getOneList()
     const { statusBarHeight } = wx.getSystemInfoSync()
     this.setData({
-      statusBarHeight:statusBarHeight
+      status_bar_height:statusBarHeight 
     })
     if (app.globalData.themeInfo.hkuOneLogo) {
       this.setData({
-        hkuOneLogo: app.globalData.themeInfo.hkuOneLogo,
-        hkuOneNavigationBarBackground: app.globalData.themeInfo.hkuOneNavigationBarBackground
+        hku_one_logo: app.globalData.themeInfo.hkuOneLogo,
+        hku_one_navigation_bar_background: app.globalData.themeInfo.hkuOneNavigationBarBackground
       })
     }
   },
@@ -456,6 +449,11 @@ Page({
     if(this.data.key_word == ''){
       this.getOneList()
     }
+    wx.onThemeChange((res) => {
+      this.setData({
+        theme: res.theme
+      })
+    })
   },
 
   /**

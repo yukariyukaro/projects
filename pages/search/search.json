@@ -3,7 +3,7 @@
     "one": "/components/one/one",
     "loadmore": "/components/loadmore/loadmore"
   },
-  "navigationBarTextStyle": "black",
+  "disableScroll":true,
   "navigationStyle": "custom",
-  "disableScroll":true
+  "navigationBarTitleText": "搜索"
 }
