@@ -291,7 +291,7 @@ App({
           wx.setStorageSync('systemNoticeCount', res.notice_count)
           wx.setStorageSync('allNoticeCount', newAllNoticeCount)
         }
-        this.updateTabbar
+        this.updateTabbar()
         if( wx.getStorageSync('allNoticeCount') == 0){
           var {chat} = this.initDatabase()  
           var unread_chat = chat.where({chat_unread_count : _.gt(0) }).get()
