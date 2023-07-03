@@ -111,7 +111,7 @@ Page({
     newRequest("/notice/read", {notice_id:e.currentTarget.dataset.noticeid}, that.readNotice)
     .then(res=>{
       if(res.code == 200){
-
+        app.checkUnread()
       }else{
         wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }

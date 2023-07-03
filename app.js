@@ -35,7 +35,8 @@ App({
   },
 
   onShow:function(){
-    // if (wx.getStorageSync('token')){
+    // console.log(this.globalData)
+    // if (this.globalData.loggedin){
     //   this.launchWebSoccket()
     //   this.checkUnread()
     // }
@@ -227,14 +228,17 @@ App({
       // user already logged in
         console.log("has token")
         newRequest("/user/check/wechat", {}).then((res) => {
-          if(res.code != 200){           
+          if(res.code != 200){    
+            
+          }else{
+            that.launchWebSoccket()
+            that.checkUnread()
           }
         })
       }else{
         // user not logged in
         console.log("no token")
         wx.login({
-          
           success (res) {
             if(res.code){
               // 请求开发者服务器
@@ -246,12 +250,14 @@ App({
                 if(res2.code == 200){
                   //保存登陆状态
                   wx.setStorageSync('token', res2.token)
+                  that.launchWebSoccket()
+                  that.checkUnread()  
                   resolve()
                 }else if(res2.code == 401){
                   //未注册，跳转注册页
                   var pages = getCurrentPages()
                   var currentPage = pages[pages.length-1]
-                  var url = currentPage.route
+                  var url = currentPage.route  
                   if(url!="pages/register/register"){
                     wx.reLaunch({
                       url: '/pages/register/register',
@@ -260,12 +266,12 @@ App({
                       }
                     })
                   }
-                }else{
+                }else{    
                   wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
                 }
               })
             
-            }else{
+            }else{   
               wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
               wx.hideLoading()
             }
@@ -279,8 +285,26 @@ App({
     newRequest("/notice/checkunread", {}, this.checkUnread)
     .then(res => {
       if(res.code == 200){
-        wx.setStorageSync('allNoticeCount', res.notice_count)
+        console.log(wx.getStorageSync('systemNoticeCount'))
+        if(wx.getStorageSync('systemNoticeCount')!= res.notice_count){
+          var newAllNoticeCount = wx.getStorageSync('allNoticeCount') - wx.getStorageSync('systemNoticeCount') + res.notice_count
+          wx.setStorageSync('systemNoticeCount', res.notice_count)
+          wx.setStorageSync('allNoticeCount', newAllNoticeCount)
+        }
         this.updateTabbar
+        if( wx.getStorageSync('allNoticeCount') == 0){
+          var {chat} = this.initDatabase()  
+          var unread_chat = chat.where({chat_unread_count : _.gt(0) }).get()
+          console.log(unread_chat)
+          unread_chat.forEach( achat => {
+              achat.chat_unread_count = 0
+              chat.where({
+                chat_id: achat.chat_id
+              }).update(achat)
+          })
+        }else{
+
+        }
       }else{
         wx.showToast({title: '请先注册', icon: "none", duration: 1000})
       }
@@ -658,6 +682,7 @@ App({
         }, 100);
         break
       case "notice":
+        console.log(data.content)
         wx.setStorageSync('allNoticeCount', wx.getStorageSync('allNoticeCount')+1)
         wx.setStorageSync('systemNoticeCount', wx.getStorageSync('systemNoticeCount')+1)
         that.updateTabbar()

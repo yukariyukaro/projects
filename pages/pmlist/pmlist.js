@@ -52,13 +52,7 @@ Page({
     })
     app.subscribe(false)
     var that = this
-    var allNoticeCount = wx.getStorageSync('allNoticeCount') - that.data.systemNoticeCount
-      if(allNoticeCount>0){
-        wx.setStorageSync('allNoticeCount', allNoticeCount)
-      }else{
-        wx.setStorageSync('allNoticeCount', 0)
-      }
-    wx.setStorageSync('systemNoticeCount', 0)
+
   },
 
   longpress:function(e){

@@ -274,8 +274,6 @@ Page({
     newRequest("/info/gettopic",{}, that.getTopic)
     .then((res) => {
       if(res.code == 200){
-        app.launchWebSoccket()
-        app.checkUnread()
         that.setData({
           navbar_items:that.data.navbar_items.concat(res.topic_list),
           topic_list:res.topic_list
