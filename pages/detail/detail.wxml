@@ -125,6 +125,21 @@
             </view>
           </view>
         </view>
+        <!-- 文件 -->
+        <view class="function_container" wx:if="{{post_detail.post_media.media_type == 'file'}}" bindtap="onTapFile">
+            <image class="function_file_image" src="/images/file-doc.png" wx:if="{{post_detail.post_media.file_type == 'doc'}}" />
+            <image class="function_file_image" src="/images/file-ppt.png" wx:elif="{{post_detail.post_media.file_type == 'ppt'}}" />
+            <image class="function_file_image" src="/images/file-xls.png" wx:elif="{{post_detail.post_media.file_type == 'xls'}}" />
+            <image class="function_file_image" src="/images/file-pdf.png" wx:elif="{{post_detail.post_media.file_type == 'pdf'}}" />
+            <image class="function_file_image" src="/images/file-unknown.png" wx:else />
+
+          <view class="function_file_right">
+            <view class="function_text_container">
+              <view class="function_text_title">{{ post_detail.post_media.file_name }}</view>
+              <view class="function_text_detail">{{ post_detail.post_media.file_size }}</view>
+            </view>
+          </view>
+        </view>
 
       <!-- 日期 -->
       <view class="post-datetime">

@@ -69,6 +69,13 @@
       <image src="/images/miniapp.svg" class="post-icon-netease"></image>
     </view>
   </view>
+
+  <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'file'}}">
+		<view class="post-function-title">{{ data.post_media.file_name }}</view>
+		<view class="post-function-icon-outer-file">
+		    <image src="/images/file.svg" class="post-icon-file" />
+		</view>
+  </view>
   
   <view class="post-content">
     <view class="post-content-outer" style="width: {{!data.post_image? '100%' : '82%'}}">

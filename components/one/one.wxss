@@ -188,6 +188,12 @@
   width: 5vw;
 }
 
+.post-icon-file {
+  transform: translate(0, 1rpx);
+  height: 4vw;
+  width: 4.2vw;
+}
+
 /* article */
 
 .article-author{

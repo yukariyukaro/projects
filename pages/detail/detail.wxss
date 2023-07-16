@@ -201,12 +201,17 @@
 }
 
 .function_container{
+  position: relative;
   margin-top: 5vw;
   text-align:center;
   background-color:var(--model-bg-gray);
   border-radius: 20rpx;
   display: flex;
   width: 610rpx;
+}
+
+.function_file_right{
+  width: 460rpx;
 }
 
 .function_text_container{
@@ -276,6 +281,15 @@
   height:150rpx;
   width:150rpx;
   border-radius: 20rpx
+}
+
+
+.function_file_image{
+  /* position:absolute; */
+  border-radius: 20rpx;
+  height:150rpx;
+  width:150rpx;
+  /* border: solid 1px var(--model-bg-gray); */
 }
 
 .function_bilibili_right{

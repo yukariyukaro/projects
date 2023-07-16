@@ -11,7 +11,7 @@ theme.js
 theme.json
 
 /images
-/pages/about
+/pages/about/about.wxml
 /pages/followService
 /pages/register/register.wxml
 /pages/search/search.wxml

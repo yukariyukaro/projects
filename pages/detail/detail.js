@@ -572,6 +572,31 @@ Page({
       path: this.data.post_detail.post_media.miniapp_path,
     })
   },
+  onTapFile:  function () {
+    wx.showLoading()
+    wx.downloadFile({
+      // 示例 url，并非真实存在
+      url: this.data.post_detail.post_media.file_link,
+      success: function (res) {
+        wx.hideLoading()
+        const filePath = res.tempFilePath
+        wx.openDocument({
+          filePath: filePath,
+          showMenu: true,
+          success: function () {
+            console.log('打开文档成功')
+          },
+          fail: function(){
+            console.log('打开文档失败')
+            wx.showToast({
+              title: '无法打开文件',
+            })
+          }
+        })
+      }
+    })
+  },
+
   onTapAd:function(){
     var ad_info = this.data.ad_info
     switch (ad_info.ad_type) {
