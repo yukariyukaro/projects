@@ -593,6 +593,13 @@ Page({
             })
           }
         })
+      },
+      fail: function(res){
+        console.log('打开文档失败')
+        console.log(res)
+        wx.showToast({
+          title: '无法打开文件',
+        })
       }
     })
   },
