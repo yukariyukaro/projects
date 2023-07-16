@@ -590,6 +590,7 @@ Page({
             console.log('打开文档失败')
             wx.showToast({
               title: '无法打开文件',
+              icon: 'error'
             })
           }
         })
@@ -599,6 +600,7 @@ Page({
         console.log(res)
         wx.showToast({
           title: '无法打开文件',
+          icon: 'error'
         })
       }
     })
