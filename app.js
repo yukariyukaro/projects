@@ -240,6 +240,7 @@ App({
         console.log("no token")
         wx.login({
           success (res) {
+            console.log(res)
             if(res.code){
               // 请求开发者服务器
               newRequest('/user/login/wechat', {
@@ -275,7 +276,21 @@ App({
               wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
               wx.hideLoading()
             }
-          } 
+          },
+          fail (res){
+            console.log(res)
+            var pages = getCurrentPages()
+            var currentPage = pages[pages.length-1]
+            var url = currentPage.route  
+            if(url!="pages/register/register"){
+              wx.reLaunch({
+                url: '/pages/register/register',
+                success(){
+                  wx.showToast({title: '请先注册', icon: "none", duration: 1000})
+                }
+              })
+            }
+          },
       })
       }
     })
