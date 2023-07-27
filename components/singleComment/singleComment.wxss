@@ -136,7 +136,7 @@ opacity: 0.6;
 }
 
 .divider-c{
-  width: 1px;
+  border-right: 1.5px solid #8c8c8c;
   padding: 20rpx 0 20rpx 0;
   background-color: #8c8c8c;
   display: inline-block;

@@ -70,6 +70,24 @@ Page({
             showCancel: false,
             content:'验证码已发送,请留意垃圾邮件箱!',
           });
+        } else if (res.code == 401) {
+          wx.setClipboardData({
+            data: 'https://tripleuni.com/',
+            success: function () {
+              app.showModal({
+                title: '请使用Web版「Triple Uni」登录',
+                showCancel: false,
+                content:'网站链接已复制到剪贴板',
+              });
+            }, 
+            fail: function () {
+              app.showModal({
+                title: '请使用Web版「Triple Uni」登录',
+                showCancel: false,
+                content:'https://tripleuni.com/',
+              });
+            }
+          })
         }else{
           app.showModal({title: '提示',content:res.msg,showCancel: false,})
         }
