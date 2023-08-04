@@ -125,6 +125,17 @@
             </view>
           </view>
         </view>
+        <!-- HKU找群 -->
+        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'hku_group'}}" bindtap="onTapHKUGroup">
+          <image class="function_netease_image" mode="aspectFill" src="https://i.boatonland.com/HKU/post/jeD8ijwBDkrKn3GsZHp2JfYhjErnTN7Y.jpeg"></image>
+          <view class="function_netease_right">
+            <view class="function_text_container">
+              <view class="function_text_title">{{"加入群聊: " + post_detail.post_media.group_name}}</view>
+              <view class="function_text_detail_quote">HKUer找群</view>
+            </view>
+            <image class="function_miniapp_icon" src="/images/miniapp.svg"></image>
+          </view>
+        </view>
         <!-- 文件 -->
         <view class="function_container" wx:if="{{post_detail.post_media.media_type == 'file'}}" bindtap="onTapFile">
             <image class="function_file_image" src="/images/file-doc.png" wx:if="{{post_detail.post_media.file_type == 'doc'}}" />

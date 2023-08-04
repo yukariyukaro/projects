@@ -66,7 +66,7 @@
   <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'miniapp'}}">
     <view class="post-function-title">{{data.post_media.miniapp_name}}</view>
     <view class="post-function-icon-outer-vote">
-      <image src="/images/miniapp.svg" class="post-icon-netease"></image>
+      <image src="/images/miniapp.svg" class="post-icon-miniapp"></image>
     </view>
   </view>
 
@@ -74,6 +74,13 @@
 		<view class="post-function-title">{{ data.post_media.file_name }}</view>
 		<view class="post-function-icon-outer-file">
 		    <image src="/images/file.svg" class="post-icon-file" />
+		</view>
+  </view>
+
+  <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'hku_group'}}">
+		<view class="post-function-title">{{ "加入群聊: " + data.post_media.group_name }}</view>
+		<view class="post-function-icon-outer-file">
+      <image src="/images/miniapp.svg" class="post-icon-miniapp"></image>
 		</view>
   </view>
   

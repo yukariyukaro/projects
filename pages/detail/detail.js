@@ -572,6 +572,14 @@ Page({
       path: this.data.post_detail.post_media.miniapp_path,
     })
   },
+
+  onTapHKUGroup: function () {
+    wx.navigateToMiniProgram({
+      appId: "wxa5de39979ae7affa",
+      path: "/pages/group/group?group_id=" + this.data.post_detail.post_media.group_id,
+    })
+  },
+
   onTapFile:  function () {
     wx.showLoading()
     wx.downloadFile({

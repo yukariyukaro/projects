@@ -271,6 +271,14 @@
   right: 15rpx;
 }
 
+.function_miniapp_icon{
+  width:40rpx;
+  height:40rpx;
+  position: absolute;
+  bottom: 17rpx;
+  right: 10rpx;
+}
+
 .function_bilibili_image{
   height:150rpx;
   width:230rpx;

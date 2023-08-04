@@ -178,6 +178,11 @@
   height: 4vw;
   width: 4vw;
 }
+.post-icon-miniapp{
+  transform: translate(0, 5.2rpx);
+  height: 4vw;
+  width: 4vw;
+}
 .post-icon-vote {
   height: 4vw;
   width: 4vw;
