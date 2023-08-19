@@ -179,15 +179,18 @@ Page({
     theme:'',
     hku_one_logo:'',
     navigation_bar_background_color: info.search_nav_bar_color,
-    result_shown:false,
+    result_shown: false,
     search_mode: "default",
     show_modes: false,
     mode_list: ['默认', '最新' , '最热'],
     mode_list_eng: ['default', 'latest', 'hot'],
     mode_index: 0,
-    type_list: ['全部', '树洞' , '推送'],
-    type_index: 0,
-    allow_scroll: true
+    filter_list: ['UNI', '本校'],
+    filter_index: 0,
+    include_uni: true,
+    allow_scroll: true,
+    search_suggestion_list: [],
+    search_list_loaded: false
   },
 
   getOneList: function () {
@@ -225,10 +228,16 @@ Page({
       })
     }
     
+    that.setData({
+      search_list_loaded: false,
+      search_suggestion_list: []
+    })
+    
     newRequest("/post/list/search", {
       key_word:that.data.key_word,
       page:that.data.page,
-      search_mode:that.data.search_mode
+      search_mode:that.data.search_mode,
+      include_uni:that.data.include_uni,
     }, that.getBySearch, true, true)
     .then( res=>{
       if(res.code == 200){
@@ -328,17 +337,47 @@ Page({
     }
   },
 
+  getSearchSuggestion: function(){
+    var that = this 
+    console.log("search Suggestions: ", this.data.search_suggestion_list, this.data.search_suggestion_list.length)
+    newRequest("/info/searchsuggestion", {key_word: that.data.key_word}, that.getSearchSuggestion)
+    .then((res) => {
+      if (res.code == 200){
+        var temp_list = []
+        res.search_suggestion_list.forEach((suggestion) => {
+          var parts = suggestion.split(new RegExp( that.data.key_word, "i"))
+          temp_list.push({
+            orginal: suggestion,
+            before: parts[0],
+            matched: that.data.key_word,
+            after: parts[1]
+          })
+        })
+
+        that.setData({
+          search_list_loaded: true,
+          search_suggestion_list: temp_list
+        })
+      }
+    })
+  },
+
   onInputKeyWord:function(e){
     this.setData({
       key_word:e.detail.value,
       page:0,
     })
-    // if(this.data.key_word){
-    //   this.getBySearch()
-    // }else{
-    //   this.getOneList()
-    // }
+    if(this.data.key_word){
+      this.getSearchSuggestion()
+    }else{
+      this.getOneList()
+      this.setData({
+        search_list_loaded: false,
+        search_suggestion_list: []
+      })
+    }
   },
+
   clearInput:function(){
     this.setData({
       key_word:'',
@@ -349,7 +388,9 @@ Page({
       focus: false,
       result_shown: false,
       search_mode: this.data.mode_list_eng[0],
-      mode_index: 0
+      mode_index: 0,
+      search_suggestion_list: [],
+      search_list_loaded: false
     })
     this.getOneList()
   },
@@ -370,6 +411,18 @@ Page({
       allow_scroll: that.data.show_modes
     })
   },
+
+  bindTapSuggestion: function(e){
+    var that = this
+    var query = that.data.search_suggestion_list[e.currentTarget.id].orginal
+    console.log(query)
+    that.setData({
+      key_word: query,
+      page:0,
+    })
+    that.getBySearch()
+  },
+
   bindModes: function(e){
     var that = this
     var new_mode = that.data.mode_list_eng[e.detail.value]
@@ -392,6 +445,30 @@ Page({
     }
     that.getBySearch()
   },
+
+  bindFilters: function(e){
+    var that = this
+    var include_uni = !!(1 - e.detail.value)
+    that.setData({
+      filter_index: e.detail.value,
+      include_uni: include_uni,
+      page: 0,
+      is_loading_more: true,
+      allow_scroll: true,
+      scroll_top: 0,
+    })
+
+    if(that.data.show_modes){
+      setTimeout(()=>{
+        that.setData({
+          scroll_top: 0,
+          allow_scroll: false,
+        }, 2)
+      })
+    }
+    that.getBySearch()
+  },
+
   updateTabbar:function(){
     var notice_count = wx.getStorageSync('allNoticeCount')
     if(notice_count > 0){
