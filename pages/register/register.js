@@ -60,7 +60,7 @@ Page({
       }, ()=>{}, false, true)
       .then((res) => {
         that.setData({is_sending:false})
-        if(res.code == 201){
+        if(res.code == 200){
           that.setData({
             auth_sent:true,
             vcode_key:res.vcode_key,
