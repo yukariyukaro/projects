@@ -9,9 +9,9 @@
 
 <view wx:if="{{ban_detail}}">
 
-<view style="margin: 0rpx 80rpx 120rpx 80rpx;padding-bottom: 100rpx;" wx:if="{{ban_detail.user_is_ban_permanent}}">
+<view style="margin: 0rpx 80rpx 120rpx 80rpx;padding-bottom: 100rpx;" wx:if="{{ban_detail.user_is_permanent_ban}}">
   <view>你在「{{app_name}}」中发表的内容违反了</view>
-  <view style="font-weight: bold;font-size: 44rpx;margin-top:40rpx;" bindtap="nav2Mp">「用户条款及声明」</view>
+  <view style="font-weight: bold;font-size: 44rpx;margin-top:40rpx;" bindtap="nav2Mp">「用户协议」</view>
   <view style="margin-top: 40rpx;">你的账号已被永久封禁。</view>
   <button class="mainButton-r1" bindtap="exit">退出</button>
 </view>
@@ -19,10 +19,10 @@
 <view style="margin: 0rpx 80rpx 120rpx 80rpx;padding-bottom: 100rpx;" wx:else>
   <view>你在「{{app_name}}」中发表的内容涉及</view>
   <view style="font-weight: bold;font-size: 44rpx;margin-top:10rpx;">不宜公开讨论的政治内容</view>
-  <view style="margin-top: 40rpx;">该内容违反了<text style="font-weight: bold;" bindtap="nav2Mp"> 「用户条款及声明」 </text>2.3和2.4，相关内容已被删除，你的账号将被冻结<text style="font-weight: bold;"> {{ban_detail.ban_period_now}} </text>天至</view>
+  <view style="margin-top: 40rpx;">该内容违反了<text style="font-weight: bold;" bindtap="nav2Mp"> 「用户协议」 </text>第2或3条例，相关内容已被删除，你的账号将被冻结<text style="font-weight: bold;"> {{ban_detail.ban_period_now}} </text>天至</view>
   <view style="font-weight: bold;font-size: 44rpx;margin-top:10rpx;">{{ban_detail.user_ban_until}}</view>
-  <view style="margin-top: 40rpx;">这是你的账号第<text style="font-weight: bold;"> {{ban_detail.user_ban_time}} </text>次被冻结，下一次违规将被冻结<text style="font-weight: bold;"> {{ban_detail.ban_period_next}} </text>天。</view>
-  <view style="margin-top: 40rpx;">冻结结束后你的帐号可以恢复正常使用，请你遵守<text style="font-weight: bold;" bindtap="nav2Mp"> 「用户条款及声明」 </text>及相关法律法规。</view>
+  <view style="margin-top: 40rpx;">这是你的账号第<text style="font-weight: bold;"> {{ban_detail.user_ban_times}} </text>次被冻结，下一次违规将被冻结<text style="font-weight: bold;"> {{ban_detail.ban_period_next}} </text>天。</view>
+  <view style="margin-top: 40rpx;">冻结结束后你的帐号可以恢复正常使用，请你遵守<text style="font-weight: bold;" bindtap="nav2Mp"> 「用户协议」 </text>及相关法律法规。</view>
   <button class="mainButton-r1" bindtap="exit">退出</button>
 </view>
 

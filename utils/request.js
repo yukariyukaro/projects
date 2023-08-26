@@ -5,6 +5,7 @@ export default function newRequest (path, body, relaunchFunction = new function(
   return new Promise( (resolve, reject) => {
     if (includeToken) Object.assign(body, {token: wx.getStorageSync('token')});
     if (includeLabel) Object.assign(body, {user_school_label: info.school_label});
+
     wx.request({
       url: info.api_domain + path + ".php", 
       method: 'POST',
@@ -58,9 +59,6 @@ export default function newRequest (path, body, relaunchFunction = new function(
           reject(res.data.msg)
         }else if(res.data.code == 901){
           wx.showToast({title: '系统维护中', icon: "error", duration: 2000})
-          reject(res.data.msg)
-        }else if(res.data.code == 902){
-          wx.showToast({title: res.data.msg, icon: "error", duration: 1000})
           reject(res.data.msg)
         }else{
           resolve (res.data)

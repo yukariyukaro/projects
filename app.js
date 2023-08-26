@@ -8,8 +8,8 @@ import newRequest from "./utils/request"
 App({
   onLaunch(){
     var that = this
-    this.launch().then( () => {
-      this.watchCaptureScreen()
+    that.launch().then( () => {
+      that.watchCaptureScreen()
       // this.getTheme() 
       }   
     )
@@ -82,7 +82,7 @@ App({
     tabbarJS:'',
     auth_key:'',
     from_miniapp:'',
-    themeInfo:'',
+    themeInfo:''
   },
 
   subscribe:function(mode){
@@ -189,7 +189,9 @@ App({
   // 记录截屏开始
   // /user/record/capturescreen
   watchCaptureScreen:function(){
+    var that = this;
     wx.onUserCaptureScreen(function (res) {
+      // console.log(res)
       var pages = getCurrentPages()
       var currentPage = pages[pages.length-1]
       var url = currentPage.route
@@ -200,8 +202,14 @@ App({
           urlWithArgs += key + '=' + value + '&'
       }
       urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length-1)
-      newRequest('/user/record/capturescreen', {url: urlWithArgs})
-      .then()
+      newRequest('/user/record/capturescreen', {url: urlWithArgs}, that.watchCaptureScreen)
+      .then((res)  => {
+        if (res.code == 200){
+          console.log("Screen Capture Recorded")
+        } else {
+          console.log("Screen Capture Error: ", res)
+        }
+      })
     })
   },
   // 记录截屏结束
@@ -229,10 +237,11 @@ App({
         console.log("has token")
         newRequest("/user/check/wechat", {}).then((res) => {
           if(res.code != 200){    
-            
+            reject()
           }else{
             that.launchWebSoccket()
             that.checkUnread()
+            resolve()
           }
         })
       }else{
@@ -270,11 +279,13 @@ App({
                 }else{    
                   wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
                 }
+                reject()
               })
             
             }else{   
               wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
               wx.hideLoading()
+              reject()
             }
           },
           fail (res){
@@ -290,6 +301,7 @@ App({
                 }
               })
             }
+            reject()
           },
       })
       }

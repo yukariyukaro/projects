@@ -9,7 +9,8 @@ Page({
    */
   data: {
     app_name: info.app_name,
-    team_name: info.team_name
+    team_name: info.team_name,
+    school_label_lower: info.school_label.toLowerCase(),
   },
 
   exit: function () {
@@ -18,7 +19,7 @@ Page({
 
   nav2Mp: function () {
     wx.navigateTo({
-      url: '/pages/webview/webview?url=https://mp.weixin.qq.com/s/mPbzfp2bcXNp7_KnU-IiiQ',
+      url: '/pages/webview/webview?url=https://hkupootal.com/'+this.data.school_label_lower+'/agreement',
     })
   },
 
@@ -31,10 +32,9 @@ Page({
           newRequest('/user/ban/detail', {
             code: res.code,
             system_info: JSON.stringify(wx.getSystemInfoSync())
-          }, () => {}, false)
+          }, that.getBanDetail, false, true)
           .then((res2) => {
-            
-            if(res2.code == 200 || res2.code == 201){
+            if(res2.code == 200 || res2.code == 201 || res2.code == 902){
               that.setData({
                 ban_detail: res2.ban_detail
               })
