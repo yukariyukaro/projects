@@ -34,7 +34,7 @@ Page({
             system_info: JSON.stringify(wx.getSystemInfoSync())
           }, that.getBanDetail, false, true)
           .then((res2) => {
-            if(res2.code == 200 || res2.code == 201 || res2.code == 902){
+            if(res2.code == 200 || res2.code == 201){
               that.setData({
                 ban_detail: res2.ban_detail
               })
