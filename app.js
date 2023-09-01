@@ -13,6 +13,10 @@ App({
       // this.getTheme() 
       }   
     )
+
+    // wx.setBackgroundFetchToken({
+    //   token: 
+    // })
   
     if(!wx.getStorageSync('allNoticeCount')){
       wx.setStorageSync('allNoticeCount', 0)
@@ -32,6 +36,7 @@ App({
     if(!wx.getStorageSync('showOneRedDot')){
       wx.setStorageSync('showOneRedDot', false)
     }
+
   },
 
   onShow:function(){

@@ -3,5 +3,6 @@
     "singleComment": "/components/singleComment/singleComment"
   },
   "disableScroll":true,
-  "navigationBarTitleText": "树洞详情"
+  "navigationBarTitleText": "树洞详情",
+  "initialRenderingCache": "static"
 }

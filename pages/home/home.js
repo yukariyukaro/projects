@@ -1,6 +1,7 @@
 // const { json2xml } = require("../../utils/cos-wx-sdk-v5");
 import newRequest from  "../../utils/request"
 import info from "../../utils/info"
+import { getImageCache } from '../../utils/imageCache.js'
 
 var app = getApp();
 Page({
@@ -290,9 +291,20 @@ Page({
     newRequest('/info/openad', {}, that.getAd)
     .then((res) => {
       if (res.code == 200 && res.ad_info!=null) {
-        that.setData({
-          ad_info:res.ad_info,
-          show_ad:true
+        getImageCache("openAd", res.ad_info.ad_image)
+        .then( (path) => {
+          console.log("openAd image cache at: ", path)
+          res.ad_info.ad_image = path
+          that.setData({
+            ad_info:res.ad_info,
+            show_ad:true
+          })
+        })
+        .catch(()=>{
+          that.setData({
+            ad_info:res.ad_info,
+            show_ad:true
+          })
         })
       }else{
         
@@ -494,10 +506,10 @@ Page({
       } 
     }
     // this.getPost()
+    this.getAd()
     this.getAll()
     this.getBanner()
     this.getTopic()
-    this.getAd()
   },
 
   /**

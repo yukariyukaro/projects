@@ -1,6 +1,7 @@
 var app = getApp();
 var COS = require('../../utils/cos-wx-sdk-v5.js')
 const info = require("../../utils/info.js")
+import { getImageCache } from '../../utils/imageCache.js'
 import newRequest from "../../utils/request"
 
 
@@ -28,7 +29,7 @@ Page({
     comment_list: [],
     comment_reverse: false,
 
-    ad_info:[],
+    ad_info: {},
     show_comment_box:false,
     comment_report_box_animation:'',
     comment_id:'',
@@ -235,9 +236,21 @@ Page({
     newRequest('/info/detailad', {}, that.getAd)
     .then((res) => {
       if (res.code == 200) {
-        that.setData({
-          ad_info:res.ad_info
+        getImageCache("detailAd", res.ad_info.ad_image)
+        .then( (path) => {
+          console.log("detailAd image cache at: ", path)
+          res.ad_info.ad_image = path
+          that.setData({
+            ad_info:res.ad_info
+          })
         })
+        .catch(() => {
+          console.log(res.ad_info)
+          that.setData({
+            ad_info:res.ad_info
+          })
+        })
+        
       } else {
         wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
       }
@@ -894,6 +907,7 @@ Page({
     wx.showLoading({
       title: '加载中',
     })
+    this.getAd()
     console.log(options)
     if (options.post_serial) {
       this.setData({
@@ -908,7 +922,6 @@ Page({
         uni_post_id: options.uni_post_id
       });
     }
-    this.getAd()
     var systemInfo = wx.getSystemInfoSync()
     if (app.globalData.themeInfo.primaryColorLight) {
       if (systemInfo.theme == 'dark') {

@@ -201,8 +201,8 @@
         </view>
       </view>
       <!-- 广告 -->
-      <view>
-        <image wx:if="{{ad_info.ad_image}}" src="{{ad_info.ad_image}}" class="detail-ad" bindtap="onTapAd"></image>
+      <view wx:if="{{ad_info.ad_image}}">
+        <image fade-in src="{{ad_info.ad_image}}" class="detail-ad" bindtap="onTapAd"></image>
       </view>
       <!-- 显示所有评论 -->
       <view>

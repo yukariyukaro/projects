@@ -56,11 +56,12 @@
 
 <view class="ad1" wx:if="{{show_ad}}" bindtap="closeAD">
         <view class="ad2">
-            <image mode="aspectFit" style="width:90%;" catchtap="onTapAd" src='{{ad_info.ad_image}}'/>
+            <image  mode="widthFix" width="90%" catchtap="onTapAd" src='{{ad_info.ad_image}}'/>
         </view>
           <view class="back_w">
-           <cover-view class="back_image" catchtap="closeAD">
-             <cover-image src="/images/sf-close-circle.svg"></cover-image>
-            </cover-view>
+           <view class="back_image" catchtap="closeAD">
+             <image src="/images/sf-close-circle.svg" style="width: 60rpx; height: 60rpx; display: inline-block; box-sizing: border-box"></image>
+            </view>
           </view>
+          <view style="height: 50rpx"></view>
 </view>
