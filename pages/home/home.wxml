@@ -65,3 +65,8 @@
           </view>
           <view style="height: 50rpx"></view>
 </view>
+
+<view wx:if="{{showPrivacy}}">
+  <view>隐私弹窗内容....</view>
+  <button id="agree-btn" open-type="agreePrivacyAuthorization" bindagreeprivacyauthorization="handleAgreePrivacyAuthorization">同意</button>
+</view>

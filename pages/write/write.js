@@ -29,7 +29,8 @@ Page({
     vote_option_list:[],
     vote_is_multi:false,
     isGettingMedia:false,
-    user_id_name: info.user_id_name
+    user_id_name: info.user_id_name,
+    showPrivacy: false
     // emotion_selected_index:-1,
     // post_with_emotion:false,
     // post_media_emotion:{}
@@ -175,6 +176,13 @@ Page({
       })
 
     }
+  },
+
+  tapUploadImage:function(){
+    this.setData({
+      showPrivacy: true
+    })
+    // this.uploadImage()
   },
 
   uploadImage:function(){
@@ -551,6 +559,46 @@ Page({
         is_dark:true
       })
     }
+
+
+    // 需要用户同意隐私授权时
+    wx.onNeedPrivacyAuthorization((resolve, eventInfo) => {
+      console.log('触发本次事件的接口是：' + eventInfo.referrer)
+      // 需要用户同意隐私授权时
+      // 弹出开发者自定义的隐私授权弹窗
+      this.setData({
+        showPrivacy: true
+      })
+     
+      // this.resolvePrivacyAuthorization = resolve
+    })
+
+    wx.requirePrivacyAuthorize({
+      success: () => {
+        console.log("用户同意授权")
+        // this.setData({
+        //   showPrivacy: true
+        // })
+      },
+      fail: () => {console.log("用户拒绝授权")}, // 用户拒绝授权
+      complete: () => {}
+    })
+  },
+
+  onPrivacyAgree(e){
+    console.log(e)
+    console.log("privacy agreeed")
+    this.setData({
+      showPrivacy: false
+    })
+    this.uploadImage()
+  },
+
+  onPrivacyDisagree(e){
+    console.log("privacy disagreeed")
+    this.setData({
+      showPrivacy: false
+    })
   },
 
   /**

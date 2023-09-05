@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "mini-compress": "/components/mini-compress/mini-compress"
+    "mini-compress": "/components/mini-compress/mini-compress",
+    "privacyPopup": "/components/privacyPopup/privacyPopup"
   }
 }

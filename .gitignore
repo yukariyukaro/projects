@@ -17,3 +17,4 @@ theme.json
 /pages/search/search.wxml
 /utils/info.js
 /custom-tab-bar/index.js
+/custom-tab-bar/index.wxml

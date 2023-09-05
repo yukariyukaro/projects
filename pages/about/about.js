@@ -8,7 +8,7 @@ Page({
   data: {
     app_name:info.app_name,
     is_dark: '',
-    version: '4.1.3'
+    version: '4.1.4'
   },
 
   logoAnimation: function () {
