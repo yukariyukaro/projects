@@ -1,9 +1,13 @@
 var app = getApp();
 var COS = require('../../utils/cos-wx-sdk-v5.js')
 const info = require("../../utils/info.js")
-import { getImageCache } from '../../utils/imageCache.js'
+import {
+  getImageCache
+} from '../../utils/imageCache.js'
 import newRequest from "../../utils/request"
-
+import {
+  getLinks
+} from "../../utils/getlinks"
 
 Page({
   data: {
@@ -11,7 +15,7 @@ Page({
     data_received: false,
     pre_url: 'https://i.boatonland.com/avatar/',
     school_label: info.school_label,
-    comment_theme_color:'',
+    comment_theme_color: '',
     primary_color: info.primary_color_on_light,
 
     // 举报
@@ -25,24 +29,47 @@ Page({
     uni_post_id: '',
     post_serial: '',
     post_detail: {},
+    post_msg: '',
     post_date: '',
     comment_list: [],
     comment_reverse: false,
 
-    ad_info: {},
-    show_comment_box:false,
-    comment_report_box_animation:'',
-    comment_id:'',
+    ad_info: null,
+    show_comment_box: false,
+    comment_report_box_animation: '',
+    comment_id: '',
     comment_msg: '',
-    comment_image:'',
+    comment_image: '',
     comment_with_serial: false,
     is_author: false,
     comment_box_placeholder: '想对洞主说些什么?',
-    comment_is_sending:false,
-    focus:false,
-    is_dark:false,
-    show_report_box:false,
-    my_school_label: info.school_label
+    comment_is_sending: false,
+    focus: false,
+    is_dark: false,
+    show_report_box: false,
+    my_school_label: info.school_label,
+    is_markdown: false,
+    tag_style: {
+        a: 'text-decoration: underline; color: #0969da !important;',
+        h1: 'border-bottom: 1px solid var(--bg-gray-2) !important; padding: 20rpx! 0 10rpx 0 important; margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
+        h2: 'border-bottom: 1px solid var(--bg-gray-2) !important; padding: 10rpx 0 10rpx 0 !important; margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
+        h3: 'margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
+        h4: 'margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
+        h5: 'margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
+        h6: 'margin-bottom: 30rpx !important; color: var(--on-bg-gray-1) margin-top: 10rpx !important;',
+        hr: 'border-bottom: 1px solid var(--bg-gray-2) !important; border-top: none;margin: 40rpx 0 !important; box-sizing: content-box; border-left: none; border-right:none;',
+        p: 'margin-bottom: 25rpx !important;',
+        p: 'margin-bottom: 25rpx !important;',
+        p: 'margin-bottom: 25rpx !important;',
+        table: 'margin-bottom: 25rpx !important;',
+        td: 'word-break: normal!important; word-wrap: normal!important;background-color: var(--bg-2) !important',
+        th: 'background-color: var(--bg-gray-3) !important',
+        pre: 'background-color: var(--bg-gray-3) !important;border-radius: 10 rpx !important;margin-bottom: 25rpx !important;font-size: 25rpx !important; color: var(--text) !important;',
+        code: 'background-color: var(--bg-gray-3) !important; color: var(--text) !important;',
+        ol: 'margin-bottom: 25rpx',
+        ul: 'margin-bottom: 25rpx',
+    }
+
   },
   // 下拉刷新
   onRefresh() {
@@ -66,7 +93,7 @@ Page({
 
     if (this.data.post_detail.user_is_org && this.data.post_detail.user_is_real_name) {
       wx.navigateTo({
-        url: "/pages/org/org?user_serial=" + this.data.post_detail.user_serial +"&school_label=" + this.data.post_detail.user_school_label
+        url: "/pages/org/org?user_serial=" + this.data.post_detail.user_serial + "&school_label=" + this.data.post_detail.user_school_label
       })
     } else if (!this.data.post_detail.user_is_real_name) {
       wx.navigateTo({
@@ -80,24 +107,24 @@ Page({
   },
 
   replyComment: function (e) {
-    if(e.detail.comment_order == 0){
+    if (e.detail.comment_order == 0) {
       var comment_box_placeholder = "Re G:"
-    }else{
+    } else {
       var comment_box_placeholder = "Re LG" + e.detail.comment_order + ":"
     }
-    if(this.data.post_detail.is_author){
+    if (this.data.post_detail.is_author) {
       this.setData({
-        comment_msg:'',
-        comment_box_placeholder:comment_box_placeholder,
-        comment_id:e.detail.comment_id,
-        comment_with_serial:true
+        comment_msg: '',
+        comment_box_placeholder: comment_box_placeholder,
+        comment_id: e.detail.comment_id,
+        comment_with_serial: true
       })
-    }else{
+    } else {
       this.setData({
-        comment_msg:'',
-        comment_box_placeholder:comment_box_placeholder,
-        comment_id:e.detail.comment_id,
-        comment_with_serial:false
+        comment_msg: '',
+        comment_box_placeholder: comment_box_placeholder,
+        comment_id: e.detail.comment_id,
+        comment_with_serial: false
       })
     }
     this.showCommentReportBox()
@@ -126,7 +153,7 @@ Page({
     });
     this.showCommentReportBox()
   },
-  
+
   reportPromptGetInput: function (e) {
     this.setData({
       report_user_msg: e.detail.value,
@@ -145,116 +172,147 @@ Page({
       var report_msg = "举报了#" + that.data.post_detail.post_id + "的评论LG" + that.data.report_index + "「" + that.data.report_msg + "」，理由为「" + that.data.report_user_msg + "」"
     }
 
-    newRequest("/post/single/report", {uni_post_id: that.data.uni_post_id, report_msg: report_msg}, that.reportPromptConfirm)
-    .then(res => {
-      that.setData({show_report_box: false})
-      if (res.code == 200) {
+    newRequest("/post/single/report", {
+        uni_post_id: that.data.uni_post_id,
+        report_msg: report_msg
+      }, that.reportPromptConfirm)
+      .then(res => {
+        that.setData({
+          show_report_box: false
+        })
+        if (res.code == 200) {
           wx.showToast({
             title: '举报成功',
             icon: 'none',
             duration: 1000,
           });
         } else {
-          wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
-        } 
-    })
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
+          })
+        }
+      })
   },
 
 
-  time: function(){
-    var date=new Date();
-    var time=date.getTime().toString();
-    return parseInt(time.substring(0,time.length-3));
+  time: function () {
+    var date = new Date();
+    var time = date.getTime().toString();
+    return parseInt(time.substring(0, time.length - 3));
   },
 
-  format_time: function(timestamp){
+  format_time: function (timestamp) {
     var dur = this.time() - timestamp;
-    if(dur < 60){
+    if (dur < 60) {
       return '刚刚';
-    }else if(dur < 3600){
-      return parseInt(dur/60)+'分钟前';
-    }else if(dur < 86400){
-      return parseInt(dur/3600)+'小时前';
-    }else if(dur < 172800){
-      var s = new Date(timestamp*1000);
-      return "昨天 "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
-    }else if(dur < 259200){
-      var s = new Date(timestamp*1000);
-      return "前天 "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
-    }else{
-      var s = new Date(timestamp*1000);
-      return (s.getYear()+1900)+"-"+(s.getMonth()+1)+"-"+s.getDate()+" "+String(s.getHours()).padStart(2, "0")+":"+String(s.getMinutes()).padStart(2, "0");
+    } else if (dur < 3600) {
+      return parseInt(dur / 60) + '分钟前';
+    } else if (dur < 86400) {
+      return parseInt(dur / 3600) + '小时前';
+    } else if (dur < 172800) {
+      var s = new Date(timestamp * 1000);
+      return "昨天 " + String(s.getHours()).padStart(2, "0") + ":" + String(s.getMinutes()).padStart(2, "0");
+    } else if (dur < 259200) {
+      var s = new Date(timestamp * 1000);
+      return "前天 " + String(s.getHours()).padStart(2, "0") + ":" + String(s.getMinutes()).padStart(2, "0");
+    } else {
+      var s = new Date(timestamp * 1000);
+      return (s.getYear() + 1900) + "-" + (s.getMonth() + 1) + "-" + s.getDate() + " " + String(s.getHours()).padStart(2, "0") + ":" + String(s.getMinutes()).padStart(2, "0");
     }
 
   },
 
-// /post/single/get
+  // /post/single/get
   getPostDetail: function () {
     var that = this
-    newRequest('/post/single/get', {uni_post_id: that.data.uni_post_id, post_id: that.data.post_serial}, that.getPostDetail)
-    .then((res) => {
-      if (res.code == 200) {
-        res.post_detail.post_msg = res.post_detail.post_msg.replaceAll("\\n", "\n")
-        for(let i = 0; i<res.comment_list.length ; i++){
-          res.comment_list[i].comment_msg = res.comment_list[i].comment_msg.replaceAll("\\n", "\n")
-        }
-        
-        that.setData({
-          post_detail: res.post_detail,
-          post_date: that.format_time(res.post_detail.post_create_time),
-          data_received: true,
-          comment_list: res.comment_list,
-          triggered: false,
-          uni_post_id: res.post_detail.uni_post_id
-        })
-        if (res.post_detail.is_author) {
+    newRequest('/post/single/get', {
+        uni_post_id: that.data.uni_post_id,
+        post_id: that.data.post_serial
+      }, that.getPostDetail)
+      .then((res) => {
+        if (res.code == 200) {
+          // res.post_detail.post_msg = res.post_detail.post_msg.replaceAll("\\n", "\n")
+          // for(let i = 0; i<res.comment_list.length ; i++){
+          //   res.comment_list[i].comment_msg = res.comment_list[i].comment_msg.replaceAll("\\n", "\n")
+          // }
+          if (res.post_detail.post_msg_markdown) {
+            var post_msg = res.post_detail.post_msg_markdown
+            // console.log(post_msg)s
+            that.setData({
+              is_markdown: true
+            })
+          } else {
+            var post_msg = getLinks(res.post_detail.post_msg, res.post_detail.user_school_label)
+          }
+
           that.setData({
-            comment_placeholder: "想在自己的树洞下补充些什么？"
+            post_detail: res.post_detail,
+            post_msg: post_msg,
+            post_date: that.format_time(res.post_detail.post_create_time),
+            data_received: true,
+            comment_list: res.comment_list,
+            triggered: false,
+            uni_post_id: res.post_detail.uni_post_id
           })
-        }
-        
-      } else if (res.code == 400) {
-        wx.navigateBack({
-          delta: 1,
-          success() {
-            wx.showToast({
-              title: "它好像不见了>.<",
-              icon: "none",
-              duration: 1000
+          if (res.post_detail.is_author) {
+            that.setData({
+              comment_placeholder: "想在自己的树洞下补充些什么？"
             })
           }
-        })
-      } else {
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
-      }
-    })
+
+        } else if (res.code == 400) {
+          wx.navigateBack({
+            delta: 1,
+            success() {
+              wx.showToast({
+                title: "它好像不见了>.<",
+                icon: "none",
+                duration: 1000
+              })
+            }
+          })
+        } else {
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
+          })
+        }
+      })
   },
 
   // /info/detailad
   getAd: function () {
     var that = this
     newRequest('/info/detailad', {}, that.getAd)
-    .then((res) => {
-      if (res.code == 200) {
-        getImageCache("detailAd", res.ad_info.ad_image)
-        .then( (path) => {
-          console.log("detailAd image cache at: ", path)
-          res.ad_info.ad_image = path
-          that.setData({
-            ad_info:res.ad_info
+      .then((res) => {
+        if (res.code == 200) {
+          if (res.ad_info) {
+            getImageCache("detailAd", res.ad_info.ad_image)
+              .then((path) => {
+                console.log("detailAd image cache at: ", path)
+                res.ad_info.ad_image = path
+                that.setData({
+                  ad_info: res.ad_info
+                })
+              })
+              .catch(() => {
+                console.log(res.ad_info)
+                that.setData({
+                  ad_info: res.ad_info
+                })
+              })
+          }
+        } else {
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
           })
-        })
-        .catch(() => {
-          console.log(res.ad_info)
-          that.setData({
-            ad_info:res.ad_info
-          })
-        })
-        
-      } else {
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
-      }
-    })
+        }
+      })
   },
 
   showMainMenu: function () {
@@ -262,77 +320,77 @@ Page({
     if (that.data.post_detail.is_author) {
       if (that.data.post_detail.post_public == '1') {
 
-          wx.showActionSheet({
-            alertText: 'UNI ID: U' + that.data.uni_post_id,
-            itemList: ['设为私密', '删除'],
-            success(res) {
-              if (res.tapIndex == 0) {
-                that.setPrivate()
-              } else if (res.tapIndex == 1) {
-                app.showModal({
-                  title: "确认删除？",
-                  content: "删除后将无法恢复",
-                  success(res) {
-                    if (res.confirm) {
-                      that.delete()
-                    }
+        wx.showActionSheet({
+          alertText: 'UNI ID: U' + that.data.uni_post_id,
+          itemList: ['设为私密', '删除'],
+          success(res) {
+            if (res.tapIndex == 0) {
+              that.setPrivate()
+            } else if (res.tapIndex == 1) {
+              app.showModal({
+                title: "确认删除？",
+                content: "删除后将无法恢复",
+                success(res) {
+                  if (res.confirm) {
+                    that.delete()
                   }
-                })
-              }
+                }
+              })
             }
-          })
-   
+          }
+        })
+
       } else if (that.data.post_detail.post_public == '2') {
 
-          wx.showActionSheet({
-            alertText: 'UNI ID: U' + that.data.uni_post_id,
-            itemList: ['设为公开', '删除'],
-            success(res) {
-              if (res.tapIndex == 0) {
-                that.setPublic()
-              } else if (res.tapIndex == 1) {
-                app.showModal({
-                  title: "确认删除？",
-                  content: "删除后将无法恢复",
-                  success(res) {
-                    if (res.confirm) {
-                      that.delete()
-                    }
+        wx.showActionSheet({
+          alertText: 'UNI ID: U' + that.data.uni_post_id,
+          itemList: ['设为公开', '删除'],
+          success(res) {
+            if (res.tapIndex == 0) {
+              that.setPublic()
+            } else if (res.tapIndex == 1) {
+              app.showModal({
+                title: "确认删除？",
+                content: "删除后将无法恢复",
+                success(res) {
+                  if (res.confirm) {
+                    that.delete()
                   }
-                })
-              }
+                }
+              })
             }
-          })
-        
+          }
+        })
+
       }
     } else {
       if (that.data.post_detail.is_following) {
-    
-          wx.showActionSheet({
-            alertText: 'UNI ID: U' + that.data.uni_post_id,
-            itemList: ['取消围观', '举报'],
-            success(res) {
-              if (res.tapIndex == 0) {
-                that.follow()
-              } else if (res.tapIndex == 1) {
-                that.reportPost()
-              }
+
+        wx.showActionSheet({
+          alertText: 'UNI ID: U' + that.data.uni_post_id,
+          itemList: ['取消围观', '举报'],
+          success(res) {
+            if (res.tapIndex == 0) {
+              that.follow()
+            } else if (res.tapIndex == 1) {
+              that.reportPost()
             }
-          })
-        
+          }
+        })
+
       } else {
-        
-          wx.showActionSheet({
-            alertText: 'UNI ID: U' + that.data.uni_post_id,
-            itemList: ['围观', '举报'],
-            success(res) {
-              if (res.tapIndex == 0) {
-                that.follow()
-              } else if (res.tapIndex == 1) {
-                that.reportPost()
-              }
+
+        wx.showActionSheet({
+          alertText: 'UNI ID: U' + that.data.uni_post_id,
+          itemList: ['围观', '举报'],
+          success(res) {
+            if (res.tapIndex == 0) {
+              that.follow()
+            } else if (res.tapIndex == 1) {
+              that.reportPost()
             }
-          })
+          }
+        })
 
       }
 
@@ -347,35 +405,40 @@ Page({
       title: '加载中',
     });
     var that = this
-    newRequest("/post/single/follow", {uni_post_id: that.data.uni_post_id}, that.follow)
-    .then( res => {
-      if (res.code == 200) {
-        that.data.post_detail.is_following = !that.data.post_detail.is_following
-        that.data.post_detail.post_follower_num = Number(that.data.post_detail.post_follower_num) + 1
-        that.setData({
-          post_detail: that.data.post_detail,
-        })
-        wx.showToast({
-          title: '开始围观⭐w⭐',
-          icon: 'none',
-          duration: 1000,
-        });
-      } else if (res.code == 201) {
-        that.data.post_detail.is_following = !that.data.post_detail.is_following
-        that.data.post_detail.post_follower_num = Number(that.data.post_detail.post_follower_num) - 1
-        that.setData({
-          post_detail: that.data.post_detail,
-        })
-        wx.showToast({
-          title: '停止了围观',
-          icon: 'none',
-          duration: 1000,
-        });
-      } else {
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
-      }
-    }
-    )
+    newRequest("/post/single/follow", {
+        uni_post_id: that.data.uni_post_id
+      }, that.follow)
+      .then(res => {
+        if (res.code == 200) {
+          that.data.post_detail.is_following = !that.data.post_detail.is_following
+          that.data.post_detail.post_follower_num = Number(that.data.post_detail.post_follower_num) + 1
+          that.setData({
+            post_detail: that.data.post_detail,
+          })
+          wx.showToast({
+            title: '开始围观⭐w⭐',
+            icon: 'none',
+            duration: 1000,
+          });
+        } else if (res.code == 201) {
+          that.data.post_detail.is_following = !that.data.post_detail.is_following
+          that.data.post_detail.post_follower_num = Number(that.data.post_detail.post_follower_num) - 1
+          that.setData({
+            post_detail: that.data.post_detail,
+          })
+          wx.showToast({
+            title: '停止了围观',
+            icon: 'none',
+            duration: 1000,
+          });
+        } else {
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
+          })
+        }
+      })
   },
 
   // /post/single/private
@@ -385,23 +448,28 @@ Page({
       title: '加载中',
     });
     var that = this
-    newRequest("/post/single/private", {uni_post_id: that.data.uni_post_id}, that.setPrivate)
-    .then( res => {
-      if (res.code == 200) {
-        that.data.post_detail.post_public = '2'
-        that.setData({
-          post_detail: that.data.post_detail,
-        })
-        wx.showToast({
-          title: '成功设为私密',
-          icon: 'none',
-          duration: 1000,
-        });
-      } else {
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
-      } 
-    }
-    )
+    newRequest("/post/single/private", {
+        uni_post_id: that.data.uni_post_id
+      }, that.setPrivate)
+      .then(res => {
+        if (res.code == 200) {
+          that.data.post_detail.post_public = '2'
+          that.setData({
+            post_detail: that.data.post_detail,
+          })
+          wx.showToast({
+            title: '成功设为私密',
+            icon: 'none',
+            duration: 1000,
+          });
+        } else {
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
+          })
+        }
+      })
   },
 
   // /post/single/public
@@ -411,22 +479,28 @@ Page({
       title: '加载中',
     });
     var that = this
-    newRequest("/post/single/public", {uni_post_id: that.data.uni_post_id}, that.setPublic)
-    .then( res=>{
-      if (res.code == 200) {
-        that.data.post_detail.post_public = '1'
-        that.setData({
-          post_detail: that.data.post_detail,
-        })
-        wx.showToast({
-          title: '成功设为公开',
-          icon: 'none',
-          duration: 1000,
-        });
-      } else {
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
-      }
-    })
+    newRequest("/post/single/public", {
+        uni_post_id: that.data.uni_post_id
+      }, that.setPublic)
+      .then(res => {
+        if (res.code == 200) {
+          that.data.post_detail.post_public = '1'
+          that.setData({
+            post_detail: that.data.post_detail,
+          })
+          wx.showToast({
+            title: '成功设为公开',
+            icon: 'none',
+            duration: 1000,
+          });
+        } else {
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
+          })
+        }
+      })
 
   },
 
@@ -437,21 +511,27 @@ Page({
       title: '加载中',
     });
     var that = this
-    newRequest("/post/single/delete", {uni_post_id: that.data.uni_post_id}, that.delete)
-    .then(res => {
-      if (res.code == 200) {
-        wx.showToast({
-          title: '删除成功',
-          icon: 'none',
-          duration: 1000,
-        });
-        setTimeout(() => {
-          that.getPostDetail()
-        }, 1000)
-      } else {
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
-      }
-    })
+    newRequest("/post/single/delete", {
+        uni_post_id: that.data.uni_post_id
+      }, that.delete)
+      .then(res => {
+        if (res.code == 200) {
+          wx.showToast({
+            title: '删除成功',
+            icon: 'none',
+            duration: 1000,
+          });
+          setTimeout(() => {
+            that.getPostDetail()
+          }, 1000)
+        } else {
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
+          })
+        }
+      })
   },
 
   // /comment/delete
@@ -462,7 +542,7 @@ Page({
     });
     newRequest("/comment/delete", {
       comment_id: e.detail,
-    },that.delete).then( res => {
+    }, that.delete).then(res => {
       if (res.code == 200) {
         wx.showToast({
           title: '删除成功',
@@ -473,7 +553,11 @@ Page({
           that.getPostDetail()
         }, 1000)
       } else {
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
+        wx.showToast({
+          title: res.msg ? res.msg : "错误",
+          icon: "none",
+          duration: 1000
+        })
       }
     })
 
@@ -486,16 +570,22 @@ Page({
       title: '加载中',
     });
     var that = this
-    newRequest("/post/media/vote/vote", {option_id: e.currentTarget.dataset.optionid}, that.vote)
-    .then( res => {
-      if (res.code == 200) {
-        that.getPostDetail()
-      } else if (res.code == 201) {
-        that.getPostDetail()
-      } else {
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
-      }
-    })
+    newRequest("/post/media/vote/vote", {
+        option_id: e.currentTarget.dataset.optionid
+      }, that.vote)
+      .then(res => {
+        if (res.code == 200) {
+          that.getPostDetail()
+        } else if (res.code == 201) {
+          that.getPostDetail()
+        } else {
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
+          })
+        }
+      })
   },
 
 
@@ -506,19 +596,19 @@ Page({
     });
   },
   goToComment: function () {
-    if(this.data.post_detail.is_author){
+    if (this.data.post_detail.is_author) {
       this.setData({
-        comment_msg:'',
-        comment_box_placeholder:'想在自己的树洞下补充些什么？',
-        comment_id:'',
-        comment_with_serial:true,
+        comment_msg: '',
+        comment_box_placeholder: '想在自己的树洞下补充些什么？',
+        comment_id: '',
+        comment_with_serial: true,
       })
-    }else{
+    } else {
       this.setData({
-        comment_msg:'',
-        comment_box_placeholder:'想对洞主说些什么',
-        comment_id:'',
-        comment_with_serial:false,
+        comment_msg: '',
+        comment_box_placeholder: '想对洞主说些什么',
+        comment_id: '',
+        comment_with_serial: false,
       })
     }
     this.showCommentReportBox()
@@ -593,7 +683,7 @@ Page({
     })
   },
 
-  onTapFile:  function () {
+  onTapFile: function () {
     wx.showLoading()
     wx.downloadFile({
       // 示例 url，并非真实存在
@@ -607,7 +697,7 @@ Page({
           success: function () {
             console.log('打开文档成功')
           },
-          fail: function(){
+          fail: function () {
             console.log('打开文档失败')
             wx.showToast({
               title: '无法打开文件',
@@ -616,7 +706,7 @@ Page({
           }
         })
       },
-      fail: function(res){
+      fail: function (res) {
         console.log('打开文档失败')
         console.log(res)
         wx.showToast({
@@ -627,7 +717,7 @@ Page({
     })
   },
 
-  onTapAd:function(){
+  onTapAd: function () {
     var ad_info = this.data.ad_info
     switch (ad_info.ad_type) {
       case 'article':
@@ -636,14 +726,16 @@ Page({
         });
         break;
       case 'post':
-          wx.navigateTo({
-            url: '/pages/detail/detail?post_id=' + ad_info.post_id,
-          });
-          break;
-      case 'inner':
-        wx.navigateTo({ url: ad_info.inner_path });
+        wx.navigateTo({
+          url: '/pages/detail/detail?post_id=' + ad_info.post_id,
+        });
         break;
-      case 'miniapp': 
+      case 'inner':
+        wx.navigateTo({
+          url: ad_info.inner_path
+        });
+        break;
+      case 'miniapp':
         wx.navigateToMiniProgram({
           appId: ad_info.miniapp_appid,
           path: ad_info.miniapp_path,
@@ -655,58 +747,100 @@ Page({
     }
   },
 
-  showCommentReportBox:function(){
+  nav2post: function (post_id) {
+    newRequest("/post/single/id", {
+        post_id: Number(post_id),
+        post_school_label: this.data.post_detail.user_school_label
+      }, this.nav2post)
+      .then((res) => {
+        if (!res) return
+        wx.navigateTo({
+          url: '/pages/detail/detail?uni_post_id=' + res.uni_post_id
+        })
+      })
+  },
+
+  tapLink: function (e) {
+    let url = e.detail.href
+    console.log(url)
+    if (url.slice(0, 4) == "http") {
+      const tripleUniLink = url.match(/(https:\/\/tripleuni\.com\/post\/[1-9]{5,6})/g)
+      if (tripleUniLink) {
+        let uni_post_id = tripleUniLink[0].replace('https://tripleuni.com/post/', '')
+        console.log(uni_post_id)
+        wx.navigateTo({
+          url: '/pages/detail/detail?uni_post_id=' + uni_post_id
+        })
+        return
+      } else {
+        wx.setClipboardData({
+          data: url,
+          complete() {
+            return
+          }
+        })
+      }
+    } else {
+      if (url[0] == '#') {
+        this.nav2post(url.slice(1))
+      } else {
+        this.nav2post(url)
+      }
+    }
+  },
+
+  showCommentReportBox: function () {
     var that = this;
-    var animation  = wx.createAnimation({
-        duration:500,
-        timingFunction:'ease-out'
-      })
-    var overlay_animation  = wx.createAnimation({
-        duration:500,
-        timingFunction:'ease-out'
-      })
+    var animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease-out'
+    })
+    var overlay_animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease-out'
+    })
     that.animation = animation
     that.overlay_animation = overlay_animation
     animation.translateY(400).step()
-    if(that.data.report_type!=""){
+    if (that.data.report_type != "") {
       that.setData({
         comment_report_box_animation: animation.export(),
         overlay_animation: overlay_animation.export(),
         show_report_box: true
       })
-    }else{
+    } else {
       that.setData({
         comment_report_box_animation: animation.export(),
         overlay_animation: overlay_animation.export(),
         show_comment_box: true
       })
     }
-  
-    setTimeout(function(){
+
+    setTimeout(function () {
       animation.translateY(0).step()
       overlay_animation.opacity(1).step()
       that.setData({
         comment_report_box_animation: animation.export(),
         overlay_animation: overlay_animation.export(),
       })
-    },1)
+    }, 1)
 
-    setTimeout(function(){
+    setTimeout(function () {
       that.setData({
-        focus:true
+        focus: true
       })
-    },800)
+    }, 800)
   },
-  hideCommentReportBox:function(){
+  hideCommentReportBox: function () {
     var that = this;
-    var animation  = wx.createAnimation({
-        duration:500,
-        timingFunction:'ease-in'
-      })
-    var overlay_animation  = wx.createAnimation({
-        duration:500,
-        timingFunction:'ease-in'
-      })
+    var animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease-in'
+    })
+    var overlay_animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease-in'
+    })
     that.animation = animation
     that.overlay_animation = overlay_animation
     animation.translateY(400).step()
@@ -715,25 +849,25 @@ Page({
       comment_report_box_animation: animation.export(),
       overlay_animation: overlay_animation.export(),
     })
-    setTimeout(function(){
+    setTimeout(function () {
       animation.translateY(0).step()
       that.setData({
-        show_report_box:false,
-        show_comment_box:false,
+        show_report_box: false,
+        show_comment_box: false,
         report_type: "",
-        focus:false,
-        comment_msg:'',
-        comment_image:'',
-        comment_box_placeholder:'想对洞主说些什么',
-        comment_id:'',
-        comment_with_serial:false
+        focus: false,
+        comment_msg: '',
+        comment_image: '',
+        comment_box_placeholder: '想对洞主说些什么',
+        comment_id: '',
+        comment_with_serial: false
       })
-    },500)
+    }, 500)
   },
   bindCommentMsgInput: function (e) {
     var regex = /\/\/HKUPootal:picture/
 
-    if(regex.test(e.detail.value)){
+    if (regex.test(e.detail.value)) {
       this.uploadImage()
       e.detail.value = e.detail.value.replace(regex, '')
     }
@@ -743,73 +877,83 @@ Page({
   },
   // 选择是否带编号
   switchSerialChange: function (e) {
-    this.setData({ comment_with_serial: e.detail.value });
+    this.setData({
+      comment_with_serial: e.detail.value
+    });
   },
 
   // /comment/post
   submitComment: function () {
     var that = this
-    if(that.data.comment_is_sending){
+    if (that.data.comment_is_sending) {
       return
     }
     wx.showLoading({
       title: '发送中',
     })
     that.setData({
-      comment_is_sending:true
+      comment_is_sending: true
     })
     newRequest("/comment/post", {
-      comment_msg:that.data.comment_msg,
-      uni_post_id:that.data.post_detail.uni_post_id,
-      user_is_real_name:that.data.comment_with_serial,
-      comment_image:that.data.comment_image,
+      comment_msg: that.data.comment_msg,
+      uni_post_id: that.data.post_detail.uni_post_id,
+      user_is_real_name: that.data.comment_with_serial,
+      comment_image: that.data.comment_image,
       comment_father_id: that.data.comment_id
-    }, that.submitComment).then( res=>{
+    }, that.submitComment).then(res => {
       that.setData({
-        comment_is_sending:false
+        comment_is_sending: false
       })
-      if(res.code == 200){
-        
+      if (res.code == 200) {
+
         that.hideCommentReportBox()
         that.getPostDetail()
-        wx.showToast({title: "发布成功", icon: "none", duration: 1000})
-        
-      }else{
-        wx.showToast({title: res.msg? res.msg : "错误", icon: "none", duration: 1000})
+        wx.showToast({
+          title: "发布成功",
+          icon: "none",
+          duration: 1000
+        })
+
+      } else {
+        wx.showToast({
+          title: res.msg ? res.msg : "错误",
+          icon: "none",
+          duration: 1000
+        })
       }
     })
 
 
   },
-  uploadImage:function(){
-    var that =this
+  uploadImage: function () {
+    var that = this
     var Bucket = 'boatonland-1307992092';
     var Region = 'ap-beijing';
     var cos = new COS({
       ForcePathStyle: true, // 如果使用了很多存储桶，可以通过打开后缀式，减少配置白名单域名数量，请求时会用地域域名
       getAuthorization: function (options, callback) {
-          // 异步获取临时密钥
-          wx.request({
-              url: 'https://image.boatonland.com/index.php',
-              data: {
-                  bucket: options.Bucket,
-                  region: options.Region,
-              },
-              dataType: 'json',
-              success: function (result) {
-                  var data = result.data;
-                  var credentials = data && data.credentials;
-                  if (!data || !credentials) return console.error('credentials invalid');
-                  callback({
-                      TmpSecretId: credentials.tmpSecretId,
-                      TmpSecretKey: credentials.tmpSecretKey,
-                      XCosSecurityToken: credentials.sessionToken,
-                      // 建议返回服务器时间作为签名的开始时间，避免用户浏览器本地时间偏差过大导致签名错误
-                      StartTime: data.startTime, // 时间戳，单位秒，如：1580000000
-                      ExpiredTime: data.expiredTime, // 时间戳，单位秒，如：1580000900
-                  });
-              }
-          });
+        // 异步获取临时密钥
+        wx.request({
+          url: 'https://image.boatonland.com/index.php',
+          data: {
+            bucket: options.Bucket,
+            region: options.Region,
+          },
+          dataType: 'json',
+          success: function (result) {
+            var data = result.data;
+            var credentials = data && data.credentials;
+            if (!data || !credentials) return console.error('credentials invalid');
+            callback({
+              TmpSecretId: credentials.tmpSecretId,
+              TmpSecretKey: credentials.tmpSecretKey,
+              XCosSecurityToken: credentials.sessionToken,
+              // 建议返回服务器时间作为签名的开始时间，避免用户浏览器本地时间偏差过大导致签名错误
+              StartTime: data.startTime, // 时间戳，单位秒，如：1580000000
+              ExpiredTime: data.expiredTime, // 时间戳，单位秒，如：1580000900
+            });
+          }
+        });
       }
     });
     // 接下来可以通过 cos 实例调用 COS 请求。
@@ -856,7 +1000,7 @@ Page({
     // });
 
   },
-  randomString:function(e) {
+  randomString: function (e) {
     e = e || 32;
     var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
       a = t.length,
@@ -864,7 +1008,7 @@ Page({
     for (var i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
     return n;
   },
-  getExt:function(filename){
+  getExt: function (filename) {
     var idx = filename.lastIndexOf('.');
     return (idx < 1) ? "" : "." + filename.substr(idx + 1);
   },
@@ -907,13 +1051,12 @@ Page({
     wx.showLoading({
       title: '加载中',
     })
-    this.getAd()
     console.log(options)
     if (options.post_serial) {
       this.setData({
         post_serial: options.post_serial
       })
-    } else if (options.post_id){
+    } else if (options.post_id) {
       this.setData({
         post_serial: options.post_id
       })
@@ -950,6 +1093,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    this.getAd()
     this.getPostDetail();
   },
 

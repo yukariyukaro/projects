@@ -112,7 +112,7 @@ Component({
     courseJoinGroup: function() {
       wx.navigateToMiniProgram({
         appId:'wxa5de39979ae7affa',
-        path:'/pages/newindex/newindex?group_code=' + this.properties.data.course_code,
+        path: "/pages/group/group?group_id=" + this.properties.data.group_id,
       })
     },
 

@@ -179,10 +179,10 @@ Page({
   },
 
   tapUploadImage:function(){
-    this.setData({
-      showPrivacy: true
-    })
-    // this.uploadImage()
+    // this.setData({
+    //   showPrivacy: true
+    // })
+    this.uploadImage()
   },
 
   uploadImage:function(){
@@ -532,6 +532,12 @@ Page({
       n = "";
     for (var i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
     return n;
+  },
+
+  privacyOverlayTap:function(e){
+    this.setData({
+      showPrivacy: false
+    })
   },
 
   /**

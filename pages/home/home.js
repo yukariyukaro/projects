@@ -505,11 +505,15 @@ Page({
         }
       } 
     }
-    // this.getPost()
-    this.getAd()
-    this.getAll()
-    this.getBanner()
-    this.getTopic()
+
+    app.launch().then(() => {
+      // this.getPost()
+      this.getAd()
+      this.getAll()
+      this.getBanner()
+      this.getTopic()
+    })
+
   },
 
   /**

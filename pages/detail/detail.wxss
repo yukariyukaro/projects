@@ -80,6 +80,12 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
+.post-content-center{
+  text-align:left;
+  padding: 0.5vw 2vw 3.5vw 2vw;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 .post-text {
   width:100%;
   word-break: break-word;
@@ -565,3 +571,93 @@
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
   /* background-color: var(--bg-2); */
 }
+
+
+
+.wxparser--wxParser-ol .wxparser--wxParser-ol, 
+.wxparser--wxParser-ol .wxparser--wxParser-ul, 
+.wxparser--wxParser-ul .wxparser--wxParser-ol, 
+.wxparser--wxParser-ul .wxparser--wxParser-ul {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.wxparser--wxParser-p, .wxparser--wxParser-blockquote, .wxparser--wxParser-table{
+  margin-bottom: 25rpx !important;
+}
+
+
+.wxparser--wxParser-ul , .wxparser--wxParser-ol{
+  margin: 0 0 25rpx 20rpx !important;
+}
+
+
+.wxparser--wxParser-li-circle{
+  transform: translate(0, -6rpx);
+}
+
+.wxparser--wxParser-li , .wxparser--wxParser-ol-li{ 
+  margin: 5rpx 0 !important;
+  padding: 5rpx 0 !important;
+}
+
+.msg text{
+  user-select: texts !important;
+  line-height: 1.5;
+  display: inline !important;
+  /* height: fit-content; */
+   word-break: break-word;
+}
+
+.msg image{
+  margin: 10rpx 0 ;
+}
+
+.wxparser--wxParser-blockquote{
+  background-color: var(--bg-2) !important;
+  color: var(--on-bg-2) !important;
+  border-left: 3px solid var(--bg-gray-2) !important;
+  margin: 25rpx 0 !important;
+}
+
+.wxparser--wxParser-blockquote .wxparser--wxParser-p{
+  margin: 15rpx 0 !important;
+}
+
+.wxparser--wxParser-pre{
+  background-color: var(--bg-gray-3) !important;border-radius: 15 rpx !important;margin-bottom: 25rpx !important;
+  padding: 20rpx 28rpx !important;
+}
+
+.wxparser--wxParser-pre .wxparser--wxParser-code{
+  background-color: transparent !important;
+  font-family: monospace !important;
+  font-size: 28rpx !important;
+  overflow: visible;
+}
+
+.wxparser--wxParser-code{
+  background-color: var(--bg-gray-3) !important;
+
+  border-radius: 15rpx !important;
+}
+
+
+.wxparser--wxParser-th{
+  background-color: var(--bg-gray-3) !important;
+}
+
+.wxparser--wxParser-th, .wxparser--wxParser-td{
+  padding: 15rpx !important;
+}
+
+.wxparser--wxParser-br{
+  height: 0 !important;
+}
+
+.wxparser--wxParser-inline {
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
