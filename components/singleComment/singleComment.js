@@ -1,4 +1,7 @@
 var app = getApp();
+import {
+    getLinks
+  } from "../../utils/getlinks"
 Component({
   properties: {
     exist: Boolean,
@@ -13,25 +16,30 @@ Component({
     comment_alias: String,
     user_avatar: String,
     uni_post_id: String,
-    user_serial: String,
+    user_serial: (String || null),
     comment_school_label: String,
     post_is_author: Boolean,
-    comment_father_msg: String,
-    comment_image: String,
-    comment_theme_color: String
+    comment_father_msg: (String || null),
+    comment_image: (String || null),
+    comment_theme_color: String 
   },
 
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
     borderStyle:"",
-    comment_date: ""
+    comment_date: "",
+    parsed_msg: ""
   },
   
   lifetimes: {
     attached: function() {
       var app = getApp()
       var systemInfo = wx.getSystemInfoSync()
-      this.setData({comment_date: this.format_time(this.properties.comment_create_time)})
+      console.log(this.properties.comment_school_label)
+      this.setData({
+          comment_date: this.format_time(this.properties.comment_create_time),
+          parsed_msg:  getLinks(this.properties.comment_msg, this.properties.comment_school_label)
+        })
       if(app.globalData.themeInfo.primaryColorLight){
         if(systemInfo.theme == 'dark'){
           this.setData({

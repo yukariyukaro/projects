@@ -41,9 +41,10 @@
   <view class="content-outer" wx-if="{{data_received}}">
     <!-- 内容 -->
     <view class="post-outer">
-      <view class="post-content">
+      <view class="{{is_markdown? 'post-content-center':'post-content'}}">
         <view class="post-text">
-          <text user-select='true'>{{post_detail.post_msg}}</text>
+        <!-- <text user-select='true'>{{post_detail.post_msg}}</text> -->
+            <mp-html selectable container-style="white-space: {{is_markdown? 'normal':'pre-wrap'}};" content="{{post_msg}}" tag-style="{{tag_style}}" markdown="{{is_markdown}}"/>
         </view>
         <!-- 图片 -->
         <view wx:if="{{post_detail.post_image}}" style="margin-top: 5vw; margin-right:20rpx;text-align:center" wx:for="{{post_detail.post_image}}" wx:key="index">
@@ -201,7 +202,7 @@
         </view>
       </view>
       <!-- 广告 -->
-      <view wx:if="{{ad_info.ad_image}}">
+      <view wx:if="{{ad_info}}">
         <image fade-in src="{{ad_info.ad_image}}" class="detail-ad" bindtap="onTapAd"></image>
       </view>
       <!-- 显示所有评论 -->

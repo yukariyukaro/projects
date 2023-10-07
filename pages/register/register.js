@@ -77,14 +77,14 @@ Page({
               app.showModal({
                 title: '请使用Web版「Triple Uni」登录',
                 showCancel: false,
-                content:'感谢您的反馈与支持。出于对后续开发及运营方面的综合考量，我们正计划从小程序版向web版逐渐过渡，因此目前对'+ that.data.app_name +'新注册用户暂不开放小程序版本，您可以通过 https://tripleuni.com/ 访问' + that.data.app_name+ '。\n网址复制至剪切板',
+                content:'出于对后续开发及运营方面的综合考量，我们正计划从小程序版向web版逐渐过渡，因此目前对'+ that.data.app_name +'新注册用户暂不开放小程序版本，您可以通过 https://tripleuni.com/ 访问' + that.data.app_name+ '。\n网址复制至剪切板',
               });
             }, 
             fail: function () {
               app.showModal({
                 title: '请使用Web版「Triple Uni」登录',
                 showCancel: false,
-                content:'感谢您的反馈与支持。出于对后续开发及运营方面的综合考量，我们正计划从小程序版向web版逐渐过渡，因此目前对'+ that.data.app_name +'新注册用户暂不开放小程序版本，您可以通过 https://tripleuni.com/ 访问'+ that.data.app_name + '。',
+                content:'出于对后续开发及运营方面的综合考量，我们正计划从小程序版向web版逐渐过渡，因此目前对'+ that.data.app_name +'新注册用户暂不开放小程序版本，您可以通过 https://tripleuni.com/ 访问'+ that.data.app_name + '。',
               });
             }
           })

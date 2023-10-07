@@ -68,7 +68,7 @@ let getImageCache = ( key,url ) =>{
                       // console.log ( '图片下载成功')
                       wx.compressImage({
                         src: res.tempFilePath,
-                        compressedHeight: 500,
+                        compressedWidth: 500,
                         success: function (res) {
                           fs.saveFile ( {
                             tempFilePath : res.tempFilePath,

@@ -7,12 +7,6 @@ import newRequest from "./utils/request"
 
 App({
   onLaunch(){
-    var that = this
-    that.launch().then( () => {
-      that.watchCaptureScreen()
-      // this.getTheme() 
-      }   
-    )
 
     // wx.setBackgroundFetchToken({
     //   token: 
@@ -245,6 +239,7 @@ App({
             reject()
           }else{
             that.launchWebSoccket()
+            that.watchCaptureScreen()
             that.checkUnread()
             resolve()
           }
@@ -267,6 +262,7 @@ App({
                   wx.setStorageSync('token', res2.token)
                   that.launchWebSoccket()
                   that.checkUnread()  
+                  that.watchCaptureScreen()
                   resolve()
                 }else if(res2.code == 401){
                   //未注册，跳转注册页
@@ -317,7 +313,7 @@ App({
     newRequest("/notice/checkunread", {}, this.checkUnread)
     .then(res => {
       if(res.code == 200){
-        console.log(wx.getStorageSync('systemNoticeCount'))
+        // console.log(wx.getStorageSync('systemNoticeCount'))
         if(wx.getStorageSync('systemNoticeCount')!= res.notice_count){
           var newAllNoticeCount = wx.getStorageSync('allNoticeCount') - wx.getStorageSync('systemNoticeCount') + res.notice_count
           wx.setStorageSync('systemNoticeCount', res.notice_count)
@@ -327,7 +323,7 @@ App({
         if( wx.getStorageSync('allNoticeCount') == 0){
           var {chat} = this.initDatabase()  
           var unread_chat = chat.where({chat_unread_count : _.gt(0) }).get()
-          console.log(unread_chat)
+          // console.log(unread_chat)
           unread_chat.forEach( achat => {
               achat.chat_unread_count = 0
               chat.where({
