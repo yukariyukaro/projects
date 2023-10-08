@@ -568,43 +568,43 @@ Page({
 
 
     // 需要用户同意隐私授权时
-    wx.onNeedPrivacyAuthorization((resolve, eventInfo) => {
-      console.log('触发本次事件的接口是：' + eventInfo.referrer)
-      // 需要用户同意隐私授权时
-      // 弹出开发者自定义的隐私授权弹窗
-      this.setData({
-        showPrivacy: true
-      })
+    // wx.onNeedPrivacyAuthorization((resolve, eventInfo) => {
+    //   console.log('触发本次事件的接口是：' + eventInfo.referrer)
+    //   // 需要用户同意隐私授权时
+    //   // 弹出开发者自定义的隐私授权弹窗
+    //   this.setData({
+    //     showPrivacy: true
+    //   })
      
-      // this.resolvePrivacyAuthorization = resolve
-    })
+    //   // this.resolvePrivacyAuthorization = resolve
+    // })
 
-    wx.requirePrivacyAuthorize({
-      success: () => {
-        console.log("用户同意授权")
-        // this.setData({
-        //   showPrivacy: true
-        // })
-      },
-      fail: () => {console.log("用户拒绝授权")}, // 用户拒绝授权
-      complete: () => {}
-    })
-  },
+//     wx.requirePrivacyAuthorize({
+//       success: () => {
+//         console.log("用户同意授权")
+//         // this.setData({
+//         //   showPrivacy: true
+//         // })
+//       },
+//       fail: () => {console.log("用户拒绝授权")}, // 用户拒绝授权
+//       complete: () => {}
+//     })
+//   },
 
-  onPrivacyAgree(e){
-    console.log(e)
-    console.log("privacy agreeed")
-    this.setData({
-      showPrivacy: false
-    })
-    this.uploadImage()
-  },
+//   onPrivacyAgree(e){
+//     console.log(e)
+//     console.log("privacy agreeed")
+//     this.setData({
+//       showPrivacy: false
+//     })
+//     this.uploadImage()
+//   },
 
-  onPrivacyDisagree(e){
-    console.log("privacy disagreeed")
-    this.setData({
-      showPrivacy: false
-    })
+//   onPrivacyDisagree(e){
+//     console.log("privacy disagreeed")
+//     this.setData({
+//       showPrivacy: false
+//     })
   },
 
   /**
