@@ -1,24 +1,26 @@
-<view id="privacyContainer" class="container" style="position: fixed;  bottom:{{height}}px; visibility: {{innerShow? 'visible': 'hidden'}}; ">
+<view class="overlay">
+    <view id="privacyContainer" class="container" style="position: fixed;  bottom:{{height}}px; visibility: {{innerShow? 'visible': 'hidden'}}; ">
     <view class="title">
           <text class="title_text">{{title}}</text>
     </view>
     <view class="message">
         <view class="message_text">{{desc1}}</view>
-        <view class="message_text" style="color: var(--primary)" bindtap="openPrivacyContract">{{urlTitle}}</view>
+        <navigator class="message_text" style="color: var(--primary);" url="/pages/webview/webview?url=https://hkupootal.com/{{school_label_lower}}/agreement">{{userAgreement}}</navigator>
+        和
+        <navigator class="message_text" style="color: var(--primary);" url="/pages/webview/webview?url=https://hkupootal.com/{{school_label_lower}}/privacy">{{privacyAgreement}}</navigator>
         <view class="message_text">{{desc2}}</view>
     </view>
     <view class="buttons-outer">
       <view class="buttons">
         <button id="disagree-btn"
-
           class="abutton disagree"
           bindtap="handleDisagree"
-        >不同意并返回</button>
+        >不同意并退出</button>
         <button id="agree-btn"
-          open-type="agreePrivacyAuthorization"
           class="abutton agree"
-          bindagreeprivacyauthorization="handleAgree"
+          bindtap="handleAgree"
         >同意并继续</button>
       </view>
     </view>
   </view>
+</view>

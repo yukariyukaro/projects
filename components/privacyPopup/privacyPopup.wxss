@@ -1,3 +1,13 @@
+.overlay{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+}
+
 .container{
   /* height: 600rpx; */
   background-color: var(--bg-2);
@@ -13,7 +23,7 @@
   flex-direction: column;
   width: 100vw;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.16);
-  z-index: 50;
+  z-index: 10000;
   transition-duration: 500ms;
 }
 
@@ -28,12 +38,13 @@
 }
 .message{
   margin: 60rpx 50rpx;
+  margin-bottom: 80rpx;
 }
 
 .message_text{
   font-size: 29rpx;
   margin-bottom: 20rpx;
- 
+    display: inline;
 }
 
 .buttons-outer{

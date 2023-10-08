@@ -1,11 +1,16 @@
- Component({
+import info from "../../utils/info"
+import newRequest from "../../utils/request"
+
+Component({
     data: {
-        title: "用户隐私保护提示",
-        desc1: "根据微信小程序政策，在您上传照片前应阅读并同意",
-        urlTitle: "《用户隐私保护指引》",
-        desc2: "当您点击同意并上传照片，即表示您已理解并同息该条款内容，该条款将对您产生法律约束力。如您拒绝，将无法上传照片。",
+        title: "用户服务条款和隐私协议更新",
+        desc1: "你需要同意我们最新版本的",
+        userAgreement: "《用户服务协议》",
+        privacyAgreement: "《隐私条款》",
+        desc2: "才可继续使用我们的服务。",
         innerShow: false,
         height: -500,
+        school_label_lower: info.school_label.toLowerCase(),
     },
     lifetimes: {
       attached: function() {
@@ -31,14 +36,27 @@
     },
     methods: {
         handleDisagree(e) {
-            this.disPopUp()
-            setTimeout(() => {
-              this.triggerEvent("disagree")
-            }, 450);
+            this.triggerEvent("disagree")
+            // setTimeout(() => {
+            //   this.triggerEvent("disagree")
+            // }, 450);
         },
-        handleAgree(e) {
-            this.triggerEvent("agree")
-            this.disPopUp()
+        handleAgree(e) {  
+            newRequest('/user/terms/agree', {}, this.handleAgree)
+            .then((res) => {
+                if (res.code == 200){
+                    this.disPopUp()
+                    setTimeout(() => {
+                        this.triggerEvent("agree")
+                    }, 450);
+                } else {
+                    wx.showToast({
+                      title: '请求失败，请重试',
+                      icon: "none", 
+                      duration: 1000
+                    })
+                }
+            })
         },
         popUp() {
           setTimeout(() => {
