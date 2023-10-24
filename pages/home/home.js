@@ -83,8 +83,7 @@ Page({
         this.setData({
             show_privacy: false
         })
-        this.getAd()
-        this.getAll()
+        app.globalData.show_privacy = false
     },
 
     // 切换导航栏选项卡
@@ -506,7 +505,7 @@ Page({
     },
 
     checkTerms: function () {
-        let that = this
+        let that = this  
         return new Promise(function (resolve, reject) {
             newRequest('/user/terms/check', {}, that.checkTerms)
                 .then((res) => {
@@ -555,6 +554,44 @@ Page({
     //   })
     // },
 
+
+    initializeWhenReady: function (options){
+        console.log('privacy chekced:',app.globalData.privacy_checked)
+        if(app.globalData.token_checked && app.globalData.privacy_checked){
+            this.getAd()
+            this.getAll()
+            this.getBanner()
+            this.getTopic()
+
+            if (options && !app.globalData.show_privacy) {
+                if (options.jump_page) {
+                    if (options.jump_page === 'detail') {
+                        if (options.uni_post_id) {
+                            wx.navigateTo({
+                                url: '/pages/detail/detail?uni_post_id=' + options.uni_post_id,
+                            });
+                        } else if (options.post_id) {
+                            wx.navigateTo({
+                                url: '/pages/detail/detail?post_serial=' + options.post_id,
+                            });
+                        } else if (options.post_serial) {
+                            wx.navigateTo({
+                                url: '/pages/detail/detail?post_serial=' + options.post_serial,
+                            });
+                        }
+                    }
+                }
+            }
+            if (app.globalData.show_privacy){
+                this.setData({
+                    show_privacy: true
+                })
+            }
+        }
+        else{
+            setTimeout(this.initializeWhenReady, 250);
+        }
+    },
     /**
      * 生命周期函数--监听页面加载
      */
@@ -571,42 +608,13 @@ Page({
         //     })
         //   }
         // }
+        that.initializeWhenReady(options)
 
-        if (app.globalData.auth_key) {
-            wx.navigateTo({
-                url: '/pages/auth/auth?auth_key=' + app.globalData.auth_key + '&from_miniapp=' + app.globalData.from_miniapp,
-            })
-        }
-        if (options) {
-            if (options.jump_page) {
-                if (options.jump_page === 'detail') {
-                    if (options.uni_post_id) {
-                        wx.navigateTo({
-                            url: '/pages/detail/detail?uni_post_id=' + options.uni_post_id,
-                        });
-                    } else if (options.post_id) {
-                        wx.navigateTo({
-                            url: '/pages/detail/detail?post_serial=' + options.post_id,
-                        });
-                    } else if (options.post_serial) {
-                        wx.navigateTo({
-                            url: '/pages/detail/detail?post_serial=' + options.post_serial,
-                        });
-                    }
-                }
-            }
-        }
-
-        app.launch().then(() => {
-            // this.getPost()
-            this.checkTerms()
-                .then(() => {
-                    this.getAd()
-                    this.getAll()
-                })
-            this.getBanner()
-            this.getTopic()
-        })
+        // if (app.globalData.auth_key) {
+        //     wx.navigateTo({
+        //         url: '/pages/auth/auth?auth_key=' + app.globalData.auth_key + '&from_miniapp=' + app.globalData.from_miniapp,
+        //     })
+        // }
 
     },
 

@@ -151,6 +151,9 @@ Page({
               }, () => {}, false, true).then( (res2) => {
                 if(res2.code == 200){
                   wx.setStorageSync('token', res2.token)
+                  app.globalData.show_privacy = false
+                  app.globalData.token_checked = true 
+                  app.globalData.privacy_checked = true
                   wx.reLaunch({
                     url: '/pages/home/home',
                   })

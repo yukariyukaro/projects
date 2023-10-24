@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "text-encoding-shim": "^1.0.5"
+  }
+}

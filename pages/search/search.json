@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "one": "/components/one/one",
-    "loadmore": "/components/loadmore/loadmore"
+    "loadmore": "/components/loadmore/loadmore",
+    "mp-html": "/components/mp-html/index"
   },
   "disableScroll":true,
   "navigationStyle": "custom",

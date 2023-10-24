@@ -106,17 +106,17 @@ Component({
             let post_id = post.split('|')[0]
             let post_school_label = post.split('|')[1]
             newRequest("/post/single/id", {
-                post_id: Number(post_id),
-                post_school_label: post_school_label
-              }, this.nav2post)
-              .then((res) => {
-                if (!res) return
-                wx.navigateTo({
-                  url: '/pages/detail/detail?uni_post_id=' + res.uni_post_id
+                    post_id: Number(post_id),
+                    post_school_label: post_school_label
+                }, this.nav2post)
+                .then((res) => {
+                    if (!res) return
+                    wx.navigateTo({
+                        url: '/pages/detail/detail?uni_post_id=' + res.uni_post_id
+                    })
                 })
-              })
-          },
-        
+        },
+
         linkTap: function (t) {
             var r = t.currentTarget ? this.getNode(t.currentTarget.dataset.i) : {},
                 e = r.attrs || t,
@@ -126,20 +126,23 @@ Component({
             console.log(url)
             if (url.slice(0, 4) == "http") {
                 const tripleUniLink = url.match(/(https:\/\/tripleuni\.com\/post\/[1-9]{5,6})/g)
+                const article = url.startsWith("https://mp.weixin.qq.com/s")
                 if (tripleUniLink) {
-                let uni_post_id = tripleUniLink[0].replace('https://tripleuni.com/post/', '')
-                console.log(uni_post_id)
-                wx.navigateTo({
-                    url: '/pages/detail/detail?uni_post_id=' + uni_post_id
-                })
-                return
-                } else {
-                wx.setClipboardData({
-                    data: url,
-                    complete() {
+                    let uni_post_id = tripleUniLink[0].replace('https://tripleuni.com/post/', '')
+                    console.log(uni_post_id)
+                    wx.navigateTo({
+                        url: '/pages/detail/detail?uni_post_id=' + uni_post_id
+                    })
                     return
-                    }
-                })
+                } else if (article) {
+                    wx.navigateTo({url: '/pages/webview/webview?url=' + url})
+                }else {
+                    wx.setClipboardData({
+                        data: url,
+                        complete() {
+                            return
+                        }
+                    })
                 }
             } else {
                 if (url[0] == '#') {

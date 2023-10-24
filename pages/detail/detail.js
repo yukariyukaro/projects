@@ -49,26 +49,6 @@ Page({
     show_report_box: false,
     my_school_label: info.school_label,
     is_markdown: false,
-    tag_style: {
-        a: 'text-decoration: underline; color: #0969da !important;',
-        h1: 'border-bottom: 1px solid var(--bg-gray-2) !important; padding: 20rpx! 0 10rpx 0 important; margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
-        h2: 'border-bottom: 1px solid var(--bg-gray-2) !important; padding: 10rpx 0 10rpx 0 !important; margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
-        h3: 'margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
-        h4: 'margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
-        h5: 'margin-bottom: 30rpx !important; margin-top: 10rpx !important;',
-        h6: 'margin-bottom: 30rpx !important; color: var(--on-bg-gray-1) margin-top: 10rpx !important;',
-        hr: 'border-bottom: 1px solid var(--bg-gray-2) !important; border-top: none;margin: 40rpx 0 !important; box-sizing: content-box; border-left: none; border-right:none;',
-        p: 'margin-bottom: 25rpx !important;',
-        p: 'margin-bottom: 25rpx !important;',
-        p: 'margin-bottom: 25rpx !important;',
-        table: 'margin-bottom: 25rpx !important;',
-        td: 'word-break: normal!important; word-wrap: normal!important;background-color: var(--bg-2) !important',
-        th: 'background-color: var(--bg-gray-3) !important',
-        pre: 'background-color: var(--bg-gray-3) !important;border-radius: 10 rpx !important;margin-bottom: 25rpx !important;font-size: 25rpx !important; color: var(--text) !important;',
-        code: 'background-color: var(--bg-gray-3) !important; color: var(--text) !important;',
-        ol: 'margin-bottom: 25rpx',
-        ul: 'margin-bottom: 25rpx',
-    }
 
   },
   // 下拉刷新
