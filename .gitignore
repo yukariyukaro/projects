@@ -12,7 +12,7 @@ theme.json
 
 /images
 /pages/about/about.wxml
-/pages/followService
+/pages/followService/followService.wxml
 /pages/register/register.wxml
 /pages/search/search.wxml
 /utils/info.js
