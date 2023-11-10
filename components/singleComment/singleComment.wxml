@@ -24,7 +24,7 @@
         <view class="card-comment-content-q"><text user-select='true'>{{comment_father_msg}}</text></view>
       </view>
       <!-- <view class="card-comment-content"><text user-select='true'>{{comment_msg}}</text></view> -->
-      <mp-html container-style="padding: 0vw 2vw 2vw 2vw;" content="{{parsed_msg}}" selectable style="white-space: pre-wrap"/>
+      <mp-html content="{{parsed_msg}}" selectable container-style="white-space: pre-wrap; padding: 0vw 2vw 2vw 2vw;"/>
     
       <image  bindtap="reportComment" class="icon-report" src="/images/sf-report.svg"></image>
 
