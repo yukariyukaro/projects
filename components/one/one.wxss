@@ -732,3 +732,20 @@
   bottom: 17rpx;
   right: 10rpx;
 }
+
+.sharing-tag{
+  display: flex;
+  font-size: 26rpx;
+  background-color: var(--bg-gray-1); 
+  color: var(--on-bg-gray-1); 
+  border-radius: 20rpx; 
+  padding: 8rpx 20rpx 8rpx 18rpx; 
+  margin: 0 15rpx 13rpx 0;
+}
+
+.sharing-tag-icons {
+  transform: translate(0, 1rpx);
+  width: 30rpx;
+  height: 30rpx;
+  margin-right: 7rpx;
+}

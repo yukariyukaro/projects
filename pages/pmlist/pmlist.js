@@ -58,7 +58,7 @@ Page({
   longpress:function(e){
     var that = this
     wx.showActionSheet({
-      itemList: ['删除'],
+      itemList: ['删除并屏蔽用户'],
       success (res) {
         if(res.tapIndex == 0){
           app.deleteChat(e.currentTarget.dataset.chatid, e.currentTarget.dataset.unreadcount)

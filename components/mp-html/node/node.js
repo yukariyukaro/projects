@@ -125,7 +125,7 @@ Component({
             let url = i
             console.log(url)
             if (url.slice(0, 4) == "http") {
-                const tripleUniLink = url.match(/(https:\/\/tripleuni\.com\/post\/[1-9]{5,6})/g)
+                const tripleUniLink = url.match(/https:\/\/tripleuni\.com\/post\/(\d+)/g)
                 const article = url.startsWith("https://mp.weixin.qq.com/s")
                 if (tripleUniLink) {
                     let uni_post_id = tripleUniLink[0].replace('https://tripleuni.com/post/', '')
@@ -135,7 +135,13 @@ Component({
                     })
                     return
                 } else if (article) {
-                    wx.navigateTo({url: '/pages/webview/webview?url=' + url})
+                    // wx.navigateTo({url: '/pages/webview/webview?url=' + url})
+                    wx.setClipboardData({
+                      data: url,
+                      complete() {
+                          return
+                      }
+                    })
                 }else {
                     wx.setClipboardData({
                         data: url,

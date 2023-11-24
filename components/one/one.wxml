@@ -122,6 +122,33 @@
   </view>
 </view>
 
+<view bindtap="nav2Post" class="post-outer" wx:if="{{(type == 'post' && data.post_media.media_type == 'sharing') || type == 'sharing'}}">
+  <image src="{{data.post_media.sharing_image}}" style="width: 100%;height:294rpx;overflow: hidden;border-radius: 20rpx 20rpx 0 0;" mode="aspectFill"></image>
+  <view style="font-size: 32rpx;font-weight: normal;margin:10rpx 30rpx 0 30rpx;padding-bottom: 10rpx;">
+    <view class="post-header-title">
+      <image class="post-avatar" src="{{preURL+data.user_avatar+'.svg'}}" catchtap="nav2OrgFromArticle" />
+      <text class="article-author" catchtap="nav2OrgFromArticle">{{data.user_alias}}</text>
+    </view>
+    <view style="margin-top: 10rpx; margin-bottom: 10rpx; font-weight: bold;">{{data.post_media.sharing_title}}</view>
+    <text style="color: var(--on-bg-gray-1); font-size: 28rpx !important;">{{data.post_media.sharing_abstract}}</text>
+  </view>
+  <view style="display: flex; flex-wrap: wrap; margin:15rpx 30rpx 0 30rpx;padding-bottom: 20rpx;"> 
+    <view class="sharing-tag">
+      <image class="sharing-tag-icons" src="/images/sharing-author.svg"></image>
+      <text>{{data.post_media.sharing_author}}</text>
+    </view>
+    <view class="sharing-tag" wx:for="{{data.post_media.sharing_tag_list}}" wx:key="index">
+      <image class="sharing-tag-icons" src="/images/sharing-tag.svg"></image>
+      <text>{{item}}</text>
+    </view>
+    <view class="sharing-tag">
+      <image class="sharing-tag-icons" src="/images/sharing-time.svg" style="transform: translate(0, 3rpx);"></image>
+      <text>{{data.post_media.sharing_create_time_display}}</text>
+    </view>
+  </view>
+
+</view>
+
 
 <view class="org-outer" wx:if="{{type == 'org'}}">
   <!-- 头像名称 -->
