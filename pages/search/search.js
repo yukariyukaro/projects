@@ -519,7 +519,8 @@ Page({
       ai_answer_html: ''
     })
 
-    const url = 'https://api.chat.hkupootal.com/search.php?id=' + that.data.aisearch_detail.ai_search_id + '&token=' + wx.getStorageSync('token')
+    // const url = 'https://api.chat.hkupootal.com/search.php?id=' + that.data.aisearch_detail.ai_search_id + '&token=' + wx.getStorageSync('token')
+    const url = 'https://chat.tripleuni.com/search.php?id=' + that.data.aisearch_detail.ai_search_id + '&token=' + wx.getStorageSync('token')
 
     const requestTask = wx.request({
       url: url,

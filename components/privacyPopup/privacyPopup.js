@@ -11,6 +11,7 @@ Component({
         innerShow: false,
         height: -500,
         school_label_lower: info.school_label.toLowerCase(),
+        terms_url: info.terms_url
     },
     lifetimes: {
       attached: function() {

@@ -19,7 +19,7 @@ Page({
 
   nav2Mp: function () {
     wx.navigateTo({
-      url: '/pages/webview/webview?url=https://hkupootal.com/'+this.data.school_label_lower+'/agreement',
+      url: '/pages/webview/webview?url='+info.terms_url+'/'+this.data.school_label_lower+'/agreement',
     })
   },
 

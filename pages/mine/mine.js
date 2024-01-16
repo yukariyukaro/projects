@@ -12,7 +12,8 @@ Page({
     user_background_scale:1,
     user_info:[],
     mine_background_image:app.globalData.theme.mineBackgroundImage,
-    school_label: info.school_label.toLowerCase()
+    school_label: info.school_label.toLowerCase(),
+    terms_url: info.terms_url
   },
   
   // /user/profile/get

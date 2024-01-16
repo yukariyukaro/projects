@@ -914,7 +914,7 @@ Page({
       getAuthorization: function (options, callback) {
         // 异步获取临时密钥
         wx.request({
-          url: 'https://image.boatonland.com/index.php',
+          url: 'https://upload.tripleuni.com/index.php',
           data: {
             bucket: options.Bucket,
             region: options.Region,

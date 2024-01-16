@@ -24,7 +24,8 @@ Page({
     mode: 'email',
     user_portal_password: '',
     theme: wx.getSystemInfoSync().theme,
-    contact_email: info.contact_email
+    contact_email: info.contact_email,
+    terms_url: info.terms_url
   },
 
   // /user/register/wechat/email

@@ -134,12 +134,16 @@ Component({
                         url: '/pages/detail/detail?uni_post_id=' + uni_post_id
                     })
                     return
-                } else if (article) {
+                } 
+                else if (article) {
                     // wx.navigateTo({url: '/pages/webview/webview?url=' + url})
                     wx.setClipboardData({
                       data: url,
                       complete() {
-                          return
+                          returns
+                      },
+                      fail(e){
+                        console.log(e)
                       }
                     })
                 }else {
@@ -147,7 +151,11 @@ Component({
                         data: url,
                         complete() {
                             return
+                        },
+                        fail(e){
+                          console.log(e)
                         }
+
                     })
                 }
             } else {
