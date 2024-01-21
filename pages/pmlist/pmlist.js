@@ -9,7 +9,9 @@ Page({
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
     chat_list: [],
-    systemNoticeCount:0
+    systemNoticeCount:0,
+    theme: app.globalData.theme,
+    statusbar_height: wx.getSystemInfoSync().statusBarHeight
   },
 
   setPageData:function(){
@@ -98,6 +100,11 @@ Page({
         url: '/pages/notice/notice',
       })
     }
+    wx.onThemeChange((result) => {
+      this.setData({
+        theme: app.globalData.theme
+      })
+    })
   },
 
   /**
@@ -117,7 +124,8 @@ Page({
     app.globalData.tabbarJS = this
     app.updateTabbar()
     this.setData({
-      systemNoticeCount:wx.getStorageSync('systemNoticeCount')
+      systemNoticeCount:wx.getStorageSync('systemNoticeCount'),
+      theme: app.globalData.theme
     })
   },
 

@@ -21,6 +21,13 @@ Page({
     keyboardPosition:0,
     inputFocus:false,
     chatStyle:"",
+    theme: app.globalData.theme,
+    statusbar_height: wx.getSystemInfoSync().statusBarHeight,
+    is_dark: false,
+  },
+  
+  back() {
+    wx.navigateBack()
   },
 
   bindInput: function (e) {
@@ -257,6 +264,11 @@ Page({
     app.globalData.chat_id = this.data.chat_id
     this.setPageData()
     var systemInfo = wx.getSystemInfoSync()
+    if (systemInfo.theme == 'dark') {
+      this.setData({
+        is_dark: true,
+      })
+    }
     if (app.globalData.themeInfo.primaryColorLight) {
       if (systemInfo.theme == 'dark') {
         this.setData({
@@ -268,6 +280,19 @@ Page({
         })
       }
     }
+    wx.onThemeChange((result) => {
+      if (result.theme == 'dark'){
+        this.setData({
+          is_dark: true,
+          theme: app.globalData.theme
+        })
+      }else{
+        this.setData({
+          is_dark: false ,
+          theme: app.globalData.theme
+        })
+      }
+    })
 
   },
 
@@ -284,6 +309,9 @@ Page({
   onShow: function () {
     app.globalData.indexJS = this
     app.globalData.chat_id = this.data.chat_id
+    this.setData({
+      theme: app.globalData.theme,
+    })
   },
 
   /**

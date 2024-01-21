@@ -1,18 +1,18 @@
 <view class="tab-bar" style="background: {{is_dark?'#1c1c1c':'#ffffff'}};">
 
-    <view bindtap="switchTab" class="{{item.is_special!=null&&item.is_special==true?'tab-bar-item-center':'tab-bar-item'}}" data-index="{{index}}" data-url="{{item.pagePath}}" wx:for="{{list}}" wx:key="index">
+  <view bindtap="switchTab" class="{{item.is_special!=null&&item.is_special==true?'tab-bar-item-center':'tab-bar-item'}}" data-index="{{index}}" data-url="{{item.pagePath}}" wx:for="{{list}}" wx:key="index">
 
-      <view class="tab-bar-public" wx:if="{{item.is_special}}">
-            <view class="tab-bar-public-background">
-                <image class="tab-bar-public-icon" src="{{item.iconPath}}" style="background-color: {{is_dark?'#1c1c1c':'#ffffff'}};border: 20rpx solid {{is_dark?'#1c1c1c':'#ffffff'}}" animation="{{animation}}"></image>
-            </view>
-        </view>
-
-        <image class="tab-bar-item-image" src="{{selected===index?item.selectedIconPath:item.iconPath}}" wx:else></image>
-
-        <view class="tab-bar-badge" wx:if="{{index == 3 && allNoticeCount > 0}}">{{allNoticeCount}}</view>
-        <view class="tab-bar-tip" wx:if="{{index == 1 && showOneRedDot}}"></view>
-
-        <view class="tab-bar-item-view" style="color:{{(selected===1 && index ===1)? one_color:selected===index?(is_dark?tabbarFontSelectedColorDark:tabbarFontSelectedColorLight):(is_dark?tabbarFontColorDark:tabbarFontColorLight)}}; font-weight: {{selected===index?'bold':'normal'}};">{{item.text}}</view>
+    <view class="tab-bar-public" wx:if="{{item.is_special}}">
+      <view class="tab-bar-public-background">
+        <image class="tab-bar-public-icon" src="{{item.iconPath}}" style="background-color: {{is_dark?'#1c1c1c':'#ffffff'}};border: 20rpx solid {{is_dark?'#1c1c1c':'#ffffff'}}" animation="{{animation}}"></image>
+      </view>
     </view>
+
+    <image class="tab-bar-item-image" src="{{selected===index?item.selectedIconPath:item.iconPath}}" wx:else></image>
+
+    <view class="tab-bar-badge" wx:if="{{index == 3 && allNoticeCount > 0}}">{{allNoticeCount}}</view>
+    <view class="tab-bar-tip" wx:if="{{index == 1 && showOneRedDot}}"></view>
+
+    <view class="tab-bar-item-view" style="color:{{(selected===1 && index ===1 && school_label === 'HKU')? one_color:selected===index?(is_dark?tabbarFontSelectedColorDark:tabbarFontSelectedColorLight):(is_dark?tabbarFontColorDark:tabbarFontColorLight)}}; font-weight: {{selected===index?'bold':'normal'}};">{{item.text}}</view>
+  </view>
 </view>

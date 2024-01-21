@@ -3,5 +3,6 @@
     "one": "/components/one/one",
     "loadmore": "/components/loadmore/loadmore"
   },
-  "navigationBarTitleText": "我的围观"
+  "navigationBarTitleText": "我的围观",
+  "navigationStyle": "custom"
 }

@@ -4,5 +4,6 @@
     "loadmore": "/components/loadmore/loadmore",
     "privacyPopup": "/components/privacyPopup/privacyPopup"
   },
-  "disableScroll":true
+  "disableScroll":true,
+  "navigationStyle": "custom"
 }

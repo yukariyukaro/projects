@@ -1,5 +1,7 @@
 {
   "usingComponents": {
     "mini-compress": "/components/mini-compress/mini-compress"
-  }
+  },
+
+  "navigationStyle": "custom"
 }

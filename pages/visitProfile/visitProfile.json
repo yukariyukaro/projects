@@ -4,5 +4,6 @@
     "loadmore": "/components/loadmore/loadmore"
   },
   "navigationBarTitleText": "用户信息",
-  "disableScroll":true
+  "disableScroll":true,
+  "navigationStyle": "custom"
 }

@@ -134,15 +134,15 @@
   </view>
   <view style="display: flex; flex-wrap: wrap; margin:15rpx 30rpx 0 30rpx;padding-bottom: 20rpx;"> 
     <view class="sharing-tag">
-      <image class="sharing-tag-icons" src="/images/sharing-author.svg"></image>
+      <image class="sharing-tag-icons" src="/images/{{school_label}}/sharing-author.svg"></image>
       <text>{{data.post_media.sharing_author}}</text>
     </view>
     <view class="sharing-tag" wx:for="{{data.post_media.sharing_tag_list}}" wx:key="index">
-      <image class="sharing-tag-icons" src="/images/sharing-tag.svg"></image>
+      <image class="sharing-tag-icons" src="/images/{{school_label}}/sharing-tag.svg"></image>
       <text>{{item}}</text>
     </view>
     <view class="sharing-tag">
-      <image class="sharing-tag-icons" src="/images/sharing-time.svg" style="transform: translate(0, 3rpx);"></image>
+      <image class="sharing-tag-icons" src="/images/{{school_label}}/sharing-time.svg" style="transform: translate(0, 3rpx);"></image>
       <text>{{data.post_media.sharing_create_time_display}}</text>
     </view>
   </view>

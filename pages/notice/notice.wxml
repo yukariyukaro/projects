@@ -1,3 +1,10 @@
+<!-- Navbar -->
+<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
+  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
+  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
+  <view style="margin-bottom:12px; font-size: small;">通知</view>
+</view>
+
 <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll">
 
   <view wx:for="{{notice_list}}" wx:key="index" class="outer" wx:if="{{notice_list.length > 0}}" data-url="{{item.notice_url}}" data-index="{{index}}" data-noticeid="{{item.notice_id}}" bindtap="nav2Notice">

@@ -3,5 +3,6 @@
     "one": "/components/one/one",
     "loadmore": "/components/loadmore/loadmore"
   },
-  "navigationBarTitleText": "我的树洞"
+  "navigationBarTitleText": "我的树洞",
+  "navigationStyle": "custom"
 }

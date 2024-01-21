@@ -1,5 +1,6 @@
 {
   "usingComponents": {},
   "disableScroll": true,
-  "navigationBarTitleText": "私信"
+  "navigationBarTitleText": "私信",
+  "navigationStyle": "custom"
 }

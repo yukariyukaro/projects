@@ -3,5 +3,6 @@
     "loadmore": "/components/loadmore/loadmore"
   },
   "navigationBarTitleText": "通知",
-  "disableScroll": true
+  "disableScroll": true,
+  "navigationStyle": "custom"
 }

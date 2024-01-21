@@ -10,11 +10,6 @@ app.wxss
 theme.js
 theme.json
 
-/images
-/pages/about/about.wxml
+
 /pages/followService/followService.wxml
 /pages/register/register.wxml
-/pages/search/search.wxml
-/utils/info.js
-/custom-tab-bar/index.js
-/custom-tab-bar/index.wxml

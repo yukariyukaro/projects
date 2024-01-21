@@ -180,7 +180,7 @@ Page({
     status_bar_opacity_mask: 0,
     theme: '',
     hku_one_logo: '',
-    navigation_bar_background_color: info.search_nav_bar_color,
+    navigation_bar_background_color: wx.getSystemInfoSync().theme == 'dark'? info.search_nav_bar_color_dark :info.search_nav_bar_color,
     result_shown: false,
     search_mode: "default",
     show_modes: false,
@@ -196,6 +196,7 @@ Page({
     aisearch_detail: null,
     ai_is_getting_answer: false,
     ai_answer: '',
+    school_label: info.school_label
   },
 
   getOneList: function () {
@@ -596,6 +597,17 @@ Page({
         hku_one_navigation_bar_background: app.globalData.themeInfo.hkuOneNavigationBarBackground
       })
     }
+    wx.onThemeChange((result) => {
+      if (result.theme == 'dark'){
+        this.setData({
+          navigation_bar_background_color: info.search_nav_bar_color_dark
+        })
+      } else {
+        this.setData({
+          navigation_bar_background_color: info.search_nav_bar_color
+        })
+      }
+    })
   },
 
   /**
@@ -609,6 +621,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    var is_dark = wx.getSystemInfoSync().theme == 'dark';
     this.getTabBar().setData({
       selected: 1
     })
@@ -616,7 +629,8 @@ Page({
     this.getPlaceholder()
     this.check()
     this.setData({
-      theme: app.globalData.theme.backgroundTextStyle
+      theme: app.globalData.theme.backgroundTextStyle,
+      navigation_bar_background_color: is_dark? info.search_nav_bar_color_dark : info.search_nav_bar_color
     })
     // wx.setTabBarStyle({
     //   color: '#8a8a8a',

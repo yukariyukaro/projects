@@ -1,3 +1,13 @@
+<!-- Navbar -->
+<view style="position: sticky; top: 0; z-index: 1000;">
+<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px;">
+  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
+  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
+  <view style="margin-bottom:12px; font-size: small;">发布树洞</view>
+</view>
+</view>
+
+<!-- <scroll-view scroll-y="true" class="scroll"> -->
 <view class="outer">
 <view class="block shadow radius">
   <view class="textarea-outer" bindtap="focus">
@@ -11,7 +21,7 @@
     <view class="media-single-line">
       <text style="line-height:8vw">图片</text>
       <view class="media-icon-outer">
-        <image class="media-icon" src="/images/photograph.svg"></image>
+        <image class="media-icon" src="/images/{{school_label}}/photo.svg"></image>
       </view>
     </view>
     <view wx:if="{{post_image[0] != ''}}" style="margin-top: 2vw;text-align:center" wx:for="{{post_image}}" wx:key="index">
@@ -32,7 +42,7 @@
       <text style="line-height:8vw" wx:if="{{post_with_media}}">请选择功能类型</text>
       <text style="line-height:8vw" wx:else>百宝箱</text>
       <view class="media-icon-outer">
-        <image class="media-icon-album" src="/images/album.svg"></image>
+        <image class="media-icon-album" src="/images/{{school_label}}/media.svg"></image>
       </view>
     </view>
     <view wx:if="{{post_with_media}}" style="margin-top: 2vw;text-align:center">
@@ -187,19 +197,25 @@
     <view class="switch-group-public">
       <text class="switch-question-label">公开发布<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primary_color?primary_color:is_dark?'#864442':'#D85050'}}" checked="{{post_public}}" bindchange="switchPublicChange"/>  
+        <switch color="{{theme.primary}}" checked="{{post_public}}" bindchange="switchPublicChange"/>  
       </view>
     </view>
     <view class="switch-group-anonymous">
       <text class="switch-question-label">公开{{user_id_name}}<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primary_color?primary_color:is_dark?'#864442':'#D85050'}}" checked="{{post_with_serial}}" bindchange="switchSerialChange"/> 
+        <switch color="{{theme.primary}}" checked="{{post_with_serial}}" bindchange="switchSerialChange"/> 
       </view>
     </view>
     <view class="switch-group-anonymous">
       <text class="switch-question-label">同步到UNI<text style="color:red"> *</text> </text>
       <view class="switch" >
-        <switch color="{{primary_color?primary_color:is_dark?'#864442':'#D85050'}}" checked="{{post_is_uni}}" bindchange="switchUNIChange"/> 
+        <switch color="{{theme.primary}}" checked="{{post_is_uni}}" bindchange="switchUNIChange"/> 
+      </view>
+    </view>
+    <view class="switch-group-anonymous">
+      <text class="switch-question-label">富文本编辑 (Markdown)<text style="color:red"> *</text> </text>
+      <view class="switch" >
+        <switch color="{{theme.primary}}" checked="{{post_is_uni}}" bindchange="switchMarkdownChange"/> 
       </view>
     </view>
     
@@ -224,9 +240,7 @@
   <text style="color:#a3a0a0; margin: 0 60rpx; font-size:25rpx;" wx:if="{{post_with_media && !post_media_received && media_index != 3}}">请先获取或设置百宝箱资源</text>
 </view>
 </view>
-
-
 <mini-compress />
-
+<!-- </scroll-view> -->
 <!-- <view wx:if="{{showPrivacy}}" class="overlay" bindtap="privacyOverlayTap"></view> -->
 <!-- <privacyPopup wx:if="{{showPrivacy}}" bind:agree="onPrivacyAgree" bind:disagree="onPrivacyDisagree"/> -->

@@ -49,7 +49,8 @@ Page({
     show_report_box: false,
     my_school_label: info.school_label,
     is_markdown: false,
-
+    statusbar_height: wx.getSystemInfoSync().statusBarHeight,
+    theme: app.globalData.theme,
   },
   // 下拉刷新
   onRefresh() {
@@ -67,6 +68,10 @@ Page({
       triggered: false,
     });
     wx.hideLoading()
+  },
+
+  back() {
+    wx.navigateBack()
   },
 
   visitUser: function () {
@@ -1046,6 +1051,11 @@ Page({
       });
     }
     var systemInfo = wx.getSystemInfoSync()
+    if (systemInfo.theme == 'dark') {
+      this.setData({
+        is_dark: true,
+      })
+    }
     if (app.globalData.themeInfo.primaryColorLight) {
       if (systemInfo.theme == 'dark') {
         this.setData({
@@ -1059,6 +1069,19 @@ Page({
         })
       }
     }
+    wx.onThemeChange((result) => {
+      if (result.theme == 'dark'){
+        this.setData({
+          is_dark: true,
+          theme: app.globalData.theme
+        })
+      }else{
+        this.setData({
+          is_dark: false ,
+          theme: app.globalData.theme
+        })
+      }
+    })
 
   },
 
@@ -1075,6 +1098,9 @@ Page({
   onShow: function () {
     this.getAd()
     this.getPostDetail();
+    this.setData({
+      theme: app.globalData.theme,
+    })
   },
 
   /**

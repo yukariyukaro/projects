@@ -19,7 +19,15 @@ Page({
     uni_post_id:'',
     comment_order:'',
     school_label:'',
+    statusbar_height: wx.getSystemInfoSync().statusBarHeight,
+    theme: app.globalData.theme,
+    is_dark: false,
   },
+
+  back() {
+    wx.navigateBack()
+  },
+
   // 下拉刷新
   onRefresh() {
     this.setData({
@@ -187,6 +195,25 @@ Page({
   onLoad: function (options) {
     var that = this;
     var school_label = info.school_label
+    var systemInfo = wx.getSystemInfoSync()
+    if (systemInfo.theme == 'dark') {
+      this.setData({
+        is_dark: true,
+      })
+    }
+    wx.onThemeChange((result) => {
+      if (result.theme == 'dark'){
+        this.setData({
+          is_dark: true,
+          theme: app.globalData.theme
+        })
+      }else{
+        this.setData({
+          is_dark: false ,
+          theme: app.globalData.theme
+        })
+      }
+    })
     if(options.school_label){
       console.log(options.school_label)
       school_label = options.school_label
@@ -228,7 +255,11 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {},
+  onShow: function () {
+    this.setData({
+      theme: app.globalData.theme,
+    })
+  },
 
   /**
    * 生命周期函数--监听页面隐藏

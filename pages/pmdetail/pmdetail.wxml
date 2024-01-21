@@ -1,10 +1,17 @@
+<!-- Navbar -->
+<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
+  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
+  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
+  <view style="margin-bottom:12px; font-size: small;">私信</view>
+</view>
+
 <scroll-view
   style="height:calc(100vh - 220rpx);margin-bottom: 250rpx;"
   scroll-y="{{true}}"
   scroll-top="{{scroll_top}}"
   scroll-into-view="{{toView}}"
 >
-  <view class="content-container" >
+  <view class="content-container" style="--primary:{{theme.primary}};">
     <view class="item-container" wx:for="{{pm_list}}" wx:key="index" id='pm-{{index}}'>
       <text class="item-top" wx:if="{{index==0||pm_list[index].pm_create_time-pm_list[index-1].pm_create_time>60*5}}">{{item.pm_display_date}}</text>
       <view class="item" style="flex-direction: {{item.pm_is_from_me?'row-reverse':'row'}}">
@@ -48,7 +55,7 @@
         <image bindtap="sendImage" class="jz-chat-edit-view-emoji"
           src="/images/icon_image.png"></image>
       </view>
-      <text bindtap="sendMessage" class="jz-chat-edit-view-confirm" style="{{chatStyle?chatStyle:''}}">发送</text>
+      <text bindtap="sendMessage" class="jz-chat-edit-view-confirm" style="--primary:{{theme.primary}};{{chatStyle?chatStyle:''}}">发送</text>
     </view>
     <scroll-view class="jz-chat-emoji-scroll" hidden="{{!emojiShow}}" scrollY="true"
       style="height: {{keyboardHeight}}rpx;">

@@ -1,11 +1,13 @@
 // components/one/one.js
+const info = require("../../utils/info");
+
 Component({
   /**
    * 组件的属性列表
    */
   properties: {
     type: String,
-    data: Object
+    data: Object,
   },
 
   /**
@@ -13,7 +15,8 @@ Component({
    */
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
-    is_dark:false
+    is_dark:false,
+    school_label: info.school_label
   },
 
   lifetimes: {

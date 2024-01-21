@@ -1,9 +1,12 @@
 <!-- 彩虹主题 -->
 <!-- <view class="ns">HKU噗噗</view> -->
 
+<!-- Navbar -->
+<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px"><view style="margin-bottom:12px; font-size: small;">{{app_title}}</view></view>
+
 <view class="navbar shadow">
   <scroll-view scroll-x enhanced show-scrollbar="false" style="height: 100%;white-space: nowrap;" scroll-into-view="nav-{{nav_to_view}}">
-    <view wx:for="{{navbar_items}}" id='nav-{{index + start_index}}' wx:for-item="name" wx:key="id" data-index="{{index + start_index}}" class="item {{current_tab==(index + start_index) ? 'active-class active' : ''}}" style="{{index + start_index < -1 ? 'width:40rpx;' : ''}}" bindtap="navbarTapPre">
+    <view wx:for="{{navbar_items}}" id='nav-{{index + start_index}}' wx:for-item="name" wx:key="id" data-index="{{index + start_index}}" class="item {{current_tab==(index + start_index) ? 'active-class active' : ''}}" style="{{index + start_index < -1 ? 'width:40rpx;' : ''}}; --primary:{{theme.primary}}" bindtap="navbarTapPre">
       <text>{{prop ? name[prop] : name}}</text>
     </view>
   </scroll-view>
@@ -67,3 +70,10 @@
 </view>
 
 <privacyPopup wx:if="{{show_privacy}}" bind:agree="onPrivacyAgree" bind:disagree="onPrivacyDisagree"/>
+
+<view class="overlay" wx:if="{{content_loaded < 4}}">
+  <view class="triple-uni-logo-wrappper">
+  <image class="triple-uni-logo" src="/images/triple-uni.png"></image>
+</view>
+<text class="overlay-text">HKU噗噗·科大空间站·马料水哔哔机</text>
+</view>

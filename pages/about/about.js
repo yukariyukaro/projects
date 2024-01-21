@@ -1,5 +1,7 @@
 // pages/about/about.js
 const info = require("../../utils/info")
+var app = getApp();
+
 Page({
 
   /**
@@ -8,7 +10,10 @@ Page({
   data: {
     app_name:info.app_name,
     is_dark: '',
-    version: '4.3.2'
+    version: '4.3.2',
+    school_label: info.school_label,
+    team_name: info.team_name,
+    theme: app.globalData.theme
   },
 
   logoAnimation: function () {

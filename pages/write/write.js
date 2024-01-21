@@ -12,6 +12,7 @@ Page({
     post_public: true,
     post_with_serial: false,
     post_is_uni: false,
+    post_is_markdown: false,
     topic_list: [],
     topic_index: -1,
     is_sending: false,
@@ -30,10 +31,13 @@ Page({
     vote_is_multi:false,
     isGettingMedia:false,
     user_id_name: info.user_id_name,
-    showPrivacy: false
+    showPrivacy: false,
     // emotion_selected_index:-1,
     // post_with_emotion:false,
     // post_media_emotion:{}
+    school_label: info.school_label,
+    statusbar_height: wx.getSystemInfoSync().statusBarHeight,
+    theme: app.globalData.theme,
   },
   // 让输入框聚焦
   focus: function () {
@@ -62,11 +66,17 @@ Page({
   switchMultiChange: function (e) {
     this.setData({ vote_is_multi: e.detail.value });
   },
+  switchMarkdownChange: function (e) {
+    this.setData({ post_is_markdown: e.detail.value });
+  },
   // 选择主题
   bindTopic: function (e) {
     this.setData({
       topic_index: e.detail.value,
     });
+  },
+  back() {
+    wx.navigateBack()
   },
 
   getQuote: function (){
@@ -99,7 +109,7 @@ Page({
   // 提交
   submitNewPost: async function () {
     var that = this
-    const post_msg = this.data.post_msg;
+    let post_msg = this.data.post_msg;
     const topic_index = this.data.topic_index;
     if (this.data.is_sending) return;
     this.setData({
@@ -145,6 +155,10 @@ Page({
         var post_media = JSON.stringify(await this.getQuote())
       }else{
         var post_media = ''
+      }
+
+      if (that.data.post_is_markdown){
+        post_msg = "[Triple Uni Markdown]\n" + post_msg
       }
 
       newRequest("/post/single/post", {
@@ -566,6 +580,20 @@ Page({
       })
     }
 
+    wx.onThemeChange((result) => {
+      if (result.theme == 'dark'){
+        this.setData({
+          is_dark: true,
+          theme: app.globalData.theme
+        })
+      }else{
+        this.setData({
+          is_dark: false ,
+          theme: app.globalData.theme
+        })
+      }
+    })
+
 
     // 需要用户同意隐私授权时
     // wx.onNeedPrivacyAuthorization((resolve, eventInfo) => {
@@ -616,7 +644,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.setData({
+      theme: app.globalData.theme,
+    })
   },
 
   /**

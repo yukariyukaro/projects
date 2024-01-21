@@ -2,6 +2,13 @@
 
 <view class="overlay" wx:if="{{show_comment_box || show_report_box}}" animation="{{overlay_animation}}"></view>
 
+<!-- Navbar -->
+<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
+  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
+  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
+  <view style="margin-bottom:12px; font-size: small;">树洞详情</view>
+</view>
+
 <!-- 漂浮头部 -->
 <view class="header-outer">
   <view class="header" wx:if="{{data_received}}">
@@ -9,9 +16,9 @@
       <text style="font-weight:bold;align-self:center;font-size: 30rpx;">#{{post_detail.post_id}}</text>
       <view class="topic">{{post_detail.post_topic}}</view>
     </view>
-    <view class="header-control">
+    <view class="header-control"> 
       <!-- 围观/公开状态 -->
-      <view class="header-status">
+      <view class="header-status" style="--primary:{{theme.primary}}; --secondary:{{theme.secondary}};">
         <view wx:if="{{!post_detail.is_author && post_detail.is_following}}" bindtap="follow">
           正在围观
         </view>
@@ -83,7 +90,7 @@
           </view>
         </view>
         <!-- 投票 -->
-        <view class="function_container" style="padding-bottom: 20rpx;  flex-direction: column;" wx:if="{{post_detail.post_media.media_type == 'vote'}}">
+        <view class="function_container" style="padding-bottom: 20rpx;  flex-direction: column; --primary: {{theme.primary}}; --secondary: {{theme.secondary}}" wx:if="{{post_detail.post_media.media_type == 'vote'}}">
           <view class="function_vote_title">{{post_detail.post_media.vote_title}}</view>
 
           <view class="function_vote_subtitle" wx:if="{{post_detail.post_media.user_voted_option_title}}">你已选择：{{post_detail.post_media.user_voted_option_title}}</view>
@@ -247,9 +254,9 @@
   <view style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 20rpx;">
     <view style="display: flex;flex-direction: row;" wx:if="{{!post_detail.is_author && show_comment_box}}">
       <view style="font-size: 30rpx;line-height: 60rpx;margin-right: -10rpx;color: #8C8C8C;">实名回复</view>
-      <switch class="textarea-switch" color="{{primary_color}}" checked="{{comment_with_serial}}" bindchange="switchSerialChange"></switch>
+      <switch class="textarea-switch" color="{{theme.primary}}" checked="{{comment_with_serial}}" bindchange="switchSerialChange"></switch>
     </view>
     <view wx:else></view>
-    <view class="send-button" bindtap="{{show_comment_box? 'submitComment':'reportPromptConfirm'}}" >发送</view>
+    <view class="send-button" bindtap="{{show_comment_box? 'submitComment':'reportPromptConfirm'}}" style="--primary: {{theme.primary}}">发送</view>
   </view>
 </view>

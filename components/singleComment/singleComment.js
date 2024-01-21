@@ -21,14 +21,15 @@ Component({
     post_is_author: Boolean,
     comment_father_msg: (String || null),
     comment_image: (String || null),
-    comment_theme_color: String
+    comment_theme_color: String,
   },
 
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
     borderStyle: "",
     comment_date: "",
-    parsed_msg: ""
+    parsed_msg: "",
+    theme: app.globalData.theme
   },
 
   lifetimes: {

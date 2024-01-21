@@ -1,5 +1,4 @@
 const info = require('info.js')
-var app = getApp();
 
 export default function newRequest (path, body, relaunchFunction = new function(){},includeToken = true, includeLabel = false){
   return new Promise( (resolve, reject) => {

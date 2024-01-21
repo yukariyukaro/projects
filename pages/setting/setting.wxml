@@ -1,3 +1,10 @@
+<!-- Navbar -->
+<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
+  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
+  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
+  <view style="margin-bottom:12px; font-size: small;">设置</view>
+</view>
+
 <view class="menu">
   <view class="u-flex-item">
     <view class="u-row-left">
@@ -7,7 +14,7 @@
       </view>
     </view>
     <view class="u-row-right">
-      <switch color="{{primary_color}}" checked="{{subscribe_accept}}" bindchange="acceptSubscribeNew" />
+      <switch color="{{theme.primary}}" checked="{{subscribe_accept}}" bindchange="acceptSubscribeNew" />
     </view>
   </view>
   <view class="u-flex-item" bindtap="clearUnread">
@@ -45,7 +52,7 @@
       </view>
     </view>
     <view class="u-row-right">
-      <switch color="{{primary_color}}" checked="{{allow_home_swipe}}" bindchange="setAllowHomeSwipe" />
+      <switch color="{{theme.primary}}" checked="{{allow_home_swipe}}" bindchange="setAllowHomeSwipe" />
     </view>
   </view>
   <view class="u-flex-item">
@@ -56,7 +63,7 @@
       </view>
     </view>
     <view class="u-row-right">
-      <switch color="{{primary_color}}" checked="{{ban_uni_post}}" bindchange="setBanUniPost" />
+      <switch color="{{theme.primary}}" checked="{{ban_uni_post}}" bindchange="setBanUniPost" />
     </view>
   </view>
 </view>
