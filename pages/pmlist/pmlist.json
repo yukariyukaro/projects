@@ -1,5 +1,6 @@
 {
   "usingComponents": {},
   "navigationBarTitleText": "消息",
-  "navigationStyle": "custom"
+  "navigationStyle": "custom",
+  "disableScroll": true
 }

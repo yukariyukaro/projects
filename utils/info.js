@@ -1,4 +1,5 @@
 const user_school_label = wx.getStorageSync('user_school_label');
+var meta = {}
 
 if (user_school_label.toUpperCase() == 'HKU') {
   var meta = {

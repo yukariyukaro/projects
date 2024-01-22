@@ -2,7 +2,7 @@
 <view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
   <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
   <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
-  <view style="margin-bottom:12px; font-size: small;">我的树洞</view>
+  <view style="margin-bottom:12px; ">我的树洞</view>
 </view>
 
 <scroll-view
@@ -17,6 +17,7 @@
   bindrefresherrestore="onRestore"
   bindscrolltolower="onLoadMore"
   bindscroll="bindScroll"
+  style = "height: calc(100vh - {{statusbar_height}}px  - env(safe-area-inset-bottom));"
 >
 <view class="post-content">
   <one type="{{item.type}}" data="{{item.data}}" wx:for="{{one_list}}" wx:key="index"/>

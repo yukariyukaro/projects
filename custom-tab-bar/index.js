@@ -29,8 +29,8 @@ Component({
       },
       {
         pagePath: "/pages/write/write",
-        iconPath: "/images/" + info.school_label + "/write.png",
-        selectedIconPath: "/images/" + info.school_label + "/write.png",
+        iconPath: "/images/" + info.school_label + "/write." + (info.school_label == 'UST'? 'svg' : 'png'),
+        selectedIconPath: "/images/" + info.school_label + "/write." + (info.school_label == 'UST'? 'svg' : 'png'),
         text: "",
         is_special: true
       },
@@ -52,9 +52,6 @@ Component({
   lifetimes: {
     attached() {
       this.updateTheme()
-      wx.onThemeChange((result) => {
-        this.updateTheme()
-      })
     },
     moved() {
       this.updateTheme()
@@ -160,7 +157,6 @@ Component({
             list: dark_list
           })
         } else {
-          is_dark = false
           this.setData({
             is_dark: false,
             list: light_list

@@ -313,7 +313,7 @@ App({
     var that = this
     return new Promise(function (resolve, reject) {
       var token = wx.getStorageSync('token')
-      wx.showLoading({})
+      // wx.showLoading({})
       if (token) {
         // user already logged in
         console.log("has token")
@@ -383,7 +383,7 @@ App({
                 icon: "none",
                 duration: 1000
               })
-              wx.hideLoading()
+              // wx.hideLoading()
               reject()
             }
           },

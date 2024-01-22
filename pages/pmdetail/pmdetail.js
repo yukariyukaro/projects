@@ -24,6 +24,7 @@ Page({
     theme: app.globalData.theme,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
     is_dark: false,
+    temp_msg_list: []
   },
   
   back() {
@@ -131,12 +132,51 @@ Page({
       pm_msg:'',
       emojiShow:false
     })
+    //立即发送
+    // const pm_create_time = Math.floor(Date.now() / 1000)
+    // var pm_is_real_name = false
+    // var user_alias = ''
+    // var user_serial = ''
+    // var user_avatar = ''
+    // for (let i = 0; i < that.data.pm_list.length; i++) {
+    //   if (that.data.pm_list[i].pm_is_from_me) {
+    //     pm_is_real_name = that.data.pm_list[i].pm_is_real_name
+    //     user_alias = that.data.pm_list[i].user_alias
+    //     user_serial = that.data.pm_list[i].user_serial
+    //     user_avatar = that.data.pm_list[i].user_avatar
+    //     break
+    //   }
+    // }
+    // wx.vibrateShort({
+    //   type: 'heavy',
+    // })
+    // setTimeout(() => {
+    //   wx.vibrateShort({
+    //     type: 'heavy',
+    //   })
+    // }, 100);
+    // that.setData({
+    //   pm_list: [...that.data.pm_list, {
+    //     chat_id: that.data.chat_id,
+    //     pm_create_time: pm_create_time,
+    //     pm_display_date: that.formatTime(pm_create_time),
+    //     pm_id: null,
+    //     pm_is_from_me: true,
+    //     pm_is_real_name: pm_is_real_name,
+    //     pm_msg: pm_msg,
+    //     pm_media: null,
+    //     user_avatar: user_avatar,
+    //     user_alias: user_alias,
+    //     user_serial: user_serial
+    //   }]
+    // })
+    //立即发送结束
     newRequest("/pm/message/send", {
       chat_id:that.data.chat_id,
       pm_msg:pm_msg,
     }).then(res=>{
       if(res.code == 200){
-
+        
       }else{
         wx.showToast({title: res.msg? res.msg : "错误", icon: "error", duration: 1000})
       }

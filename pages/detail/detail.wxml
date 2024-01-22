@@ -6,7 +6,7 @@
 <view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
   <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
   <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
-  <view style="margin-bottom:12px; font-size: small;">树洞详情</view>
+  <view style="margin-bottom:12px; ">树洞详情</view>
 </view>
 
 <!-- 漂浮头部 -->
@@ -44,7 +44,7 @@
   </view>
 </view>
 
-<scroll-view scroll-y="{{true}}" class="scroll-outer" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore">
+<scroll-view scroll-y="{{true}}" class="scroll-outer" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" style="height:calc(100vh - 15vw - {{statusbar_height}}px - env(safe-area-inset-bottom));">
   <view class="content-outer" wx-if="{{data_received}}">
     <!-- 内容 -->
     <view class="post-outer">

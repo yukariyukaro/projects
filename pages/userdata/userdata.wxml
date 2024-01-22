@@ -2,7 +2,7 @@
 <view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
   <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
   <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
-  <view style="margin-bottom:12px; font-size: small;">用户资料</view>
+  <view style="margin-bottom:12px; ">用户资料</view>
 </view>
 
 <view class="own-header">
@@ -16,7 +16,7 @@
   </view>
 </view>
 
-<scroll-view style="height: calc(100vh - 240rpx); " scroll-y="true">
+<scroll-view style="height: calc(100vh - {{statusbar_height}}px - 240rpx - env(safe-area-inset-bottom)); " scroll-y="true">
   <view class="menu">
     <view class="u-flex-item">
       <view class="u-row-left">
@@ -58,7 +58,7 @@
     </view>
   </view>
 
-  <button class="mainButton-r" bindtap="update">保存</button>
+  <button class="mainButton-r" bindtap="update" style="--primary: {{theme.primary}}">保存</button>
 
   <view style="height:20rpx;">
   </view>

@@ -24,7 +24,7 @@ Page({
     ad_info: {},
     is_last: false,
     show_ad: false,
-    is_loading_more: false,
+    is_loading_more: true,
     refresh_triggered: false,
     main_data_received: false,
     allow_home_swipe: false,
@@ -635,7 +635,13 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {},
+  onReady: function () {
+    setTimeout(() => {
+      this.setData({
+        content_loaded: 4
+      })
+    }, 5000)
+  },
 
   /**
    * 生命周期函数--监听页面显示

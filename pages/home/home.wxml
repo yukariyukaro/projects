@@ -2,7 +2,9 @@
 <!-- <view class="ns">HKU噗噗</view> -->
 
 <!-- Navbar -->
-<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px"><view style="margin-bottom:12px; font-size: small;">{{app_title}}</view></view>
+<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
+  <view style="margin-bottom:12px; ">{{app_title}}</view>
+</view>
 
 <view class="navbar shadow">
   <scroll-view scroll-x enhanced show-scrollbar="false" style="height: 100%;white-space: nowrap;" scroll-into-view="nav-{{nav_to_view}}">
@@ -23,11 +25,11 @@
 <swiper class="scroll-outer" current="{{swiper_current}}" bindchange="swiperChange" wx:if="{{allow_home_swipe}}">
   <swiper-item wx:for="{{navbar_items}}" wx:key="index">
 
-    <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:if="{{index == current_tab - start_index}}">
+    <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:if="{{index == current_tab - start_index}}" style="height: calc(100vh - 12vw - {{statusbar_height}}px - 104px - env(safe-area-inset-bottom));">
 
       <view class="post-content" style="margin-top:5vw">
-        <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}"/>
-        <one type="{{item.type}}" data="{{item.data}}" wx:for="{{post_list}}" wx:key="index"/>
+        <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}" />
+        <one type="{{item.type}}" data="{{item.data}}" wx:for="{{post_list}}" wx:key="index" />
         <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />
       </view>
 
@@ -36,11 +38,11 @@
 </swiper>
 
 <!-- 禁止左右滑动切换tab -->
-<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:else>
+<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" style="height: calc(100vh - 12vw - {{statusbar_height}}px - 104px - env(safe-area-inset-bottom));" wx:else>
 
   <view class="post-content">
-    <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}"/>
-    <one type="{{item.type}}" data="{{item.data}}" wx:for="{{post_list}}" wx:key="post_id"/>
+    <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}" />
+    <one type="{{item.type}}" data="{{item.data}}" wx:for="{{post_list}}" wx:key="post_id" />
     <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />
   </view>
 
@@ -58,22 +60,30 @@
 
 
 <view class="ad1" wx:if="{{show_ad}}" bindtap="closeAD">
-        <view class="ad2">
-            <image  mode="widthFix" width="90%" catchtap="onTapAd" src='{{ad_info.ad_image}}'/>
-        </view>
-          <view class="back_w">
-           <view class="back_image" catchtap="closeAD">
-             <image src="/images/sf-close-circle.svg" style="width: 60rpx; height: 60rpx; display: inline-block; box-sizing: border-box"></image>
-            </view>
-          </view>
-          <view style="height: 50rpx"></view>
+  <view class="ad2">
+    <image mode="widthFix" width="90%" catchtap="onTapAd" src='{{ad_info.ad_image}}' />
+  </view>
+  <view class="back_w">
+    <view class="back_image" catchtap="closeAD">
+      <image src="/images/sf-close-circle.svg" style="width: 60rpx; height: 60rpx; display: inline-block; box-sizing: border-box"></image>
+    </view>
+  </view>
+  <view style="height: 50rpx"></view>
 </view>
 
-<privacyPopup wx:if="{{show_privacy}}" bind:agree="onPrivacyAgree" bind:disagree="onPrivacyDisagree"/>
+<privacyPopup wx:if="{{show_privacy}}" bind:agree="onPrivacyAgree" bind:disagree="onPrivacyDisagree" />
 
 <view class="overlay" wx:if="{{content_loaded < 4}}">
   <view class="triple-uni-logo-wrappper">
-  <image class="triple-uni-logo" src="/images/triple-uni.png"></image>
+    <image class="triple-uni-logo" src="/images/triple-uni.png"></image>
+  </view>
+  
+
+<view class="overlay-bottom">
+  <view class="loader-wrapper">
+    <div class="loader"></div>
+  </view>
+  <text class="overlay-text">HKU噗噗·科大空间站·马料水哔哔机</text>
 </view>
-<text class="overlay-text">HKU噗噗·科大空间站·马料水哔哔机</text>
+
 </view>

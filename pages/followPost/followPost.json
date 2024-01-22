@@ -4,5 +4,6 @@
     "loadmore": "/components/loadmore/loadmore"
   },
   "navigationBarTitleText": "我的围观",
-  "navigationStyle": "custom"
+  "navigationStyle": "custom",
+  "disableScroll": true
 }

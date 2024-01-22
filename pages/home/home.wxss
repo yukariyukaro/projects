@@ -15,27 +15,69 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10000;
+  z-index: 10001;
   text-align: center;
 }
 
-.overlay-text{
+.overlay-bottom {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom) + 22rpx) ;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-end;
+}
+
+.overlay-text {
   color: var(--on-bg-2);
   font-size: large;
 }
 
-.triple-uni-logo-wrappper{
+.triple-uni-logo-wrappper {
+  position: absolute;
+  top: 30vh;
   width: 100%;
-  height: 50%;
+  height: fit-content;
   position: relative;
-  margin-top: 20vh;
   text-align: center;
+}
+
+.loader-wrapper {
+  display: flex;
+  width: 100vw;
+  align-content: flex-end;
+  justify-content: center;
+  height: 150rpx;
+  text-align: center;
+}
+
+.loader {
+  display: block;
+  margin-top: 50rpx;
+  border: 10rpx solid var(--bg-gray-1);
+  /* Light grey */
+  border-top: 10rpx solid var(--on-bg-gray-1);
+  border-radius: 50%;
+  width: 36rpx;
+  height: 36rpx;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .triple-uni-logo {
   width: 400rpx;
   height: 400rpx;
 }
+
+
 
 .custom-statusbar {
   display: flex;
@@ -123,7 +165,7 @@
 }
 
 .scroll-outer {
-  height: calc(100vh - 12vw - 150px - env(safe-area-inset-bottom));
+  height: calc(100vh - 12vw -  - env(safe-area-inset-bottom));
 }
 
 
@@ -137,7 +179,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  z-index: 50000;
+  z-index: 10000;
 }
 
 .ad2 {

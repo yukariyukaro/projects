@@ -277,7 +277,7 @@
 }
 
 .org-swiper {
-  margin: 30rpx -40rpx 0rpx -40rpx;
+  margin: 30rpx -40rpx 30rpx -40rpx;
 }
 
 .org-banner-outer{
