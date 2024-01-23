@@ -31,7 +31,7 @@ App({
       wx.setStorageSync('showOneRedDot', false)
     }
     if (!wx.getStorageSync('user_school_label')) {
-      wx.setStorageSync('user_school_label', 'default')
+      wx.setStorageSync('user_school_label', 'UNI')
     }
 
 
@@ -162,7 +162,8 @@ App({
     themeInfo: '',
     token_checked: false,
     show_privacy: false,
-    privacy_checked: false
+    privacy_checked: false,
+    initial_launch: true,
   },
 
   subscribe: function (mode) {
@@ -324,7 +325,7 @@ App({
             that.launchWebSoccket()
             that.watchCaptureScreen()
             that.checkUnread()
-            if (wx.getStorageSync('user_school_label') == 'default') {
+            if (wx.getStorageSync('user_school_label') == 'UNI') {
               wx.setStorageSync('user_school_label', 'HKU')
             }
             resolve()

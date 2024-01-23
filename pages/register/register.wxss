@@ -44,6 +44,7 @@
   height: 100%;
 }
 
+
 .inputbar-auth{
   display: flex;
   height: 100%;
@@ -91,7 +92,7 @@
 
 .contact {
   position: fixed;
-  bottom: 10vw;
+  bottom: calc(env(safe-area-inset-bottom));
   text-align: center;
   left: 15vw;
   width: 70vw;

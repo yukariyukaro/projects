@@ -1,4 +1,5 @@
 const { default: newRequest } = require("../../utils/request")
+const info = require("../../utils/info")
 
 // pages/followService/followService.js
 Page({
@@ -7,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    school_label: info.school_label
   },
   check: function () {
     var that = this

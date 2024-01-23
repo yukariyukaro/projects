@@ -33,7 +33,8 @@ Page({
     app_title: info.app_title,
     theme: app.globalData.theme,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
-    content_loaded: 0
+    content_loaded: 0,
+    initial_launch: app.globalData.initial_launch,
   },
   // 下拉刷新
   onRefresh: function () {
@@ -637,8 +638,10 @@ Page({
    */
   onReady: function () {
     setTimeout(() => {
+      app.globalData.initial_launch = false;
       this.setData({
-        content_loaded: 4
+        content_loaded: 4,
+        initial_launch: false
       })
     }, 5000)
   },
@@ -688,6 +691,7 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
+    console.log(info.share_cover)
     return {
       title: info.slogan,
       imageUrl: info.share_cover,

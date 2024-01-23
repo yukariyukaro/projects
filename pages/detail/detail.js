@@ -1036,7 +1036,6 @@ Page({
     wx.showLoading({
       title: '加载中',
     })
-    console.log(options)
     if (options.post_serial) {
       this.setData({
         post_serial: options.post_serial

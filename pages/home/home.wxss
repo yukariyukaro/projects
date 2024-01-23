@@ -164,10 +164,6 @@
   position: relative;
 }
 
-.scroll-outer {
-  height: calc(100vh - 12vw -  - env(safe-area-inset-bottom));
-}
-
 
 .ad1 {
   position: fixed;

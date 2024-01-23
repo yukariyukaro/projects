@@ -44,8 +44,22 @@ textarea {
 }
 .media-single-line {
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
+  position: relative;
 }
+
+.media-overlay{
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: var(--bg-gray-2);
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  opacity: 70%;
+  border-radius: 15rpx;
+}
+
 .media-icon-outer {
   align-self: center;
   width: 8vw;
@@ -85,6 +99,7 @@ textarea {
   text-align:left;
   padding: 2vw 5vw 2vw 5vw;
   height: auto;
+  position: relative;
 }
 /* switch块 */
 .switch-group-outer {

@@ -14,7 +14,7 @@ Page({
     user_itsc:'',
     auth_sent: false,
     agree: false,
-    suffixes: app.globalData.email_suffixes,
+    suffixes: info.email_suffixes,
     suffix_idx: 0,
     vcode_vcode:'',
     vcode_key:'',
@@ -316,6 +316,7 @@ Page({
       this.logoAnimation()
     }, 1000);
   },
+  
   changeSuffix:function(){
     var that = this
     wx.showActionSheet({

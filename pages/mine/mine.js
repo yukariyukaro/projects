@@ -216,6 +216,9 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function () {
-
+    return {
+      title: info.slogan,
+      imageUrl: info.share_cover,
+    };
   }
 })

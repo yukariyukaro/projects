@@ -17,33 +17,33 @@ Component({
     is_sending: false,
     list: [{
         pagePath: "/pages/home/home",
-        iconPath: "/images/" + info.school_label + "/home-inactive.png",
-        selectedIconPath: "/images/" + info.school_label + "/home-active.png",
+        iconPath: "/images/" + info.school_label + "/home-inactive." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
+        selectedIconPath: "/images/" + info.school_label + "/home-active." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
         text: "树洞"
       },
       {
         pagePath: "/pages/search/search",
-        iconPath: "/images/" + info.school_label + "/search-inactive.png",
-        selectedIconPath: "/images/" + info.school_label + "/search-active.png",
+        iconPath: "/images/" + info.school_label + "/search-inactive."+ (info.school_label == 'CUHK' ?  'svg' : 'png'),
+        selectedIconPath: "/images/" + info.school_label + "/search-active." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
         text: "搜索",
       },
       {
         pagePath: "/pages/write/write",
-        iconPath: "/images/" + info.school_label + "/write." + (info.school_label == 'UST'? 'svg' : 'png'),
-        selectedIconPath: "/images/" + info.school_label + "/write." + (info.school_label == 'UST'? 'svg' : 'png'),
+        iconPath: "/images/" + info.school_label + "/write." + (info.school_label == 'HKU' ?  'png' : 'svg'),
+        selectedIconPath: "/images/" + info.school_label + "/write." + (info.school_label == 'HKU' ?  'png' : 'svg'),
         text: "",
         is_special: true
       },
       {
         pagePath: "/pages/pmlist/pmlist",
-        iconPath: "/images/" + info.school_label + "/pm-inactive.png",
-        selectedIconPath: "/images/" + info.school_label + "/pm-active.png",
+        iconPath: "/images/" + info.school_label + "/pm-inactive." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
+        selectedIconPath: "/images/" + info.school_label + "/pm-active." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
         text: "消息"
       },
       {
         pagePath: "/pages/mine/mine",
-        iconPath: "/images/" + info.school_label + "/mine-inactive.png",
-        selectedIconPath: "/images/" + info.school_label + "/mine-active.png",
+        iconPath: "/images/" + info.school_label + "/mine-inactive." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
+        selectedIconPath: "/images/" + info.school_label + "/mine-active." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
         text: "我的"
       }
     ],
@@ -87,65 +87,65 @@ Component({
     updateTheme: function () {
       var light_list = [{
           pagePath: "/pages/home/home",
-          iconPath: "/images/" + info.school_label + "/home-inactive.png",
-          selectedIconPath: "/images/" + info.school_label + "/home-active.png",
+          iconPath: "/images/" + info.school_label + "/home-inactive." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
+          selectedIconPath: "/images/" + info.school_label + "/home-active." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
           text: "树洞"
         },
         {
           pagePath: "/pages/search/search",
-          iconPath: "/images/" + info.school_label + "/search-inactive.png",
-          selectedIconPath: "/images/" + info.school_label + "/search-active.png",
+          iconPath: "/images/" + info.school_label + "/search-inactive." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
+          selectedIconPath: "/images/" + info.school_label + "/search-active." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
           text: "搜索",
         },
         {
           pagePath: "/pages/write/write",
-          iconPath: "/images/" + info.school_label + "/write." + (this.data.school_label == 'UST'? 'svg' : 'png'),
-          selectedIconPath: "/images/" + info.school_label + "/write." + (this.data.school_label == 'UST'? 'svg' : 'png'),
+          iconPath: "/images/" + info.school_label + "/write." + (info.school_label == 'HKU' ?  'png' : 'svg'),
+          selectedIconPath: "/images/" + info.school_label + "/write." + (info.school_label == 'HKU' ?  'png' : 'svg'),
           text: "",
           is_special: true
         },
         {
           pagePath: "/pages/pmlist/pmlist",
-          iconPath: "/images/" + info.school_label + "/pm-inactive.png",
-          selectedIconPath: "/images/" + info.school_label + "/pm-active.png",
+          iconPath: "/images/" + info.school_label + "/pm-inactive." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
+          selectedIconPath: "/images/" + info.school_label + "/pm-active." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
           text: "消息"
         },
         {
           pagePath: "/pages/mine/mine",
-          iconPath: "/images/" + info.school_label + "/mine-inactive.png",
-          selectedIconPath: "/images/" + info.school_label + "/mine-active.png",
+          iconPath: "/images/" + info.school_label + "/mine-inactive." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
+          selectedIconPath: "/images/" + info.school_label + "/mine-active." + (info.school_label == 'CUHK' ?  'svg' : 'png'),
           text: "我的"
         }
       ]
       var dark_list = [{
           pagePath: "/pages/home/home",
-          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/home-inactive.svg" : "/home-inactive.png"),
-          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/home-active.svg" : "/home-active.png"),
+          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/home-inactive.svg" : "/home-inactive." +  (info.school_label == 'HKU' ?  'png' : 'svg')),
+          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/home-active.svg" : "/home-active." + (info.school_label == 'HKU' ?  'png' : 'svg')),
           text: "树洞"
         },
         {
           pagePath: "/pages/search/search",
-          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/search-inactive.svg" : "/search-inactive.png"),
-          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/search-active.svg" : "/search-active.png"),
+          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/search-inactive.svg" : "/search-inactive." + (info.school_label == 'HKU' ?  'png' : 'svg')),
+          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/search-active.svg" : "/search-active." + (info.school_label == 'HKU' ?  'png' : 'svg')),
           text: "搜索",
         },
         {
           pagePath: "/pages/write/write",
-          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/write.svg" : "/write.png"),
-          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/write.svg" : "/write.png"),
+          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/write.svg" : "/write." + (info.school_label == 'HKU' ?  'png' : 'svg')),
+          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/write.svg" : "/write." + (info.school_label == 'HKU' ?  'png' : 'svg')),
           text: "",
           is_special: true
         },
         {
           pagePath: "/pages/pmlist/pmlist",
-          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/pm-inactive.svg" : "/pm-inactive.png"),
-          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/pm-active.svg" : "/pm-active.png"),
+          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/pm-inactive.svg" : "/pm-inactive." + (info.school_label == 'HKU' ?  'png' : 'svg')),
+          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/pm-active.svg" : "/pm-active." + (info.school_label == 'HKU' ?  'png' : 'svg')),
           text: "消息"
         },
         {
           pagePath: "/pages/mine/mine",
-          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/mine-inactive.svg" : "/mine-inactive.png"),
-          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/mine-active.svg" : "/mine-active.png"),
+          iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/mine-inactive.svg" : "/mine-inactive." + (info.school_label == 'HKU' ?  'png' : 'svg')),
+          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/mine-active.svg" : "/mine-active." + (info.school_label == 'HKU' ?  'png' : 'svg')),
           text: "我的"
         }
       ]

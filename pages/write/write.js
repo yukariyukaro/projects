@@ -27,7 +27,7 @@ Page({
     bilibili_bv:'',
     netease_link:'',
     vote_title:'',
-    vote_option_list:[],
+    vote_option_list:[{}],
     vote_is_multi:false,
     isGettingMedia:false,
     user_id_name: info.user_id_name,
@@ -67,7 +67,25 @@ Page({
     this.setData({ vote_is_multi: e.detail.value });
   },
   switchMarkdownChange: function (e) {
-    this.setData({ post_is_markdown: e.detail.value });
+    var that = this
+    if (e.detail.value && this.data.post_with_media){
+     wx.showModal({
+      title: '开启富文本编辑提示',
+      content: '使用富文本编辑时将无法使用百宝箱中的功能！',
+      complete: (res) => {
+        if (res.cancel) {
+          that.setData({ post_is_markdown: false });
+        }
+        if (res.confirm) {
+          that.removeMedia();
+          that.setData({ 
+            post_is_markdown: e.detail.value,
+          });
+        }
+      }
+    })} else {
+      that.setData({ post_is_markdown: e.detail.value });
+    }
   },
   // 选择主题
   bindTopic: function (e) {
@@ -374,7 +392,7 @@ Page({
   },
 
   bindVoteOption: function (e) {
-    console.log(e.currentTarget.dataset.index)
+    // console.log(e.currentTarget.dataset.index)
     var new_option_list = this.data.vote_option_list
     new_option_list[e.currentTarget.dataset.index].option_title = e.detail.value
     this.setData({

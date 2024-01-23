@@ -4,12 +4,3 @@
 *.config.json
 *.DS_Store
 
-
-app.json
-app.wxss
-theme.js
-theme.json
-
-
-/pages/followService/followService.wxml
-/pages/register/register.wxml
