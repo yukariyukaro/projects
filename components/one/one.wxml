@@ -1,3 +1,30 @@
+<view class="post-outer" wx:if="{{type == 'post-skeleton'}}">
+  <!-- 标题栏 -->
+  <view class="skeleton-post-header">
+    <!-- 标题区 -->
+    <view class="skeleton-title">
+      <view class="skeleton-text skeleton"></view>
+      <view class="skeleton-avatar skeleton"></view>
+      <view class="skeleton-tag skeleton"></view>
+    </view>
+    <!-- 收藏数 评论数 -->
+    <view class="post-follower-comment-outer">
+      <view class="skeleton-text skeleton"></view>
+    </view>
+  </view>
+
+  <view class="post-divider"></view>
+
+  <!-- 树洞内容区 -->
+  <view class="post-content">
+    <view class="skeleton-post-content-outer">
+      <view class="skeleton-text-full-width skeleton"></view>
+      <view class="skeleton-text-full-width skeleton"></view>
+    </view>
+  </view>
+</view>
+
+
 <view bindtap="nav2Post" class="post-outer" wx:if="{{type == 'post'}}">
   <!-- 标题栏 -->
   <view class="post-header">

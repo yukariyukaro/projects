@@ -2,7 +2,7 @@
   <view class="more-avatar-outer" style="--primary:{{theme.primary}}">
     <view class="avatar-image-wrapper">
       <view class="avatar-ripple" style="--primary:{{theme.primary}}"/>
-      <image style="{{is_dark? 'background-color: grey;':''}}" class="more-avatar" src="/images/{{school_label}}/logo.{{school_label=='HKU'? 'svg' : 'png'}}" bind:tap="handleLogoTap" />
+      <image style="{{is_dark? 'background-color: grey;':''}}" class="more-avatar" src="/images/{{school_label}}/logo.{{school_label=='UST'? 'png' : 'svg'}}" bind:tap="handleLogoTap" />
     </view>
     <view style="margin-top: 40rpx;font-size: 40rpx;font-weight: 500;">{{app_name}}</view>
     <view style="margin-top: 10rpx;font-size: 34rpx;">Version: {{version}}</view>
@@ -16,9 +16,21 @@
 
 <view class="outer">
   <view style="padding:30rpx 40rpx">
+    <view style="font-weight: bold;font-size: 34rpx;">4.4.0</view>
+    <view class="divider"></view>
+    <text style="font-size: 28rpx;">三校小程序合并
+    长按消息可清除未读消息
+    支持富文本编辑树洞
+    修复了一些已知问题
+    </text>
+  </view>
+</view>
+
+<view class="outer">
+  <view style="padding:30rpx 40rpx">
     <view style="font-weight: bold;font-size: 34rpx;">4.3.0</view>
     <view class="divider"></view>
-    <text style="font-size: 28rpx;"> {{school_label == 'HKU'? '「HKU ONE」新增「AI小妥」回答\n': ''}}新增分享贴功能
+    <text style="font-size: 28rpx;"> {{school_label == 'HKU'? '「HKU ONE」新增「AI小妥」回答\n': ''}}新增分享帖功能
     修复了一些已知问题
     </text>
   </view>

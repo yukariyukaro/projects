@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    app_name: app.globalData.app_name,
+    app_name: 'Triple Uni',
     school_label: app.globalData.school_label,
     school_label_lower: app.globalData.school_label.toLowerCase(),
     primary_color: info.primary_color_on_light,
@@ -55,16 +55,16 @@ Page({
       is_sending:true
     })
 
-    newRequest("/user/register/wechat/email", {
-            user_itsc: that.data.user_itsc,
-            user_email_suffix: that.data.suffixes[that.data.suffix_idx],
-      }, ()=>{}, false, true)
+    newRequest("/user/register/wechatuni/email", {
+            user_email: that.data.user_itsc + that.data.suffixes[that.data.suffix_idx]
+      }, ()=>{}, false, false)
       .then((res) => {
         that.setData({is_sending:false})
         if(res.code == 200){
           that.setData({
             auth_sent:true,
             vcode_key:res.vcode_key,
+            school_label:res.user_school_label
           })
           app.showModal({
             title: '验证码已发送',
@@ -142,28 +142,31 @@ Page({
       wx.login({
         success (res) {
           if(res.code){
-              newRequest("/user/register/wechat/verify", {
+              newRequest("/user/register/wechatuni/verify", {
                 user_itsc:that.data.user_itsc,
                 user_email_suffix:that.data.suffixes[that.data.suffix_idx],
                 vcode_vcode:that.data.vcode_vcode,
                 vcode_key:that.data.vcode_key,
                 code:res.code,
+                user_school_label:that.data.school_label,
                 system_info:JSON.stringify(wx.getSystemInfoSync())
-              }, () => {}, false, true).then( (res2) => {
+              }, () => {}, false, false).then( (res2) => {
                 if(res2.code == 200){
                   wx.setStorageSync('token', res2.token)
-                  app.globalData.show_privacy = false
-                  app.globalData.token_checked = true 
-                  app.globalData.privacy_checked = true
-                  wx.reLaunch({
-                    url: '/pages/home/home',
-                  })
-                  wx.closeSocket()
-                  app.launchWebSoccket()
+                  wx.setStorageSync('user_school_label', that.data.school_label)
+                  wx.setStorageSync('block_splash', true)
+                  wx.restartMiniProgram({path: '/pages/home/home'})
+                  // app.globalData.show_privacy = false
+                  // app.globalData.token_checked = true 
+                  // app.globalData.privacy_checked = true
+                  // wx.reLaunch({
+                  //   url: '/pages/home/home',
+                  // })
+                  // wx.closeSocket()
+                  // app.launchWebSoccket()
                 }else if(res2.code == 401){
                   app.showModal({title: '注册失败',content:'验证码错误', showCancel: false,})
                   that.setData({
-                    auth_sent: false,
                     is_posting: false
                   })
                 }else if(res2.code == 402){
@@ -233,36 +236,34 @@ Page({
     that.setData({
       is_posting:true
     })
-    wx.login({
-      success (res) {
-        if(res.code){
-          newRequest("/user/register/wechat/org", {
-            user_itsc:that.data.user_itsc,
-            org_password:that.data.user_portal_password,
-            code:res.code,
-          }, () => {}, false, true)
-          .then( res2 => {
-            if(res2.code == 200){
-              wx.setStorageSync('token', res2.token)
-              wx.reLaunch({
-                url: '/pages/home/home',
-              })
-              wx.closeSocket()
-              app.launchWebSoccket()
-            }else{
-              app.showModal({title: '提示',content:res2.msg, showCancel: false,})
-              that.setData({
-                auth_sent: false,
-                is_posting: false
-              })
-            }
-          })
 
-        }else{
-          wx.showToast({title: '登录失败，请稍后再试', icon: "none", duration: 1000})
-        }
+    newRequest("/user/register/wechatuni/org", {
+      user_itsc:that.data.user_itsc,
+      org_password:that.data.user_portal_password,
+    }, () => {}, false, false)
+    .then( res2 => {
+      if(res2.code == 200){
+        wx.setStorageSync('token', res2.token)
+        wx.setStorageSync('user_school_label', res2.user_school_label)
+        wx.setStorageSync('block_splash', true)
+        wx.restartMiniProgram({
+          path: '/pages/home/home',
+        })
+        // wx.reLaunch({
+        //   url: '/pages/home/home',
+        // })
+        // wx.closeSocket()
+        // app.launchWebSoccket()
+      }else{
+        app.showModal({title: '提示',content:res2.msg, showCancel: false,})
+        that.setData({
+          auth_sent: false,
+          is_posting: false
+        })
       }
-  })
+    })
+
+
   }
   
     
@@ -273,10 +274,19 @@ Page({
       agree:!this.data.agree
     })
   },
+
+  // bindPickerChange: function(e) {
+  //   console.log('picker发送选择改变，携带值为', e)
+  //   this.setData({
+  //     index: e.detail.value
+  //   })
+  // },
+
   handleSuffixChange(e) {
     const idx = e.detail.value;
     this.setData({ suffix_idx: idx });
   },
+
   uidInput:function(e){
     this.setData({
       user_itsc:e.detail.value

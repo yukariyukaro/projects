@@ -1,9 +1,10 @@
-const themes = require('./theme');
-const info = require('./utils/info')
+var themes = require('./theme');
+var info = require('./utils/info')
 
 const localDB = require('utils/database.js')
 const _ = localDB.command
 import newRequest from "./utils/request"
+import decode_token from "./utils/jwt-decode"
 
 App({
   onLaunch() {
@@ -33,6 +34,9 @@ App({
     if (!wx.getStorageSync('user_school_label')) {
       wx.setStorageSync('user_school_label', 'UNI')
     }
+    if (!wx.getStorageSync('block_splash')) {
+      wx.setStorageSync('block_splash', false)
+    }
 
 
     this.launch()
@@ -61,9 +65,9 @@ App({
     let that = this
     newRequest('/user/terms/check', {}, that.checkTerms)
       .then((res) => {
-        this.globalData.privacy_checked = true
         if (res.code == 201) {
           this.globalData.show_privacy = true
+          this.globalData.privacy_checked = true
           var pages = getCurrentPages()
           var currentPage = pages[pages.length - 1]
           var url = currentPage.route
@@ -81,6 +85,7 @@ App({
           }
         } else if (res.code == 200) {
           this.globalData.show_privacy = false
+          this.globalData.privacy_checked = true
         } else {
           wx.showToast({
             title: res.msg ? res.msg : "错误",
@@ -140,6 +145,7 @@ App({
   globalData: {
     // URL: 'https://service-74x06cvh-1301435395.sh.apigw.tencentcs.com/release/prod_hku',
     app_name: info.app_name,
+    app_title: info.app_title,
     school_label: info.school_label,
     email_suffixes: info.email_suffixes,
     userInfo: null,
@@ -163,7 +169,8 @@ App({
     token_checked: false,
     show_privacy: false,
     privacy_checked: false,
-    initial_launch: true,
+    initial_launch: wx.getStorageSync('block_splash') ? false : true,
+    close_socket: false,
   },
 
   subscribe: function (mode) {
@@ -310,8 +317,8 @@ App({
     });
   },
 
-  launch: function () {
-    var that = this
+  launch() {
+    let that = this
     return new Promise(function (resolve, reject) {
       var token = wx.getStorageSync('token')
       // wx.showLoading({})
@@ -325,90 +332,141 @@ App({
             that.launchWebSoccket()
             that.watchCaptureScreen()
             that.checkUnread()
-            if (wx.getStorageSync('user_school_label') == 'UNI') {
-              wx.setStorageSync('user_school_label', 'HKU')
+            let stored_label = wx.getStorageSync('user_school_label')
+            let token_label = decode_token(token).user_school_label
+            if (stored_label == 'UNI' || stored_label != token_label) {
+              that.login().then( () => {
+                if (wx.getStorageSync('block_splash')) {
+                  wx.setStorageSync('block_splash', false)
+                }
+                resolve()
+              }
+                
+              )
+              // let pages = getCurrentPages()
+              // let current_page = pages[pages.length - 1].route
+              // wx.setStorageSync('user_school_label', token_label)
+              // wx.setStorageSync('block_splash', true)
+              // wx.restartMiniProgram({
+              //   path: '/' + current_page
+              // })
+            }
+            if (wx.getStorageSync('block_splash')) {
+              wx.setStorageSync('block_splash', false)
             }
             resolve()
           }
         })
       } else {
-        // user not logged in
         console.log("no token")
-        wx.login({
-          success(res) {
-            console.log(res)
-            if (res.code) {
-              // 请求开发者服务器
-              newRequest('/user/login/wechat', {
-                  code: res.code,
-                  system_info: JSON.stringify(wx.getSystemInfoSync())
-                }, () => {}, false, true)
-                .then((res2) => {
-                  if (res2.code == 200) {
-                    //保存登陆状态
-                    wx.setStorageSync('token', res2.token)
-                    that.launchWebSoccket()
-                    that.checkUnread()
-                    that.watchCaptureScreen()
-                    resolve()
-                  } else if (res2.code == 401) {
-                    //未注册，跳转注册页
-                    var pages = getCurrentPages()
-                    var currentPage = pages[pages.length - 1]
-                    var url = currentPage.route
-                    if (url != "pages/register/register") {
-                      wx.reLaunch({
-                        url: '/pages/register/register',
-                        success() {
-                          wx.showToast({
-                            title: '请先注册',
-                            icon: "none",
-                            duration: 1000
-                          })
-                        }
-                      })
-                    }
-                  } else {
-                    wx.showToast({
-                      title: res.msg ? res.msg : "错误",
-                      icon: "none",
-                      duration: 1000
+        that.login()
+        .then(() => {
+          resolve()
+        })
+        .catch(() => {
+          reject()
+        })
+      }
+    })
+  },
+
+  login: function () {
+    // user not logged in
+    let that = this
+    return new Promise(function (resolve, reject) {
+      wx.login({
+        success(res) {
+          console.log(res)
+          if (res.code) {
+            // 请求开发者服务器
+            newRequest('/user/login/wechatuni', {
+                code: res.code,
+                system_info: JSON.stringify(wx.getSystemInfoSync())
+              }, this.login, false, false)
+              .then((res2) => {
+                if (res2.code == 200) {
+                  //保存登陆状态
+                  wx.setStorageSync('token', res2.token)
+                  if (res2.user_school_label != wx.getStorageSync('user_school_label')) {
+                    let pages = getCurrentPages()
+                    let current_page = pages[pages.length - 1].route
+                    wx.setStorageSync('user_school_label', res2.user_school_label)
+                    wx.setStorageSync('block_splash', true)
+                    wx.restartMiniProgram({
+                      path: '/' + current_page
                     })
                   }
-                  reject()
-                })
-
-            } else {
-              wx.showToast({
-                title: '登录失败，请稍后再试',
-                icon: "none",
-                duration: 1000
-              })
-              // wx.hideLoading()
-              reject()
-            }
-          },
-          fail(res) {
-            console.log(res)
-            var pages = getCurrentPages()
-            var currentPage = pages[pages.length - 1]
-            var url = currentPage.route
-            if (url != "pages/register/register") {
-              wx.reLaunch({
-                url: '/pages/register/register',
-                success() {
+                  if (wx.getStorageSync('block_splash')) {
+                    wx.setStorageSync('block_splash', false)
+                  }
+                  that.launchWebSoccket()
+                  that.checkUnread()
+                  that.watchCaptureScreen()
+                  resolve()
+                } else if (res2.code == 201) {
+                  let query_str = JSON.stringify(res2.account_list)
+                  wx.reLaunch({
+                    url: '/pages/chooseAccount/chooseAccount?account_list=' + query_str
+                  })
+                } else if (res2.code == 401) {
+                  //未注册，跳转注册页
+                  var pages = getCurrentPages()
+                  var currentPage = pages[pages.length - 1]
+                  var url = currentPage.route
+                  if (url != "pages/register/register") {
+                    wx.reLaunch({
+                      url: '/pages/register/register',
+                      success() {
+                        wx.showToast({
+                          title: '请先注册',
+                          icon: "none",
+                          duration: 1000
+                        })
+                      }
+                    })
+                  }
+                } else {
                   wx.showToast({
-                    title: '请先注册',
+                    title: res.msg ? res.msg : "错误",
                     icon: "none",
                     duration: 1000
                   })
                 }
+                reject()
               })
-            }
+
+          } else {
+            wx.showToast({
+              title: '登录失败，请稍后再试',
+              icon: "none",
+              duration: 1000
+            })
+            // wx.hideLoading()
             reject()
-          },
-        })
-      }
+          }
+
+        },
+
+        fail(res) {
+          console.log(res)
+          let pages = getCurrentPages()
+          let currentPage = pages[pages.length - 1]
+          let url = currentPage.route
+          if (url != "pages/register/register") {
+            wx.reLaunch({
+              url: '/pages/register/register',
+              success() {
+                wx.showToast({
+                  title: '请先注册',
+                  icon: "none",
+                  duration: 1000
+                })
+              }
+            })
+          }
+          reject()
+        },
+      })
     })
   },
 
@@ -872,10 +930,12 @@ App({
         data: JSON.stringify(message)
       })
     }
-    setTimeout(() => {
-      console.log("每10秒检测一次")
-      that.launchWebSoccket()
-    }, 10000);
+    if (!that.globalData.close_socket) {
+      setTimeout(() => {
+        console.log("每10秒检测一次")
+        that.launchWebSoccket()
+      }, 10000);
+    }
   },
 
   updateTabbar: function () {

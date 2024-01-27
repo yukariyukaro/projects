@@ -1,5 +1,7 @@
 // var e = getApp();
 import info from "../utils/info.js"
+import newRequest from "../utils/request"
+var app = getApp()
 
 Component({
   data: {
@@ -163,6 +165,40 @@ Component({
           })
         }
       }
+    },
+    clearUnread:function(){
+      let that = this
+      app.showModal({
+        title:"提示",
+        content:"确认清空未读消息？",
+        showCancel:true,
+        success(res){
+          if(res.confirm){
+            newRequest("/notice/clear", {})
+            .then(res => {
+              if (res.code == 200){
+                var db = app.initDatabase()
+                var chat = db.chat
+                var chat_list = chat.get()
+                chat_list.forEach(item => {
+                  item.chat_unread_count = 0
+                  chat.where({
+                    chat_id: item.chat_id
+                  }).update(item)
+                })
+                wx.removeTabBarBadge({
+                  ndex: 1,
+                })
+                wx.setStorageSync('allNoticeCount', 0)
+                wx.setStorageSync('systemNoticeCount', 0)
+                wx.showToast({title: '清理成功', icon: "none", duration: 1000})
+              }else{
+                wx.showToast({title: '清理失败', icon: "none", duration: 1000})
+              }
+            })
+          }
+        }
+      })
     },
   },
 

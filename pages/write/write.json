@@ -3,5 +3,6 @@
     "mini-compress": "/components/mini-compress/mini-compress"
   },
 
-  "navigationStyle": "custom"
+  "navigationStyle": "custom",
+  "disableScroll": true
 }

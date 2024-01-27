@@ -6,7 +6,7 @@
 </view>
 
 <view class="menu">
-  <view class="u-flex-item">
+  <!-- <view class="u-flex-item">
     <view class="u-row-left">
       <view style="display: flex;flex-direction: column;">
         <view class="name">通知推送</view>
@@ -16,7 +16,7 @@
     <view class="u-row-right">
       <switch color="{{theme.primary}}" checked="{{subscribe_accept}}" bindchange="acceptSubscribeNew" />
     </view>
-  </view>
+  </view> -->
   <view class="u-flex-item" bindtap="clearUnread">
     <view class="u-row-left">
       <view style="display: flex;flex-direction: column;">

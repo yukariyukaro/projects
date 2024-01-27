@@ -1,22 +1,24 @@
 <view class="overlay">
-    <view id="privacyContainer" class="container" style="position: fixed;  bottom:{{height}}px; visibility: {{innerShow? 'visible': 'hidden'}}; ">
+    <view id="privacyContainer" class="container" style="{{close? 'bottom: -400px;': ''}}">
     <view class="title">
           <text class="title_text">{{title}}</text>
     </view>
     <view class="message">
         <view class="message_text">{{desc1}}</view>
-        <navigator class="message_text" style="color: var(--primary);" url="/pages/webview/webview?url={{terms_url}}/{{school_label_lower}}/agreement">{{userAgreement}}</navigator>
+        <navigator class="message_text" style="color: {{primary_color}};" url="/pages/webview/webview?url={{terms_url}}/{{school_label_lower}}/agreement">{{userAgreement}}</navigator>
         和
-        <navigator class="message_text" style="color: var(--primary);" url="/pages/webview/webview?url={{terms_url}}/{{school_label_lower}}/privacy">{{privacyAgreement}}</navigator>
+        <navigator class="message_text" style="color: {{primary_color}};" url="/pages/webview/webview?url={{terms_url}}/{{school_label_lower}}/privacy">{{privacyAgreement}}</navigator>
         <view class="message_text">{{desc2}}</view>
     </view>
     <view class="buttons-outer">
       <view class="buttons">
         <button id="disagree-btn"
+          style="--primary: {{primary_color}}"
           class="abutton disagree"
           bindtap="handleDisagree"
         >不同意并退出</button>
         <button id="agree-btn"
+          style="--primary: {{primary_color}}"
           class="abutton agree"
           bindtap="handleAgree"
         >同意并继续</button>

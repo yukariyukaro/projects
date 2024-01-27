@@ -1,6 +1,6 @@
 <view class="tab-bar" style="background: {{is_dark?'#1c1c1c':'#ffffff'}};">
 
-  <view bindtap="switchTab" class="{{item.is_special!=null&&item.is_special==true?'tab-bar-item-center':'tab-bar-item'}}" data-index="{{index}}" data-url="{{item.pagePath}}" wx:for="{{list}}" wx:key="index">
+  <view bindtap="switchTab" class="{{item.is_special!=null&&item.is_special==true?'tab-bar-item-center':'tab-bar-item'}}" data-index="{{index}}" data-url="{{item.pagePath}}" wx:for="{{list}}" wx:key="index" bindlongpress="{{index == 3? 'clearUnread':''}}">
 
     <view class="tab-bar-public" wx:if="{{item.is_special}}">
       <view class="tab-bar-public-background">

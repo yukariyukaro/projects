@@ -25,10 +25,11 @@
 <swiper class="scroll-outer" current="{{swiper_current}}" bindchange="swiperChange" wx:if="{{allow_home_swipe}}" style="height: calc(100vh - 12vw - {{statusbar_height + 44}}px - 110rpx - env(safe-area-inset-bottom))">
   <swiper-item wx:for="{{navbar_items}}" wx:key="index">
 
-    <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:if="{{index == current_tab - start_index}}" style="height: calc(100vh - 12vw - {{statusbar_height + 44}}px - 110rpx - env(safe-area-inset-bottom))">
+    <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" wx:if="{{index == current_tab - start_index}}" style="height: calc(100vh - 12vw - {{statusbar_height + 44}}px - 100rpx - env(safe-area-inset-bottom))">
 
       <view class="post-content" style="margin-top:5vw">
         <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}" />
+        <one type="post-skeleton" wx:if="{{is_loading_more && !post_list[0]}}" wx:for="{{5}}" wx:key="index"/>
         <one type="{{item.type}}" data="{{item.data}}" wx:for="{{post_list}}" wx:key="index" />
         <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />
       </view>
@@ -38,10 +39,11 @@
 </swiper>
 
 <!-- 禁止左右滑动切换tab -->
-<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" style="height: calc(100vh - 12vw - {{statusbar_height + 44}}px - 110rpx - env(safe-area-inset-bottom));" wx:else>
+<scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll" style="height: calc(100vh - 12vw - {{statusbar_height + 44}}px - 100rpx - env(safe-area-inset-bottom));" wx:else>
 
   <view class="post-content">
     <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}" />
+    <one type="post-skeleton" wx:if="{{is_loading_more && !post_list[0]}}" wx:for="{{5}}" wx:key="index"/>
     <one type="{{item.type}}" data="{{item.data}}" wx:for="{{post_list}}" wx:key="post_id" />
     <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />
   </view>
@@ -73,17 +75,11 @@
 
 <privacyPopup wx:if="{{show_privacy}}" bind:agree="onPrivacyAgree" bind:disagree="onPrivacyDisagree" />
 
-<view class="overlay" wx:if="{{content_loaded < 4 && initial_launch}}">
+<view class="splash-screen" wx:if="{{(content_loaded < 4 && initial_launch) || force_splash || !token_checked}}">
   <view class="triple-uni-logo-wrappper">
-    <image class="triple-uni-logo" src="/images/triple-uni.png"></image>
+    <image class="triple-uni-logo logo-anim-open" src="/images/triple-uni.png"></image>
+    <image class="triple-uni-title title-anim-open" src="/images/triple-uni-title-{{theme_mode}}.png"></image>
   </view>
   
-
-<view class="overlay-bottom">
-  <view class="loader-wrapper">
-    <div class="loader"></div>
-  </view>
-  <text class="overlay-text">HKU噗噗·科大空间站·马料水哔哔机</text>
-</view>
 
 </view>

@@ -1,14 +1,14 @@
 .outer {
   width: 100%;
-  height: 100%;
+  height:  fit-content;
   padding-top: 6vw;
   padding-bottom: 7vw;
+  margin-bottom: env(safe-area-inset-bottom);
   font-size: 4vw
 }
 
 .scroll {
   /* height: 100vh; */
-  height: 100vh;
   width: 100%;
 }
 

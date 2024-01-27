@@ -8,7 +8,7 @@ Page({
   data: {
     // scrollViewRefresherStyle: app.globalData.theme.scrollViewRefresherStyle,
     refresh_triggered: false,
-    is_loading_more: false,
+    is_loading_more: true,
     is_last: false,
     one_list: [],
     page:0,

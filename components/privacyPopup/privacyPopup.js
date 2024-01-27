@@ -8,33 +8,17 @@ Component({
         userAgreement: "《用户服务协议》",
         privacyAgreement: "《隐私条款》",
         desc2: "才可继续使用我们的服务。",
-        innerShow: false,
-        height: -500,
         school_label_lower: info.school_label.toLowerCase(),
-        terms_url: info.terms_url
+        terms_url: info.terms_url,
+        primary_color: wx.getSystemInfoSync().theme == 'light'? info.primary_color_on_light : info.primary_color_on_dark,
+        close: false
     },
+
     lifetimes: {
       attached: function() {
-        if (wx.getPrivacySetting) {
-          wx.getPrivacySetting({
-            success: res => {
-                console.log("是否需要授权：", res.needAuthorization, "隐私协议的名称为：", res.privacyContractName)
-                this.setData({urlTitle: res.privacyContractName})
-                if (!res.needAuthorization) {
-                  this.popUp()
-                } else{
-                  this.triggerEvent("agree")
-                }
-            },
-            fail: () => { },
-            complete: () => { },
-          })
-        } else {
-          // 低版本基础库不支持 wx.getPrivacySetting 接口，隐私接口可以直接调用
-          this.triggerEvent("agree")
-        }
       },
     },
+
     methods: {
         handleDisagree(e) {
             this.triggerEvent("disagree")
@@ -55,33 +39,23 @@ Component({
                       title: '请求失败，请重试',
                       icon: "none", 
                       duration: 1000
-                    })
+                    }) 
                 }
             })
         },
-        popUp() {
-          setTimeout(() => {
-            this.setData({
-              height:0,
-              innerShow: true
-            })
-          }, 10);
-        },
+        // popUp() {
+        //   setTimeout(() => {
+        //     this.setData({
+        //       height:0,
+        //       innerShow: true
+        //     })
+        //   }, 10);
+        // },
         disPopUp() {
             this.setData({
-              innerShow: false,
-              height: -400
+              close: true
             })
         },
-        openPrivacyContract() {
-          wx.openPrivacyContract({
-            success: res => {
-              console.log('openPrivacyContract success')
-            },
-            fail: res => {
-              console.error('openPrivacyContract fail', res)
-            }
-          })
-        },
+        
     }
 })

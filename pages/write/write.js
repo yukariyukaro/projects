@@ -693,7 +693,7 @@ Page({
   onShareAppMessage: function () {
     return {
       title: info.slogan,
-      imageUrl: '/images/cover.jpg',
+      imageUrl: info.share_cover,
     };
   },
 });

@@ -6,7 +6,7 @@
   <view class='title'>{{app_name}}</view>
 </view>
 
-<view class="prompt" style="margin-bottom: 40rpx;margin-top: 40rpx;" wx:if="{{mode == 'email'}}">需要使用你的教育邮箱验证{{ school_label }}学生身份</view>
+<view class="prompt" style="margin-bottom: 40rpx;margin-top: 40rpx;" wx:if="{{mode == 'email'}}">需要使用你的教育邮箱验证学生身份</view>
 <view class="prompt" style="margin-bottom: 40rpx;margin-top: 40rpx;" wx:else>需要使用你的账号与密码验证社团身份</view>
 
 <view class="common-outer">
@@ -24,7 +24,7 @@
 
 <view class="common-outer" wx:if="{{mode=='email'}}">
 
-    <picker class="inputbar" bindchange="bindPickerChange" value="{{suffix_idx}}" range="{{suffixes}}">
+    <picker class="inputbar" bindchange="handleSuffixChange" value="{{suffix_idx}}" range="{{suffixes}}">
       <view class="inputbar-input" style="margin-top: 25rpx;">
         {{suffixes[suffix_idx]}}
       </view>

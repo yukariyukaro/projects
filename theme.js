@@ -105,4 +105,22 @@ if (user_school_label.toUpperCase() == 'HKU'){
       "onBg2": "rgba(175, 175, 175, 0.8)"
     }
   }
+} else {
+  module.exports={
+    "light":{
+      "backgroundTextStyle": "light",
+      "navigationBarTextStyle": "black",
+      "scrollViewRefresherStyle": "black",
+      "primary": "#366ABD",
+      "secondary": "#F7D047",
+    },
+    "dark": {
+      "backgroundTextStyle": "dark",
+      "navigationBarTextStyle": "black",
+      "scrollViewRefresherStyle": "white",
+      "primary": "#366ABD",
+      "secondary": "#f3ec68",
+
+    }
+  }
 }

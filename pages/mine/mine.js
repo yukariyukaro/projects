@@ -85,14 +85,16 @@ Page({
       title: '清除数据中',
     });
     // record记录开始
-    newRequest("/user/logout/wechat", {}, this.implementLogout)
+    newRequest("/user/logout/wechatuni", {}, this.implementLogout)
     .then((res) => {
       if(res.code == 200){
         wx.removeStorageSync('token')
         app.clearDB()
+        app.globalData.close_socket = true
         wx.closeSocket()
         wx.setStorageSync('allNoticeCount', 0)
         wx.setStorageSync('systemNoticeCount', 0)
+        wx.setStorageSync('user_school_label', 'UNI')
         wx.reLaunch({
           url: '/pages/register/register',
         })

@@ -6,11 +6,12 @@
     padding-bottom: env(safe-area-inset-bottom);
     filter: drop-shadow(0px -2px 10px rgba(0,0,0,0.06));
     display: flex;
-    z-index: 999999;
-    height: 110rpx;
+    z-index: 99999;
+    height: 100rpx;
 }
 
 .tab-bar-item {
+    margin-top: 15rpx;
     flex: 1;
     display: flex;
     justify-content: center;
@@ -58,7 +59,7 @@
 
 .tab-bar-badge {
     position: absolute;
-    top: 10rpx;
+    top: 0rpx;
     left: 53%;
     height: 30rpx;
     background: linear-gradient(82.01deg,#FF5F5C 28.29%,#FE8A63 100%);
@@ -76,7 +77,7 @@
 
 .tab-bar-tip {
     position: absolute;
-    top: 12rpx;
+    top: 2rpx;
     left: 53%;
     width: 20rpx;
     height: 20rpx;

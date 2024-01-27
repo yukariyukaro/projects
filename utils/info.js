@@ -12,20 +12,20 @@ if (user_school_label.toUpperCase() == 'HKU') {
     slogan: "HKU噗噗， 你不孤单",
     contact_serial: "HKUPootal",
     contact_school_label: "HKU",
-    primary_color_on_light: "#ec849e",
-    primary_color_on_dark: "#c96b82",
+    primary_color_on_light: "#D85050",
+    primary_color_on_dark: "#864442",
     search_nav_bar_color: "#1F86FC",
     search_nav_bar_color_dark: "#1F86FC",
     secondary_color: "#ffd700",
     user_id_name: "Pootal ID",
-    share_cover: "/images/HKU/cover.jpg",
+    share_cover: "/images/HKU/cover.png",
   }
 } else if (user_school_label.toUpperCase() == 'UST') {
   var meta = {
     app_name: "Stardust 科大空间站",
     app_title: "科大空间站",
     team_name: "Stardust 科大星尘",
-    service_account: "科大空间站",
+    service_account: "Stardust 科大空间站",
     search_page_topic: "小火鸟",
     school_label: "UST",
     slogan: "We're all stardust",
@@ -38,7 +38,7 @@ if (user_school_label.toUpperCase() == 'HKU') {
     search_nav_bar_color_dark: "#B49AED",
     secondary_color: "#F7D047",
     user_id_name: "Stardust ID",
-    share_cover: "/images/UST/cover.jpg",
+    share_cover: "/images/UST/cover.png",
   }
 } else if (user_school_label.toUpperCase() == 'CUHK') {
   var meta = {

@@ -10,7 +10,7 @@ Page({
   data: {
     app_name:info.app_name,
     is_dark: '',
-    version: '4.3.2',
+    version: '4.4.0',
     school_label: info.school_label,
     team_name: info.team_name,
     theme: app.globalData.theme

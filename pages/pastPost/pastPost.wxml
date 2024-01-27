@@ -20,6 +20,7 @@
   style = "height: calc(100vh - {{statusbar_height}}px  - env(safe-area-inset-bottom));"
 >
 <view class="post-content">
+  <one type="post-skeleton" wx:if="{{is_loading_more && !one_list[0]}}" wx:for="{{5}}" wx:key="index"></one>
   <one type="{{item.type}}" data="{{item.data}}" wx:for="{{one_list}}" wx:key="index"/>
   <loadmore empty="{{one_list.length==0}}" end="{{is_last}}" loading="{{is_loading_more}}">
     <text class="loadmore-text">这里空荡荡的\n快写下自己树洞吧</text>

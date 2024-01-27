@@ -6,8 +6,9 @@ const schoolToColor = {
 };
 const schools = ['UST', 'CUHK', 'HKU'];
 const school_suffix = {'UST': '!', 'CUHK': '@', 'HKU': '#'};
+
 module.exports = {
   schoolToColor,
   schools,
-  school_suffix,
+  school_suffix
 };

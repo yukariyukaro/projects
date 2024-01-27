@@ -150,16 +150,12 @@ Page({
     wx.showLoading({
       title: '加载中',
     });
-    if (that.data.report_type == 'post') {
-      var report_msg = "举报了#" + that.data.post_detail.post_id + "「" + that.data.post_detail.post_msg + "」，理由为「" + that.data.report_user_msg + "」"
-    }
-    if (that.data.report_type == 'comment') {
-      var report_msg = "举报了#" + that.data.post_detail.post_id + "的评论LG" + that.data.report_index + "「" + that.data.report_msg + "」，理由为「" + that.data.report_user_msg + "」"
-    }
 
     newRequest("/post/single/report", {
         uni_post_id: that.data.uni_post_id,
-        report_msg: report_msg
+        comment_order: that.data.report_type == 'post'? -1 : that.data.report_index,
+        comment_msg: that.data.report_type == 'post'? that.data.post_detail.post_msg : that.data.report_msg,
+        report_msg: that.data.report_user_msg
       }, that.reportPromptConfirm)
       .then(res => {
         that.setData({
@@ -206,7 +202,6 @@ Page({
       var s = new Date(timestamp * 1000);
       return (s.getYear() + 1900) + "-" + (s.getMonth() + 1) + "-" + s.getDate() + " " + String(s.getHours()).padStart(2, "0") + ":" + String(s.getMinutes()).padStart(2, "0");
     }
-
   },
 
   // /post/single/get

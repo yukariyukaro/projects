@@ -8,8 +8,8 @@
   background-image: url("/images/rainbow.png");
 }
 
-.overlay {
-  background-color: var(--bg-2);
+.splash-screen {
+  background-color: var(--bg-1);
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -17,64 +17,73 @@
   left: 0;
   z-index: 10001;
   text-align: center;
-}
-
-.overlay-bottom {
-  position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 22rpx) ;
   display: flex;
   flex-direction: column;
-  align-content: flex-end;
+  justify-content:space-around;
 }
 
-.overlay-text {
-  color: var(--on-bg-2);
-  font-size: large;
+.logo-anim-open {
+  animation-duration: 0.7s;
+  animation-fill-mode: forwards;
+  animation-name: body-anim-open;
+  animation-timing-function: cubic-bezier(0.6, 0, 0.4, 1);
 }
+
+@keyframes body-anim-open {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+.title-anim-open {
+  -webkit-animation-duration: 1.4s;
+  animation-duration: 1.4s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-name: title-anim-open;
+  animation-name: title-anim-open;
+  -webkit-animation-timing-function: cubic-bezier(0.6, 0, 0.4, 1);
+  animation-timing-function: cubic-bezier(0.6, 0, 0.4, 1);
+}
+
+@keyframes title-anim-open {
+  0% {
+      opacity: 0;
+  }
+  50% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+
 
 .triple-uni-logo-wrappper {
-  position: absolute;
-  top: 30vh;
+  /* position: absolute;
+  top: 20vh; */
   width: 100%;
-  height: fit-content;
+  height: 55vh;
   position: relative;
-  text-align: center;
-}
-
-.loader-wrapper {
   display: flex;
-  width: 100vw;
-  align-content: flex-end;
-  justify-content: center;
-  height: 150rpx;
-  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.loader {
-  display: block;
-  margin-top: 50rpx;
-  border: 10rpx solid var(--bg-gray-1);
-  /* Light grey */
-  border-top: 10rpx solid var(--on-bg-gray-1);
-  border-radius: 50%;
-  width: 36rpx;
-  height: 36rpx;
-  animation: spin 1.5s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 .triple-uni-logo {
   width: 400rpx;
   height: 400rpx;
+}
+
+.triple-uni-title {
+  width: 300rpx;
+  height: 300rpx;
 }
 
 

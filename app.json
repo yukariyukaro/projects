@@ -21,7 +21,8 @@
     "pages/userdata/userdata",
     "pages/followService/followService",
     "pages/banDetail/banDetail",
-    "pages/visitProfile/visitProfile"
+    "pages/visitProfile/visitProfile",
+    "pages/chooseAccount/chooseAccount"
   ],
   "requiredBackgroundModes": [
     "audio",

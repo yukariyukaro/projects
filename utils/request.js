@@ -19,7 +19,7 @@ export default function newRequest (path, body, relaunchFunction = new function(
             success (res2) {
               console.log(res2);
               if(res2.code){
-                newRequest("/user/login/wechat", {
+                newRequest("/user/login/wechatuni", {
                   code: res2.code,
                   system_info: JSON.stringify(wx.getSystemInfoSync())
                 }, () => {}, false, true).then( (res3) => {
@@ -40,8 +40,8 @@ export default function newRequest (path, body, relaunchFunction = new function(
                       })
                     }
                   }else{
-                    wx.showToast({title: res3.data.msg, icon: "none", duration: 1000})
-                    reject(res3.data.msg)
+                    wx.showToast({title: res3.msg, icon: "none", duration: 1000})
+                    reject(res3.msg)
                   }
                 })
               }else{

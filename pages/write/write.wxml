@@ -7,7 +7,7 @@
 </view>
 </view>
 
-<!-- <scroll-view scroll-y="true" class="scroll"> -->
+<scroll-view scroll-y="true" class="scroll" style="height: calc(100vh - {{statusbar_height + 44}}px);">
 <view class="outer">
 <view class="block shadow radius">
   <view class="textarea-outer" bindtap="focus">
@@ -242,6 +242,6 @@
 </view>
 </view>
 <mini-compress />
-<!-- </scroll-view> -->
+</scroll-view>
 <!-- <view wx:if="{{showPrivacy}}" class="overlay" bindtap="privacyOverlayTap"></view> -->
 <!-- <privacyPopup wx:if="{{showPrivacy}}" bind:agree="onPrivacyAgree" bind:disagree="onPrivacyDisagree"/> -->

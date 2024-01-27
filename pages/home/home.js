@@ -32,9 +32,11 @@ Page({
     show_privacy: false,
     app_title: info.app_title,
     theme: app.globalData.theme,
+    theme_mode: wx.getSystemInfoSync().theme,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
     content_loaded: 0,
     initial_launch: app.globalData.initial_launch,
+    force_splash: app.globalData.initial_launch,
   },
   // 下拉刷新
   onRefresh: function () {
@@ -100,10 +102,11 @@ Page({
       swiper_current: e.currentTarget.dataset.index - this.data.start_index
     })
   },
+
   navbarTap: function (index) {
-    wx.showLoading({
-      title: '加载中',
-    })
+    // wx.showLoading({
+    //   title: '加载中',
+    // })
     this.setData({
       is_loading_more: true,
       post_list: [],
@@ -569,37 +572,42 @@ Page({
 
 
   initializeWhenReady: function (options) {
-      this.getAd()
-      this.getAll()
-      this.getBanner()
-      this.getTopic()
+    this.getAd()
+    this.getAll()
+    this.getBanner()
+    this.getTopic()
 
-      if (options && !app.globalData.show_privacy) {
-        if (options.jump_page) {
-          if (options.jump_page === 'detail') {
-            if (options.uni_post_id) {
-              wx.navigateTo({
-                url: '/pages/detail/detail?uni_post_id=' + options.uni_post_id,
-              });
-            } else if (options.post_id) {
-              wx.navigateTo({
-                url: '/pages/detail/detail?post_serial=' + options.post_id,
-              });
-            } else if (options.post_serial) {
-              wx.navigateTo({
-                url: '/pages/detail/detail?post_serial=' + options.post_serial,
-              });
-            }
+    if (options && !app.globalData.show_privacy) {
+      if (options.jump_page) {
+        if (options.jump_page === 'detail') {
+          if (options.uni_post_id) {
+            wx.navigateTo({
+              url: '/pages/detail/detail?uni_post_id=' + options.uni_post_id,
+            });
+          } else if (options.post_id) {
+            wx.navigateTo({
+              url: '/pages/detail/detail?post_serial=' + options.post_id,
+            });
+          } else if (options.post_serial) {
+            wx.navigateTo({
+              url: '/pages/detail/detail?post_serial=' + options.post_serial,
+            });
           }
         }
       }
+    }
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var that = this
-
+    if (!app.globalData.initial_launch) {
+      that.setData({
+        force_splash: false,
+        initial_launch: false,
+      })
+    }
     // var qrlink = decodeURIComponent(options.q)
     // if(qrlink.match("https://pupu.hkupootal.com/qrcode?")){
     //   var query = qrlink.split("https://pupu.hkupootal.com/qrcode?")
@@ -611,17 +619,27 @@ Page({
     //   }
     // }
     that.initializeWhenReady(options)
-    
-    app.watch('privacy_checked',(v)=>{
-      console.log("Privacy checked: ", v)
-      this.setData({
-          show_privacy: app.globalData.show_privacy
+
+    app.watch('token_checked', (v) => {
+      let that = this
+      that.setData({
+        token_checked: v
       })
-  })
+    })
+
+    app.watch('privacy_checked', (v) => {
+      let that = this
+      console.log("Privacy checked: ", v)
+      console.log("Show privacy", app.globalData.show_privacy)
+      that.setData({
+        show_privacy: app.globalData.show_privacy
+      })
+    })
 
     wx.onThemeChange((result) => {
       that.setData({
-        theme: app.globalData.theme
+        theme: app.globalData.theme,
+        theme_mode: result.theme
       })
     })
 
@@ -638,6 +656,12 @@ Page({
    */
   onReady: function () {
     setTimeout(() => {
+      this.setData({
+        force_splash: false,
+      })
+    }, 2000)
+
+    setTimeout(() => {
       app.globalData.initial_launch = false;
       this.setData({
         content_loaded: 4,
@@ -650,17 +674,18 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.getTabBar().setData({
+    let that = this
+    that.getTabBar().setData({
       selected: 0
     })
     app.globalData.tabbarJS = this
     app.updateTabbar()
     // this.getCalendarNow()
-    this.setData({
+    that.setData({
+      theme: app.globalData.theme,
       allow_home_swipe: wx.getStorageSync('allow_home_swipe'),
       show_privacy: app.globalData.show_privacy
     })
-
   },
 
   /**
