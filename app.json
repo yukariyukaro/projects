@@ -22,7 +22,8 @@
     "pages/followService/followService",
     "pages/banDetail/banDetail",
     "pages/visitProfile/visitProfile",
-    "pages/chooseAccount/chooseAccount"
+    "pages/chooseAccount/chooseAccount",
+    "pages/enterTripleUni/enterTripleUni"
   ],
   "requiredBackgroundModes": [
     "audio",
@@ -30,7 +31,7 @@
   ],
   "darkmode": true,
   "window": {
-    "navigationBarTitleText": "HKU噗噗",
+    "navigationBarTitleText": "Triple Uni",
     "navigationBarBackgroundColor": "@navigationBarBackgroundColor",
     "navigationBarTextStyle": "@navigationBarTextStyle",
     "backgroundColor": "@backgroundColor",

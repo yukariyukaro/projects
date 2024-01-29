@@ -1,5 +1,5 @@
 page {
-  --primary:  #366ABD;
+  --primary:  #1F9BF0;
   /* --primary: #EE8EAB; */
   /* --primary-gradient: linear-gradient(to bottom right, #c53d3d, #e96b6b); */
   --secondary: #ffd700;

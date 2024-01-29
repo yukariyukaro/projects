@@ -325,6 +325,15 @@ App({
       if (token) {
         // user already logged in
         console.log("has token")
+        // 带token进入 无label
+        let stored_label = wx.getStorageSync('user_school_label')
+        let token_label = decode_token(token).user_school_label
+        if (stored_label == 'UNI' || stored_label != token_label) {
+          wx.reLaunch({
+            url: '/pages/enterTripleUni/enterTripleUni',
+          })
+        }
+        // 检查token
         newRequest("/user/check/wechat", {}).then((res) => {
           if (res.code != 200) {
             reject()
@@ -332,17 +341,17 @@ App({
             that.launchWebSoccket()
             that.watchCaptureScreen()
             that.checkUnread()
-            let stored_label = wx.getStorageSync('user_school_label')
-            let token_label = decode_token(token).user_school_label
-            if (stored_label == 'UNI' || stored_label != token_label) {
-              that.login().then( () => {
-                if (wx.getStorageSync('block_splash')) {
-                  wx.setStorageSync('block_splash', false)
-                }
-                resolve()
-              }
-                
-              )
+            // let stored_label = wx.getStorageSync('user_school_label')
+            // let token_label = decode_token(token).user_school_label
+            // if (stored_label == 'UNI' || stored_label != token_label) {
+            //   wx.reLaunch({
+            //     url: '/pages/enterTripleUni/enterTripleUni',
+            //   })
+
+              // that.login().then( () => {
+              //   resolve()
+              // })
+
               // let pages = getCurrentPages()
               // let current_page = pages[pages.length - 1].route
               // wx.setStorageSync('user_school_label', token_label)
@@ -350,7 +359,7 @@ App({
               // wx.restartMiniProgram({
               //   path: '/' + current_page
               // })
-            }
+            // }
             if (wx.getStorageSync('block_splash')) {
               wx.setStorageSync('block_splash', false)
             }
@@ -388,17 +397,15 @@ App({
                   //保存登陆状态
                   wx.setStorageSync('token', res2.token)
                   if (res2.user_school_label != wx.getStorageSync('user_school_label')) {
-                    let pages = getCurrentPages()
-                    let current_page = pages[pages.length - 1].route
                     wx.setStorageSync('user_school_label', res2.user_school_label)
                     wx.setStorageSync('block_splash', true)
                     wx.restartMiniProgram({
-                      path: '/' + current_page
+                      path: '/pages/home/home'
                     })
                   }
-                  if (wx.getStorageSync('block_splash')) {
-                    wx.setStorageSync('block_splash', false)
-                  }
+                  // if (wx.getStorageSync('block_splash')) {
+                  //   wx.setStorageSync('block_splash', false)
+                  // }
                   that.launchWebSoccket()
                   that.checkUnread()
                   that.watchCaptureScreen()

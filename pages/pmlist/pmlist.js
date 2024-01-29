@@ -9,7 +9,7 @@ Page({
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
     chat_list: [],
-    systemNoticeCount:0,
+    systemNoticeCount: 0,
     theme: app.globalData.theme,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight
   },

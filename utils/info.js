@@ -70,7 +70,7 @@ if (user_school_label.toUpperCase() == 'HKU') {
     slogan: null,
     contact_serial: "HKUPootal",
     contact_school_label: "HKU",
-    primary_color_on_light: "#366ABD",
+    primary_color_on_light: "#1F9BF0",
     primary_color_on_dark: "#366ABD",
     search_nav_bar_color: "#252D40",
     search_nav_bar_color_dark: "#252D40",
@@ -86,6 +86,5 @@ meta.api_domain = "https://api.tripleuni.com/v4";
 meta.socket = "wss://ws.tripleuni.com:7230";
 meta.terms_url = "https://terms.tripleuni.com";
 meta.contact_email = "support@tripleuni.com";
-meta.email_suffixes = ["@connect.hku.hk", "@connect.ust.hk", "@link.cuhk.edu.hk", "@hku.hk", "@ust.hk", "@cuhk.edu.hk", "@alumni.ust.hk"];
 
 module.exports = meta;

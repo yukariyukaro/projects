@@ -1,0 +1,7 @@
+
+<view class="body">
+  <image class="bg" mode="aspectFill" src="/images/enter-triple-uni-bg.jpg"> </image>
+  <view class="button-outter">
+  <image class="button" mode="aspectFit" src="/images/enter-triple-uni-button.jpg" bindtap="enter"> </image>
+  </view>
+</view>

@@ -1,4 +1,6 @@
-const { default: newRequest } = require("../../utils/request")
+const {
+  default: newRequest
+} = require("../../utils/request")
 const info = require("../../utils/info")
 
 var app = getApp()
@@ -14,52 +16,59 @@ Page({
     statusbar_height: wx.getSystemInfoSync().statusBarHeight
   },
 
-  nav2Home:function(){
+  nav2Home: function () {
     wx.reLaunch({
       url: '/pages/home/home',
     })
   },
 
-  select_account:function(e){
-    console.log(e)
+  select_account: function (e) {
+    // console.log(e)
     let idx = e.currentTarget.id
     app.showModal({
       content: this.data.account_list[idx].user_serial,
       title: '你确定选择此账号吗？',
       success: (result) => {
-
-        //获取微信code
-        wx.login({
-          success: (res) => {
-            newRequest("/user/register/wechatuni/choose", {
-              user_itsc: this.data.account_list[idx].user_itsc,
-              user_school_label: this.data.account_list[idx].user_school_label,
-              code: res.code
-            }, this.select_account, false, false)
-            .then((res2) => {
-              if (res2.code == 200) {
-                wx.setStorageSync('token', res2.token)
-                wx.setStorageSync('user_school_label', res2.user_school_label)
-                wx.setStorageSync('block_splash', true)
-                wx.restartMiniProgram({path: "/pages/home/home"})
-              } else {
-                wx.showToast({
-                  title: res2.msg ? res2.msg : "选择失败请重试",
-                  icon: "none",
-                  duration: 1000
+        console.log(result)
+        if (result.confirm) {
+          //获取微信code
+          wx.login({
+            success: (res) => {
+              newRequest("/user/register/wechatuni/choose", {
+                  user_itsc: this.data.account_list[idx].user_itsc,
+                  user_school_label: this.data.account_list[idx].user_school_label,
+                  code: res.code
+                }, this.select_account, false, false)
+                .then((res2) => {
+                  if (res2.code == 200) {
+                    wx.setStorageSync('token', res2.token)
+                    wx.setStorageSync('user_school_label', res2.user_school_label)
+                    wx.setStorageSync('block_splash', true)
+                    wx.restartMiniProgram({
+                      path: "/pages/home/home"
+                    })
+                  } else {
+                    wx.showToast({
+                      title: res2.msg ? res2.msg : "选择失败请重试",
+                      icon: "none",
+                      duration: 1000
+                    })
+                  }
                 })
-              }
-            })
-          },
-          fail: (res) => {
-            wx.showToast({
-              title: res.errMsg,
-              duration: 1000,
-            })
-          }
-        })
+            },
+            fail: (res) => {
+              wx.showToast({
+                title: res.errMsg,
+                duration: 1000,
+              })
+            }
+          })
+        }
 
       },
+      fail: (result) => {
+        console.log(result)
+      }
     })
   },
 
@@ -93,14 +102,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-      console.log(options.account_list)
-      let accounts = JSON.parse(options.account_list.replaceAll('\'','\"'))
-      accounts.forEach((item) => {
-        item.display_time = this.format_time(item.user_create_time)
-      })
-      this.setData({
-        account_list: accounts,
-      })
+    // console.log(options.account_list)
+    let accounts = JSON.parse(options.account_list.replaceAll('\'', '\"'))
+    accounts.forEach((item) => {
+      item.display_time = this.format_time(item.user_create_time)
+    })
+    this.setData({
+      account_list: accounts,
+    })
   },
 
   /**

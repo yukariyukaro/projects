@@ -40,6 +40,7 @@ Page({
     comment_id: '',
     comment_msg: '',
     comment_image: '',
+    comments_received: false,
     comment_with_serial: false,
     is_author: false,
     comment_box_placeholder: '想对洞主说些什么?',
@@ -153,8 +154,8 @@ Page({
 
     newRequest("/post/single/report", {
         uni_post_id: that.data.uni_post_id,
-        comment_order: that.data.report_type == 'post'? -1 : that.data.report_index,
-        comment_msg: that.data.report_type == 'post'? that.data.post_detail.post_msg : that.data.report_msg,
+        comment_order: that.data.report_type == 'post' ? -1 : that.data.report_index,
+        comment_msg: that.data.report_type == 'post' ? that.data.post_detail.post_msg : that.data.report_msg,
         report_msg: that.data.report_user_msg
       }, that.reportPromptConfirm)
       .then(res => {
@@ -166,16 +167,22 @@ Page({
             title: '举报成功',
             icon: 'none',
             duration: 1000,
+            report_type: ''
           });
         } else {
           wx.showToast({
             title: res.msg ? res.msg : "错误",
             icon: "none",
-            duration: 1000
+            duration: 1000,
+            report_type: ''
           })
         }
       })
   },
+
+  // imageLoaded (e) {
+  //   console.log(e)
+  // },
 
 
   time: function () {
@@ -213,10 +220,6 @@ Page({
       }, that.getPostDetail)
       .then((res) => {
         if (res.code == 200) {
-          // res.post_detail.post_msg = res.post_detail.post_msg.replaceAll("\\n", "\n")
-          // for(let i = 0; i<res.comment_list.length ; i++){
-          //   res.comment_list[i].comment_msg = res.comment_list[i].comment_msg.replaceAll("\\n", "\n")
-          // }
           if (res.post_detail.post_msg_markdown) {
             var post_msg = res.post_detail.post_msg_markdown
             // console.log(post_msg)s
@@ -232,6 +235,7 @@ Page({
             post_msg: post_msg,
             post_date: that.format_time(res.post_detail.post_create_time),
             data_received: true,
+            comments_received: true,
             comment_list: res.comment_list,
             triggered: false,
             uni_post_id: res.post_detail.uni_post_id
@@ -582,6 +586,7 @@ Page({
         comment_box_placeholder: '想在自己的树洞下补充些什么？',
         comment_id: '',
         comment_with_serial: true,
+        report_type: ''
       })
     } else {
       this.setData({
@@ -589,6 +594,7 @@ Page({
         comment_box_placeholder: '想对洞主说些什么',
         comment_id: '',
         comment_with_serial: false,
+        report_type: ''
       })
     }
     this.showCommentReportBox()
@@ -1028,22 +1034,38 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.showLoading({
-      title: '加载中',
-    })
-    if (options.post_serial) {
+    if (options.post_detail) {
+      let post_detail_object = JSON.parse(options.post_detail)
       this.setData({
-        post_serial: options.post_serial
-      })
-    } else if (options.post_id) {
-      this.setData({
-        post_serial: options.post_id
+        uni_post_id: options.uni_post_id,
+        post_detail: post_detail_object,
+        data_received: true,
+        post_msg: post_detail_object.post_msg,
+        post_date: this.format_time(post_detail_object.post_create_time),
       })
     } else {
-      this.setData({
-        uni_post_id: options.uni_post_id
-      });
+      wx.showLoading({
+        title: '加载中',
+      })
+      if (options.post_serial) {
+        this.setData({
+          post_serial: options.post_serial
+        })
+      } else if (options.post_id) {
+        this.setData({
+          post_serial: options.post_id
+        })
+      } else {
+        this.setData({
+          uni_post_id: options.uni_post_id
+        });
+      }
     }
+
+    this.getPostDetail();
+    this.getAd()
+
+    // Theming and dark mode
     var systemInfo = wx.getSystemInfoSync()
     if (systemInfo.theme == 'dark') {
       this.setData({
@@ -1064,14 +1086,14 @@ Page({
       }
     }
     wx.onThemeChange((result) => {
-      if (result.theme == 'dark'){
+      if (result.theme == 'dark') {
         this.setData({
           is_dark: true,
           theme: app.globalData.theme
         })
-      }else{
+      } else {
         this.setData({
-          is_dark: false ,
+          is_dark: false,
           theme: app.globalData.theme
         })
       }
@@ -1090,8 +1112,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.getAd()
-    this.getPostDetail();
     this.setData({
       theme: app.globalData.theme,
     })

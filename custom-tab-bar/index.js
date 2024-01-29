@@ -67,7 +67,7 @@ Component({
 
       if (index != that.data.selected) {
         if (index == 2) {
-          console.log(data)
+          // console.log(data)
           wx.navigateTo({
             url: data.url
           })
@@ -134,7 +134,7 @@ Component({
         {
           pagePath: "/pages/write/write",
           iconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/write.svg" : "/write." + (info.school_label == 'HKU' ?  'png' : 'svg')),
-          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/write.svg" : "/write." + (info.school_label == 'HKU' ?  'png' : 'svg')),
+          selectedIconPath: "/images/" + info.school_label + (info.school_label == 'UST' ? "/dark/write.svg" : "/write." + (info.school_label == 'png' ?  'png' : 'svg')),
           text: "",
           is_special: true
         },
@@ -191,6 +191,7 @@ Component({
                 })
                 wx.setStorageSync('allNoticeCount', 0)
                 wx.setStorageSync('systemNoticeCount', 0)
+                app.updateTabbar()
                 wx.showToast({title: '清理成功', icon: "none", duration: 1000})
               }else{
                 wx.showToast({title: '清理失败', icon: "none", duration: 1000})

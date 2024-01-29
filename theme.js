@@ -111,7 +111,7 @@ if (user_school_label.toUpperCase() == 'HKU'){
       "backgroundTextStyle": "light",
       "navigationBarTextStyle": "black",
       "scrollViewRefresherStyle": "black",
-      "primary": "#366ABD",
+      "primary": "#1F9BF0",
       "secondary": "#F7D047",
     },
     "dark": {

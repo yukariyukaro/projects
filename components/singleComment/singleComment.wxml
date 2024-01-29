@@ -1,41 +1,58 @@
-<view>
+<view wx:if="{{!is_skeleton}}">
   <view class="card-outer" style="{{borderStyle ? borderStyle : ''}}; --primary:{{theme.primary}}; --secondary:{{theme.secondary}}">
-      <view class="card-comment-serial">
-          <text class="comment-floor" wx:if="{{comment_order=='0'}}">G · </text>
-          <text class="comment-floor" wx:if="{{comment_order!='0'}}">LG{{comment_order}} · </text>
-          <text class="comment-date">{{comment_date}}</text>
-          <view style="float:right" wx:if="{{is_author}}" bindtap="deleteComment">
-            <image class="icon-delete" src="/images/sf-delete.svg"></image>
-          </view>
-          <view style="float:right; display: flex" wx:else>
-            <image  bindtap="goToComment" class="icon-reply" src="/images/sf-reply.svg"></image>
-          </view>
+    <view class="card-comment-serial">
+      <text class="comment-floor" wx:if="{{comment_order=='0'}}">G · </text>
+      <text class="comment-floor" wx:if="{{comment_order!='0'}}">LG{{comment_order}} · </text>
+      <text class="comment-date">{{comment_date}}</text>
+      <view style="float:right" wx:if="{{is_author}}" bindtap="deleteComment">
+        <image class="icon-delete" src="/images/sf-delete.svg"></image>
       </view>
-      <view class="divider"></view>
-      <view wx:if="{{comment_image}}" style="margin: 15rpx 10rpx 10rpx 10rpx;text-align:center;">
-          <image
-            style="width:100%;border-radius: 10px;" mode="widthFix"
-            src="{{comment_image}}"
-            bindtap="previewCommentPic"
-          ></image>
-        </view>
-      <view style="display: inline-flex; padding: 0 0 0 20rpx;margin-bottom: 20rpx;" wx:if="{{comment_father_msg}}">
-        <view class="divider-c"></view>
-        <view class="card-comment-content-q"><text user-select='true'>{{comment_father_msg}}</text></view>
+      <view style="float:right; display: flex" wx:else>
+        <image bindtap="goToComment" class="icon-reply" src="/images/sf-reply.svg"></image>
       </view>
-      <!-- <view class="card-comment-content"><text user-select='true'>{{comment_msg}}</text></view> -->
-      <mp-html content="{{parsed_msg}}" selectable container-style="white-space: pre-wrap; padding: 0vw 2vw 2vw 2vw;"/>
-    
-      <image  bindtap="reportComment" class="icon-report" src="/images/sf-report.svg"></image>
+    </view>
+    <view class="divider"></view>
+    <view wx:if="{{comment_image}}" style="margin: 15rpx 10rpx 10rpx 10rpx;text-align:center;">
+      <image style="width:100%;border-radius: 10px;" mode="widthFix" src="{{comment_image}}" bindtap="previewCommentPic"></image>
+    </view>
+    <view style="display: inline-flex; padding: 0 0 0 20rpx;margin-bottom: 20rpx;" wx:if="{{comment_father_msg}}">
+      <view class="divider-c"></view>
+      <view class="card-comment-content-q"><text user-select='true'>{{comment_father_msg}}</text></view>
+    </view>
+    <!-- <view class="card-comment-content"><text user-select='true'>{{comment_msg}}</text></view> -->
+    <mp-html content="{{parsed_msg}}" selectable container-style="white-space: pre-wrap; padding: 0vw 2vw 2vw 2vw;" />
 
-      <view class="alias{{is_org?'-org':''}}" bindtap="visitUser">
-        <text>{{comment_alias}}</text>
-      </view>
+    <image bindtap="reportComment" class="icon-report" src="/images/sf-report.svg"></image>
 
-      <view class="avatar-outer" wx:if="{{user_avatar != ''}}" bindtap="visitUser">
-        <image class="avatar" src="{{preURL+user_avatar+'.svg'}}"/>
-      </view>  
-      <view class="clear"></view>
+    <view class="alias{{is_org?'-org':''}}" bindtap="visitUser">
+      <text>{{comment_alias}}</text>
+    </view>
+
+    <view class="avatar-outer" wx:if="{{user_avatar != ''}}" bindtap="visitUser">
+      <image class="avatar" src="{{preURL+user_avatar+'.svg'}}" />
+    </view>
+    <view class="clear"></view>
   </view>
   <view style="height: 4vw"></view>
+</view>
+
+<view wx:else>
+  <view class="card-outer-skeleton" style="border-style: none;">
+    <view class="card-comment-serial">
+      <view class="skeleton-title">
+        <view class="skeleton-text skeleton" style="width: 45rpx;"></view>
+        <view class="skeleton-text skeleton"></view>
+      </view>
+      <view class="skeleton-text skeleton" style="width: 45rpx; position: absolute; right: 3.5vw;top: 2vw"></view>
+    </view>
+    <view class="divider"></view>
+    <view class="skeleton-post-content-outer">
+      <view class="skeleton-text-full-width skeleton"></view>
+    </view>
+    <view class="skeleton-signature">
+      <view class="skeleton-avatar skeleton"></view>
+      <view class="skeleton-tag skeleton"></view>
+    </view>
+    
+  </view>
 </view>

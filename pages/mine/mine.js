@@ -70,7 +70,7 @@ Page({
     var that = this;
     app.showModal({
       title: '提示',
-      content: '登出后将解绑微信号和UID,下次登陆将重新绑定。确定登出吗?',
+      content: '登出后将解绑微信号和邮箱,下次登陆将重新绑定。确定登出吗?',
       success(res) {
         if (res.confirm) {
           that.implementLogout();

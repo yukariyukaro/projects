@@ -54,8 +54,8 @@
             <mp-html selectable container-style="white-space: {{is_markdown? 'normal':'pre-wrap'}};" content="{{post_msg}}" markdown="{{is_markdown}}"/>
         </view>
         <!-- 图片 -->
-        <view wx:if="{{post_detail.post_image}}" style="margin-top: 5vw; margin-right:20rpx;text-align:center" wx:for="{{post_detail.post_image}}" wx:key="index">
-          <image style="width:100%;border-radius: 10px" mode="widthFix" src="{{item}}" data-index="{{index}}" bindtap="previewPic"></image>
+        <view wx:if="{{post_detail.post_image}}" style="margin-top: 5vw; margin-right:20rpx;text-align:center" wx:for="{{post_detail.post_image}}" wx:key="index" >
+          <image fade-in style="width:100%;border-radius: 10px" mode="widthFix" src="{{item}}" data-index="{{index}}" bindtap="previewPic"></image>
         </view>
         <!-- Bilibili -->
         <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'bilibili'}}" bindtap="onTapBilibili">
@@ -214,7 +214,8 @@
       </view>
       <!-- 显示所有评论 -->
       <view>
-        <singleComment id="commentComponent" wx:for="{{comment_list}}" wx:key="comment_id" bind:deleteComment="deleteComment" bind:replyComment="replyComment" bind:reportComment="reportComment" uni_post_id="{{item.uni_post_id}}" comment_id="{{item.comment_id}}" comment_order="{{item.comment_order}}" comment_msg="{{item.comment_msg_display? item.comment_msg_display:item.comment_msg}}" comment_create_time="{{item.comment_create_time}}" is_author="{{item.is_author}}" is_anonymous="{{!item.user_is_real_name}}" is_org="{{item.user_is_org}}" comment_alias="{{item.user_alias}}" user_avatar="{{item.user_avatar}}" user_serial="{{item.user_serial}}" comment_school_label="{{item.user_school_label}}" post_is_author="{{post_detail.is_author}}" comment_father_msg="{{item.comment_father_msg}}" comment_image="{{item.comment_image}}" comment_theme_color="{{comment_theme_color}}"/>
+        <singleComment wx:if="{{!comments_received && data_received}}" is_skeleton wx:for="{{post_detail.post_comment_num}}" wx:key="index"></singleComment>
+        <singleComment id="commentComponent" wx:for="{{comment_list}}" wx:key="comment_id" bind:deleteComment="deleteComment" bind:replyComment="replyComment" bind:reportComment="reportComment" uni_post_id="{{item.uni_post_id}}" comment_id="{{item.comment_id}}" comment_order="{{item.comment_order}}" comment_msg="{{item.comment_msg_display? item.comment_msg_display:item.comment_msg}}" comment_create_time="{{item.comment_create_time}}" is_author="{{item.is_author}}" is_anonymous="{{!item.user_is_real_name}}" is_org="{{item.user_is_org}}" comment_alias="{{item.user_alias}}" user_avatar="{{item.user_avatar}}" user_serial="{{item.user_serial}}" comment_school_label="{{item.user_school_label}}" post_is_author="{{post_detail.is_author}}" comment_father_msg="{{item.comment_father_msg}}" comment_image="{{item.comment_image}}" comment_theme_color="{{comment_theme_color}}" is_skeleton="{{false}}"/>
       </view>
     </view>
   </view>

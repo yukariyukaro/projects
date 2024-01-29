@@ -6,7 +6,7 @@
   min-height: 100vh;
 }
 
-.HKU{
+/* .HKU{
   border: #D85050 1px solid
 }
 
@@ -26,14 +26,21 @@
   .UST{
     border: #B49AED 1px solid
   }
-}
+} */
 
 .header{
   text-align: center;
   font-weight: 400;
-  font-size: larger;
+  font-size: 40rpx;
   margin-top: 110rpx;
   margin-bottom: 50rpx;
+}
+
+.footer{
+  text-align: center;
+  font-weight: 200;
+  font-size: 27rpx;
+  margin: 100rpx 40rpx 50rpx 40rpx;
 }
 
 .serial-avatar-outer{

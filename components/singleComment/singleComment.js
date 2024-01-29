@@ -22,6 +22,7 @@ Component({
     comment_father_msg: (String || null),
     comment_image: (String || null),
     comment_theme_color: String,
+    is_skeleton: Boolean,
   },
 
   data: {

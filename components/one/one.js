@@ -86,8 +86,9 @@ Component({
       });
     },
     nav2Post: function () {
+      let query_str = JSON.stringify(this.properties.data)
       wx.navigateTo({
-        url: '/pages/detail/detail?uni_post_id=' + this.properties.data.uni_post_id,
+        url: '/pages/detail/detail?uni_post_id=' + this.properties.data.uni_post_id + '&post_detail=' + query_str,
       })
     },
     nav2OrgFromArticle: function () {
@@ -99,7 +100,8 @@ Component({
       if(this.properties.data.article_link){
         wx.navigateTo({url: '/pages/webview/webview?url=' + this.properties.data.article_link,})
       }else{
-        wx.navigateTo({url: '/pages/detail/detail?uni_post_id=' + this.properties.data.uni_post_id,})
+        let query_str = JSON.stringify(this.properties.data)
+        wx.navigateTo({url: '/pages/detail/detail?uni_post_id=' + this.properties.data.uni_post_id + '&post_detail=' + query_str})
       }
     },
     nav2OrgFromOrg: function () {

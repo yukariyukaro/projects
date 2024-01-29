@@ -618,10 +618,10 @@ Page({
     //     })
     //   }
     // }
-    that.initializeWhenReady(options)
 
     app.watch('token_checked', (v) => {
-      let that = this
+      // let that = this
+      that.initializeWhenReady(options)
       that.setData({
         token_checked: v
       })

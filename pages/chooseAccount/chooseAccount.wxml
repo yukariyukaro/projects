@@ -1,28 +1,34 @@
 <view class="body" style="padding-top: {{statusbar_height}}px;">
-<view class="header">
-  <text>请选择默认登陆账号</text>
-</view>
-
-<view class="account-outer {{item.user_school_label}}" wx:for="{{account_list}}" wx:key="index" bind:tap="select_account" id="{{index}}" >
-  <view class="account-header">
-    <view class="serial-avatar-outer"> 
-      <view class="account-avatar-outer" wx-if="{{item.user_avatar != ''}}">
-        <image class="account-avatar" src="{{pre_url+item.user_avatar+'.svg'}}" />
-      </view>
-      <text class="user-serial">{{item.user_serial}}</text>
-    </view>
-      <text>{{item.user_school_label}}</text>
-  </view> 
-
-  <view class="account-divider"></view>
-
-  <!-- 树洞内容区 -->
-  <view class="account-content">
-    <text>注册时间：{{item.display_time}}</text>
-    <text>注册邮箱：{{item.user_itsc + item.user_email_suffix}}</text>
-    <text>树洞数量：{{item.post_count}}</text>
-    <text>围观数量：{{item.follow_count}}</text>
+  <view class="header">
+    <text>请选择默认登陆账号</text>
   </view>
-</view>
 
+  <view class="account-outer {{item.user_school_label}}" wx:for="{{account_list}}" wx:key="index" bind:tap="select_account" id="{{index}}">
+    <view class="account-header">
+      <view class="serial-avatar-outer">
+        <view class="account-avatar-outer" wx-if="{{item.user_avatar != ''}}">
+          <image class="account-avatar" src="{{pre_url+item.user_avatar+'.svg'}}" />
+        </view>
+        <text class="user-serial">{{item.user_serial}}</text>
+      </view>
+      <text wx:if="{{item.user_school_label == 'HKU'}}">HKU噗噗</text>
+      <text wx:if="{{item.user_school_label == 'UST'}}">科大空间站</text>
+      <text wx:if="{{item.user_school_label == 'CUHK'}}">马料水哔哔机</text>
+    </view>
+
+    <view class="account-divider"></view>
+
+    <!-- 树洞内容区 -->
+    <view class="account-content">
+      <text>树洞学校：{{item.user_school_label}}</text>
+      <text>注册时间：{{item.display_time}}</text>
+      <text>注册邮箱：{{item.user_itsc + item.user_email_suffix}}</text>
+      <text>树洞数量：{{item.post_count}}</text>
+      <text>围观数量：{{item.follow_count}}</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <text>你选择的账号将作为你在“Triple Uni"小程序的默认登录账号。如要使用其他账号，请退出当前账号后重新使用相应的教育邮箱登录。</text>
+  </view>
 </view>
