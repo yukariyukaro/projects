@@ -35,20 +35,25 @@
         <image class="post-avatar" src="{{preURL+data.user_avatar+'.svg'}}" />
       </view>
       <view class="post-topic">
-        <text class="post-topic-text">{{data.post_topic}}</text>
+        <view class="post-topic-text" style="{{tag_has_emoji? 'transform: translateY(-2rpx)':''}}">{{data.post_topic}}</view>
       </view>
     </view>
     <!-- 收藏数 评论数 -->
     <view class="post-follower-comment-outer">
-      <view style="padding-right:15rpx;">
-        <image wx:if="{{data.is_following}}" class="post-follower-icon" src="/images/sf-star-fill.svg"></image>
-        <image wx:else class="post-follower-icon" src="/images/sf-star.svg"></image>
+
+      <view class="post-icon-number-outer">
+        <view style="padding-right: 10rpx;">
+          <image class="post-follower-icon" src="/images/sf-comment.svg"></image>
+        </view>
+        <view class="post-follower-num">{{data.post_comment_num}}</view>
       </view>
-      <view class="post-follower-num" style="padding-right: 25rpx;">{{data.post_follower_num}}</view>
-      <view style="padding-right: 15rpx;">
-        <image class="post-follower-icon" src="/images/sf-comment.svg"></image>
+      <view class="post-icon-number-outer">
+        <view style="padding-right:8rpx;">
+          <image wx:if="{{data.is_following}}" class="post-follower-icon" src="/images/sf-star-fill.svg"></image>
+          <image wx:else class="post-follower-icon" src="/images/sf-star.svg"></image>
+        </view>
+        <view class="post-follower-num">{{data.post_follower_num}}</view>
       </view>
-      <view class="post-follower-num">{{data.post_comment_num}}</view>
     </view>
   </view>
 
@@ -98,19 +103,19 @@
   </view>
 
   <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'file'}}">
-		<view class="post-function-title">{{ data.post_media.file_name }}</view>
-		<view class="post-function-icon-outer-file">
-		    <image src="/images/file.svg" class="post-icon-file" />
-		</view>
+    <view class="post-function-title">{{ data.post_media.file_name }}</view>
+    <view class="post-function-icon-outer-file">
+      <image src="/images/file.svg" class="post-icon-file" />
+    </view>
   </view>
 
   <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'hku_group'}}">
-		<view class="post-function-title">{{ "加入群聊: " + data.post_media.group_name }}</view>
-		<view class="post-function-icon-outer-file">
+    <view class="post-function-title">{{ "加入群聊: " + data.post_media.group_name }}</view>
+    <view class="post-function-icon-outer-file">
       <image src="/images/miniapp.svg" class="post-icon-miniapp"></image>
-		</view>
+    </view>
   </view>
-  
+
   <view class="post-content">
     <view class="post-content-outer" style="width: {{!data.post_image? '100%' : '82%'}}">
       <view class="post-content-text">
@@ -159,7 +164,7 @@
     <view style="margin-top: 10rpx; margin-bottom: 10rpx; font-weight: bold;">{{data.post_media.sharing_title}}</view>
     <text style="color: var(--on-bg-gray-1); font-size: 28rpx !important;">{{data.post_media.sharing_abstract}}</text>
   </view>
-  <view style="display: flex; flex-wrap: wrap; margin:15rpx 30rpx 0 30rpx;padding-bottom: 20rpx;"> 
+  <view style="display: flex; flex-wrap: wrap; margin:15rpx 30rpx 0 30rpx;padding-bottom: 20rpx;">
     <view class="sharing-tag">
       <image class="sharing-tag-icons" src="/images/{{school_label}}/sharing-author.svg"></image>
       <text>{{data.post_media.sharing_author}}</text>
@@ -282,8 +287,8 @@
       <view class="banner-outer-o">
         <image src="{{item.banner_image}}" class="banner-outer" bindtap="orgOnTapBanner" data-banneritem="{{data[index]}}">
           <view class="banner-title" wx:if="{{item.banner_title}}">
-          <text>{{item.banner_title}}</text>
-        </view>
+            <text>{{item.banner_title}}</text>
+          </view>
         </image>
       </view>
       <!-- <view class="banner-outer" style="background-image: url({{item.banner_image}});" bindtap="orgOnTapBanner" data-banneritem="{{data.banner_list[index]}}">

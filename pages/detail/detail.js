@@ -382,45 +382,51 @@ Page({
 
   },
 
+  switchFollowing () {
+    var that = this;
+    let new_post_detail = that.data.post_detail
+    if(!new_post_detail.is_following){
+      new_post_detail.is_following = true
+      new_post_detail.post_follower_num = Number(new_post_detail.post_follower_num) + 1
+    } else {
+      new_post_detail.is_following = false
+      new_post_detail.post_follower_num = Number(new_post_detail.post_follower_num) - 1
+    }
+    that.setData({
+      post_detail: new_post_detail
+    })
+  },
+
   // /post/single/follow
   follow: function () {
     var that = this;
-    wx.showLoading({
-      title: '加载中',
-    });
-    var that = this
+    that.switchFollowing()
+  
     newRequest("/post/single/follow", {
         uni_post_id: that.data.uni_post_id
       }, that.follow)
       .then(res => {
         if (res.code == 200) {
-          that.data.post_detail.is_following = !that.data.post_detail.is_following
-          that.data.post_detail.post_follower_num = Number(that.data.post_detail.post_follower_num) + 1
-          that.setData({
-            post_detail: that.data.post_detail,
-          })
           wx.showToast({
             title: '开始围观⭐w⭐',
             icon: 'none',
             duration: 1000,
           });
+          console.log("围观成功")
         } else if (res.code == 201) {
-          that.data.post_detail.is_following = !that.data.post_detail.is_following
-          that.data.post_detail.post_follower_num = Number(that.data.post_detail.post_follower_num) - 1
-          that.setData({
-            post_detail: that.data.post_detail,
-          })
           wx.showToast({
             title: '停止了围观',
             icon: 'none',
             duration: 1000,
           });
+          console.log("取消围观成功")
         } else {
           wx.showToast({
             title: res.msg ? res.msg : "错误",
             icon: "none",
             duration: 1000
           })
+          that.switchFollowing()
         }
       })
   },
@@ -1035,18 +1041,23 @@ Page({
    */
   onLoad: function (options) {
     if (options.post_detail) {
-      let post_detail_object = JSON.parse(options.post_detail)
-      this.setData({
-        uni_post_id: options.uni_post_id,
-        post_detail: post_detail_object,
-        data_received: true,
-        post_msg: post_detail_object.post_msg,
-        post_date: this.format_time(post_detail_object.post_create_time),
-      })
+      try {
+        let post_detail_object = JSON.parse(options.post_detail)
+        this.setData({
+          is_markdown: post_detail_object.post_msg_markdown == null? false : true,
+          uni_post_id: options.uni_post_id,
+          post_detail: post_detail_object,
+          data_received: true,
+          post_msg: post_detail_object.post_msg_markdown || post_detail_object.post_msg,
+          post_date: this.format_time(post_detail_object.post_create_time),
+        })
+      } catch {
+        this.setData({
+          uni_post_id: options.uni_post_id
+        });
+      }
+      
     } else {
-      wx.showLoading({
-        title: '加载中',
-      })
       if (options.post_serial) {
         this.setData({
           post_serial: options.post_serial

@@ -16,7 +16,8 @@ Component({
   data: {
     preURL: 'https://i.boatonland.com/avatar/',
     is_dark:false,
-    school_label: info.school_label
+    school_label: info.school_label,
+    tag_has_emoji: false,
   },
 
   lifetimes: {
@@ -31,21 +32,21 @@ Component({
       
       if (that.data.type == 'post'){
         const regex_emoji = /[\p{Extended_Pictographic}\u{1F3FB}-\u{1F3FF}\u{1F9B0}-\u{1F9B3}]+/gu;
-        const emoji = that.data.data.post_topic.match(regex_emoji);
-        let temp = that.data.data
-        if(emoji){
-          
-          let post_fix = temp.post_topic.slice(2)
-          if (post_fix.length > 9){
-            post_fix = post_fix.slice(5,10)
+        const has_emoji = that.data.data.post_topic.match(regex_emoji)? true : false;
+        // let temp = that.data.data
+        // if(emoji){
+        //   let post_fix = temp.post_topic.slice(2)
+        //   if (post_fix.length > 9){
+        //     post_fix = post_fix.slice(5,10)
+        //   }
 
-          }
-          temp.post_topic = emoji+" "+post_fix
-        }
-        temp.post_msg = temp.post_msg.replaceAll("\\n", "\n")
+        //   temp.post_topic = emoji+post_fix
+        // }
+        // temp.post_msg = temp.post_msg.replaceAll("\\n", "\n")
 
         that.setData({
-          data: temp
+          tag_has_emoji: has_emoji,
+          data: that.data.data
         })
       }
     }

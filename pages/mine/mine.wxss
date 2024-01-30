@@ -33,7 +33,7 @@
 
 .header-top {
   /* height: 186rpx; */
-  padding: 0 32rpx 0 54rpx;
+  padding: 14rpx 46rpx 0 46rpx;
   display: flex;
 }
 
