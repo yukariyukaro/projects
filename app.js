@@ -320,7 +320,7 @@ App({
 
   showModal(options) {
     return wx.showModal({
-      confirmColor: this.globalData.theme.primary,
+      confirmColor: info.school_label != 'CUHK'? this.globalData.theme.primary: '',
       ...options,
     });
   },

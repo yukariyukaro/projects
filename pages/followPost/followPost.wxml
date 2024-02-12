@@ -1,9 +1,5 @@
 <!-- Navbar -->
-<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
-  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
-  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
-  <view style="margin-bottom:12px; ">我的围观</view>
-</view>
+<navbar title="我的围观" showBack/>
 
 <scroll-view
   scroll-y="{{true}}" class="scroll-outer"

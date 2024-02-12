@@ -3,7 +3,8 @@
     "one": "/components/one/one",
     "loadmore": "/components/loadmore/loadmore",
     "privacyPopup": "/components/privacyPopup/privacyPopup",
-    "enableNotification": "/components/enableNotification/enableNotification"
+    "enableNotification": "/components/enableNotification/enableNotification",
+    "navbar": "/components/navbar/navbar"
   },
   "disableScroll":true,
   "navigationStyle": "custom"

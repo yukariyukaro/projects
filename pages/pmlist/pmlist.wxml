@@ -1,7 +1,5 @@
 <!-- Navbar -->
-<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
-  <view style="margin-bottom:12px; ">消息</view>
-</view>
+<navbar title="消息"/>
 
 <scroll-view style="height: calc(100vh - {{statusbar_height}}px - 44rpx - env(safe-area-inset-bottom)); " scroll-y="true">
 <view class="dialog-list fix-tabbar">

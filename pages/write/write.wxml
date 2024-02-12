@@ -1,10 +1,6 @@
 <!-- Navbar -->
 <view style="position: sticky; top: 0; z-index: 1000;">
-<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px;">
-  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
-  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
-  <view style="margin-bottom:12px; ">发布树洞</view>
-</view>
+<navbar title="发布树洞" showBack/>
 </view>
 
 <scroll-view scroll-y="true" class="scroll" style="height: calc(100vh - {{statusbar_height + 44}}px);">

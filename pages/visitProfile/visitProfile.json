@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "one": "/components/one/one",
-    "loadmore": "/components/loadmore/loadmore"
+    "loadmore": "/components/loadmore/loadmore",
+    "navbar": "/components/navbar/navbar"
   },
   "navigationBarTitleText": "用户信息",
   "disableScroll":true,

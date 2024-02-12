@@ -1,10 +1,8 @@
-<!-- 彩虹主题 -->
-<!-- <view class="ns">HKU噗噗</view> -->
+
 
 <!-- Navbar -->
-<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
-  <view style="margin-bottom:12px; ">{{app_title}}</view>
-</view>
+<navbar title="{{app_title}}"/>
+
 
 <view class="navbar shadow">
   <scroll-view scroll-x enhanced show-scrollbar="false" style="height: 100%;white-space: nowrap;" scroll-into-view="nav-{{nav_to_view}}" enable-back-to-top="{{true}}">

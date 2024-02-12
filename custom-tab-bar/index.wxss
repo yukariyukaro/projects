@@ -8,6 +8,7 @@
     display: flex;
     z-index: 99999;
     height: 110rpx;
+    overflow: visible;
 }
 
 .tab-bar-item {
@@ -45,6 +46,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: visible;
 }
 
 
@@ -53,10 +55,10 @@
     width: 120rpx;
     height: 120rpx;
     /* height: 144rpx; */
-    background-color: var(--bg-2);
+    /* background-color: var(--bg-2); */
     border: 20rpx solid var(--bg-2)!;
     border-radius: 50%;
-    /* overflow: visible; */
+    overflow: visible;
 }
 
 .tab-bar-badge {

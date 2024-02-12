@@ -40,7 +40,8 @@ Component({
       // console.log(this.properties.comment_school_label)
       this.setData({
         comment_date: this.format_time(this.properties.comment_create_time),
-        parsed_msg: getLinks(this.properties.comment_msg, this.properties.comment_school_label)
+        parsed_msg: getLinks(this.properties.comment_msg, this.properties.comment_school_label),
+        theme: app.globalData.theme
       })
       if (app.globalData.themeInfo.primaryColorLight) {
         if (systemInfo.theme == 'dark') {
@@ -58,7 +59,13 @@ Component({
           borderStyle: "border: 1px solid " + this.properties.comment_theme_color + ";"
         })
       }
+      wx.onThemeChange(() => {
+        this.setData({
+          theme: app.globalData.theme
+        })
+      })
     },
+  
   },
 
   /**
@@ -80,6 +87,7 @@ Component({
         })
       }
     },
+    
     reportComment: function () {
       this.triggerEvent('reportComment', {
         comment_msg: this.data.comment_msg,

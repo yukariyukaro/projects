@@ -1,32 +1,46 @@
 // components/navbar/navbar.js
+var app = getApp()
+
 Component({
-  options: {
-    multipleSlots: true,
-  },
-  externalClasses: ['active-class'],
+
+  /**
+   * 组件的属性列表
+   */
   properties: {
-    items: {
-      type: Array,
-      value: [],
-    },
-    startIndex: {
-      type: Number,
-      value: 0,
-    },
-    currentIndex: {
-      type: Number,
-      value: 0,
-    },
-    prop: String,
+    title: String,
+    showBack: Boolean
   },
+
+  /**
+   * 组件的初始数据
+   */
+  data: {
+    statusbar_height: wx.getSystemInfoSync().statusBarHeight,
+    primary: app.globalData.theme.primary,
+    is_dark: wx.getSystemInfoSync().theme == "dark"
+  },
+
+  lifetimes: {
+    attached() {
+      this.setData({
+        primary: app.globalData.theme.primary
+      })
+
+      wx.onThemeChange((result) => {
+        this.setData({
+          primary: app.globalData.theme.primary,
+          is_dark: result.theme == "dark"
+        })
+      })
+    },
+  },
+
+  /**
+   * 组件的方法列表
+   */
   methods: {
-    navbarTap: function (e) {
-      const currentIndex = e.currentTarget.dataset.index;
-      // setData 设置properties
-      // 在外层使用model:current-index=...双向绑定
-      // 因为私信等页面外部也要用到currentIndex这个变量
-      this.setData({ currentIndex });
-      this.triggerEvent('change', currentIndex);
+    back() {
+      wx.navigateBack()
     },
-  },
-});
+  }
+})

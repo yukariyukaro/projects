@@ -38,7 +38,7 @@ Page({
         title: '请勿重复操作',
         showCancel: false,
         content: '验证码已发送，有一定几率在垃圾邮件箱噢',
-        confirmColor: '#1F9BF0'
+
       });
       return;
     }
@@ -47,7 +47,6 @@ Page({
         title: '警告',
         showCancel: false,
         content: '邮箱不能为空',
-        confirmColor: '#1F9BF0'
       });
       return;
     }
@@ -78,7 +77,7 @@ Page({
             title: '验证码已发送',
             showCancel: false,
             content: '验证码已发送,请留意垃圾邮件箱!',
-            confirmColor: '#1F9BF0'
+
           });
         } else if (res.code == 401) {
           // wx.setClipboardData({
@@ -118,7 +117,7 @@ Page({
           title: '提示',
           showCancel: false,
           content: '请先获取验证码',
-          confirmColor: '#1F9BF0'
+
         });
         return;
       }
@@ -127,7 +126,7 @@ Page({
           title: '警告',
           showCancel: false,
           content: '邮箱不能为空',
-          confirmColor: '#1F9BF0'
+
         });
         return;
       }
@@ -136,7 +135,7 @@ Page({
           title: '警告',
           showCancel: false,
           content: '验证码不能为空',
-          confirmColor: '#1F9BF0'
+
         });
         return;
       }
@@ -145,7 +144,7 @@ Page({
           title: '提示',
           showCancel: false,
           content: '请先同意「用户服务协议」与「隐私政策」',
-          confirmColor: '#1F9BF0'
+
         });
         return;
       }
@@ -193,7 +192,7 @@ Page({
                   title: '注册失败',
                   content: '验证码错误,请检查',
                   showCancel: false,
-                  confirmColor: '#1F9BF0'
+
                 })
                 that.setData({
                   is_posting: false,
@@ -203,7 +202,7 @@ Page({
                   title: '注册失败',
                   content: '社团账号请使用账号密码登录',
                   showCancel: false,
-                  confirmColor: '#1F9BF0'
+
                 })
                 that.setData({
                   auth_sent: false,
@@ -214,7 +213,7 @@ Page({
                   title: '注册失败',
                   content: '该邮箱已注册',
                   showCancel: false,
-                  confirmColor: '#1F9BF0'
+
                 })
                 that.setData({
                   auth_sent: false,
@@ -225,7 +224,7 @@ Page({
                   title: '提示',
                   content: res2.msg,
                   showCancel: false,
-                  confirmColor: '#1F9BF0'
+
                 })
                 that.setData({
                   auth_sent: false,
@@ -252,7 +251,7 @@ Page({
           title: '警告',
           showCancel: false,
           content: '邮箱不能为空',
-          confirmColor: '#1F9BF0'
+
         });
         return;
       }
@@ -261,7 +260,7 @@ Page({
           title: '警告',
           showCancel: false,
           content: 'PIN不能为空',
-          confirmColor: '#1F9BF0'
+
         });
         return;
       }
@@ -270,7 +269,7 @@ Page({
           title: '提示',
           showCancel: false,
           content: '请先同意「用户服务协议」与「隐私政策」',
-          confirmColor: '#1F9BF0'
+
         });
         return;
       }
@@ -309,7 +308,7 @@ Page({
               title: '提示',
               content: res2.msg,
               showCancel: false,
-              confirmColor: '#1F9BF0'
+
             })
             that.setData({
               auth_sent: false,

@@ -15,9 +15,8 @@ Page({
     page:0,
     scroll_top: 0,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
-    theme: app.globalData.theme,
-    is_dark: false,
   },
+
   // 下拉刷新
   onRefresh() {
     this.setData({
@@ -38,10 +37,6 @@ Page({
       page:this.data.page + 1
     });
     this.getPostByMy();
-  },
-
-  back() {
-    wx.navigateBack()
   },
 
   // /post/list/my
@@ -86,25 +81,6 @@ Page({
    */
   onLoad: function (options) {
     this.getPostByMy();
-    var systemInfo = wx.getSystemInfoSync()
-    if (systemInfo.theme == 'dark') {
-      this.setData({
-        is_dark: true,
-      })
-    }
-    wx.onThemeChange((result) => {
-      if (result.theme == 'dark'){
-        this.setData({
-          is_dark: true,
-          theme: app.globalData.theme
-        })
-      }else{
-        this.setData({
-          is_dark: false ,
-          theme: app.globalData.theme
-        })
-      }
-    })
   },
 
   /**

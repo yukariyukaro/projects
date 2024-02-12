@@ -7,6 +7,7 @@ if (user_school_label.toUpperCase() == 'HKU'){
       "navigationBarTextStyle": "white",
       "scrollViewRefresherStyle": "black",
       "primary": "#D85050",
+      // "primary": "linear-gradient(to bottom right, #c53d3d, #e96b9b)",
       "secondary": "#ffd700",
       "backgroundColor": "#fff",
       "navigationBarBackgroundColor": "#D85050",

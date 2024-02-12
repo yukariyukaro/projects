@@ -3,13 +3,7 @@
 <enableNotification  wx:if="{{show_notification}}" type="{{notification_type}}" bind:disagree="onNotificationAction" bind:agree="onNotificationAction"/> 
 
 <!-- Navbar -->
-<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
-  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
-  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
-  <view style="margin-bottom:12px; ">树洞详情</view>
-</view>
-
-
+<navbar title="树洞详情" showBack/>
 
 <!-- 漂浮头部 -->
 <view class="header-outer" wx:if="{{data_received}}">

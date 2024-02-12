@@ -28,10 +28,7 @@ Page({
     show_notification: false,
     notification_type: "default"
   },
-  
-  back() {
-    wx.navigateBack()
-  },
+
 
   onNotificationAction (){
     this.setData({

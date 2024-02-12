@@ -15,12 +15,6 @@ Page({
     is_loading_more:false,
     refresh_triggered: false,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
-    theme: app.globalData.theme,
-    is_dark: false,
-  },
-
-  back() {
-    wx.navigateBack()
   },
 
   formatTime: function(timestamp){
@@ -160,25 +154,6 @@ Page({
   onLoad: function (options) {
     this.getUserInfo()
     this.getNotice()
-    var systemInfo = wx.getSystemInfoSync()
-    if (systemInfo.theme == 'dark') {
-      this.setData({
-        is_dark: true,
-      })
-    }
-    wx.onThemeChange((result) => {
-      if (result.theme == 'dark'){
-        this.setData({
-          is_dark: true,
-          theme: app.globalData.theme
-        })
-      }else{
-        this.setData({
-          is_dark: false ,
-          theme: app.globalData.theme
-        })
-      }
-    })
   },
 
   /**
@@ -192,9 +167,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.setData({
-      theme: app.globalData.theme,
-    })
   },
 
   /**

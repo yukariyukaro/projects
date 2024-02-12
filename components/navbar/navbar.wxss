@@ -1,23 +1,26 @@
-.navbar {
+/* components/navbar/navbar.wxss */
+
+.custom-statusbar {
   display: flex;
-  background-color: var(--bg-3);
-  height: 12vw;
-  align-items: stretch;
-  font-size: 4vw;
-  box-shadow: var(--shadow-1);
-}
-.navbar .item {
-  position: relative;
-  flex: auto;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 160rpx;
   text-align: center;
-  line-height: 12vw;
+  color: var(--on-primary);
+  /* background-color: var(--primary); */
+  background-color: linear-gradient(to bottom right, #55A5FF, #A7F7FF);
+  position: relative;
 }
-.navbar .item.active::after {
-  content: "";
+
+.back-container{
   position: absolute;
-  bottom: 0;
-  left: 35%;
-  right: 35%;
-  height: 1vw;
-  background: var(--secondary);
+  left: 0;
+}
+
+.back-button{
+  width: 18px;
+  position: absolute;
+  bottom: -194rpx;
+  left: 8px;
 }

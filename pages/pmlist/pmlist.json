@@ -1,5 +1,7 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "navbar": "/components/navbar/navbar"
+  },
   "navigationBarTitleText": "消息",
   "navigationStyle": "custom",
   "disableScroll": true

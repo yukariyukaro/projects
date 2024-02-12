@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "enableNotification": "/components/enableNotification/enableNotification"
+    "enableNotification": "/components/enableNotification/enableNotification",
+    "navbar": "/components/navbar/navbar"
   },
   "disableScroll": true,
   "navigationBarTitleText": "私信",

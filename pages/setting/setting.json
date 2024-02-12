@@ -1,5 +1,7 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "navbar": "/components/navbar/navbar"
+  },
   "navigationBarTitleText": "设置",
   "navigationStyle": "custom"
 }

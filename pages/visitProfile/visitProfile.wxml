@@ -1,16 +1,12 @@
 <!-- Navbar -->
-<view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
-  <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
-  <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
-  <view style="margin-bottom:12px; ">用户信息</view>
-</view>
+<navbar title="用户信息" showBack/>
 
 <scroll-view scroll-y="{{true}}" class="scroll-outer" scroll-top="{{scroll_top}}" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{refresh_triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindscrolltolower="onLoadMore" bindscroll="bindScroll">
 
   <view class="own-header">
     <view class="header-top">
       <view class="own-header-img-div">
-        <image mode="aspectFill" class="own-header-img" src="{{preURL + userInfo.user_avatar}}.svg"></image>
+        <image wx:if="{{userInfo.user_avatar}}" mode="aspectFill" class="own-header-img" src="{{preURL + userInfo.user_avatar}}.svg"></image>
       </view>
       <view class="header-middle">
         <view class="own-header-r-t text-overflow">{{userInfo.user_serial}}</view>

@@ -16,11 +16,6 @@ Page({
     user_id_name: info.user_id_name,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
     theme: app.globalData.theme,
-    is_dark: false,
-  },
-
-  back() {
-    wx.navigateBack()
   },
 
   // /user/profile/get
@@ -141,24 +136,10 @@ Page({
   onLoad: function (options) {
     this.getUserInfo()
     this.getAvatarCollection()
-    var systemInfo = wx.getSystemInfoSync()
-    if (systemInfo.theme == 'dark') {
-      this.setData({
-        is_dark: true,
-      })
-    }
     wx.onThemeChange((result) => {
-      if (result.theme == 'dark'){
-        this.setData({
-          is_dark: true,
-          theme: app.globalData.theme
-        })
-      }else{
-        this.setData({
-          is_dark: false ,
-          theme: app.globalData.theme
-        })
-      }
+      this.setData({
+        theme: app.globalData.theme,
+      })
     })
   },
 

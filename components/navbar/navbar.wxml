@@ -1,13 +1,9 @@
-<view class="navbar shadow">
-  <slot name="before"/>
-  <view
-    wx:for="{{items}}" 
-    wx:for-item="name"
-    wx:key="unique"
-    data-index="{{index + startIndex}}"
-    class="item {{currentIndex==(index + startIndex) ? 'active-class active' : ''}}"
-    bindtap="navbarTap">
-      <text>{{prop ? name[prop] : name}}</text>
+<!--components/navbar/navbar.wxml-->
+<!-- Navbar -->
+<view class="custom-statusbar" style="background: {{primary}}; height: {{statusbar_height + 44}}px">
+  <view wx:if="{{showBack}}" class="back-container">
+    <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
+    <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
   </view>
-  <slot name="after"/>
+  <view style="margin-bottom:12px; font-weight: 500;">{{title}}</view>
 </view>
