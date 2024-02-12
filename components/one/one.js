@@ -176,6 +176,10 @@ Component({
             path: banner_item.miniapp_path,
           })
           break;
+        case 'report2023':
+          wx.navigateTo({
+            url: '/pages/webview/webview?url=' + info.report_url + '&token=' + wx.getStorageSync('token')
+          });
         case 'none':
         default:
           break;

@@ -1,1 +1,19 @@
 /* pages/followService/followService.wxss */
+.body {
+  background-color: var(--bg-2);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 40vh;
+  margin-bottom: 10vh;
+  font-size: 40rpx;
+  text-align: center;
+}

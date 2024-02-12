@@ -42,18 +42,27 @@
     <view class="post-follower-comment-outer">
 
       <view class="post-icon-number-outer">
-        <view style="padding-right: 10rpx;">
-          <image class="post-follower-icon" src="/images/sf-comment.svg"></image>
-        </view>
-        <view class="post-follower-num">{{data.post_comment_num}}</view>
-      </view>
-      <view class="post-icon-number-outer">
         <view style="padding-right:8rpx;">
           <image wx:if="{{data.is_following}}" class="post-follower-icon" src="/images/sf-star-fill.svg"></image>
           <image wx:else class="post-follower-icon" src="/images/sf-star.svg"></image>
         </view>
         <view class="post-follower-num">{{data.post_follower_num}}</view>
       </view>
+
+      <view class="post-icon-number-outer">
+        <view style="padding-right: 10rpx;">
+          <image class="post-follower-icon" src="/images/sf-comment.svg"></image>
+        </view>
+        <view class="post-follower-num">{{data.post_comment_num}}</view>
+      </view>
+      
+      <!-- <view class="post-icon-number-outer">
+        <view style="padding-right:8rpx;">
+          <image wx:if="{{data.is_liked}}" class="post-follower-icon" src="/images/sf-heart-fill.svg"></image>
+          <image wx:else class="post-follower-icon" src="/images/sf-heart.svg"></image>
+        </view>
+        <view class="post-follower-num">{{data.post_follower_num}}</view>
+      </view> -->
     </view>
   </view>
 

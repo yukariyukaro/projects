@@ -9,8 +9,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    school_label: info.school_label
+    school_label: info.school_label,
+    relaunch_path: ''
   },
+
   check: function () {
     var that = this
     let token = wx.getStorageSync('token')
@@ -18,9 +20,15 @@ Page({
       let stored_school_label = wx.getStorageSync('user_school_label')
       let token_school_label = decode_token(token)
       if (stored_school_label == token_school_label || token_school_label != 'HKU' || stored_school_label != 'HKU'){
-        wx.reLaunch({
-          url: '/pages/home/home',
-        })
+        if (that.data.relaunch_path){
+          wx.reLaunch({
+            url: that.data.relaunch_path,
+          })
+        } else {
+          wx.reLaunch({
+            url: '/pages/home/home',
+          })
+        }
       }
     }
   },
@@ -37,7 +45,7 @@ Page({
       duration: 2000,
       icon: 'loading'
     })
-    app.login()
+    app.login(this.data.relaunch_path)
     .catch(() => {
       wx.showToast({
         title: '进入失败请重试',
@@ -51,7 +59,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    console.log(options)
+    if(options.launchPath){
+      this.setData({
+        relaunch_path: decodeURIComponent(options.launchPath)
+      })
+    }
   },
 
   /**

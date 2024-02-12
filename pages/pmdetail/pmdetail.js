@@ -14,21 +14,29 @@ Page({
     pm_msg:'',
     emojiShow: false,
     emojiChars: ["😀", "😁", "😂", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "😗", "😙", "😚", "😇", "😐", "😑", "😶", "😏", "😣", "😥", "😮", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "😒", "😓", "😔", "😕", "😲", "😷", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😬", "😰", "😱", "😳", "😵", "😡", "😠", "👦", "👧", "👨", "👩", "👴", "👵", "👶", "👱", "👮", "👲", "👳", "👷", "👸", "💂", "🎅", "👰", "👼", "💆", "💇", "🙍", "🙎", "🙅", "🙆", "💁", "🙋", "🙇", "🙌", "🙏", "👤", "👥", "🚶", "🏃", "👯", "💃", "👫", "👬", "👭", "💏", "💑", "👪", "💪", "👈", "👉", "☝", "👆", "👇", "✌", "✋", "👌", "👍", "👎", "✊", "👊", "👋", "👏", "👐", "✍", "👣", "👀", "👂", "👃", "👅", "👄", "💋", "👓", "👔", "👕", "👖", "👗", "👘", "👙", "👚", "👛", "👜", "👝", "🎒", "💼", "👞", "👟", "👠", "👡", "👢", "👑", "👒", "🎩", "🎓", "💄", "💅", "💍", "🌂"],
-    keyboardHeight: 400,
+    keyboardHeight: 0,
     page:1,
     pm_list:[],
     toView:'',
-    keyboardPosition:0,
+    keyboardPosition:400,
     inputFocus:false,
     chatStyle:"",
     theme: app.globalData.theme,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
     is_dark: false,
-    temp_msg_list: []
+    temp_msg_list: [],
+    show_notification: false,
+    notification_type: "default"
   },
   
   back() {
     wx.navigateBack()
+  },
+
+  onNotificationAction (){
+    this.setData({
+      show_notification: false
+    })
   },
 
   bindInput: function (e) {
@@ -38,15 +46,22 @@ Page({
   },
 
   onInputFocus: function (t) {
-    var e = wx.getSystemInfoSync(),
-      a = parseInt(750 * t.detail.height / e.windowWidth);
-    if(a>0){
-      this.setData({
-        keyboardHeight:a
-      })
-    }
     this.setData({
+      keyboardHeight: t.detail.height,
       emojiShow:false
+    })
+    // var e = wx.getSystemInfoSync(),
+    //   a = parseInt(750 * t.detail.height / e.windowWidth);
+    // if(a>0){
+    //   this.setData({
+    //     keyboardHeight: t.detail.height
+    //   })
+    // }
+  },
+
+  onInputBlur () {
+    this.setData({
+      keyboardHeight: 0
     })
   },
 
@@ -176,7 +191,20 @@ Page({
       pm_msg:pm_msg,
     }).then(res=>{
       if(res.code == 200){
-        
+        if (!wx.getStorageSync('block_notification_notice')) {
+          newRequest("/notice/checkaccept", {})
+            .then(res => {
+              if (res.code == 200) {
+                if (!res.notice_accept_service) {
+                  console.log("show notification")
+                  that.setData({
+                    show_notification: true,
+                    notification_type: "pm"
+                  })
+                }
+              }
+            })
+        }
       }else{
         wx.showToast({title: res.msg? res.msg : "错误", icon: "error", duration: 1000})
       }

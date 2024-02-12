@@ -25,7 +25,7 @@ if (user_school_label.toUpperCase() == 'HKU') {
     app_name: "Stardust 科大空间站",
     app_title: "科大空间站",
     team_name: "Stardust 科大星尘",
-    service_account: "Stardust 科大空间站",
+    service_account: "科大空间站",
     search_page_topic: "小火鸟",
     school_label: "UST",
     slogan: "We're all stardust",
@@ -86,5 +86,7 @@ meta.api_domain = "https://api.tripleuni.com/v4";
 meta.socket = "wss://ws.tripleuni.com:7230";
 meta.terms_url = "https://terms.tripleuni.com";
 meta.contact_email = "support@tripleuni.com";
+meta.report_url = "https://report2023.tripleuni.com";
+meta.service_account = "Triple Uni",
 
 module.exports = meta;

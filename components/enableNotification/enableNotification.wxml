@@ -1,0 +1,25 @@
+<!--components/enableNotification/enableNotification.wxml-->
+<view class="{{close? 'overlay-close': 'overlay'}}">
+  <view id="privacyContainer" class="container" style="{{close? 'bottom: -400px;': ''}}">
+    <view class="title">
+      <text class="title_text">{{title}}</text>
+    </view>
+    <view class="message">
+      <view class="message_text">{{message}}</view>
+      
+      <view>
+        <checkbox-group bindchange="agreeBlock" style="display: inline;">
+          <checkbox value="{{block_popup}}" color="{{primary_color}}"></checkbox>
+        </checkbox-group>
+        <text class="check-box-text">不再提醒</text>
+      </view>
+    </view>
+    <view class="buttons-outer">
+      <view class="buttons">
+        <button id="disagree-btn" style="--primary: {{primary_color}}" class="abutton disagree" bindtap="handleDisagree">保持关闭</button>
+        <button id="agree-btn" style="--primary: {{primary_color}}" class="abutton agree" bindtap="handleAgree">开启通知</button>
+      </view>
+    </view>
+    <view class="message_disclaimer">{{disclaimer}}</view>
+  </view>
+</view>

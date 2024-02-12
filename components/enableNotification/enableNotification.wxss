@@ -1,14 +1,15 @@
+/* components/enableNotification/enableNotification.wxss */
 .overlay{
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10000;
-    animation-name: body-anim-open;
-    animation-duration: 0.4s;
-    animation-fill-mode: forwards;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  animation-name: body-anim-open;
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
 }
 
 .overlay-close{
@@ -21,7 +22,6 @@
   z-index: 10000;
   animation-name: body-anim-close;
   animation-duration: 0.4s;
-  opacity: 0;
   animation-fill-mode: forwards;
 }
 
@@ -50,7 +50,7 @@
   border-top-left-radius: 5%;
   border-top-right-radius: 5%;
   padding-top: 50rpx;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 40rpx);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 16rpx);
   /* padding-left: 50rpx;
   padding-right: 50rpx; */
   margin:0;
@@ -65,6 +65,7 @@
   animation-fill-mode: forwards;
   animation-name: slide-in;
   transition: 0.5s ease-out;
+  z-index: 10001;
 }
 
 @keyframes slide-in{
@@ -87,14 +88,25 @@
   font-weight: 600;
 }
 .message{
-  margin: 60rpx 50rpx;
-  margin-bottom: 80rpx;
+  margin: 40rpx 50rpx 20rpx 50rpx;
+  /* padding: 0 4rpx; */
 }
 
 .message_text{
   font-size: 29rpx;
   margin-bottom: 20rpx;
-    display: inline;
+}
+
+.message_disclaimer{
+  margin: 30rpx 50rpx 10rpx 50rpx;
+  padding: 0 14rpx;
+  font-size: 20rpx;
+  color: var(--on-bg-2);
+}
+
+.check-box-text{
+  font-size: 22rpx;
+  color: var(--on-bg-2);
 }
 
 .buttons-outer{
@@ -105,6 +117,7 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
+  margin-bottom: 10rpx;
 }
 
 .abutton{
@@ -114,7 +127,7 @@
   font-weight: 700;
   font-size: 30rpx !important;
   margin: 0 !important;
-  padding: 20rpx 0;
+  padding: 0.53rem 0;
 }
 
 .agree{
@@ -134,3 +147,6 @@
   color: var(--primary);
 }
 
+checkbox {
+  transform: scale(0.6,0.6);
+}

@@ -57,7 +57,7 @@
 
 </view>
 
-<view class="suggestion-overlay {{theme=='dark'? 'suggestion-overlay-dark':''}}" wx:if="{{search_list_loaded && search_suggestion_list.length}}" animation="{{overlay_animation}}">
+<view class="suggestion-overlay {{theme=='dark'? 'suggestion-overlay-dark':''}}" wx:if="{{search_list_loaded && search_suggestion_list.length && !result_shown && !is_loading_more}}" animation="{{overlay_animation}}">
     <view class="suggestion-overlay-content" wx:for="{{search_suggestion_list}}" wx:key="index" id="{{index}}" bindtap="bindTapSuggestion">
         <view style="z-index: 3;">
             <image class="small-icon" src="/images/sf-search.svg" style="margin-left: 55rpx; transform: translate(0, 6rpx);"></image>

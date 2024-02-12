@@ -2,5 +2,6 @@
   "usingComponents": {},
   "navigationBarTitleText": "",
   "navigationBarBackgroundColor": "@navigationBarBackgroundColorWebview",
-  "navigationBarTextStyle": "@navigationBarTextStyleWebview"
+  "navigationBarTextStyle": "@navigationBarTextStyleWebview",
+  "navigationStyle": "custom"
 }

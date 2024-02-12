@@ -5,6 +5,8 @@
   <view style="margin-bottom:12px; ">私信</view>
 </view>
 
+<enableNotification  wx:if="{{show_notification}}" type="{{notification_type}}" bind:disagree="onNotificationAction" bind:agree="onNotificationAction"/> 
+
 <scroll-view
   style="height:calc(100vh - 220rpx - {{statusbar_height}}px - 44px); margin-bottom: 250rpx;"
   scroll-y="{{true}}"
@@ -47,6 +49,7 @@
       maxlength="400"
       confirm-type="send"
       bindconfirm="sendMessage"
+      bindblur="onInputBlur"
       value="{{pm_msg}}"></input>
     <view class="jz-chat-edit-view-bottom">
       <view class="jz-chat-edit-view-bottom-left">

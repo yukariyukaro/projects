@@ -18,10 +18,10 @@
   <view style="padding:30rpx 40rpx">
     <view style="font-weight: bold;font-size: 34rpx;">4.4.0</view>
     <view class="divider"></view>
-    <text style="font-size: 28rpx;">三校小程序合并
-    长按消息可清除未读消息
+    <text style="font-size: 28rpx;">「Triple Uni 2023年度报告」上线
+    三校小程序合并
     支持富文本编辑树洞
-    修复了一些已知问题
+    修复了一些已知问题，并优化了交互逻辑
     </text>
   </view>
 </view>

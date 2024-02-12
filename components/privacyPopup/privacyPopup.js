@@ -21,11 +21,12 @@ Component({
 
     methods: {
         handleDisagree(e) {
+          this.disPopUp()
+          setTimeout(() => {
             this.triggerEvent("disagree")
-            // setTimeout(() => {
-            //   this.triggerEvent("disagree")
-            // }, 450);
+          }, 390);
         },
+
         handleAgree(e) {  
             newRequest('/user/terms/agree', {}, this.handleAgree)
             .then((res) => {

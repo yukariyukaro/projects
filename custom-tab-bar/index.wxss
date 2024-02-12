@@ -7,11 +7,11 @@
     filter: drop-shadow(0px -2px 10px rgba(0,0,0,0.06));
     display: flex;
     z-index: 99999;
-    height: 100rpx;
+    height: 110rpx;
 }
 
 .tab-bar-item {
-    margin-top: 15rpx;
+    margin-top: 10rpx;
     flex: 1;
     display: flex;
     justify-content: center;
@@ -52,9 +52,11 @@
     margin: 20rpx;
     width: 120rpx;
     height: 120rpx;
+    /* height: 144rpx; */
     background-color: var(--bg-2);
     border: 20rpx solid var(--bg-2)!;
     border-radius: 50%;
+    /* overflow: visible; */
 }
 
 .tab-bar-badge {

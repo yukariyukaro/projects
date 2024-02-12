@@ -37,6 +37,8 @@ Page({
     content_loaded: 0,
     initial_launch: app.globalData.initial_launch,
     force_splash: app.globalData.initial_launch,
+    show_notification: false,
+    notification_type: "default"
   },
   // 下拉刷新
   onRefresh: function () {
@@ -75,6 +77,12 @@ Page({
     this.getAll()
   },
 
+  onNotificationAction() {
+    this.setData({
+      show_notification: false
+    })
+  },
+
   onPrivacyDisagree: function (e) {
     // console.log(e)
     wx.exitMiniProgram({
@@ -92,6 +100,7 @@ Page({
       show_privacy: false
     })
     app.globalData.show_privacy = false
+    this.handleJump(this.data.unhandled_options)
   },
 
   // 切换导航栏选项卡
@@ -457,6 +466,10 @@ Page({
           path: ad_info.miniapp_path,
         })
         break;
+      case 'report2023':
+        wx.navigateTo({
+          url: '/pages/webview/webview?url=' + info.report_url + '&token=' + wx.getStorageSync('token')
+        });
       case 'none':
       default:
         break;
@@ -570,13 +583,7 @@ Page({
   //   })
   // },
 
-
-  initializeWhenReady: function (options) {
-    this.getAd()
-    this.getAll()
-    this.getBanner()
-    this.getTopic()
-
+  handleJump(options) {
     if (options && !app.globalData.show_privacy) {
       if (options.jump_page) {
         if (options.jump_page === 'detail') {
@@ -594,8 +601,39 @@ Page({
             });
           }
         }
+      } else if (options.action) {
+        if (options.action == 'report') {
+          console.log('jump to report')
+          wx.navigateTo({
+            url: '/pages/webview/webview?url=' + info.report_url + '&token=' + wx.getStorageSync('token')
+          });
+        }
+      } else if (options.from) {
+        if (options.from == 'write') {
+          if (!wx.getStorageSync('block_notification_notice')) {
+            newRequest("/notice/checkaccept", {})
+              .then(res => {
+                if (res.code == 200) {
+                  if (!res.notice_accept_service) {
+                    console.log("show notification")
+                    this.setData({
+                      show_notification: true,
+                      notification_type: "post"
+                    })
+                  }
+                }
+              })
+          }
+        }
       }
     }
+  },
+
+  initializeWhenReady: function () {
+    this.getAd()
+    this.getAll()
+    this.getBanner()
+    this.getTopic()
   },
   /**
    * 生命周期函数--监听页面加载
@@ -621,19 +659,36 @@ Page({
 
     app.watch('token_checked', (v) => {
       // let that = this
-      that.initializeWhenReady(options)
+      that.initializeWhenReady()
       that.setData({
         token_checked: v
       })
+
+      if (wx.getStorageSync('initial_login')) {
+        wx.setStorageSync('initial_login', false)
+        newRequest("/notice/checkaccept", {})
+          .then(res => {
+            if (res.code == 200) {
+              if (!res.notice_accept_service) {
+                console.log("show notification")
+                that.setData({
+                  show_notification: true,
+                  notification_type: "default"
+                })
+              }
+            }
+          })
+      }
     })
 
     app.watch('privacy_checked', (v) => {
-      let that = this
       console.log("Privacy checked: ", v)
       console.log("Show privacy", app.globalData.show_privacy)
       that.setData({
-        show_privacy: app.globalData.show_privacy
+        show_privacy: app.globalData.show_privacy,
+        unhandled_options: app.globalData.show_privacy ? options : null
       })
+      that.handleJump(options)
     })
 
     wx.onThemeChange((result) => {

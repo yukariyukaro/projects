@@ -180,7 +180,7 @@ Page({
     status_bar_opacity_mask: 0,
     theme: '',
     hku_one_logo: '',
-    navigation_bar_background_color: wx.getSystemInfoSync().theme == 'dark'? info.search_nav_bar_color_dark :info.search_nav_bar_color,
+    navigation_bar_background_color: wx.getSystemInfoSync().theme == 'dark' ? info.search_nav_bar_color_dark : info.search_nav_bar_color,
     result_shown: false,
     search_mode: "default",
     show_modes: false,
@@ -243,7 +243,7 @@ Page({
 
     that.setData({
       search_list_loaded: false,
-      search_suggestion_list: []
+      search_suggestion_list: [],
     })
 
     newRequest("/post/list/search", {
@@ -315,7 +315,7 @@ Page({
       .then(res => {
         if (res.code == 200) {
           if (!res.user_info.is_following_service_account) {
-            wx.reLaunch({
+            wx.navigateTo({
               url: '/pages/followService/followService',
             })
           }
@@ -332,10 +332,13 @@ Page({
     }
     this.setData({
       page: 0,
-      scroll_top: 0
+      scroll_top: 0,
+      is_loading_more: true,
+      aisearch_detail: null
     })
     this.getBySearch()
   },
+
   onLoadMore: function () {
     if (this.data.is_loading_more) {
       return
@@ -405,12 +408,13 @@ Page({
   onInputKeyWord: function (e) {
     this.setData({
       key_word: e.detail.value,
+      result_shown: false,
       page: 0,
     })
     if (this.data.key_word) {
       this.getSearchSuggestion()
     } else {
-      this.getOneList()
+      // this.getOneList()
       this.setData({
         search_list_loaded: false,
         search_suggestion_list: []
@@ -598,7 +602,7 @@ Page({
       })
     }
     wx.onThemeChange((result) => {
-      if (result.theme == 'dark'){
+      if (result.theme == 'dark') {
         this.setData({
           navigation_bar_background_color: info.search_nav_bar_color_dark
         })
@@ -627,10 +631,10 @@ Page({
     })
     app.globalData.tabbarJS = this
     this.getPlaceholder()
-    this.check()
+    // this.check()
     this.setData({
       theme: app.globalData.theme.backgroundTextStyle,
-      navigation_bar_background_color: is_dark? info.search_nav_bar_color_dark : info.search_nav_bar_color
+      navigation_bar_background_color: is_dark ? info.search_nav_bar_color_dark : info.search_nav_bar_color
     })
     // wx.setTabBarStyle({
     //   color: '#8a8a8a',

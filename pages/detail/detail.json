@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "singleComment": "/components/singleComment/singleComment",
-    "mp-html": "/components/mp-html/index"
+    "mp-html": "/components/mp-html/index",
+    "enableNotification": "/components/enableNotification/enableNotification"
   },
   "disableScroll":true,
   "navigationBarTitleText": "树洞详情",

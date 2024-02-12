@@ -7,12 +7,7 @@ import newRequest from "./utils/request"
 import decode_token from "./utils/jwt-decode"
 
 App({
-  onLaunch() {
-
-    // wx.setBackgroundFetchToken({
-    //   token: 
-    // })
-
+  onLaunch(options) {
     if (!wx.getStorageSync('allNoticeCount')) {
       wx.setStorageSync('allNoticeCount', 0)
     }
@@ -38,8 +33,21 @@ App({
       wx.setStorageSync('block_splash', false)
     }
 
+    let launchPath = '/' + options.path
+    console.log(options)
+    if (Object.keys(options.query).length > 0) {
+      // 拼接url的参数
+      launchPath += '?'
+      for (let key in options.query) {
+        let value = options.query[key]
+        launchPath += key + '=' + value + '&'
+      }
+      launchPath = launchPath.substring(0, launchPath.length - 1)
+    } 
 
-    this.launch()
+    console.log("launch path", launchPath)
+
+    this.launch(launchPath)
       .then(() => {
         this.globalData.token_checked = true
         this.checkTerms()
@@ -121,7 +129,7 @@ App({
       enumerable: true,
       set: function (value) {
         this['_' + key] = value;
-        console.log('是否会被执行2')
+        // console.log('是否会被执行2')
         method(value);
       },
       get: function () {
@@ -317,7 +325,7 @@ App({
     });
   },
 
-  launch() {
+  launch(launch_path) {
     let that = this
     return new Promise(function (resolve, reject) {
       var token = wx.getStorageSync('token')
@@ -330,7 +338,7 @@ App({
         let token_label = decode_token(token).user_school_label
         if (stored_label == 'UNI' || stored_label != token_label) {
           wx.reLaunch({
-            url: '/pages/enterTripleUni/enterTripleUni',
+            url: '/pages/enterTripleUni/enterTripleUni?launchPath='+encodeURIComponent(launch_path),
           })
         }
         // 检查token
@@ -368,7 +376,7 @@ App({
         })
       } else {
         console.log("no token")
-        that.login()
+        that.login(launch_path)
         .then(() => {
           resolve()
         })
@@ -379,8 +387,9 @@ App({
     })
   },
 
-  login: function () {
+  login: function (launch_path) {
     // user not logged in
+    console.log('login', launch_path)
     let that = this
     return new Promise(function (resolve, reject) {
       wx.login({
@@ -396,11 +405,12 @@ App({
                 if (res2.code == 200) {
                   //保存登陆状态
                   wx.setStorageSync('token', res2.token)
+                  wx.setStorageSync('initial_login', true)
                   if (res2.user_school_label != wx.getStorageSync('user_school_label')) {
                     wx.setStorageSync('user_school_label', res2.user_school_label)
                     wx.setStorageSync('block_splash', true)
                     wx.restartMiniProgram({
-                      path: '/pages/home/home'
+                      path: launch_path
                     })
                   }
                   // if (wx.getStorageSync('block_splash')) {
@@ -412,6 +422,7 @@ App({
                   resolve()
                 } else if (res2.code == 201) {
                   let query_str = JSON.stringify(res2.account_list)
+                  wx.setStorageSync('initial_login', true)
                   wx.reLaunch({
                     url: '/pages/chooseAccount/chooseAccount?account_list=' + query_str
                   })
@@ -422,7 +433,7 @@ App({
                   var url = currentPage.route
                   if (url != "pages/register/register") {
                     wx.reLaunch({
-                      url: '/pages/register/register',
+                      url: '/pages/register/register?launch_path='+encodeURIComponent(launch_path),
                       success() {
                         wx.showToast({
                           title: '请先注册',
@@ -461,7 +472,8 @@ App({
           let url = currentPage.route
           if (url != "pages/register/register") {
             wx.reLaunch({
-              url: '/pages/register/register',
+              url: '/pages/register/register?launch_path=' +encodeURIComponent(launch_path) ,
+
               success() {
                 wx.showToast({
                   title: '请先注册',
@@ -805,15 +817,15 @@ App({
   },
 
   webSocketConnect: function () {
-    console.log('开始链接')
+    console.log('开始链接Socket')
     var that = this
     var websocket = wx.connectSocket({
       url: info.socket,
       success(res) {
-        console.log(res)
+        // console.log(res)
       },
       fail(res) {
-        console.log(res)
+        console.log('Socket 连接失败',res)
       },
     })
 
@@ -922,9 +934,9 @@ App({
   launchWebSoccket: function () {
     var that = this
     if (!that.globalData.wsConnect) {
-      console.log("先获取历史消息")
+      // console.log("先获取历史消息")
       that.getHistoryMessage().then(() => {
-        console.log("然后链接")
+        // console.log("然后链接")
         that.webSocketConnect()
       }).catch(() => {
         that.launchWebSoccket()

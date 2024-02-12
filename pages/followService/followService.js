@@ -16,8 +16,11 @@ Page({
     .then(res=>{
       if(res.code == 200){
         if(res.user_info.is_following_service_account){
-          wx.reLaunch({
-            url: '/pages/search/search',
+          wx.navigateBack()
+          .fail(() => {
+            wx.reLaunch({
+              url: '/pages/search/search',
+            })
           })
         }
       }
@@ -47,7 +50,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    this.check()
+    // this.check()
   },
 
   /**

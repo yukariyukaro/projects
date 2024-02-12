@@ -6,17 +6,28 @@
 </view>
 
 <view class="menu">
-  <!-- <view class="u-flex-item">
+  <view class="u-flex-item">
     <view class="u-row-left">
       <view style="display: flex;flex-direction: column;">
-        <view class="name">通知推送</view>
+        <view class="name">公众号通知推送</view>
         <view class="note">开启后可以在「{{service_account_name}}」公众号接收到通知推送</view>
       </view>
     </view>
     <view class="u-row-right">
-      <switch color="{{theme.primary}}" checked="{{subscribe_accept}}" bindchange="acceptSubscribeNew" />
+      <switch color="{{theme.primary}}" checked="{{subscribe_accept}}" bindchange="serviceAccountNotification" />
     </view>
-  </view> -->
+  </view>
+  <view class="u-flex-item">
+    <view class="u-row-left">
+      <view style="display: flex;flex-direction: column;">
+        <view class="name">Triple Uni 网页端通知推送</view>
+        <view class="note">开启后可以在浏览器中接收到通知推送</view>
+      </view>
+    </view>
+    <view class="u-row-right">
+      <switch color="{{theme.primary}}" checked="{{web_subscribe_accept}}" bindchange="webNotification" />
+    </view>
+  </view>
   <view class="u-flex-item" bindtap="clearUnread">
     <view class="u-row-left">
       <view style="display: flex;flex-direction: column;">

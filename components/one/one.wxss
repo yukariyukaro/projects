@@ -120,7 +120,7 @@
 }
 .post-avatar-outer {
   display: inline;
-  margin: 5rpx 20rpx 0 20rpx;
+  margin: 5rpx 18rpx 0 20rpx;
 }
 .post-avatar {
   width: 45rpx;
@@ -144,19 +144,20 @@
 }
 .post-icon-number-outer{
   display: flex;
-  margin-left: 20rpx;
+  margin-left: 22rpx;
 }
 .post-follower-icon {
-  width: 30rpx;
-  height: 30rpx;
+  width: 28rpx;
+  height: 28rpx;
   margin-top: 15rpx;
-  margin-right: 2rpx;
+  margin-right: 0rpx;
 }
 .post-follower-num{
   color: #8C8C8C;
   font-weight: normal;
-  font-size: 30rpx;
+  font-size: 28rpx;
   align-self: center;
+  margin-bottom: 4rpx;
 }
 .post-divider{
   height: 1px;
@@ -209,8 +210,7 @@
   display: flex;
   background: var(--bg-gray-1);
   width: 90%;
-  margin: auto;
-  margin-bottom: 15rpx;
+  margin: 10px auto 5px auto;
   padding: 15rpx 20rpx;
   box-sizing: border-box;  
   border-radius: 20rpx;

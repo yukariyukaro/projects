@@ -1,4 +1,4 @@
-<view class="overlay">
+<view class="{{close? 'overlay-close': 'overlay'}}">
     <view id="privacyContainer" class="container" style="{{close? 'bottom: -400px;': ''}}">
     <view class="title">
           <text class="title_text">{{title}}</text>

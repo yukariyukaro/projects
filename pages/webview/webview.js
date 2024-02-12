@@ -5,23 +5,29 @@ Page({
    * Page initial data
    */
   data: {
-    url:''
+    url: ''
   },
 
   /**
    * Lifecycle function--Called when page load
    */
   onLoad: function (options) {
-    this.setData({
-      url:options.url
-    })
+    if (options.token) {
+      this.setData({
+        url: options.url + '?token=' + options.token
+      })
+    } else {
+      this.setData({
+        url: options.url
+      })
+    }
   },
 
   /**
    * Lifecycle function--Called when page is initially rendered
    */
   onReady: function () {
-
+    console.log(this.data.url)
   },
 
   /**

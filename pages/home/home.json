@@ -2,7 +2,8 @@
   "usingComponents": {
     "one": "/components/one/one",
     "loadmore": "/components/loadmore/loadmore",
-    "privacyPopup": "/components/privacyPopup/privacyPopup"
+    "privacyPopup": "/components/privacyPopup/privacyPopup",
+    "enableNotification": "/components/enableNotification/enableNotification"
   },
   "disableScroll":true,
   "navigationStyle": "custom"

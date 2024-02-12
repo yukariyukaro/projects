@@ -1,5 +1,7 @@
 <view class="overlay" wx:if="{{show_comment_box || show_report_box}}" animation="{{overlay_animation}}" bindtap="hideCommentReportBox"></view>
 
+<enableNotification  wx:if="{{show_notification}}" type="{{notification_type}}" bind:disagree="onNotificationAction" bind:agree="onNotificationAction"/> 
+
 <!-- Navbar -->
 <view class="custom-statusbar" style="background-color: {{theme.primary}}; height: {{statusbar_height + 44}}px">
   <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
@@ -61,8 +63,8 @@
   <view class="skeleton-text skeleton" style="float: left;"></view>
 </view>
 
-<scroll-view scroll-y="{{true}}" class="scroll-outer" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" style="height:calc(100vh - 15vw - {{statusbar_height}}px - env(safe-area-inset-bottom));" wx:else="">
-  <view class="content-outer" >
+<scroll-view scroll-y="{{true}}" class="scroll-outer" refresher-enabled="{{true}}" refresher-threshold="{{30}}" refresher-default-style="{{scrollViewRefresherStyle}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" style="height:calc(100vh - 15vw - {{statusbar_height + 44}}px);" wx:else="">
+  <view class="content-outer">
     <!-- 内容 -->
     <view class="post-outer">
       <view class="{{is_markdown? 'post-content-center':'post-content'}}">
@@ -216,16 +218,24 @@
           <!-- 围观数 -->
           <view class="icon-number-outer" bindtap="follow">
             <view class="follower-icon-outer">
-              <image wx-if="{{post_detail.is_following}}" class="icon" src="/images/sf-star-fill.svg"></image>
-              <image wx-if="{{!post_detail.is_following}}" class="icon" src="/images/sf-star.svg"></image>
+              <image wx:if="{{post_detail.is_following}}" class="icon" src="/images/sf-star-fill.svg"></image>
+              <image wx:else class="icon" src="/images/sf-star.svg"></image>
             </view>
             <view class="follower-num">{{post_detail.post_follower_num}}</view>
           </view>
+          <!-- 点赞数 -->
+          <!-- <view class="icon-number-outer" bindtap="like">
+            <view class="follower-icon-outer">
+              <image wx:if="{{post_detail.is_liked}}" class="icon" src="/images/sf-heart-fill.svg"></image>
+              <image wx:else class="icon" src="/images/sf-heart.svg"></image>
+            </view>
+            <view class="follower-num">{{post_detail.post_likes_num}}</view>
+          </view> -->
           <!-- 倒序 -->
-          <view bindtap="reverseComments" style="width: 100%; " wx:if="{{comment_list.length > 0}}">
-            <view style="text-align: right; margin-top: 2rpx;">
-              <image wx:if="{{!comment_reverse}}" class="icon" src="/images/sort.svg"></image>
-              <image wx:if="{{comment_reverse}}" class="icon" style="transform: rotate(180deg)" src="/images/sort.svg"></image>
+          <view style="width: 100%; " wx:if="{{comment_list.length > 0}}">
+            <view style="text-align: right; margin-top: 2rpx;" >
+              <image wx:if="{{!comment_reverse}}" class="icon" src="/images/sort.svg" bindtap="reverseComments"></image>
+              <image wx:if="{{comment_reverse}}" class="icon" style="transform: rotate(180deg)" src="/images/sort.svg" bindtap="reverseComments"></image>
             </view>
           </view>
         </view>
@@ -236,7 +246,7 @@
         <!-- 显示所有评论 -->
         <view>
           <singleComment wx:if="{{!comments_received && data_received}}" is_skeleton wx:for="{{post_detail.post_comment_num}}" wx:key="index"></singleComment>
-          <singleComment id="commentComponent" wx:for="{{comment_list}}" wx:key="comment_id" bind:deleteComment="deleteComment" bind:replyComment="replyComment" bind:reportComment="reportComment" uni_post_id="{{item.uni_post_id}}" comment_id="{{item.comment_id}}" comment_order="{{item.comment_order}}" comment_msg="{{item.comment_msg_display? item.comment_msg_display:item.comment_msg}}" comment_create_time="{{item.comment_create_time}}" is_author="{{item.is_author}}" is_anonymous="{{!item.user_is_real_name}}" is_org="{{item.user_is_org}}" comment_alias="{{item.user_alias}}" user_avatar="{{item.user_avatar}}" user_serial="{{item.user_serial}}" comment_school_label="{{item.user_school_label}}" post_is_author="{{post_detail.is_author}}" comment_father_msg="{{item.comment_father_msg}}" comment_image="{{item.comment_image}}" comment_theme_color="{{comment_theme_color}}" is_skeleton="{{false}}" />
+          <singleComment id="commentComponent" wx:for="{{comment_list}}" wx:key="comment_id" bind:deleteComment="deleteComment" bind:replyComment="replyComment" bind:reportComment="reportComment" uni_post_id="{{item.uni_post_id}}" comment_id="{{item.comment_id}}" comment_order="{{item.comment_order}}" comment_msg="{{item.comment_msg_display? item.comment_msg_display:item.comment_msg}}" comment_create_time="{{item.comment_create_time}}" is_author="{{item.is_author}}" is_anonymous="{{!item.user_is_real_name}}" is_org="{{item.user_is_org}}" comment_alias="{{item.user_alias}}" user_avatar="{{item.user_avatar}}" user_serial="{{item.user_serial || ''}}" comment_school_label="{{item.user_school_label}}" post_is_author="{{post_detail.is_author}}" comment_father_msg="{{item.comment_father_msg || ''}}" comment_image="{{item.comment_image || ''}}" comment_theme_color="{{comment_theme_color}}" is_skeleton="{{false}}" />
         </view>
       </view>
     </view>
@@ -263,7 +273,7 @@
   </view>
   <!-- 输入框 -->
   <view class="textarea-outer" bindtap="focus" wx:if="{{show_comment_box}}">
-    <textarea class="textarea-content" maxlength="500" placeholder="{{comment_box_placeholder}}" show-confirm-bar="{{false}}" bindinput="bindCommentMsgInput" value="{{comment_msg}}" focus="{{focus}}" cursor-spacing="360rpx" adjust-position auto-height style="width: {{comment_image != ''?'80%':'100%'}};">
+    <textarea class="textarea-content" maxlength="500" placeholder="{{comment_box_placeholder}}" show-confirm-bar="{{false}}" bindinput="bindCommentMsgInput" value="{{comment_msg}}" focus="{{focus}}" cursor-spacing="360rpx" adjust-position auto-height style="width: {{comment_image != ''?'80%':'100%'}};" bind:focus="onInputFocus" bind:blur="onInputBlur" bindconfirm="submitComment">
     </textarea>
     <!-- <view wx:if="{{comment_image != ''}}" style="text-align:center;width:20%;">
       <image style="width:100%;border-radius: 10px" mode="widthFix" src="{{comment_image}}" catchtap="picTap"></image>
@@ -271,7 +281,7 @@
   </view>
 
   <view class="textarea-outer" bindtap="focus" wx:else>
-    <textarea class="textarea-content" maxlength="500" placeholder="举报原因" show-confirm-bar="{{false}}" bindinput="reportPromptGetInput" value="{{report_user_msg}}" focus="{{focus}}" cursor-spacing="360rpx" adjust-position auto-height style="width: 100%;">
+    <textarea class="textarea-content" maxlength="500" placeholder="举报原因" show-confirm-bar="{{false}}" bindinput="reportPromptGetInput" value="{{report_user_msg}}" focus="{{focus}}" cursor-spacing="360rpx" adjust-position auto-height style="width: 100%;" bindconfirm="reportPromptConfirm">
     </textarea>
   </view>
 
@@ -283,4 +293,6 @@
     <view wx:else></view>
     <view class="send-button" bindtap="{{show_comment_box? 'submitComment':'reportPromptConfirm'}}" style="--primary: {{theme.primary}}">发送</view>
   </view>
+
+  <!-- <view class="keyboard-placeholder" style="height: {{keyboardHeight}}"> </view> -->
 </view>

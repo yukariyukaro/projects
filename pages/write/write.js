@@ -193,7 +193,7 @@ Page({
           if(post_public == 1){
             wx.showToast({ title: '新的公开树洞诞生了⭐', icon: 'none', duration: 1000,});
             setTimeout(() =>
-              wx.reLaunch({url: '/pages/home/home',}),
+              wx.reLaunch({url: '/pages/home/home?from=write',}),
             1000);
           }
           if(post_public == 2){

@@ -486,6 +486,7 @@ padding-bottom:80rpx;
   align-items: center;
   box-sizing: border-box;
   background: var(--inputouter);
+  transition: 0.1s ease-in-out;
 }
 
 .container {

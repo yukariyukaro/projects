@@ -171,9 +171,15 @@ Page({
                 wx.setStorageSync('token', res2.token)
                 wx.setStorageSync('user_school_label', that.data.school_label)
                 wx.setStorageSync('block_splash', true)
-                wx.restartMiniProgram({
-                  path: '/pages/home/home'
-                })
+                if (that.data.relaunch_path) {
+                  wx.restartMiniProgram({
+                    path: that.data.relaunch_path,
+                  })
+                } else {
+                  wx.restartMiniProgram({
+                    path: '/pages/home/home',
+                  })
+                }
                 // app.globalData.show_privacy = false
                 // app.globalData.token_checked = true 
                 // app.globalData.privacy_checked = true
@@ -284,9 +290,15 @@ Page({
             wx.setStorageSync('token', res2.token)
             wx.setStorageSync('user_school_label', res2.user_school_label)
             wx.setStorageSync('block_splash', true)
-            wx.restartMiniProgram({
-              path: '/pages/home/home',
-            })
+            if (that.data.relaunch_path) {
+              wx.restartMiniProgram({
+                path: that.data.relaunch_path,
+              })
+            } else {
+              wx.restartMiniProgram({
+                path: '/pages/home/home',
+              })
+            }
             // wx.reLaunch({
             //   url: '/pages/home/home',
             // })
@@ -371,7 +383,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function () {
+  onLoad: function (options) {
+    // console.log(options)
+    // console.log(decodeURIComponent(options.launch_path))
     wx.hideHomeButton()
 
     if (app.globalData.from_miniapp) {
@@ -384,6 +398,12 @@ Page({
         theme: result.theme
       })
     })
+
+    if (options.launch_path) {
+      this.setData({
+        relaunch_path: decodeURIComponent(options.launch_path)
+      })
+    }
   },
 
   /**

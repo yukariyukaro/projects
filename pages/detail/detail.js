@@ -52,6 +52,9 @@ Page({
     is_markdown: false,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
     theme: app.globalData.theme,
+    keyboard_height: 0,
+    show_notification: false,
+    notification_type: "default"
   },
   // 下拉刷新
   onRefresh() {
@@ -167,14 +170,12 @@ Page({
             title: '举报成功',
             icon: 'none',
             duration: 1000,
-            report_type: ''
           });
         } else {
           wx.showToast({
             title: res.msg ? res.msg : "错误",
             icon: "none",
             duration: 1000,
-            report_type: ''
           })
         }
       })
@@ -382,10 +383,10 @@ Page({
 
   },
 
-  switchFollowing () {
+  switchFollowing() {
     var that = this;
     let new_post_detail = that.data.post_detail
-    if(!new_post_detail.is_following){
+    if (!new_post_detail.is_following) {
       new_post_detail.is_following = true
       new_post_detail.post_follower_num = Number(new_post_detail.post_follower_num) + 1
     } else {
@@ -397,11 +398,17 @@ Page({
     })
   },
 
+  onNotificationAction() {
+    this.setData({
+      show_notification: false
+    })
+  },
+
   // /post/single/follow
   follow: function () {
     var that = this;
     that.switchFollowing()
-  
+
     newRequest("/post/single/follow", {
         uni_post_id: that.data.uni_post_id
       }, that.follow)
@@ -413,6 +420,24 @@ Page({
             duration: 1000,
           });
           console.log("围观成功")
+          if (!that.data.post_detail.is_following) {
+            that.switchFollowing()
+          }
+
+          if (!wx.getStorageSync('block_notification_notice')) {
+            newRequest("/notice/checkaccept", {})
+              .then(res => {
+                if (res.code == 200) {
+                  if (!res.notice_accept_service) {
+                    console.log("show notification")
+                    that.setData({
+                      show_notification: true,
+                      notification_type: "follow"
+                    })
+                  }
+                }
+              })
+          }
         } else if (res.code == 201) {
           wx.showToast({
             title: '停止了围观',
@@ -420,6 +445,9 @@ Page({
             duration: 1000,
           });
           console.log("取消围观成功")
+          if (that.data.post_detail.is_following) {
+            that.switchFollowing()
+          }
         } else {
           wx.showToast({
             title: res.msg ? res.msg : "错误",
@@ -427,6 +455,51 @@ Page({
             duration: 1000
           })
           that.switchFollowing()
+        }
+      })
+  },
+
+  switchLiked() {
+    var that = this;
+    let new_post_detail = that.data.post_detail
+    if (!new_post_detail.is_liked) {
+      new_post_detail.is_liked = true
+      new_post_detail.post_likes_num = Number(new_post_detail.post_likes_num) + 1
+    } else {
+      new_post_detail.is_liked = false
+      new_post_detail.post_likes_num = Number(new_post_detail.post_likes_num) - 1
+    }
+    that.setData({
+      post_detail: new_post_detail
+    })
+  },
+
+  // /post/single/like
+  like: function () {
+    var that = this;
+    that.switchLiked()
+
+    newRequest("/post/single/follow", {
+        uni_post_id: that.data.uni_post_id
+      }, that.like)
+      .then(res => {
+        if (res.code == 200) {
+          console.log("点赞成功")
+          if (!that.data.post_detail.is_liked) {
+            that.switchLiked()
+          }
+        } else if (res.code == 201) {
+          console.log("取消点赞成功")
+          if (that.data.post_detail.is_liked) {
+            that.switchLiked()
+          }
+        } else {
+          wx.showToast({
+            title: res.msg ? res.msg : "错误",
+            icon: "none",
+            duration: 1000
+          })
+          that.switchLiked()
         }
       })
   },
@@ -585,6 +658,7 @@ Page({
       urls: this.data.post_detail.post_image,
     });
   },
+
   goToComment: function () {
     if (this.data.post_detail.is_author) {
       this.setData({
@@ -605,6 +679,7 @@ Page({
     }
     this.showCommentReportBox()
   },
+
   // 评论倒序
   reverseComments: function () {
     const comment_list = this.data.comment_list.reverse();
@@ -783,6 +858,7 @@ Page({
 
   showCommentReportBox: function () {
     var that = this;
+
     var animation = wx.createAnimation({
       duration: 500,
       timingFunction: 'ease-out'
@@ -821,7 +897,7 @@ Page({
       that.setData({
         focus: true
       })
-    }, 800)
+    }, 490)
   },
   hideCommentReportBox: function () {
     var that = this;
@@ -867,6 +943,21 @@ Page({
       comment_msg: e.detail.value,
     });
   },
+
+  onInputFocus(e) {
+    console.log(e.detail.height)
+    if (e.detail.height) {
+      this.setData({
+        keyboardHeight: 'calc(' + e.detail.height + 'px - env(safe-area-inset-bottom) - 20rpx)'
+      })
+    }
+  },
+
+  onInputBlur() {
+    this.setData({
+      keyboardHeight: 0
+    })
+  },
   // 选择是否带编号
   switchSerialChange: function (e) {
     this.setData({
@@ -905,6 +996,21 @@ Page({
           icon: "none",
           duration: 1000
         })
+
+        if (!wx.getStorageSync('block_notification_notice')) {
+          newRequest("/notice/checkaccept", {})
+            .then(res => {
+              if (res.code == 200) {
+                if (!res.notice_accept_service) {
+                  console.log("show notification")
+                  that.setData({
+                    show_notification: true,
+                    notification_type: "comment"
+                  })
+                }
+              }
+            })
+        }
 
       } else {
         wx.showToast({
@@ -1044,7 +1150,7 @@ Page({
       try {
         let post_detail_object = JSON.parse(options.post_detail)
         this.setData({
-          is_markdown: post_detail_object.post_msg_markdown == null? false : true,
+          is_markdown: post_detail_object.post_msg_markdown == null ? false : true,
           uni_post_id: options.uni_post_id,
           post_detail: post_detail_object,
           data_received: true,
@@ -1056,7 +1162,7 @@ Page({
           uni_post_id: options.uni_post_id
         });
       }
-      
+
     } else {
       if (options.post_serial) {
         this.setData({
