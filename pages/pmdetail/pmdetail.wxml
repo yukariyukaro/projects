@@ -3,7 +3,7 @@
 <enableNotification  wx:if="{{show_notification}}" type="{{notification_type}}" bind:disagree="onNotificationAction" bind:agree="onNotificationAction"/> 
 
 <scroll-view
-  style="height:calc(100vh - 220rpx - {{statusbar_height}}px - 44px); margin-bottom: 250rpx;"
+  style="height:calc(100vh - 220rpx - {{statusbar_height}}px - 44px - {{400 * emojiShow}}rpx); margin-bottom: 250rpx;"
   scroll-y="{{true}}"
   scroll-top="{{scroll_top}}"
   scroll-into-view="{{toView}}"

@@ -17,13 +17,15 @@ Component({
   data: {
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
     primary: app.globalData.theme.primary,
-    is_dark: wx.getSystemInfoSync().theme == "dark"
+    is_dark: true,
+    is_hku: app.globalData.school_label == "HKU"
   },
 
   lifetimes: {
     attached() {
       this.setData({
-        primary: app.globalData.theme.primary
+        primary: app.globalData.theme.primary,
+        is_dark: wx.getSystemInfoSync().theme == "dark"
       })
 
       wx.onThemeChange((result) => {
