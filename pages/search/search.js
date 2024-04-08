@@ -196,7 +196,9 @@ Page({
     aisearch_detail: null,
     ai_is_getting_answer: false,
     ai_answer: '',
-    school_label: info.school_label
+    school_label: info.school_label,
+    show_emotional_support: false,
+    emotional_support_keyword: ['想死', '自杀', '抑郁', '不想活了', '结束生命']
   },
 
   getOneList: function () {
@@ -241,9 +243,15 @@ Page({
       })
     }
 
+    let need_support = false;
+    if (that.data.emotional_support_keyword.some( i => that.data.key_word.toLowerCase().includes(i) )) {
+      need_support = true;
+    }
+
     that.setData({
       search_list_loaded: false,
       search_suggestion_list: [],
+      show_emotional_support: need_support
     })
 
     newRequest("/post/list/search", {
@@ -334,7 +342,8 @@ Page({
       page: 0,
       scroll_top: 0,
       is_loading_more: true,
-      aisearch_detail: null
+      aisearch_detail: null,
+      show_emotional_support: false
     })
     this.getBySearch()
   },
@@ -383,7 +392,7 @@ Page({
     // console.log("search Suggestions: ", this.data.search_suggestion_list, this.data.search_suggestion_list.length)
     newRequest("/info/searchsuggestion", {
         key_word: that.data.key_word
-      }, that.getSearchSuggestion)
+      }, that.getSearchSuggestion, true, false, true)
       .then((res) => {
         if (res.code == 200) {
           var temp_list = []
@@ -436,7 +445,8 @@ Page({
       search_suggestion_list: [],
       search_list_loaded: false,
       ai_answer: "",
-      aisearch_detail: null
+      aisearch_detail: null,
+      show_emotional_support: false
     })
     this.getOneList()
   },

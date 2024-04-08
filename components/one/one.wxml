@@ -9,7 +9,7 @@
     </view>
     <!-- 收藏数 评论数 -->
     <view class="post-follower-comment-outer">
-      <view class="skeleton-text skeleton"></view>
+      <view class="skeleton-text skeleton" style="width: 180rpx;"></view>
     </view>
   </view>
 
@@ -40,9 +40,16 @@
     </view>
     <!-- 收藏数 评论数 -->
     <view class="post-follower-comment-outer">
+      <!-- <view class="post-icon-number-outer">
+        <view style="padding-right:6rpx;">
+          <image wx:if="{{data.is_liked}}" class="post-like-icon" src="/images/sf-heart-fill.svg"></image>
+          <image wx:else class="post-like-icon" src="/images/sf-heart.svg"></image>
+        </view>
+        <view class="post-follower-num">{{data.post_follower_num}}</view>
+      </view> -->
 
       <view class="post-icon-number-outer">
-        <view style="padding-right:8rpx;">
+        <view style="padding-right:6rpx;">
           <image wx:if="{{data.is_following}}" class="post-follower-icon" src="/images/sf-star-fill.svg"></image>
           <image wx:else class="post-follower-icon" src="/images/sf-star.svg"></image>
         </view>
@@ -50,19 +57,12 @@
       </view>
 
       <view class="post-icon-number-outer">
-        <view style="padding-right: 10rpx;">
+        <view style="padding-right: 8rpx;">
           <image class="post-follower-icon" src="/images/sf-comment.svg"></image>
         </view>
         <view class="post-follower-num">{{data.post_comment_num}}</view>
       </view>
       
-      <!-- <view class="post-icon-number-outer">
-        <view style="padding-right:8rpx;">
-          <image wx:if="{{data.is_liked}}" class="post-follower-icon" src="/images/sf-heart-fill.svg"></image>
-          <image wx:else class="post-follower-icon" src="/images/sf-heart.svg"></image>
-        </view>
-        <view class="post-follower-num">{{data.post_follower_num}}</view>
-      </view> -->
     </view>
   </view>
 
@@ -294,7 +294,7 @@
   <swiper circular="{{data.length > 1}}" autoplay="{{data.length > 1}}" class="banner-swiper" interval="3000" wx:if="{{data[0]}}">
     <swiper-item wx:for="{{data}}" wx:key="id">
       <view class="banner-outer-o">
-        <image src="{{item.banner_image}}" class="banner-outer" bindtap="orgOnTapBanner" data-banneritem="{{data[index]}}">
+        <image src="{{item.banner_image}}" mode="aspectFill" class="banner-outer" bindtap="orgOnTapBanner" data-banneritem="{{data[index]}}">
           <view class="banner-title" wx:if="{{item.banner_title}}">
             <text>{{item.banner_title}}</text>
           </view>

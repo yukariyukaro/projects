@@ -504,7 +504,7 @@ padding-bottom:80rpx;
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
-  padding: 0 32rpx 25rpx 32rpx;
+  padding: 0 32rpx 32rpx 32rpx;
 }
 
 .item-container {
@@ -630,4 +630,22 @@ padding-bottom:80rpx;
   position: fixed;
   left: 32rpx;
   bottom: 250rpx;
+}
+
+.loader {
+  margin-top: 1.2rem;
+  margin-right: 0.6rem;
+  width: 20rpx;
+  aspect-ratio: 1;
+  --_g: no-repeat radial-gradient(farthest-side, #b9b8b8 94%, #0000);
+  background:
+    var(--_g) 0    0,
+    var(--_g) 100% 0,
+    var(--_g) 100% 100%,
+    var(--_g) 0    100%;
+  background-size: 40% 40%;
+  animation: l38 .5s infinite; 
+}
+@keyframes l38 {
+  100% {background-position: 100% 0,100% 100%,0 100%,0 0}
 }

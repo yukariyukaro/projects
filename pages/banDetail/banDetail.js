@@ -10,7 +10,9 @@ Page({
   data: {
     app_name: info.app_name,
     team_name: info.team_name,
+    school_label: info.school_label,
     school_label_lower: info.school_label.toLowerCase(),
+    primary_color: info.primary_color_on_dark,
   },
 
   exit: function () {

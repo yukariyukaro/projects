@@ -187,11 +187,16 @@ Component({
                   }).update(item)
                 })
                 wx.removeTabBarBadge({
-                  ndex: 1,
+                  index: 1,
                 })
                 wx.setStorageSync('allNoticeCount', 0)
                 wx.setStorageSync('systemNoticeCount', 0)
                 app.updateTabbar()
+
+                if (app.globalData.indexJS.route == 'pages/pmlist/pmlist') {
+                  app.globalData.indexJS.setPageData()
+                }
+
                 wx.showToast({title: '清理成功', icon: "none", duration: 1000})
               }else{
                 wx.showToast({title: '清理失败', icon: "none", duration: 1000})

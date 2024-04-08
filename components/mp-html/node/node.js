@@ -158,8 +158,8 @@ Component({
           })
         }
       } else {
-        if (url[0] == '#') {
-          this.nav2post(url.slice(1))
+        if (url.slice(0, 5) == 'post:') {
+          this.nav2post(url.slice(5))
         } else {
           wx.setClipboardData({
             data: url,

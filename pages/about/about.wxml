@@ -14,6 +14,17 @@
   </view>
 </view>
 
+<!-- <view class="outer">
+  <view style="padding:30rpx 40rpx">
+    <view style="font-weight: bold;font-size: 34rpx;">4.5.0</view>
+    <view class="divider"></view>
+    <text style="font-size: 28rpx;">新增树洞点赞功能
+    长按导航栏消息按钮可清楚未读
+    修复了一些已知问题，并优化了交互逻辑
+    </text>
+  </view>
+</view> -->
+
 <view class="outer">
   <view style="padding:30rpx 40rpx">
     <view style="font-weight: bold;font-size: 34rpx;">4.4.0</view>

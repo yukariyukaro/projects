@@ -74,10 +74,6 @@ Page({
     wx.hideLoading()
   },
 
-  back() {
-    wx.navigateBack()
-  },
-
   visitUser: function () {
 
     if (this.data.post_detail.user_is_org && this.data.post_detail.user_is_real_name) {
@@ -143,6 +139,7 @@ Page({
     this.showCommentReportBox()
   },
 
+
   reportPromptGetInput: function (e) {
     this.setData({
       report_user_msg: e.detail.value,
@@ -184,6 +181,20 @@ Page({
   // imageLoaded (e) {
   //   console.log(e)
   // },
+
+  copyText: function() {
+    let that = this
+    wx.showActionSheet({
+      itemList: ['复制'],
+      success(res) {
+        if (res.tapIndex == 0) {
+          wx.setClipboardData({
+            data: that.data.post_detail.post_msg,
+          })
+        }
+      }
+    })
+  },
 
 
   time: function () {

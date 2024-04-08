@@ -86,7 +86,18 @@
 
             </view>
         </view>
-
+        <view class="emotional-support" wx:if="{{show_emotional_support}}">
+          <view class="emotional-support-text">漫长日子里会有风和日丽，</view>
+          <view class="emotional-support-text">也偶有阴雨绵绵，</view>
+          <view class="emotional-support-text">但即使被雨点打湿，</view>
+          <view class="emotional-support-text">也不要放弃期待雨后的天晴哦。</view>
+          <view class="emotional-support-contact"> {{school_label}} 24小时情绪支援热线: 
+            <text user-select wx:if="{{school_label == 'CUHK'}}">5400 2055</text>
+            <text user-select wx:elif="{{school_label == 'HKU'}}">3917 8388</text>
+            <text user-select wx:elif="{{school_label == 'UST'}}">2358 6696</text>
+          </view>
+    
+        </view>
         <one wx:for="{{one_list}}" type="{{item.type}}" data="{{item.data}}" wx:key="index" />
         <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />
     </view>

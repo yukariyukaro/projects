@@ -342,7 +342,7 @@ App({
           })
         }
         // 检查token
-        newRequest("/user/check/wechat", {}).then((res) => {
+        newRequest("/user/check/wechat", {}, that.launch).then((res) => {
           if (res.code != 200) {
             reject()
           } else {
@@ -902,17 +902,18 @@ App({
         }
         break
       case "message":
-        var content = data.content
-        // console.log(content)
-        that.addMessageToDb(content)
-        wx.vibrateShort({
-          type: 'heavy',
-        })
-        setTimeout(() => {
+        console.log(data.content)
+        that.addMessageToDb(data.content)
+        if (!data.content.pm_is_from_me){
           wx.vibrateShort({
             type: 'heavy',
           })
-        }, 100);
+          setTimeout(() => {
+            wx.vibrateShort({
+              type: 'heavy',
+            })
+          }, 100);
+        }
         break
       case "notice":
         console.log(data.content)

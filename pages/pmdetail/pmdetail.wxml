@@ -3,7 +3,7 @@
 <enableNotification  wx:if="{{show_notification}}" type="{{notification_type}}" bind:disagree="onNotificationAction" bind:agree="onNotificationAction"/> 
 
 <scroll-view
-  style="height:calc(100vh - 220rpx - {{statusbar_height}}px - 44px - {{400 * emojiShow}}rpx); margin-bottom: 250rpx;"
+  style="height:calc(100vh - 220rpx - {{statusbar_height}}px - 46px - {{400 * emojiShow}}rpx);"
   scroll-y="{{true}}"
   scroll-top="{{scroll_top}}"
   scroll-into-view="{{toView}}"
@@ -16,6 +16,7 @@
           src="{{preURL + item.user_avatar}}.svg"></image>
         <view class="item-right {{item.pm_is_from_me?'item-right-me':''}}">
           <view class="item-right-text-container {{item.pm_is_from_me?'item-right-text-container-me':''}}">
+            <view class="loader" wx:if="{{!item.pm_id}}"></view>
             <image 
             wx:if="{{item.pm_media.type == 'image'}}"
             src="{{item.pm_media.image_link}}"

@@ -141,10 +141,11 @@
 .post-follower-comment-outer {
   display: flex;
   position: relative;
+  overflow: hidden;
 }
 .post-icon-number-outer{
   display: flex;
-  margin-left: 22rpx;
+  margin-left: 18rpx;
 }
 .post-follower-icon {
   width: 28rpx;
@@ -152,12 +153,20 @@
   margin-top: 15rpx;
   margin-right: 0rpx;
 }
+
+.post-like-icon{
+  width: 26rpx;
+  height: 26rpx;
+  margin-top: 15rpx;
+  margin-right: 0rpx;
+}
+
 .post-follower-num{
   color: #8C8C8C;
   font-weight: normal;
-  font-size: 28rpx;
+  font-size: 24rpx;
   align-self: center;
-  margin-bottom: 4rpx;
+  margin-bottom: 2rpx;
 }
 .post-divider{
   height: 1px;

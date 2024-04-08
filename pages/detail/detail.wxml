@@ -9,7 +9,7 @@
 <view class="header-outer" wx:if="{{data_received}}">
   <view class="header">
     <view class="header-title">
-      <text style="font-weight:bold;align-self:center;font-size: 30rpx;">#{{post_detail.post_id}}</text>
+      <text style="font-weight:bold;align-self:center;font-size: 30rpx;" user-select="true">#{{post_detail.post_id}}</text>
       <view class="topic">{{post_detail.post_topic}}</view>
     </view>
     <view class="header-control">
@@ -62,9 +62,9 @@
     <!-- 内容 -->
     <view class="post-outer">
       <view class="{{is_markdown? 'post-content-center':'post-content'}}">
-        <view class="post-text">
+        <view class="post-text" bind:longpress="copyText">
           <!-- <text user-select='true'>{{post_detail.post_msg}}</text> -->
-          <mp-html selectable container-style="white-space: {{is_markdown? 'normal':'pre-wrap'}};" content="{{post_msg}}" markdown="{{is_markdown}}" />
+          <mp-html container-style="white-space: {{is_markdown? 'normal':'pre-wrap'}};" content="{{post_msg}}" markdown="{{is_markdown}}" />
         </view>
         <!-- 图片 -->
         <view wx:if="{{post_detail.post_image}}" class="image-wrapper" wx:for="{{post_detail.post_image}}" wx:key="index">
@@ -128,7 +128,7 @@
         </view>
         <!-- 引用树洞 -->
         <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'quote'}}" bindtap="onTapQuote">
-          <image class="function_netease_image" mode="aspectFill" src="/images/logo.svg"></image>
+          <image class="function_netease_image" mode="aspectFill" src="/images/{{school_label}}/logo.svg"></image>
           <view class="function_netease_right">
             <view class="function_text_container">
               <view class="function_text_title">{{post_detail.post_media.quote_title}}</view>
@@ -220,10 +220,10 @@
           <!-- 点赞数 -->
           <!-- <view class="icon-number-outer" bindtap="like">
             <view class="follower-icon-outer">
-              <image wx:if="{{post_detail.is_liked}}" class="icon" src="/images/sf-heart-fill.svg"></image>
-              <image wx:else class="icon" src="/images/sf-heart.svg"></image>
+              <image wx:if="{{post_detail.is_liked}}" class="like-icon" src="/images/sf-heart-fill.svg"></image>
+              <image wx:else class="like-icon" src="/images/sf-heart.svg"></image>
             </view>
-            <view class="follower-num">{{post_detail.post_likes_num}}</view>
+            <view class="follower-num">{{post_detail.post_follower_num}}</view>
           </view> -->
           <!-- 倒序 -->
           <view style="width: 100%; " wx:if="{{comment_list.length > 0}}">

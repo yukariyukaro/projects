@@ -1,6 +1,6 @@
 const info = require('info.js')
 
-export default function newRequest (path, body, relaunchFunction = new function(){},includeToken = true, includeLabel = false){
+export default function newRequest (path, body, relaunchFunction = new function(){},includeToken = true, includeLabel = false, noLoadingModal = false){
   return new Promise( (resolve, reject) => {
     if (includeToken) Object.assign(body, {token: wx.getStorageSync('token')});
     if (includeLabel) Object.assign(body, {user_school_label: info.school_label});
@@ -13,7 +13,9 @@ export default function newRequest (path, body, relaunchFunction = new function(
         'content-type': 'application/x-www-form-urlencoded'
       },
       success (res) {
-        wx.hideLoading()
+        if (!noLoadingModal){
+          wx.hideLoading()
+        }
         if(res.data.code == 801 || res.data.code == 802){
           wx.login({
             success (res2) {
@@ -65,6 +67,9 @@ export default function newRequest (path, body, relaunchFunction = new function(
         }else{
           resolve (res.data)
         }
+      },
+      fail (res) {
+        reject(res)
       }
     })
   })

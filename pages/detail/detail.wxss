@@ -204,6 +204,7 @@
   width: 100%;
   word-break: break-word;
   white-space: pre-line;
+  display: inline;
 }
 
 .post-datetime {
@@ -276,8 +277,13 @@
 }
 
 .comment-follower-num-area .icon {
-  width: 35rpx;
-  height: 35rpx;
+  width: 34rpx;
+  height: 34rpx;
+}
+
+.comment-follower-num-area .like-icon {
+  width: 32rpx;
+  height: 32rpx;
 }
 
 .follower-icon-outer {
@@ -445,7 +451,8 @@
 .function_netease_image {
   height: 150rpx;
   width: 150rpx;
-  border-radius: 20rpx
+  border-radius: 20rpx;
+  background-color: var(--bg-gray-1);
 }
 
 

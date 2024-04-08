@@ -9,7 +9,10 @@
             <image id="{{n.attrs.id}}" class="_img {{n.attrs.class}}" style="{{ctrl[i]===-1?'display:none;':''}}width:{{ctrl[i]? ctrl[i]+'px': '1px'}};height:{{'1px'}};{{n.attrs.style}}" src="{{n.attrs.src}}" mode="{{!n.h?'widthFix':(!n.w?'heightFix':'scaleToFill')}}" lazy-load="{{opts[0]}}" webp="{{n.webp}}" show-menu-by-longpress="{{opts[3]&&!n.attrs.ignore}}" data-i="{{i}}" bindload="imgLoad" binderror="mediaError" catchtap="imgTap" bindlongpress="noop" />
         </block>
     </block>
-    <text wx:elif="{{n.text}}" user-select="{{opts[4]=='force'&&isiOS}}" decode>{{n.text}}</text><text wx:elif="{{n.name==='br'}}">\n</text>
+
+    <text wx:elif="{{n.text}}" user-select="{{opts[4]}}" decode>{{n.text}}</text>
+    <text wx:elif="{{n.name==='br'}}">\n</text>
+    
     <view wx:elif="{{n.name==='a'}}" id="{{n.attrs.id}}" class="{{n.attrs.href?'_a ':''}}{{n.attrs.class}}" hover-class="_hover" style="display:inline;{{n.attrs.style}}" data-i="{{i}}" catchtap="linkTap">
         <node childs="{{n.children}}" opts="{{opts}}" style="display:inherit" />
     </view><video wx:elif="{{n.name==='video'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" autoplay="{{n.attrs.autoplay}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" muted="{{n.attrs.muted}}" object-fit="{{n.attrs['object-fit']}}" poster="{{n.attrs.poster}}" src="{{n.src[ctrl[i]||0]}}" data-i="{{i}}" bindplay="play" binderror="mediaError" /><audio wx:elif="{{n.name==='audio'}}" id="{{n.attrs.id}}" class="{{n.attrs.class}}" style="{{n.attrs.style}}" author="{{n.attrs.author}}" controls="{{n.attrs.controls}}" loop="{{n.attrs.loop}}" name="{{n.attrs.name}}" poster="{{n.attrs.poster}}" src="{{n.src[ctrl[i]||0]}}" data-i="{{i}}" bindplay="play" binderror="mediaError" />
