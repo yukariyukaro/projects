@@ -37,6 +37,9 @@
       <view class="post-topic">
         <view class="post-topic-text" style="{{tag_has_emoji? 'transform: translateY(-2rpx)':''}}">{{data.post_topic}}</view>
       </view>
+      <!-- <view class="missed-post-promt" wx-if="{{source == 'missed_hot_post'}}">
+        <text>可能错过的树洞</text>
+      </view> -->
     </view>
     <!-- 收藏数 评论数 -->
     <view class="post-follower-comment-outer">
@@ -62,11 +65,12 @@
         </view>
         <view class="post-follower-num">{{data.post_comment_num}}</view>
       </view>
-      
+
     </view>
   </view>
 
   <view class="post-divider"></view>
+  <!-- <text wx-if="{{source == 'missed_hot_post'}}">可能错过的树洞</text> -->
 
   <!-- 树洞内容区 -->
   <view class="post-function-outer" wx:if="{{data.post_media.media_type == 'netease'}}">
@@ -126,17 +130,22 @@
   </view>
 
   <view class="post-content">
-    <view class="post-content-outer" style="width: {{!data.post_image? '100%' : '82%'}}">
-      <view class="post-content-text">
-        <text>{{data.post_msg_short_is_complete? data.post_msg:data.post_msg_short}}</text>
-        <text wx:if="{{!data.post_msg_short_is_complete}}">...</text>
-        <view wx:if="{{!data.post_msg_short_is_complete}}" class="post-loadmore"><text>查看完整树洞</text></view>
+    <view style="display: flex;">
+      <view class="post-content-outer" style="width: {{!data.post_image? '100%' : '82%'}}">
+        <view class="post-content-text">
+          <text>{{data.post_msg_short_is_complete? data.post_msg:data.post_msg_short}}</text>
+          <text wx:if="{{!data.post_msg_short_is_complete}}">...</text>
+          <!-- <view wx:if="{{source == 'missed_hot_post'}}" class="post-loadmore"><text>可能错过的树洞</text></view> -->
+        </view>
+      </view>
+      <view class="post-image-outer" wx:if="{{data.post_image[0]}}">
+        <image class="post-image" src="{{data.post_image_is_loaded ? data.post_image[0] : '/images/image-placeholder.svg'}}" bindload="postImageOnLoad" lazy-load="true" mode="widthFix"></image>
       </view>
     </view>
-    <view class="post-image-outer" wx:if="{{data.post_image[0]}}">
-      <image class="post-image" src="{{data.post_image_is_loaded ? data.post_image[0] : '/images/image-placeholder.svg'}}" bindload="postImageOnLoad" lazy-load="true" mode="widthFix"></image>
-    </view>
+
+    <view wx:if="{{source == 'missed_hot_post'}}" class="post-missed"><text>可能错过的树洞</text></view>
   </view>
+
 </view>
 
 <view bindtap="courseJoinGroup" class="post-outer" wx:if="{{type == 'hku_group_add'}}">

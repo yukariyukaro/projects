@@ -2,8 +2,8 @@
 <!-- Navbar -->
 <view class="custom-statusbar" style="background: {{primary}}; height: {{statusbar_height + 44}}px">
   <view wx:if="{{showBack}}" class="back-container">
-    <image class="back-button" src="/images/back-dark.svg" wx:if="{{is_dark}}" bindtap="back"> </image>
-    <image class="back-button" src="/images/back-light.svg" wx:else bindtap="back"> </image>
+    <image class="back-button" src="/images/back-dark.svg" mode="center" wx:if="{{is_dark}}" bindtap="back"> </image>
+    <image class="back-button" src="/images/back-light.svg" mode="center" wx:else bindtap="back"> </image>
   </view>
-  <view style="margin-bottom:12px; font-weight: 500;">{{title}}</view>
+  <view style="margin-bottom:12px; font-weight: 400;">{{title}}</view>
 </view>

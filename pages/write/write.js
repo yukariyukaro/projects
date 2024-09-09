@@ -40,6 +40,7 @@ Page({
     school_label: info.school_label,
     statusbar_height: wx.getSystemInfoSync().statusBarHeight,
     theme: app.globalData.theme,
+    upload_progess: [],
   },
   // 让输入框聚焦
   focus: function () {
@@ -278,7 +279,7 @@ Page({
       getAuthorization: function (options, callback) {
         // 异步获取临时密钥
         wx.request({
-          url: 'https://upload.tripleuni.com/index.php',
+          url: info.upload_url,
           data: {
             bucket: options.Bucket,
             region: options.Region,
@@ -301,7 +302,6 @@ Page({
       }
     });
     // 接下来可以通过 cos 实例调用 COS 请求。
-
     wx.chooseMedia({
       count: 5, // 默认9
       mediaType: ['image'],
@@ -311,7 +311,10 @@ Page({
         wx.showLoading({
           title: '上传中'
         })
-        console.log(res)
+        let img_count = res.tempFiles.length
+        that.setData({
+          upload_progess: Array(img_count).fill(0)
+        })
         res.tempFiles.forEach((tempfile, i) => {
           var filePath = tempfile.tempFilePath;
           cos.postObject({
@@ -320,12 +323,24 @@ Page({
             Key: info.school_label + '/post/' + that.randomString() + that.getExt(filePath),
             FilePath: filePath,
             onProgress: function (info) {
+              let percent = that.data.upload_progess
+              percent[i] = Math.round(info.percent * 100)
+              that.setData({
+                image_uploading: true,
+                upload_progess: percent
+              })
               console.log(info)
-              console.log(JSON.stringify(info));
             }
           }, function (err, data) {
 
             console.log(err || data);
+            if (that.data.post_image.length >= img_count - 1){
+              that.setData({
+                image_uploading: false,
+                upload_progess: []
+              })
+            }
+
             if (data.Location) {
               var location = 'https://i.boatonland.com/' + info.school_label + '/post/' + data.Location.substr(data.Location.lastIndexOf("/") + 1);
               // wx.showLoading({
@@ -341,12 +356,22 @@ Page({
                   })
                 }
                 var newimg = that.data.post_image
+                let percent = that.data.upload_progess
+                if (percent.length == 1){
+                  percent = []
+                } else {
+                  percent[i] = 101
+                }
+
                 newimg.push(location)
                 console.log(newimg)
                 that.setData({
                   post_image: newimg,
+                  upload_progess: percent
                 })
               }, 1000)
+
+
             } else {
               wx.hideLoading()
               wx.showToast({

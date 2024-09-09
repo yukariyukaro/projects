@@ -1,9 +1,9 @@
 <view class="overlay" wx:if="{{show_comment_box || show_report_box}}" animation="{{overlay_animation}}" bindtap="hideCommentReportBox"></view>
 
-<enableNotification  wx:if="{{show_notification}}" type="{{notification_type}}" bind:disagree="onNotificationAction" bind:agree="onNotificationAction"/> 
+<enableNotification wx:if="{{show_notification}}" type="{{notification_type}}" bind:disagree="onNotificationAction" bind:agree="onNotificationAction" />
 
 <!-- Navbar -->
-<navbar title="树洞详情" showBack/>
+<navbar title="树洞详情" showBack />
 
 <!-- 漂浮头部 -->
 <view class="header-outer" wx:if="{{data_received}}">
@@ -61,114 +61,116 @@
   <view class="content-outer">
     <!-- 内容 -->
     <view class="post-outer">
-      <view class="{{is_markdown? 'post-content-center':'post-content'}}">
-        <view class="post-text" bind:longpress="copyText">
-          <!-- <text user-select='true'>{{post_detail.post_msg}}</text> -->
-          <mp-html container-style="white-space: {{is_markdown? 'normal':'pre-wrap'}};" content="{{post_msg}}" markdown="{{is_markdown}}" />
-        </view>
-        <!-- 图片 -->
-        <view wx:if="{{post_detail.post_image}}" class="image-wrapper" wx:for="{{post_detail.post_image}}" wx:key="index">
-          <image class="image" fade-in mode="widthFix" src="{{item}}" data-index="{{index}}" bindtap="previewPic"></image>
-        </view>
-        <!-- Bilibili -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'bilibili'}}" bindtap="onTapBilibili">
-          <image class="function_bilibili_image" mode="aspectFill" src="{{post_detail.post_media.bilibili_image}}"></image>
-          <view class="function_bilibili_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{post_detail.post_media.bilibili_title}}</view>
-              <view class="function_text_detail">{{post_detail.post_media.bilibili_author}}</view>
-            </view>
-            <image class="function_bilibili_icon" src="/images/bilibili.svg"></image>
+      <view class="'post-content-center'">
+        <view class="post-content-inner">
+          <view class="post-text" bind:longpress="copyText">
+            <!-- <text user-select='true'>{{post_detail.post_msg}}</text> -->
+            <mp-html container-style="white-space: {{is_markdown? 'normal':'pre-wrap'}};" content="{{post_msg}}" markdown="{{is_markdown}}" />
           </view>
-        </view>
-        <!-- 文章 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'article'}}" bindtap="onTapArticle">
-          <image class="function_bilibili_image" mode="aspectFill" src="{{post_detail.post_media.article_image}}"></image>
-          <view class="function_bilibili_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{post_detail.post_media.article_title}}</view>
-              <view class="function_text_detail">{{post_detail.post_media.article_author}}</view>
+          <!-- 图片 -->
+          <view wx:if="{{post_detail.post_image}}" class="image-wrapper" wx:for="{{post_detail.post_image}}" wx:key="index">
+            <image class="image" fade-in mode="widthFix" src="{{item}}" data-index="{{index}}" bindtap="previewPic"></image>
+          </view>
+          <!-- Bilibili -->
+          <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'bilibili'}}" bindtap="onTapBilibili">
+            <image class="function_bilibili_image" mode="aspectFill" src="{{post_detail.post_media.bilibili_image}}"></image>
+            <view class="function_bilibili_right">
+              <view class="function_text_container">
+                <view class="function_text_title">{{post_detail.post_media.bilibili_title}}</view>
+                <view class="function_text_detail">{{post_detail.post_media.bilibili_author}}</view>
+              </view>
+              <image class="function_bilibili_icon" src="/images/bilibili.svg"></image>
             </view>
           </view>
-        </view>
-        <!-- 网易云 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'netease'}}" bindtap="onTapNetease">
-          <image class="function_netease_image" mode="aspectFill" src="{{post_detail.post_media.netease_image}}"></image>
-          <view class="function_netease_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{post_detail.post_media.netease_title}}</view>
-              <view class="function_text_detail">{{post_detail.post_media.netease_artist}} - {{post_detail.post_media.netease_epname}}</view>
-            </view>
-            <image class="function_netease_icon" src="/images/netease.svg"></image>
-          </view>
-        </view>
-        <!-- 投票 -->
-        <view class="function_container" style="padding-bottom: 20rpx;  flex-direction: column; --primary: {{theme.primary}}; --secondary: {{theme.secondary}}" wx:if="{{post_detail.post_media.media_type == 'vote'}}">
-          <view class="function_vote_title">{{post_detail.post_media.vote_title}}</view>
-
-          <view class="function_vote_subtitle" wx:if="{{post_detail.post_media.user_voted_option_title}}">你已选择：{{post_detail.post_media.user_voted_option_title}}</view>
-          <view class="function_vote_subtitle" wx:else>你尚未投票{{post_detail.post_media.user_voted_option_title}}</view>
-
-          <view class="function_vote_option_list" wx:for="{{post_detail.post_media.option_list}}" bindtap="vote" data-optionid="{{item.option_id}}" wx:key="index">
-
-            <view class="function_vote_option_lower">
-              <view class="{{item.is_voted ? 'function_vote_option_lower_text_left_voted' :'function_vote_option_lower_text_left'}}">{{item.option_title}}</view>
-              <view class="{{item.is_voted ? 'function_vote_option_lower_text_right_voted' :'function_vote_option_lower_text_right'}}">{{item.option_num}}</view>
-            </view>
-
-            <view class="{{item.is_voted ? 'function_vote_option_upper_voted' :'function_vote_option_upper'}}" style="width:{{item.option_percentage_str}};">
-              <view class="function_vote_option_upper_inner">
-                <view class="function_vote_option_upper_text_left">{{item.option_title}}</view>
-                <view class="function_vote_option_upper_text_right">{{item.option_num}}</view>
+          <!-- 文章 -->
+          <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'article'}}" bindtap="onTapArticle">
+            <image class="function_bilibili_image" mode="aspectFill" src="{{post_detail.post_media.article_image}}"></image>
+            <view class="function_bilibili_right">
+              <view class="function_text_container">
+                <view class="function_text_title">{{post_detail.post_media.article_title}}</view>
+                <view class="function_text_detail">{{post_detail.post_media.article_author}}</view>
               </view>
             </view>
-
           </view>
-
-        </view>
-        <!-- 引用树洞 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'quote'}}" bindtap="onTapQuote">
-          <image class="function_netease_image" mode="aspectFill" src="/images/{{school_label}}/logo.svg"></image>
-          <view class="function_netease_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{post_detail.post_media.quote_title}}</view>
-              <view class="function_text_detail_quote">{{post_detail.post_media.quote_content}}</view>
+          <!-- 网易云 -->
+          <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'netease'}}" bindtap="onTapNetease">
+            <image class="function_netease_image" mode="aspectFill" src="{{post_detail.post_media.netease_image}}"></image>
+            <view class="function_netease_right">
+              <view class="function_text_container">
+                <view class="function_text_title">{{post_detail.post_media.netease_title}}</view>
+                <view class="function_text_detail">{{post_detail.post_media.netease_artist}} - {{post_detail.post_media.netease_epname}}</view>
+              </view>
+              <image class="function_netease_icon" src="/images/netease.svg"></image>
             </view>
           </view>
-        </view>
-        <!-- 小程序 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'miniapp'}}" bindtap="onTapMiniapp">
-          <image class="function_netease_image" mode="aspectFill" src="{{post_detail.post_media.miniapp_image}}"></image>
-          <view class="function_netease_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{post_detail.post_media.miniapp_msg}}</view>
-              <view class="function_text_detail_quote">{{post_detail.post_media.miniapp_name}}</view>
-            </view>
-          </view>
-        </view>
-        <!-- HKU找群 -->
-        <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'hku_group'}}" bindtap="onTapHKUGroup">
-          <image class="function_netease_image" mode="aspectFill" src="https://i.boatonland.com/HKU/post/jeD8ijwBDkrKn3GsZHp2JfYhjErnTN7Y.jpeg"></image>
-          <view class="function_netease_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{"加入群聊: " + post_detail.post_media.group_name}}</view>
-              <view class="function_text_detail_quote">HKUer找群</view>
-            </view>
-            <image class="function_miniapp_icon" src="/images/miniapp.svg"></image>
-          </view>
-        </view>
-        <!-- 文件 -->
-        <view class="function_container" wx:if="{{post_detail.post_media.media_type == 'file'}}" bindtap="onTapFile">
-          <image class="function_file_image" src="/images/file-doc.png" wx:if="{{post_detail.post_media.file_type == 'doc'}}" />
-          <image class="function_file_image" src="/images/file-ppt.png" wx:elif="{{post_detail.post_media.file_type == 'ppt'}}" />
-          <image class="function_file_image" src="/images/file-xls.png" wx:elif="{{post_detail.post_media.file_type == 'xls'}}" />
-          <image class="function_file_image" src="/images/file-pdf.png" wx:elif="{{post_detail.post_media.file_type == 'pdf'}}" />
-          <image class="function_file_image" src="/images/file-unknown.png" wx:else />
+          <!-- 投票 -->
+          <view class="function_container" style="padding-bottom: 20rpx;  flex-direction: column; --primary: {{theme.primary}}; --secondary: {{theme.secondary}}" wx:if="{{post_detail.post_media.media_type == 'vote'}}">
+            <view class="function_vote_title">{{post_detail.post_media.vote_title}}</view>
 
-          <view class="function_file_right">
-            <view class="function_text_container">
-              <view class="function_text_title">{{ post_detail.post_media.file_name }}</view>
-              <view class="function_text_detail">{{ post_detail.post_media.file_size }}</view>
+            <view class="function_vote_subtitle" wx:if="{{post_detail.post_media.user_voted_option_title}}">你已选择：{{post_detail.post_media.user_voted_option_title}}</view>
+            <view class="function_vote_subtitle" wx:else>你尚未投票{{post_detail.post_media.user_voted_option_title}}</view>
+
+            <view class="function_vote_option_list" wx:for="{{post_detail.post_media.option_list}}" bindtap="vote" data-optionid="{{item.option_id}}" wx:key="index">
+
+              <view class="function_vote_option_lower">
+                <view class="{{item.is_voted ? 'function_vote_option_lower_text_left_voted' :'function_vote_option_lower_text_left'}}">{{item.option_title}}</view>
+                <view class="{{item.is_voted ? 'function_vote_option_lower_text_right_voted' :'function_vote_option_lower_text_right'}}">{{item.option_num}}</view>
+              </view>
+
+              <view class="{{item.is_voted ? 'function_vote_option_upper_voted' :'function_vote_option_upper'}}" style="width:{{item.option_percentage_str}};">
+                <view class="function_vote_option_upper_inner">
+                  <view class="{{item.is_voted ? 'function_vote_option_upper_text_left_voted':'function_vote_option_upper_text_left'}}">{{item.option_title}}</view>
+                  <view class="function_vote_option_upper_text_right">{{item.option_num}}</view>
+                </view>
+              </view>
+
+            </view>
+
+          </view>
+          <!-- 引用树洞 -->
+          <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'quote'}}" bindtap="onTapQuote">
+            <image class="function_netease_image" mode="aspectFill" src="/images/{{school_label}}/logo.svg"></image>
+            <view class="function_netease_right">
+              <view class="function_text_container">
+                <view class="function_text_title">{{post_detail.post_media.quote_title}}</view>
+                <view class="function_text_detail_quote">{{post_detail.post_media.quote_content}}</view>
+              </view>
+            </view>
+          </view>
+          <!-- 小程序 -->
+          <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'miniapp'}}" bindtap="onTapMiniapp">
+            <image class="function_netease_image" mode="aspectFill" src="{{post_detail.post_media.miniapp_image}}"></image>
+            <view class="function_netease_right">
+              <view class="function_text_container">
+                <view class="function_text_title">{{post_detail.post_media.miniapp_msg}}</view>
+                <view class="function_text_detail_quote">{{post_detail.post_media.miniapp_name}}</view>
+              </view>
+            </view>
+          </view>
+          <!-- HKU找群 -->
+          <view class="function_container" style="height: 150rpx;  flex-direction: row;" wx:if="{{post_detail.post_media.media_type == 'hku_group'}}" bindtap="onTapHKUGroup">
+            <image class="function_netease_image" mode="aspectFill" src="https://i.boatonland.com/HKU/post/jeD8ijwBDkrKn3GsZHp2JfYhjErnTN7Y.jpeg"></image>
+            <view class="function_netease_right">
+              <view class="function_text_container">
+                <view class="function_text_title">{{"加入群聊: " + post_detail.post_media.group_name}}</view>
+                <view class="function_text_detail_quote">HKUer找群</view>
+              </view>
+              <image class="function_miniapp_icon" src="/images/miniapp.svg"></image>
+            </view>
+          </view>
+          <!-- 文件 -->
+          <view class="function_container" wx:if="{{post_detail.post_media.media_type == 'file'}}" bindtap="onTapFile">
+            <image class="function_file_image" src="/images/file-doc.png" wx:if="{{post_detail.post_media.file_type == 'doc'}}" />
+            <image class="function_file_image" src="/images/file-ppt.png" wx:elif="{{post_detail.post_media.file_type == 'ppt'}}" />
+            <image class="function_file_image" src="/images/file-xls.png" wx:elif="{{post_detail.post_media.file_type == 'xls'}}" />
+            <image class="function_file_image" src="/images/file-pdf.png" wx:elif="{{post_detail.post_media.file_type == 'pdf'}}" />
+            <image class="function_file_image" src="/images/file-unknown.png" wx:else />
+
+            <view class="function_file_right">
+              <view class="function_text_container">
+                <view class="function_text_title">{{ post_detail.post_media.file_name }}</view>
+                <view class="function_text_detail">{{ post_detail.post_media.file_size }}</view>
+              </view>
             </view>
           </view>
         </view>
@@ -180,6 +182,7 @@
           <view>发表于{{post_date}}</view>
         </view>
         <!-- 署名 -->
+
         <view class="alias{{post_detail.user_is_org?'-org':''}}" bindtap="visitUser">
           <text>{{post_detail.user_alias}}</text>
         </view>
@@ -193,6 +196,7 @@
             <view class="org-box-inner">{{post_detail.user_alias}}已开通社团主页</view>
           </view>
         </view>
+
 
       </view>
 
@@ -227,7 +231,7 @@
           </view> -->
           <!-- 倒序 -->
           <view style="width: 100%; " wx:if="{{comment_list.length > 0}}">
-            <view style="text-align: right; margin-top: 2rpx;" >
+            <view style="text-align: right; margin-top: 2rpx;">
               <image wx:if="{{!comment_reverse}}" class="icon" src="/images/sort.svg" bindtap="reverseComments"></image>
               <image wx:if="{{comment_reverse}}" class="icon" style="transform: rotate(180deg)" src="/images/sort.svg" bindtap="reverseComments"></image>
             </view>

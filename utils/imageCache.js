@@ -29,34 +29,15 @@ let getImageCache = (key, url) => {
               success: function (res) {
                 if (res.statusCode === 200) {
                   // console.log ( '图片下载成功')
-                  wx.compressImage({
-                    src: res.tempFilePath,
-                    compressedWidth: 1500,
-                    success: function (res) {
-                      fs.saveFile({
-                        tempFilePath: res.tempFilePath,
-                        success(res) {
-                          // console.log ( '图片缓存成功')
-                          wx.setStorageSync(key, {
-                            localPath: res.savedFilePath,
-                            src: url
-                          })
-                          resolve(res.savedFilePath)
-                        }
+                  fs.saveFile({
+                    tempFilePath: res.tempFilePath,
+                    success(res) {
+                      // console.log ( '图片缓存成功')
+                      wx.setStorageSync(key, {
+                        localPath: res.savedFilePath,
+                        src: url
                       })
-                    },
-                    fail: function () {
-                      fs.saveFile({
-                        tempFilePath: res.tempFilePath,
-                        success(res) {
-                          // console.log ( '图片缓存成功')
-                          wx.setStorageSync(key, {
-                            localPath: res.savedFilePath,
-                            src: url
-                          })
-                          resolve(res.savedFilePath)
-                        }
-                      })
+                      resolve(res.savedFilePath)
                     }
                   })
                 } else {
@@ -72,34 +53,15 @@ let getImageCache = (key, url) => {
         success: function (res) {
           if (res.statusCode === 200) {
             // console.log ( '图片下载成功')
-            wx.compressImage({
-              src: res.tempFilePath,
-              compressedWidth: 1500,
-              success: function (res) {
-                fs.saveFile({
-                  tempFilePath: res.tempFilePath,
-                  success(res) {
-                    // console.log ( '图片缓存成功')
-                    wx.setStorageSync(key, {
-                      localPath: res.savedFilePath,
-                      src: url
-                    })
-                    resolve(res.savedFilePath)
-                  }
+            fs.saveFile({
+              tempFilePath: res.tempFilePath,
+              success(res) {
+                // console.log ( '图片缓存成功')
+                wx.setStorageSync(key, {
+                  localPath: res.savedFilePath,
+                  src: url
                 })
-              },
-              fail: function () {
-                fs.saveFile({
-                  tempFilePath: res.tempFilePath,
-                  success(res) {
-                    // console.log ( '图片缓存成功')
-                    wx.setStorageSync(key, {
-                      localPath: res.savedFilePath,
-                      src: url
-                    })
-                    resolve(res.savedFilePath)
-                  }
-                })
+                resolve(res.savedFilePath)
               }
             })
           } else {

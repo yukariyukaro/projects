@@ -28,7 +28,7 @@
       <view class="post-content" style="margin-top:5vw">
         <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}" />
         <one type="post-skeleton" wx:if="{{is_loading_more && !post_list[0]}}" wx:for="{{5}}" wx:key="index"/>
-        <one type="{{item.type}}" data="{{item.data}}" wx:for="{{post_list}}" wx:key="index" />
+        <one type="{{item.type}}" data="{{item.data}}" source="{{item.source}}" wx:for="{{post_list}}" wx:key="index" />
         <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />
       </view>
 
@@ -42,7 +42,7 @@
   <view class="post-content">
     <one type="banner" data="{{banner_list}}" wx:if="{{banner_list[0]}}" />
     <one type="post-skeleton" wx:if="{{is_loading_more && !post_list[0]}}" wx:for="{{5}}" wx:key="index"/>
-    <one type="{{item.type}}" data="{{item.data}}" wx:for="{{post_list}}" wx:key="post_id" />
+    <one type="{{item.type}}" data="{{item.data}}" source="{{item.source}}"  wx:for="{{post_list}}" wx:key="post_id" />
     <loadmore end="{{is_last}}" loading="{{is_loading_more}}" />
   </view>
 
@@ -61,7 +61,7 @@
 
 <view class="ad1" wx:if="{{show_ad}}" bindtap="closeAD">
   <view class="ad2">
-    <image mode="widthFix" width="90%" catchtap="onTapAd" src='{{ad_info.ad_image}}' />
+    <image class="ad_image" mode="widthFix" width="90%" catchtap="onTapAd" src='{{ad_info.ad_image}}' />
   </view>
   <view class="back_w">
     <view class="back_image" catchtap="closeAD">

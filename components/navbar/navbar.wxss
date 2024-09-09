@@ -16,11 +16,15 @@
 .back-container{
   position: absolute;
   left: 0;
+  height: 100%;
+  width: 50rpx;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
 }
 
 .back-button{
-  width: 18px;
-  position: absolute;
-  bottom: -194rpx;
-  left: 8px;
+  width: 36rpx;
+  height: 36rpx;
+  margin: 26rpx 0;
 }

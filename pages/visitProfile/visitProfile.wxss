@@ -57,7 +57,3 @@
   height: 50rpx;
   overflow: hidden;
 }
-
-.scroll-outer{
-  height: 100vh;
-}

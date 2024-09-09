@@ -82,8 +82,11 @@ if (user_school_label.toUpperCase() == 'HKU') {
 
 // api_domain: "https://api.uni.hkupootal.com/v4",
 // socket:"wss://ws.uni.hkupootal.com:7230",
-meta.api_domain = "https://api.tripleuni.com/v4";
-meta.socket = "wss://ws.tripleuni.com:7230";
+// meta.api_domain = "https://api.tripleuni.com/v4";
+meta.api_domain = "https://api.uuunnniii.com/v4"
+// meta.socket = "wss://ws.tripleuni.com:7230";
+meta.socket = "wss://ws.uuunnniii.com:7230";
+meta.upload_url = "https://upload.uuunnniii.com/index.php";
 meta.terms_url = "https://terms.tripleuni.com";
 meta.contact_email = "support@tripleuni.com";
 meta.report_url = "https://report2023.tripleuni.com";

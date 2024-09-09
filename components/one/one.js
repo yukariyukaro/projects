@@ -8,6 +8,7 @@ Component({
   properties: {
     type: String,
     data: Object,
+    source: String,
   },
 
   /**
@@ -21,8 +22,9 @@ Component({
   },
 
   lifetimes: {
-    attached:function(){
+    attached:function(){      
       var that = this
+      // console.log(that.properties)
       var systemInfo = wx.getSystemInfoSync()
       if(systemInfo.theme == 'dark'){
         that.setData({
@@ -46,7 +48,7 @@ Component({
 
         that.setData({
           tag_has_emoji: has_emoji,
-          data: that.data.data
+          data: that.data.data,
         })
       }
     }

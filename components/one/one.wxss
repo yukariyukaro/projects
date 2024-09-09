@@ -129,7 +129,7 @@
 .post-topic {
   color: var(--on-bg-gray-1);
   align-self: center;
-  padding: 4rpx 15rpx;
+  padding: 4rpx 14rpx;
   border-radius: 20rpx;
   background: var(--bg-gray-1);
   margin-bottom: 4rpx;
@@ -137,6 +137,15 @@
 }
 .post-topic-text {
   font-size: 26rpx;
+}
+
+.missed-post-promt{
+  font-size: 20rpx;
+  color: var(--on-bg-gray-1);
+  align-self: center;
+  padding-left: 14rpx;
+  padding-bottom: 2rpx;
+  /* text-decoration: underline; */
 }
 .post-follower-comment-outer {
   display: flex;
@@ -172,13 +181,26 @@
   height: 1px;
   margin: 10rpx 20rpx 14rpx 20rpx;
   background-color: var(--bg-gray-3);
+  position: relative;
+}
+.post-divider text{
+  background:#fff; 
+  padding:0 10rpx;
+  background-color: var(--bg-2);
+  color: var(--on-bg-2);
+  font-size: 20rpx;
+  position: absolute;
+  top: -12rpx;
+  right: 16rpx;
 }
 .post-content {
+  position: relative;
   width: auto;
   text-align:left;
   padding: 10rpx 40rpx 30rpx 40rpx;
   white-space: pre-wrap;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
 .post-content-outer {
@@ -187,13 +209,27 @@
 .post-content-text {
   word-break: break-word;
   width: 100%;
+  height: 100%;
 }
 .post-loadmore {
-  font-size: 22rpx;
+  font-size: 20rpx;
   color: #8C8C8C;
-  margin-top: 30rpx;
+  margin-top: 36rpx;
+  margin-right: -4rpx;
+  margin-bottom: -4rpx;
   float: right
 }
+.post-missed {
+  font-size: 20rpx;
+  height: fit-content;
+  color: #8C8C8C;
+  display: block;
+  width: 100%;
+  text-align: right;
+  margin-top: 10rpx;
+  margin-bottom: -4rpx;
+}
+
 .post-image-outer {
   width: 18%;
   height: 200rpx;

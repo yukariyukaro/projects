@@ -8,6 +8,10 @@ import decode_token from "./utils/jwt-decode"
 
 App({
   onLaunch(options) {
+    if (!wx.getStorageSync('version') || wx.getStorageSync('version') != "4.4.7"){
+      wx.setStorageSync('version', "4.4.7")
+      wx.removeStorageSync('openAd')
+    }
     if (!wx.getStorageSync('allNoticeCount')) {
       wx.setStorageSync('allNoticeCount', 0)
     }
@@ -766,7 +770,7 @@ App({
 
   // /pm/chat/get
   addChatToDb: function (item) {
-    console.log(item)
+    // console.log(item)
     var that = this
     if (that.globalData.gettingChatList.includes(item.chat_id)) {
       // console.log("已经在获取"+item.chat_id)

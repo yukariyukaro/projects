@@ -805,7 +805,7 @@ Page({
         break;
       case 'post':
         wx.navigateTo({
-          url: '/pages/detail/detail?post_id=' + ad_info.post_id,
+          url: '/pages/detail/detail?uni_post_id=' + ad_info.uni_post_id,
         });
         break;
       case 'inner':
@@ -1043,7 +1043,7 @@ Page({
       getAuthorization: function (options, callback) {
         // 异步获取临时密钥
         wx.request({
-          url: 'https://upload.tripleuni.com/index.php',
+          url: info.upload_url,
           data: {
             bucket: options.Bucket,
             region: options.Region,

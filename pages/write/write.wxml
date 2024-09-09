@@ -28,6 +28,9 @@
         catchtap="picTap"
       ></image>
     </view>
+    <view style="margin-top: 10rpx;" wx:if="{{image_uploading}}">
+      <progress show-info border-radius="4" stroke-width="4" activeColor="{{theme.primary}}" percent="{{item}}" wx:for="{{upload_progess}}" wx:if="{{item <= 100}}"/>
+    </view>
   </view>
 </view>
 

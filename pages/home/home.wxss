@@ -179,6 +179,11 @@
   width: 100%;
   text-align: center;
   height: fit-content;
+  background: transparent;
+}
+
+.ad_image{
+  background-color: transparent !important;
 }
 
 .back_w {
@@ -187,7 +192,7 @@
 
 .back_image {
   border-radius: 50%;
-  background-color: white;
+  background-color: transparent;
   width: 60rpx;
   height: 60rpx;
   position: relative;

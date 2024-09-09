@@ -60,6 +60,7 @@ Page({
    */
   onLoad(options) {
     console.log(options)
+    console.log(decodeURIComponent(options.launchPath))
     if(options.launchPath){
       this.setData({
         relaunch_path: decodeURIComponent(options.launchPath)
